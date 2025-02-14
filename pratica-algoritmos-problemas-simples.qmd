@@ -1,0 +1,152 @@
+# Problemas simples {#sec-problemas-problemas-simples}
+
+::: {.callout-warning}
+**Em construção**
+:::
+
+::: {#exr-metros-para-pes}
+Considerando os aspectos culturais dos diversos países, é comum a divergência entre as unidades de medidas. A distância, por exemplo, pode ser dada usando o sistema métrico, usando o metro como base, ou de outras formas, expressando distâncias em pés, jardas ou milhas, por exemplo.
+
+Escreva um algoritmo para que, a partir de uma distância expressa em metros, apresente o valor correspondente em pés.
+
+&resposta& @sol-metros-para-pes @sol-metros-para-pes-v2
+:::
+
+<!-- IMC -->
+::: {#exr-x}
+O índice de massa corpórea (IMC), embora
+não seja preciso, é um indicativo inicial sobre a
+situação da quantidade de gordura de um indivíduo.
+Sabendo-se que o IMC pode ser calculado pela
+expressão abaixo (sendo m a massa em
+quilogramas e h a altura em metros), escreva um
+algoritmo que leia a massa e a altura de uma
+pessoa, escrevendo seu IMC: $I_{IMC} = m/h^2$.
+:::
+
+:::
+O salário de um balconista tem uma parte que
+é fixa, registrada na carteira de trabalho. A outra
+parte é variável e depende das comissões obtidas
+pelas vendas. Escreva um algoritmo que leia o
+salário base de um empregado, o total de vendas
+que realizou e a porcentagem de sua comissão,
+escrevendo, ao final o seu salário total.
+:::
+
+:::
+Escreva um algoritmo que gere um número
+inteiro positivo r a partir de outro número s,
+também positivo. O método de cálculo consiste em
+multiplicar o valor s por 455.470.314 e obter o
+resto da divisão deste produto por 2.147.483.647, o
+que resulta no novo valor gerado r. Este é um dos
+métodos
+para
+a
+geração
+de
+números
+(pseudo)aleatórios.
+:::
+
+:::
+Escreva um algoritmo para ler as
+coordenadas de dois pontos no espaço $\mathbb{R}^3$ e
+escrever a distância entre eles.
+:::
+
+:::
+Considerando variáveis inteiras para o
+armazenamento de três datas (dia1, mês1, ano1;
+dia2, mês2, ano2 e dia3, mês3, ano3), escreva
+expressões que resultem no valor verdadeiro
+quando as condições abaixo forem cumpridas.
+Desconsidere anos bissextos.
+a) A primeira data é uma válida;
+b) A primeira e segunda datas estão no mesmo
+mês e no mesmo ano;
+c) A primeira data é anterior à segunda, sabendo-
+se que ambas estão no mesmo mês e no mesmo
+ano (não é necessário verificar isso);
+d) A primeira data é anterior à segunda, sabendo-
+se apenas que ambas estão no mesmo ano;
+e) A primeira data é anterior à segunda;
+f) A segunda data é posterior à primeira e
+anterior à segunda.
+:::
+
+<!-- Isso vai aqui???? -->
+:::
+Escreva uma expressão lógica que resulte em
+verdadeiro se e somente se o valor guardado na
+variável ano corresponder a um ano bissexto. Um
+ano é bissexto se for múltiplo de quatro, mas não
+for múltiplo de 100, exceto se for múltiplo de 400.
+:::
+
+:::
+Escreva um algoritmo que leia um período
+de tempo em segundos, escrevendo-o em horas,
+minutos e segundos.
+:::
+
+:::
+Escreva um algoritmo que leia dois
+números reais e verifique se um é o inverso do
+outro.
+:::
+
+:::
+Escreva um algoritmo que leia dois
+números reais e verifique se um é o oposto do
+outro.
+:::
+
+:::
+Por um problema de disponibilidade
+de notas e moedas, uma grande rede de
+supermercado precisa informar ao caixa a
+melhor forma de retornar o troco. Assim, dados
+o total da conta e o valor pago pelo cliente, deve
+ser escrito o troco devido, especificando quanto
+de cada nota ou moeda deve ser entregue,
+minimizando o número total de cédulas e
+moedas. Considerar notas de R$200,00, R$100,00, R$50,00, R$20,00,
+R$10,00, R$5,00 e R$2,00 e moedas de
+R$1,00, R$0,50, R$0,25, R$0,10, R$0,05 e
+R$0,01 devem ser devolvidas de modo que o
+número total de moedas seja mínimo.
+<!-- Rever o texto! -->
+:::
+
+:::
+O IPVA anual de um carro novo é
+calculado como sendo 4% do valor da nota
+fiscal, mas é proporcional ao número de meses
+no ano com que o proprietário ficará
+efetivamente com o veículo. Assim, um carro
+comprado em agosto, pagará o proporcional a
+cinco meses de imposto. Escreva um algoritmo
+que leia o valor do carro e a data de compra e
+calcule o IPVA devido, escrevendo o valor.
+:::
+
+:::
+Escreva um algoritmo que leia uma idade
+em dias, meses e anos e a escreva apenas em
+número de dias. Desconsidere anos bissextos.
+:::
+
+:::
+Escreva um algoritmo que leia uma idade
+em dias e a escreva em dias, meses e anos.
+Desconsidere anos bissextos.
+:::
+
+:::
+Escreva um algoritmo que leia uma idade
+em dias, meses e anos e a escreva em anos (com
+casas decimais). Desconsidere anos bissextos.
+:::
+

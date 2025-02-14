@@ -1,0 +1,10 @@
+<!-- Valor máximo de multa e identificação do motorista -->
+::: {#exr-0030}
+Preocupados com o aumento das ocorrências de trânsito, uma cidade do interior solicitou uma listagem contendo, para cada motorista (identificado pelo número de sua habilitação) e o valor total de suas multas nos últimos 12\ meses. A lista não foi gerada obedecendo qualquer ordenação específica e motoristas que não possuem multas não são incluídos.
+
+Escreva um algoritmo que processe essa lista, que contém número da CNH e valor de multas para cada um dos motoristas, e indique o valor máximo de multa, juntamente com a identificação do motorista. Em caso de empate (ou seja, dois ou mais motoristas com o mesmo valor máximo), apenas a primeira ocorrência deverá ser apresentada.
+
+Considere que a lista contém, minimamente, pelo menos um motorista.
+
+@sol-0030
+:::

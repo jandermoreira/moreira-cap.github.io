@@ -1,0 +1,54 @@
+project: 
+  output-dir: /home/jander/pessoal/jandermoreira.github.io/cap-algoritmos
+
+book:
+  subtitle: "Algoritmos para quem já sabe programar"
+  output-file: "moreira_j-construcao_algoritmos_programacao-algoritmos"
+  cover-image: capa-algoritmos.png
+  edition: Versão 0.1-alfa
+
+  sidebar:
+    pinned: true
+    tools:
+      - icon: save
+        menu:
+          - text: "Versão PDF"
+            url: "moreira_j-construcao_algoritmos_programacao-algoritmos.pdf"
+          # - text: "Versão EPUB"
+          #   url: "moreira_j-construcao_algoritmos_programacao-algoritmos.epub"
+
+  chapters:
+    - index.qmd
+    - preambulo_prefacio.qmd
+
+    - part: "Representação e uso de algoritmos"
+      chapters:
+        - algoritmos-nocoes.qmd
+        # - algoritmos-formalizacao.qmd
+    #     - algoritmos-desenvolvimento-basico-e-codificacao.qmd
+    #     - algoritmos-execucao-condicional.qmd
+    #     - algoritmos-desenvolvimento-com-condicionais-e-codificacao.qmd
+    - part: "Processamento de sequências de dados"
+      chapters:
+        - algoritmos-processamento-basico-de-sequencias-de-dados.qmd
+        - algoritmos-desenvolvimento-de-algoritmos-para-processamento-de-sequencias.qmd
+    # - part: "Desenvolvimento e organização de algoritmos"
+    #   chapters:
+    #     - algoritmos-desenvolvimento-por-refinamentos-sucessivos.qmd
+        # - algoritmos-testes-de-mesa.qmd
+    #     - algoritmos-modularizacao.qmd
+    #     - algoritmos-desenvolvimento-com-modularizacao.qmd
+    # - part: "Representação de dados estruturados"
+    #   chapters: 
+    #     - algoritmos-cadeias-de-caracteres.qmd
+    #     - algoritmos-dados-compostos-registros.qmd
+    #     - algoritmos-dados-compostos-vetores.qmd
+    #     - algoritmos-dados-compostos-matrizes.qmd
+    # - part: "Desenvolvimento com arquivos"
+    #   chapters: 
+    #     - algoritmos-manipulacao-de-arquivos-de-registros.qmd
+    # - part: "Recursividade"
+    #   chapters:
+    #     - algoritmos-recursividade.qmd
+
+    - referencias.qmd

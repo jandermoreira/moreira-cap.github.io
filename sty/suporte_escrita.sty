@@ -1,0 +1,33 @@
+%! Package = suporte_escrita
+%! Author = Jander Moreira
+%! Date = 2023/02
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{suporte_escrita}[2023/02/17 Suporte à escrita]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% SUPORTE À ESCRITA E SUA ORGANIZAÇÃO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% segmentos de texto condicionados à existência de um 'label'
+\makeatletter
+\ExplSyntaxOn
+\newif\ifalllabels
+\NewDocumentCommand { \checklabels } { m } {
+% #1: lista de rótulos separados por vírgulas (sem espaços!)
+    \bool_set_true:N \l_all_labels_bool
+    \clist_map_inline:nn { #1 } {
+        \@ifundefined { r@##1 } { \bool_set_false:N \l_all_labels_bool } { }
+    }
+    \bool_if:NTF \l_all_labels_bool { \alllabelstrue } { \alllabelsfalse}
+}
+\ExplSyntaxOff
+\makeatother
+\newcommand{\Condicional}[2]{%
+    \checklabels{#1}%
+    \ifalllabels%
+    #2
+    \fi%
+}
+
+

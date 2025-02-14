@@ -1,0 +1,671 @@
+# C: expressões relacionais e lógicas
+
+Além de expressões aritméticas, há outros dois tipos de expressões relevantes, ambas tratadas neste capítulo: relacionais e lógicas.
+
+## Expressões relacionais
+
+Uma expressão relacional é a que compara (i.e., relaciona) valores. Assim, para determinar de um valor é maior que zero, usa-se uma expressão relacional: `valor > 0`.
+
+As expressões relacionais resultam em valores lógicos: verdadeiro ou falso. Em C, é possível introduzir a noção de algumas expressões relacionais por meio do programa seguinte.
+
+```{c}
+/*
+Ilustração de expressões relacionais
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+    printf("Digite dois valores inteiros: ");
+    fgets(entrada, sizeof entrada, stdin);
+    int valor1, valor2;
+    sscanf(entrada, "%d%d", &valor1, &valor2);
+    //TYPE(0, "27 12");
+
+    printf("%d == %d? %d.\n", valor1, valor2, valor1 == valor2);
+    printf("%d != %d? %d.\n", valor1, valor2, valor1 != valor2);
+    printf("%d < %d?  %d.\n", valor1, valor2, valor1 < valor2);
+    printf("%d > %d?  %d.\n", valor1, valor2, valor1 > valor2);
+    printf("%d <= %d? %d.\n", valor1, valor2, valor1 <= valor2);
+    printf("%d >= %d? %d.\n", valor1, valor2, valor1 >= valor2);
+
+    return 0;
+}
+```
+
+O resultado de uma operação relacional é um valor inteiro (tipo `int`, escrito com `%d`), podendo ser apenas dois valores: 0 se a condição é falsa ou 1, se for verdadeira. Com essa informação é possível interpretar corretamente a saída produzida pelo programa, embora essa saída não seja apropriada para um usuário comum.
+
+Outro ponto a observar observar são os operadores relacionais em si. Alguns são de fácil compreensão, outros nem tanto. A @tbl-operadores-relacionais apresenta os operadores relacionais da linguagem e seus significados.
+
+| Operador | Significado    |
+| :------: | :------------- |
+|   `==`   | Igual          |
+|   `!=`   | Diferente      |
+|   `<`    | Menor que      |
+|   `>`    | Maior que      |
+|   `<=`   | Menor ou igual |
+|   `>=`   | Maior ou igual |
+
+: Operadores relacionais da linguagem C. {#tbl-operadores-relacionais}
+
+
+Pela ordem de precedência das operações, todas as expressões aritméticas são avaliadas antes dos operadores relacionais. Desse modo, ao se escrever `2 * valor1 < 3 * valor2`, as duas multiplicações são realizadas antes da comparação, o que é bastante intuitivo.
+
+Um problema prático interessante e simples é a verificação se alguém está "bem de vida". No Brasil, uma pessoa é considerada pertencente à classe\ A (a de maior renda) se tiver renda familiar mensal acima de 20\ salários mínimos. 
+
+O @alg-classe-a mostra uma solução que determina se uma renda familiar mensal fornecida pertence ou não à classe\ A. A verificação é feita por uma comparação de valores e é usada uma variável lógica para guardar o resultado. A saída esperada do algoritmo é verdadeiro ou falso apenas.
+
+
+```latex {.pseudocode}
+%| title: Determinação de uma dada renda mensal familiar caracteriza o pertencimento à classe A.
+%| label: #alg-classe-a
+
+\begin{algorithmic}
+    \Description Determinação se uma renda familiar mensal é classificada como classe A no Brail; Classe A: 20 salários mínimos de% R\$1.412,00 (valor de janeiro de 2024)
+    \Require o valor da renda familiar
+    \Ensure \True\ se se enquadrar na classe A; \False\ se não
+    \Statex{}
+    \Statep{Obtenha \Id{renda}}
+    \Statep{Calcule \Id{é\_classe\_a} como $\Id{renda} > 28240,00$}[$20\times\mbox{R\$}1412$ (janeiro/2024)]
+    \Statep{Apresente \Id{é\_classe\_a}}
+\end{algorithmic}
+```
+
+Este algoritmo pode ser implementado em C conforme o código seguinte.
+
+
+```{c}
+/*
+Determinação se uma renda familiar mensal é classificada como classe A no
+    Brasil; Classe A: 20 salários mínimos de R\$1.412,00 (valor de janeiro
+    de 2024)
+Requer: o valor da renda familiar
+Assegura: verdadeiro se se enquadrar na classe A; falso se não
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite o valor da renda mensal familiar: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double renda_familiar;
+    sscanf(entrada, "%lf", &renda_familiar);
+    //TYPE(0, "15000");
+
+    _Bool eh_classe_a = renda_familiar > 20 * 1412.00;  // mínimo em 1/2024
+
+    printf("Sua família é classe A? %d\n", eh_classe_a);
+
+    return 0;
+}
+```
+
+A variável `eh_classe_a` é declarada para guardar o resultado da comparação e ela é do tipo `_Bool`, que guarda um valor inteiro 0 ou 1, seguindo o padrão de representação da linguagem.
+
+
+::: {.callout-tip}
+As variáveis que armazenam valores lógicos são usadas de forma diferenciada das numéricas, por exemplo. Em consequência disso, os identificadores usados também devem ser diferenciados.
+
+Uma recomendação importante para as variáveis lógicas é que possuam um verbo no nome. Assim, bons identificadores para variáveis lógicas são `existe_taxa`, `possui_filhos` ou `eh_divisor`, por exemplo.
+
+Vale notar que, embora `filhos` possa ser usada com significando se tem ou não filhos, não é óbvio que a variável seja mesmo um valor lógico, pois poderia conter, por exemplo, o número de filhos. E, assim, a clareza volta a ser um ponto relevante na escrita dos programas.
+:::
+
+
+### Afinal, `_Bool` ou `bool`?
+
+A linguagem C, no início, não possuía um tipo lógico específico. Eram empregadas variáveis do tipo `int` para representar tanto os valores realmente inteiros (como idades ou contadores) quanto para valores lógicos. Assim, para o programador com alguma experiência, não é estranha essa mistura de significados nos códigos mais antigo e também nos novos.
+
+Como não havia a necessidade de uma variável lógica, a palavra `bool` nunca foi reservada para a linguagem e poderia ser usada livremente nos programas. Em decorrência de uma posterior criação do tipo booliano, reservar uma palavra  poderia implicar a reescrita em massa dos códigos já existentes. Dessa forma, a palavra-chave escolhida for `_Bool`.
+
+Para os programas para os quais não haveria conflito, foi incluída à biblioteca padrão o arquivo de cabeçalho `stdbool.h`, o qual define `bool` como um novo nome para `_Bool`. Além do novo nome, também define `true` e `false` para serem usados no lugar de 1 e 0, respectivamente.
+
+A modificação do programa para usar essas definições é pequena, bastando incluir o arquivo de cabeçalhos e modificar o tipo na declaração da variável.
+
+```c
+#include <stdbool.h>
+```
+
+```c
+bool eh_classe_a = renda_familiar > 20 * 1412.00;
+```
+
+A forma de escrita usando `bool` parece, para o autor, a forma mais natural de declaração, pois segue um padrão visual similar ao dos outros tipos. Este será empregado ao longo do texto.
+
+Antes de apresentar a versão final do código, agora com o cabeçalho `stdbool.h`, é interessante notar que existe em C uma construção que pode ser usada neste programa para melhorar a apresentação do resultado. Esse elemento é conhecido como condicional ternário.
+
+::: {.callout title="Operador condicional ternário"}
+_expressão\_lógica_ `?` _resultado\_verdadeiro_ `:` _resultado\_falso_
+:::
+
+Esse condicional, assim como os aritméticos e os relacionais, resultam em um valor dependente de seus operandos. Neste caso, há três operandos e dois operadores: `?` e `:`. Se o valor de _expressão\_lógica_ for verdadeiro, então o resultado final da expressão é o valor _resultado\_verdadeiro_ e, caso contrário, o resultado é _resultado\_falso_.
+
+Segue um exemplo simples desse condicional ternário.
+
+```c
+int a = 20;
+int b = 12;
+
+int maior = a > b ? a : b;
+```
+
+Na atribuição a `maior`, a _expressão\_lógica_ do condicional ternário é `a > b`. Se o resultado dessa expressão for verdadeiro, então o valor de `a` é o resultado atribuído a `maior`. Se o valor de `a` for menor ou igual ao de `b`, o resultado final será `b`. 
+
+Não há restrições dos tipos de dados que podem ser usados como resultado do condicional ternário e o programa usa cadeias de caracteres como resultado.
+
+```{c}
+/*
+Determinação se uma renda familiar mensal é classificada como classe A no
+    Brasil; Classe A: 20 salários mínimos de R\$1.412,00 (valor de janeiro
+    de 2024)
+Requer: o valor da renda familiar
+Assegura: verdadeiro se se enquadrar na classe A; falso se não
+*/
+#include <stdio.h>
+#include <stdbool.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite o valor da renda mensal familiar: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double renda_familiar;
+    sscanf(entrada, "%lf", &renda_familiar);
+    //TYPE(0, "30000");
+
+    bool eh_classe_a = renda_familiar > 20 * 1412.00;  // mínimo em 1/2024
+
+    printf("Sua família %s classe A!\n", eh_classe_a ? "é" : "não é");
+
+    return 0;
+}
+```
+
+As modificações para o uso de `bool` foram feitas e, para o condicional ternário, se `eh_classe_a` for verdadeiro, o resultado é o texto `"é"` e, se não for, `"não é"`. Um desses dois valores ocupará o lugar do `%s` no texto do `printf`.
+
+
+
+## Expressões lógicas
+
+Neste tópico serão detalhadas as expressões lógicas, as quais foram usadas nos exemplos anteriores mas não foram explicadas completamente.
+
+Uma expressão lógica é uma expressão que resulta em verdadeiro ou falso pela combinação de expressões lógicas. Existem apenas três operadores lógicos: -e-, -ou-  e -não-.
+
+A combinação com o operador de disjunção -e- somente resulta em verdadeiro quando os dois operandos forem verdadeiros e, caso contrário, em falso. O conceito desse operador pode ser exemplificado por "há isenção de tarifa se o cliente possuir cartão de crédito e o volume de aplicações for superior a R$100.000,00". Nessa situação, apenas ter o cartão de crédito ou apenas ter aplicações suficientes não dá direito ao desconto. O resultado somente é verdadeiro se ambas as condições forem satisfeitas simultaneamente.
+
+O -ou- é o operador de conjunção, que resulta em verdadeiro se qualquer um de seus operadores for verdadeiro, sendo falso apenas quando ambos forem falsos. Por exemplo, "a pessoa tem direito a meia entrada no baile se for sócio do clube ou se for estudante". Este é o caso em que o resultado é falso apenas para os não sócios e os não estudantes.
+
+O operador -não- é a negação, apenas invertendo o resultado. Não verdadeiro é falso e não falso é verdadeiro. Como exemplo, em "se não estiver chovendo, vou sair", a situação de chuva é verdadeira, o resultado é falso, o que impede a saída da pessoa.
+
+Em C, a operação -e- é indicada pelo operador `&&`, -ou- usa `||` e -não- é o operador unário `!`. As combinações possíveis de resultados são apresentadas na @tbl-tabela-verdade-operadores-logicos, chamada de tabela verdade.
+
+|    `e1`    |    `e2`    | `e1 && e2` | `e1 || e2` |   `!e1`    |   `!e2`    |
+| :--------: | :--------: | :--------: | :--------: | :--------: | :--------: |
+|   falso    |   falso    |   falso    |   falso    | verdadeiro | verdadeiro |
+|   falso    | verdadeiro |   falso    | verdadeiro | verdadeiro |   falso    |
+| verdadeiro |   falso    |   falso    | verdadeiro |   falso    | verdadeiro |
+| verdadeiro | verdadeiro | verdadeiro | verdadeiro |   falso    |   falso    |
+
+: Tabela verdade para os operadores `&&` (-e-), `||` (-ou-) e `!` (-não-). {#tbl-tabela-verdade-operadores-logicos}
+
+Como os demais operadores, há também uma ordem de precedência quando são usados operadores lógicos. O de maior precedência é o `!`, seguido pelo `&&` e, por último, `||`. A quebra da precedência é feita com o uso de parênteses. Seguem exemplos de expressões e como são avaliadas (usando-se parênteses adicionais para reforçar a ordem).
+
+```c 
+a > b && a != 0 || b != 0  // ((a > b && a != 0) || b != 0)
+```
+
+```c 
+a != 0 || b != 0 && a > b  // (a != 0 || (b != 0 && a > b))
+```
+
+```c 
+// assumindo-se v1 e v2 como variáveis com valores lógicos
+!v1 && v2  // ((!v1) && v2)
+```
+
+```c 
+!v1 && !v2  // ((!v1) && (!v2))
+```
+
+::: {.callout-warning title="Curiosidade"}
+Existe uma operação chamada -ou-exclusivo-, que diferentemente do -ou-, resulta verdadeiro se apenas um dos dois operandos for verdadeiro, mas não os dois. Para se obter esse resultado, a seguinte expressão pode ser usada.
+
+```c 
+// assumindo-se v1 e v2 como variáveis com valores lógicos
+!(v1 && v2) && (v1 || v2)
+```
+
+A opção que segue é também equivalente.
+
+```c 
+(v1 && !v2) || (!v1 && v2)
+```
+
+Note-se que os parênteses nesta última expressão servem apenas para ênfase e são desnecessários dada a ordem de precedência dos operadores.
+:::
+
+
+### Relações matemáticas ternárias e sucessivas {#sec-relacoes-ternarias}
+
+No cotidiano é comum usar expressões ternárias como 0\ $< x <$\ 10 para indicar que $x$ está em um determinado intervalo. Em C é preciso cuidado com tais expressões, pois cada expressão relacional resulta em um valor inteiro.
+
+Por exemplo, a expressão `0 < valor < 10` é avaliada na seguinte ordem, considerando-se `valor` contendo 20:
+
+#. `(0 < valor) < 10`: avaliação que ocorre da esquerda para a direita;
+#. `1 < 10`: substituição do resultado intermediário na expressão;
+#. `1`: o resultado final é verdadeiro.
+
+Porém 0\ <\ 20\ <\ 10 é esperado que resulte em falso.
+
+Expressões ternárias em C não são possíveis e, assim, devem ser escritas como uma combinação de expressões binárias. A expressão deve ser escrita: `0 < valor && valor < 10`, sendo que o `&&` significa "e". O modo com que as expressões relacionais são avaliadas e o uso de valores inteiros como resultado levam à necessidade de que expressões sejam escritas, muitas vezes, de forma extensa.
+
+Estendendo esse conceito, matematicamente se pode escrever $a = b = c = d$, por exemplo. Em C, a expressão requer expressões relacionais isoladas combinadas com operadores lógicos. Assim, `a == b && b == c & c == d` é uma expressão equivalente. Seguem exemplos.
+
+```c
+a == b && b == c && c == d  // a = b = c = d
+a < b && b < c && c < d     // a < b < c < d
+a == b && b < c             // a = b < c
+```
+
+
+### Comparações com vários valores
+
+Outra questão que surgem com frequência é a verificação de uma variável com uma série de valores. Este é o caso, por exemplo, para verificar se uma variável inteira `mes` é um dos meses com 31\ dias, ou seja, se ${m \in \{ 1, 3, 5, 7, 8, 10, 12 \}}$. Não é incomum que programados iniciantes tentem fazer essa comparação como se segue.
+
+```c 
+mes == 1 || 3 || 5 || 7 || 8 || 10 || 12  // incorreto!
+```
+
+Essa expressão, pelas regras da linguagem, primeiro avalia se `mes == 1` e esse resultado é 0 ou 1. A próxima comparação verifica, portanto, `0 || 3` ou `1 || 3`, o que resulta em 1, qualquer que seja o valor obtido na primeira comparação. É importante lembrar que o valor falso está associado ao 0, enquanto qualquer valor não nulo é verdadeiro. A expressão acima significa, na prática, "mês igual a 1 ou verdadeiro ou verdadeiro ou verdadeiro...", o que é sempre verdadeiro, ou seja, 1.
+
+O ajuste necessário para essa expressão é individualizar as comparações e a comparação seguinte produz o resultado desejado.
+
+```c
+mes == 1 || mes == 3 || mes == 5 || mes == 7 ||  mes == 8 ||
+    mes == 10 || mes == 12  // OK!
+```
+
+::: callout-tip
+Elaborar expressões lógicas requer prática e atenção. Nem sempre as verificações são óbvias e testar a avaliação da expressão passo a passo pode ser uma estratégia muito interessante ou até necessária.
+:::
+
+
+## Ordem de precedência entre operadores relacionais e lógicos
+
+A linguagem C estabelece um padrão curioso (e potencialmente confuso) para ordem de precedência dos operadores relacionais e lógicos. A regra geral é que operações relacionais sejam feitas antes das lógicas, ou seja, comparações antes das combinações com -e- e -ou-. Isso é verdade, exceto para o -não-. Em C, o operador `!` tem precedência sobre os operadores relacionais.
+
+Com exemplo o trecho de código seguinte pode ser considerado.
+
+```c
+int a = 1;
+int b = 2;
+int c = 0;
+
+bool r = a > b && ! b >= c;
+```
+
+É importante observar que, embora `b` tenha valor 2, ao ser avaliado `! b > c` a primeira operação é `!b`. Como todo valor diferente de zero é verdadeiro, `!b` é falso e, portanto, igual a 0. Assim, a expressão se torna equivalente a `0 >= c`, o que resulta em verdadeiro, uma vez `c` também é zero.
+
+A ordem é, portanto:
+
+#. O operador `!`;
+#. Os operadores relacionais;
+#. O operador `&&`;
+#. O operador `||`.
+
+
+## Exemplos práticos
+
+Esta seção cobre exemplos diversos de implementações que usam expressões relacionais e lógicas em problemas diretos, com maior ou menor grau de complexidade.
+
+
+### Verificação de cédulas válidas
+
+Este é um exemplo para determinar se um determinado valor é ou não um valor de cédula válido. Atualmente no Brasil, há cédulas e moedas usadas sendo usada cotidianamente no comércio. As cédulas em papel possuem valores de face de 2, 5, 10, 20, 50, 100 e 200 reais.
+
+Assim, é proposto o @alg-cedula-valida para determinar se um valor qualquer é ou não o valor de face de uma cédula brasileira.
+
+
+```latex {.pseudocode}
+%| title: Determinação se um valor é um valor de face de uma cédula brasileira.
+%| label: #alg-cedula-valida
+\begin{algorithmic}
+    \Description Verificação se um dado valor inteiro qualquer é ou não um valor de face válido entre as cédulas do Brasil
+    \Require um valor inteiro qualquer
+    \Ensure \True\ se o valor corresponder a uma das cédulas ou \False\ se não corresponder
+    \Statex{}
+    \Statep{Obtenha \Id{valor\_de\_face}}
+    \Statep{Faça \Id{é\_válido} verdadeiro se e somente se ${\Id{valor\_de\_face} \in \{ 2, 5, 10, 20, 50, 100, 200\}}$}[senão é falso]
+    \Statep{Apresente \Id{é\_válido}}
+\end{algorithmic}
+```
+
+
+O programa seguinte codifica esse algoritmo.
+
+```{c}
+/*
+Verificação se um dado valor inteiro qualquer é ou não um valor de face
+    válido entre as cédulas do Brasil
+Requer: um valor inteiro qualquer
+Assegura: verdadeiro se o valor corresponder a uma das cédulas; falso
+    caso contrário
+*/
+#include <stdio.h>
+#include <stdbool.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite um valor inteiro para verificação de cédula: ");
+    fgets(entrada, sizeof entrada, stdin);
+    int valor_candidato;
+    sscanf(entrada, "%d", &valor_candidato);
+    //TYPE(0, "100");
+
+    bool eh_valido = valor_candidato == 2 || valor_candidato == 5 ||
+                        valor_candidato == 10 || valor_candidato == 20 ||
+                        valor_candidato == 50 || valor_candidato == 100 ||
+                        valor_candidato == 200;
+
+    printf("O valor %d é %s.\n", valor_candidato,
+        eh_valido ? "válido" : "inválido");
+
+    return 0;
+}
+```
+
+
+
+### Verificação de aprovação em disciplina
+
+Considerando-se que a aprovação de um aluno em uma disciplina exija que ele tenha média maior ou superior a\ 6 e que sua frequência não seja inferior a 75%, o problema que deve ser resolvido é determinar se um aluno foi ou não aprovado. Para determinar média final, há duas notas e deve ser calculada sua média. Para a frequência, estão disponíveis o número de faltas e o número total de aulas. Assim, é proposto como solução o @alg-media-e-frequencia.
+
+```latex {.pseudocode}
+%| title: Verificação da aprovação ou reprovação de um aluno em função de notas e frequência.
+%| label: #alg-media-e-frequencia
+\begin{algorithmic}
+    \Description Determinação de aprovação em disciplina em função da média de duas notas e frequência baseada no número de faltas e número de aulas
+    \Require duas notas de provas, número de faltas e número de aulas
+    \Ensure A média, a frequência e \True\ ou \False\ conforme aprovado ou reprovado
+    \Statex{}
+    \Statep{Obtenha $\Id{nota}_1$ e $\Id{nota}_2$}
+    \Statep{Calcule \Id{média} como  $\dfrac{\Id{nota}_1 + \Id{nota}_1}{2}$}
+    \Statep{Calcule \Id{tem\_média} como $\Id{média} \geq 6$}
+    \Statex
+    \Statep{Obtenha $n_\Id{faltas}$ e $n_\Id{aulas}$}
+    \Statep{Calcule \Id{frequência} $\dfrac{n_\Id{aulas} - n_\Id{faltas}}{n_\Id{aulas}}$}
+    \Statep{Calcule \Id{tem\_pouca\_frequência} como $\Id{frequência} < 0,75$}
+    \Statex
+    \Statep{Calcule \Id{tem\_aprovação} como \Id{tem\_média} e não \Id{tem\_pouca\_frequência}}
+    \Statep{Apresente \Id{média}, \Id{frequência} e \Id{tem\_aprovação}}
+\end{algorithmic}
+```
+
+A implementação é apresentada na sequência.
+
+```{c} 
+/*
+Determinação de aprovação em disciplina em função da média de duas notas e frequência baseada no número de faltas e número de aulas
+Requer: duas notas de provas, número de faltas e número de aulas
+Assegura: A média, a frequência e verdadeiro/falso conforme aprovado ou reprovado
+*/
+#include <stdio.h>
+#include <stdbool.h>
+
+int main(void) {
+    char entrada[160];
+
+    // Média
+    printf("Digite as duas notas de provas: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double nota1, nota2;
+    sscanf(entrada, "%lf%lf", &nota1, &nota2);
+    //TYPE(0, "5.8 9.1");
+    double media = (nota1 + nota2) / 2;
+    bool tem_media = media >= 6;
+
+    // Frequência
+    printf("Digite o número de faltas e o de aulas: ");
+    fgets(entrada, sizeof entrada, stdin);
+    int numero_faltas, numero_aulas;
+    sscanf(entrada, "%d%d", &numero_faltas, &numero_aulas);
+    //TYPE(0, "8 30");
+    double frequencia = (double) (numero_aulas - numero_faltas) / numero_aulas;
+    bool tem_pouca_frequencia = frequencia < 0.75;
+
+    // Aprovação/reprovação e resultado
+    bool tem_aprovacao = tem_media && !tem_pouca_frequencia;
+    printf("Média: %.1f; frequência: %.1f%%.\n", media, 100 * frequencia);
+    printf("Situação: %s.\n", tem_aprovacao ? "aprovado" : "reprovado");
+
+    return 0;
+}
+```
+
+Este programa usa variáveis lógicas para as diversas condições. Um detalhe interessante é a variável `tem_pouca_frequencia`, a qual indica que a frequência não é suficiente para aprovação. Na verificação final, é usado o operador -não- para negar essa condição e conceder a aprovação: `!tem_pouca_frequencia` (i.e., "não tem pouca frequência").
+
+O operador `!` é pouco usado juntamente com expressões relacionais, pois escrever `a <= b` é melhor que `!(a > b)`. Por outro lado, se existem uma variável `detectou_problema`, é mais natural negar escrevendo `detectou_problema` ou `!detectou_problema`.
+
+
+::: callout-tip
+Operadores lógicos nunca devem ser comparados com os valores `true` e `false`, como exemplificado na sequência.
+
+```c 
+tem_aprovacao ? "aprovado" : "reprovado"           // bom!
+tem_aprovacao == true ? "aprovado" : "reprovado"   // ruim e desnecessário!
+tem_aprovacao != false ? "aprovado" : "reprovado"  // pior ainda!
+```
+
+Pode-se considerar que comparar uma variável com `true` ou `false` faz tanto sentido como escrever `(a > b) == true`.
+:::
+
+### Verificação de existência de triângulo
+
+Para ilustrar tanto as expressões como o uso de valores lógicos, o problema de verificar se três segmentos de reta podem ser os lados de um triângulo é apresentado. Um triângulo não pode ser formado caso um dos segmentos seja maior ou igual à soma dos outros dois, situação em que o triângulo "não fecha". Seguem a solução no @alg-triangulo-valido-logico e sua implementação em C.
+
+```latex {.pseudocode}
+%| title: Verificação se três segmentos de reta podem ou não formar um triângulo
+%| label: #alg-triangulo-valido-logico
+
+\begin{algorithmic}
+    \Description Verificação se três segmentos de reta com determinados comprimentos podem ou não formar um triângulo
+    \Require os comprimentos $l_1$, $l_2$ e $l_3$ dos segmentos de reta
+    \Ensure \True\ se podem formar um triângulo; \False\ caso contrário
+    \Statex{}
+    \Statep{Obtenha os comprimentos $l_1$, $l_2$ e $l_3$}
+    \Statep{Calcule $\triangle_\Id{válido}$ como ${l_1 < l_2 + l_3}$ e ${l_2 < l_1 + l_3}$ e ${l_3 < l_1 + l_2}$}[verdadeiro ou falso]
+    \Statep{Apresente $\triangle_\Id{válido}$}
+\end{algorithmic}
+```
+
+```{c} 
+/*
+Verificação se três segmentos de reta com determinados comprimentos podem
+    ou não formar um triângulo
+Requer: os comprimentos $l_1$, $l_2$ e $l_3$ dos segmentos de reta
+Assegura: Verdadeiro se podem formar um triângulo; falso caso contrário
+*/
+#include <stdio.h>
+#include <stdbool.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite os comprimentos dos segmentos de reta: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double lado1, lado2, lado3;
+    sscanf(entrada, "%lf%lf%lf", &lado1, &lado2, &lado3);
+    //TYPE(0, "3 4 5");
+
+    bool triangulo_eh_valido = lado1 < lado2 + lado3 && lado2 < lado1 + lado3 &&
+            lado3 < lado1 + lado2;
+
+    printf("Triângulo %s.\n", triangulo_eh_valido ? "válido" : "inválido");
+
+    return 0;
+}
+```
+
+Neste programa, a variável `triangulo_eh_valido` é usada como uma variável lógica. 
+
+
+
+### Verificação de validade de uma data
+
+Como exemplo com expressões lógicas, segue um algoritmo para determinar se valores para dia, mês e ano formam uma data válida (@alg-data-valida). Os valores formam uma data válida se o valor do dia estiver dentro do intervalo do mês e o ano for diferente de zero[^anno-domini]. A solução desconsidera anos bissextos, de forma que fevereiro considera apenas 28 dias. Também considera que valores negativos para um ano indicam AC (antes de Cristo).
+
+[^anno-domini]: O calendário da era cristã (_Anno Domini_, ou ano do Senhor) se inicia com o ano 1 DC e anos antes de Cristo se iniciam com 1 AC. Não há ano zero.
+
+```latex {.pseudocode}
+%| title: Determinação se valores inteiros para dia, mês e ano formam uma data válida.
+%| label: #alg-data-valida
+
+\begin{algorithmic}
+    \Description Determinação se valores inteiros para dia, mês e ano formam uma data válida, desconsiderando anos bissextos e entendendo anos negativos como AC
+    \Require \Id{dia}, \Id{mês} e \Id{ano} inteiros
+    \Ensure \True\ se os valores formarem uma data válida; \False\ caso contrário
+    \Statex{}
+    \Statep{Obtenha \Id{dia}, \Id{mês} e \Id{ano}}
+    \Statep{Calcule \Id{data\_válida} com a expressão
+        $\Id{ano} \neq 0$ e $\Id{dia} > 0$ e $\Id{mês} > 0$ e
+        ($\Id{dia} \leq 28$ e $\Id{mês} == 2$ ou
+        $\Id{dia} \leq 31$ e $\Id{mês} \in \{ 1, 3, 5, 7, 8, 10, 12 \}$ ou
+        $\Id{dia} \leq 30$ e $\Id{mês} \in \{ 4, 6, 9, 11 \})$%
+    }
+    \Statep{Apresente o valor de \Id{data\_válida}}
+\end{algorithmic}
+```
+
+```{c} {.hide-compiler-output}
+/*
+Determinação se valores inteiros para dia, mês e ano formam uma data
+válida,desconsiderando anos bissextos e entendendo anos negativos como AC
+Requer: valores inteiros para dia, mês e ano
+Assegura: verdadeiro se a data é válida ou falso caso contrário
+*/
+#include <stdio.h>
+#include <stdbool.h>
+
+int main(void) {
+    char entrada[160];
+    
+    printf("Digite os valores para dia, mês e ano: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "30 2 2050");
+    int dia, mes, ano;
+    sscanf(entrada, "%d%d%d", &dia, &mes, &ano);
+
+    bool data_valida = dia > 0 && mes > 0 && ano != 0 && (
+            dia <= 28 && mes == 2 ||
+            dia <= 31 && (mes == 1 || mes == 3 || mes == 5 || mes == 7 ||
+                mes == 8 || mes == 10 || mes == 12) ||
+            dia <= 30 && (mes == 4 || mes == 6 || mes == 9 || mes == 11)
+        );
+
+    printf("%02d/%02d/%04d é %s.\n", dia, mes, ano, 
+        data_valida ? "válida" : "inválida");
+
+    return 0;
+}
+```
+
+Embora a ordem de precedência dos operadores permita escrever as expressões usando apenas os parênteses somente necessário, é usual que expressões mais longas usem o recurso dos parênteses para dar maior clareza à expressão. Um desses casos é envolver o `&&` com parênteses, mesmo sabendo-se que o `||` será avaliado posteriormente. O programa de verificação de datas é escrito lançando mão dessa estratégia.
+
+
+```{c}
+/*
+Determinação se valores inteiros para dia, mês e ano formam uma data
+    válida,desconsiderando anos bissextos e entendendo anos negativos
+    como AC
+Requer: valores inteiros para dia, mês e ano
+Assegura: verdadeiro se a data é válida ou falso caso contrário
+*/
+#include <stdio.h>
+#include <stdbool.h>
+
+int main(void) {
+    char entrada[160];
+    
+    printf("Digite os valores para dia, mês e ano: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "18 12 1892");
+    int dia, mes, ano;
+    sscanf(entrada, "%d%d%d", &dia, &mes, &ano);
+
+    bool data_valida = dia > 0 && mes > 0 && ano != 0 && (
+            (dia <= 28 && mes == 2) ||
+            (dia <= 31 && (mes == 1 || mes == 3 || mes == 5 || mes == 7 ||
+                mes == 8 || mes == 10 || mes == 12)) ||
+            (dia <= 30 && (mes == 4 || mes == 6 || mes == 9 || mes == 11))
+        );
+
+    printf("%02d/%02d/%04d é %s.\n", dia, mes, ano, 
+        data_valida ? "válida" : "inválida");
+
+    return 0;
+}
+```
+
+
+### Mais sobre valores lógicos em C
+
+Como já exposto no início do capítulo, se um valor for igual a zero ele é considerado falso e se for diferente de zero é verdadeiro. A questão é que, na linguagem C, isso é válido para qualquer valor e não somente os do tipo `bool` e inteiros.
+
+Para exemplificar, o programa abaixo pode ser considerado.
+
+```{c}
+/*
+Exemplo de programa com negação de valor double
+*/
+#include <stdio.h>
+#include <stdbool.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite um valor real: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "0.0");
+    double d;
+    sscanf(entrada, "%lf", &d);
+
+    bool r = !d;
+
+    printf("r é %s.\n", r ? "verdadeiro" : "falso");
+    return 0;
+}
+```
+
+Se o valor digitado para `d` for igual a zero, `!d` é 1; se for diferente de zero, `r` receberá 0. Para a linguagem, é irrelevante que `d` seja `double`.
+
+Segue mais um exemplo.
+
+```{c}
+/*
+Exemplo de programa com negação de valor double
+*/
+#include <stdio.h>
+#include <stdbool.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite um valor real: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "5.2");
+    double d;
+    sscanf(entrada, "%lf", &d);
+
+    printf("O valor digitado é %s zero.\n", d ? "diferente de" : "igual a");
+    return 0;
+}
+```
+Neste programa, o condicional ternário é escrito `d ? "diferente de" : "igual a"`. Se `d` for zero, a expressão é assumida como falsa; se não for, é verdadeira.
+
+::: {.callout-caution}
+Não é uma boa prática usar um valor que não seja lógico como se assim fosse. A escrita do código deve deixar claro o que é o que.
+
+Por exemplo, mesmo que `2 * i - 1 ? "Ok" : "Não ok"` funcione, resultando em `"Ok"` sempre que `2 * i - 1` for diferente de zero, deve-se sempre escrever `2 * i - 1 != 0 ? "Ok" : "Não ok"`, já que a operação aritmética não é, em si, uma expressão lógica.
+:::

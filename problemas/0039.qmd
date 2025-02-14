@@ -1,0 +1,6 @@
+<!-- Crescimento simultâneo de aplicações 2 -->
+::: {#exr-0039}
+Zana Geraldo e Otto de Mattos Oliveira são investidores e há um interesse no progresso de aplicações de cada um deles.
+
+Escreva um algoritmo que, a partir dos saldos atuais das duas aplicações e as respectivas taxas de juros mensais, apresente a evolução simultânea dos saldos de ambas as aplicações mês a mês (incluindo o mês inicial), até que a aplicação de Otto supere a de Zana ou até que tenham transcorridos 12\ meses. O número de meses decorridos deve ser apresentado no final.
+:::

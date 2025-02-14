@@ -1,0 +1,6 @@
+<!-- Função número de divisores -->
+::: {#exr-0056}
+Escreva uma função que retorne o número de divisores de um número natural, incluindo ele próprio.
+
+@rem-0056
+:::

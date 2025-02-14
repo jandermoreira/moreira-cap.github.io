@@ -1,0 +1,16 @@
+<!-- Pontuação em jogo de auditório -->
+::: {#exr-0001}
+Há dois participantes em uma competição de perguntas e respostas, que acumulam pontos ao longo de diversas fases visando um prêmio em dinheiro dado ao vencedor no final.
+
+Em das fases, o apresentador mostra aos competidores uma pergunta juntamente com com cinco respostas, cabendo a eles escolher a resposta correta. Ao mesmo tempo, cada aposta uma certa quantidade de seus pontos, que depende de sua estratégia e confiança na resposta.
+
+Feitas as escolhas e apostas, o apresentador revela a resposta correta.
+
+Os possíveis resultados são os seguintes:
+
+* Se apenas um dos jogadores acertar, ele ganha o dobro dos seus pontos apostados e também a aposta do adversário;
+* Se ambos acertarem, cada um recebe metade da soma das apostas (a pontuação não é necessariamente um valor inteiro);
+* Se ambos errarem, todos perdem os valores apostados.
+
+Escreva um algoritmo que apresente a lógica para calcular a pontuação. A partir da alternativa escolhida por cada jogador, as pontuações apostadas e a alternativa correta, apresentar o valor ganho por cada jogador.
+:::

@@ -1,0 +1,6 @@
+<!-- Movimentação do mínimo para início do vetor -->
+::: {#exr-0077}
+Escreva um procedimento mover o valor mínimo um vetor de números reais para que ocupe a primeira posição, preservando todos os valores originais. Considere que o comprimento mínimo do vetor seja 1.
+
+@sol-0077
+:::

@@ -1,0 +1,9 @@
+<!-- Qual usar? Repetição indefinida com sentinela (Transmissão em rede) -->
+::: {#exr-0020}
+Considere o problema:
+
+> Em uma transmissão de dados entre dois equipamentos diretamente conectados (i.e., sem nenhum intermediário entre eles), os dados são mandados como uma sequência de bytes no chamado nível de transporte da rede. Cada "pacote" de dados é, chamado de quadro, tem quantidade variável de bytes e é iniciado e terminado com um valor predefinido padrão. Escreva um algoritmo que receba uma sequência de valores de bytes já encabeçada pelo valor padrão e armazene os dados até encontrar o valor predefinido que indica o fim do quadro.
+
+A solução algorítmica para esse problema requer, em princípio, uma repetição.
+Qual a melhor escolha de estrutura de repetição?
+:::

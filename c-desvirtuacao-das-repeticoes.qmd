@@ -1,0 +1,284 @@
+# Desvirtuação das repetições {#sec-desvirtuacao-das-repeticoes}
+
+A estrutura do `for`, embora seja bem objetiva indicando iniciação, condição e incremento (seus três elementos de operação), ela é bastante flexível do ponto de vista de seu uso pelo programador.
+
+Um indicador dessa liberdade dada ao programador é que todos os elementos são opcionais, além de permitirem outros elementos.
+
+### Laços infinitos
+
+Em termos de argumentos opcionais, o trecho de código seguinte pode ser considerado.
+
+```c 
+for (;;)
+    printf("Faça algo!\n");
+```
+
+Para esta repetição, não há iniciação, nem condição, nem incremento. Seu comportamento, assim, funciona como um "repita o comando para sempre", ou seja, um laço infinito.
+
+
+::: {.callout-tip}
+Laços infinitos, embora não se apresentem como uma solução algorítmica em si, não são incomuns em programas. Por exemplo, o programa que gerencia um aparelho eletrônico simples como um forno de micro-ondas não foi feito para terminar: ele inicia ao se ligar o aparelho na tomada e só para quando o plugue for retirado.
+
+Embora o esquema `for (;;)` seja usado, recomenda-se que laços infinitos usem `while (true)` para dar essa ênfase.
+:::
+
+
+Na prática, basta não ter a condição de continuidade especificada para se ter a repetição infinita. Segue outro exemplo simples com repetições infinitas usando o `for`, que faz a contagem cíclica de 0 a 9 (contagem modular).
+
+```c
+for (int i = 0;; i = (i + 1) % 10)
+    printf("%d ", i);
+```
+
+
+### Término forçado `for`
+
+Enquanto se escreve um programa, o uso da repetição com `for` intuitivamente indica que um determinado número de repetições vai ocorrer. Muitos programadores deturpam essa percepção artificialmente interrompendo a repetição.
+
+Ao considerar o código seguinte, a expectativa é que a leitura seja feita cinco vezes. Na repetição, porém, há um `if` que altera o valor de `i` de forma a terminar a repetição.
+
+```{c}
+/*
+Leitura e apresentação de valores inteiros
+Requer: uma sequência de até 5 valores inteiros não negativos ou uma
+    sequência encerrada por um valor negativo
+Assegura: a apresentação de cada valor lido na tela
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("Digite até 5 valores inteiros não negativos:\n");
+    for(int i = 0; i < 5; i++) {
+        char entrada[160];
+        printf("> ");
+        fgets(entrada, sizeof entrada, stdin);
+        int valor;
+        sscanf(entrada, "%d", &valor);
+        //TYPE(0, "10");
+        //TYPE(1, "0");
+        //TYPE(2, "-5");
+        //TYPE(3, "18");
+        //TYPE(4, "1");
+        //STEP
+
+        printf("  +-- digitado %d.\n", valor);
+        if (valor < 0)
+            i = 5;
+    }
+
+    return 0;
+}
+```
+
+O programa não está incorreto no sentido de que encerra as leituras ao encontrar um valor negativo. O problema é que esse encerramento prematuro em função do valor lido é mascarado e exige por parte de outro programador que analise os comandos uma atenção extra para entender que um "para _i_ de 1 até 5" não será sempre de 1 a 5.
+
+Em programas mais complexos e com mais variáveis, o uso desse expediente de término forçado pode ficar mascarado o suficiente para que outro programador, ao fazer uma modificação, sequer note essa possibilidade e introduza um erro ou instabilidade no código.
+
+Neste caso, como o número de vezes da repetição é variável, o código ficaria mais claro usando o `do while`, por exemplo. Assim, não há indução no código a um comportamento que o programa não tem e deixa explícitas as duas condições de parada da repetição.
+
+
+```{c}
+/*
+Leitura e apresentação de valores inteiros
+Requer: uma sequência de até 5 valores inteiros não negativos ou uma
+    sequência encerrada por um valor negativo
+Assegura: a apresentação de cada valor lido na tela
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("Digite até 5 valores inteiros não negativos:\n");
+    int i = 0;
+    int valor;
+    do {
+        char entrada[160];
+        printf("> ");
+        fgets(entrada, sizeof entrada, stdin);
+        sscanf(entrada, "%d", &valor);
+        //TYPE(0, "10");
+        //TYPE(1, "0");
+        //TYPE(2, "-5");
+        //TYPE(3, "18");
+        //TYPE(4, "1");
+        //STEP
+
+        printf("  +-- digitado %d.\n", valor);
+        i++;
+    } while (valor >= 0 && i < 5);
+
+    return 0;
+}
+```
+
+
+## Laços `while` infinitos, mas nem tanto {#sec-while-infinito}
+
+Não é incomum encontrar códigos em repositórios que utilizem falsos laços infinitos. Segue um programa exemplo desse recurso.
+
+
+```{c}
+/*
+Leitura e apresentação de valores não negativos
+Requer: uma sequência de 0 ou mais de inteiros não negativos seguida
+    por um valor negativo usado como sentinela
+Assegura: a apresentação de cada valor da sequência na tela
+*/
+#include <stdio.h>
+#include <stdbool.h>
+
+int main(void) {
+    while (true) {
+        char entrada[160];
+        printf("> ");
+        int valor;
+        fgets(entrada, sizeof entrada, stdin);
+        sscanf(entrada, "%d", &valor);
+        //TYPE(0, "12");
+        //TYPE(1, "100");
+        //TYPE(2, "18");
+        //TYPE(3, "1");
+        //TYPE(4, "-5");
+        //STEP
+        if (valor < 0)
+            break;
+
+        printf("  +-- digitado %d.\n", valor);
+    }
+
+    return 0;
+}
+```
+
+Embora o `while (true)` seja um indicador sutil de que talvez não se espere uma repetição infinita, ele requer que o código seja analisado para identificar onde a condição de parada ocorre. No contexto, o comando `break` interrompe sumariamente a repetição, desestruturando o código.
+
+::: {.callout-tip}
+Somente se deve usar o `brake` para interromper repetições quando essa for realmente a melhor opção, ou seja, quando for uma exceção! Caso contrário, o emprego de `while` e `do while` são opções melhores.
+:::
+
+
+O programa seguinte é uma versão estruturado com a mesma funcionalidade usando uma condição explícita no `while`.
+
+```{c}
+/*
+Leitura e apresentação de valores não negativos
+Requer: uma sequência de 0 ou mais de inteiros não negativos seguida
+    por um valor negativo usado como sentinela
+Assegura: a apresentação de cada valor da sequência na tela
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    // Primeira leitura
+    printf("> ");
+    fgets(entrada, sizeof entrada, stdin);
+    int valor;
+    sscanf(entrada, "%d", &valor);
+    //TYPE(0, "12");
+    //STEP
+
+    while (valor >= 0) {
+        printf("  +-- digitado %d.\n", valor);
+
+        // Próxima leitura
+        printf("> ");
+        fgets(entrada, sizeof entrada, stdin);
+        sscanf(entrada, "%d", &valor);
+        //TYPE(1, "100");
+        //TYPE(2, "18");
+        //TYPE(3, "1");
+        //TYPE(4, "-5");
+        //STEP
+    }
+
+    return 0;
+}
+```
+
+
+Uma versão com `do while` é apresentada na sequência, com destaque de que a apresentação do valor na tela é feita somente para valores não negativos.
+
+```{c}
+/*
+Leitura e apresentação de valores não negativos
+Requer: uma sequência de 0 ou mais de inteiros não negativos seguida
+    por um valor negativo usado como sentinela
+Assegura: a apresentação de cada valor da sequência na tela
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    int valor;
+    do {
+        printf("> ");
+        fgets(entrada, sizeof entrada, stdin);
+        sscanf(entrada, "%d", &valor);
+        //TYPE(0, "12");
+        //TYPE(1, "100");
+        //TYPE(2, "18");
+        //TYPE(3, "1");
+        //TYPE(4, "-5");
+        //STEP
+
+        if (valor >= 0)
+            printf("  +-- digitado %d.\n", valor);
+    } while (valor >= 0);
+
+    return 0;
+}
+```
+
+
+## O comando `break` nas repetições
+
+O uso do `break` para encerrar repetições não é, em si, um erro de programação ou uma falha em si. Em programas mais complexos, com aninhamento de repetições, a indicação explícita de todas as condições que mantém ou encerram uma repetição pode tornar o código difícil de entender.
+
+O impacto no código das interrupções sumárias com `break` podem ser atenuadas usando-se um recurso de programação interessante: variáveis lógicas. As variáveis lógicas acrescentam ao código uma informação importante, que é o significado da variável dado por seu nome.
+
+Uma versão de um programa para a leitura de inteiros até encontrar um valor negativo como o usado na @sec-while-infinito é apresentado na sequência.
+
+
+```{c}
+/*
+Leitura e apresentação de valores não negativos
+Requer: uma sequência de 0 ou mais de inteiros não negativos seguida
+    por um valor negativo usado como sentinela
+Assegura: a apresentação de cada valor da sequência na tela
+*/
+#include <stdio.h>
+#include <stdbool.h>
+
+int main(void) {
+    char entrada[160];
+
+    int valor;
+    bool encontrou_sentinela = false;
+    do {
+        printf("> ");
+        fgets(entrada, sizeof entrada, stdin);
+        sscanf(entrada, "%d", &valor);
+        //TYPE(0, "12");
+        //TYPE(1, "100");
+        //TYPE(2, "18");
+        //TYPE(3, "1");
+        //TYPE(4, "-5");
+        //STEP
+
+        if (valor < 0)
+            encontrou_sentinela = true;
+        else
+            printf("  +-- digitado %d.\n", valor);
+    } while (!encontrou_sentinela);
+
+    return 0;
+}
+```
+
+Com o nome adequado, uma variável lógica somente acrescenta significado ao código: o `do while`, por exemplo, pode ler entendido como "faça a leitura e apresentação enquanto não encontrar sentinela".
+
+Para os programadores que evitam novas variáveis para economizar memória (preocupação legítima!), sempre se deve também considerar a clareza do código. Além disso, uma variável `bool` em uma máquina com 8GiB de memória principal consome 0,0000002% do total disponível[^ressalva-bool].
+
+[^ressalva-bool]: O cálculo considera que `sizeof (bool)` é um byte, valor usado pelo compilador durante a escrita desse livro.

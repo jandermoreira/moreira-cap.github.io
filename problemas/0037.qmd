@@ -1,0 +1,31 @@
+<!-- Soma dos divisores -->
+::: {#exr-0037}
+Considere o seguinte problema:
+
+> Escreva um algoritmo para processar uma sequência indefinida e não vazia de valores inteiros (todos positivos) e determinar o valor máximo. A sequência é terminada por um valor sentinela igual a -1.
+
+Para esse problema, foi apresentado o seguinte algoritmo:
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Determinar o valor máximo em sequência não vazia de inteiros positivos terminada com sentinela
+    \Require sequência de valores inteiros positivos com pelo menos um valor e encerrada por um valor igual a -1
+    \Ensure a apresentação do valor máximo da sequência
+    \Statex
+    \Statep{Defina \Id{sentinela} com valor $-1$}
+    \Statep{Inicie \Id{máximo} com zero}
+    \Statep{Obtenha \Id{valor}}[primeiro valor da sequência]
+    \While{$\Id{valor} \neq \Id{sentinela}$}
+        \Statep{Obtenha \Id{valor}}[próximo valor]
+        \If{$\Id{valor} > \Id{máximo}$}
+            \Statep{Atualize \Id{máximo} com \Id{valor}}
+        \EndIf
+    \EndWhile
+    \Statep{Apresente \Id{máximo}}
+\end{algorithmic}
+```
+
+Essa solução, porém, contém um erro de lógica. Identifique-o e proponha a correção.
+
+@rem-0037
+:::

@@ -1,0 +1,51 @@
+<!-- kNN dadas as distâncias -->
+::: {#sol-0083}
+@exr-0083
+
+O procedimento seguinte varre todo do vetor de distâncias para fazer uma "inserção seletiva" no vetor $\Id{lista\_próximos}$. O procedimento auxiliar +InsiraCrescenteLimitado+ cuida da inclusão de um novo valor na lista se ele for um dos menores até o mommento.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Seleção das 5 menores distâncias de um vetor de distâncias
+    \Require um vetor \Id{vetor} com 5 posições por referência e um vetor de distância podendo ter comprimento zero
+    \Ensure alteração do vetor de 5 posições com as menores distâncias, até o limite de 5 valores
+    \Statex    
+    \Procedure{SelelcioneMenoresDistâncias}{\Id{lista\_próximos}:\ByRef, \Id{lista\_distâncias}:\ByValue}
+        \Statep{$\Id{lista\_próximos}.\Id{comprimento} \gets 0$}[zera o comprimento da lista]
+        \For{$i \gets 0$ \To $\Id{lista\_distâncias}.\Id{comprimento} - 1$}
+            \Statep{\Commentl{Insere na lista em ordem, com possível descarte se não houver espaço}}
+            \Statep{\Call{InsiraCrescenteLimitado}{\Id{lista\_próximos}, $\Id{lista\_distâncias}[i]$}}
+        \EndFor
+    \EndProcedure
+\end{algorithmic}
+```
+
+Este é o procedimento para manter no vetor somente os menores valores. Sempre que o vetor ainda não atingiu a capacidade total, é feita a inserção mantendo os valores em ordem não decrescente. Se o vetor já estiver completo, o último item pode ou não ser descartado em função do novo valor que está sendo inserido.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Inserção de item em vetor com comprimento máximo 5, em ordem crescente de valor
+    \Require um vetor \Id{vetor} com 5 posições por referência e um item a ser inserido
+    \Ensure alteração do vetor de 5 posições com as 5\ menores distâncias considerando seus valores atuais e o novo item, mantendo a ordem crescente dos valores internamente
+    \Statex    
+    \Procedure{InsiraCrescenteLimitado}{\Id{vetor}:\ByRef, \Id{novo\_valor}:\ByValue}
+        \Statep{Defina \Id{máximo} como 5}[tamanho do vetor]
+        \If{$\Id{vetor}.\Id{comprimento} < \Id{máximo}$}
+            \Statep{$i \gets \Id{vetor}.\Id{comprimento} - 1$}[última posição corrente]
+            \Statep{$\Id{vetor}.\Id{comprimento} \gets \Id{vetor}.\Id{comprimento} + 1$}[aumenta se há espaço]
+        \Else
+            \Statep{$i \gets \Id{vetor}.\Id{comprimento} - 2$}[penúltima posição]
+        \EndIf
+        \While{$i \geq 0$ e $\Id{vetor}[i] > \Id{novo\_valor}$}
+            \Statep{$\Id{vetor}[i + 1] \gets \Id{vetor}[i]$}[move os maiores para o fim]
+            \Statep{$i \gets i - 1$}
+        \EndWhile[a posição de inserção será sempre $i + 1$]
+        \If{${i + 1 < \Id{máximo} - 1}$ ou
+            ${\Id{vetor}[\Id{máximo} - 1] > \Id{novo\_item}}$}[caso geral ou se for o último]
+            \Statep{$\Id{vetor}[i + 1] \gets \Id{novo\_valor}$}
+        \EndIf
+    \EndProcedure
+\end{algorithmic}
+```
+
+:::

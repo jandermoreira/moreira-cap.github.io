@@ -1,0 +1,16 @@
+<!-- Separação de inteiro em potências de 10  -->
+::: {#exr-0069}
+Um número inteiro é comumente escrito na base 10. Assim, o número $2601$ pode ser entendido como  ${1 \times 10^0} + {0 \times 10^1} + {6 \times 10^2} + {2 \times 10^3}$.
+
+Escreva um algoritmo que decomponha qualquer valor inteiro positivo em suas potências de\ 10 (começando pelas unidades; $10^0$). A solução deve deixar claros os cálculos usados para separar o valor em suas partes relevantes.
+
+Como exemplo, para 1003, apresentar
+
+3 x 10^0
+
+0 x 10^1
+
+0 x 10^2
+
+1 x 10^3
+:::

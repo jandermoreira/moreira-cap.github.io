@@ -1,0 +1,6 @@
+<!-- Problema conversões notas x conceitos -->
+::: {#exr-0053}
+{{< include problemas/comum-notas-e-conceitos.qmd >}}
+
+Na instituição descrita, é preciso calcular a média de três conceitos de um dado aluno, apresentando o conceito final resultante. Escreva um algoritmo para resolver esse problema.
+:::

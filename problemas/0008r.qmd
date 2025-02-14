@@ -1,0 +1,29 @@
+<!-- Determinação da categoria de natação segundo idade -->
+::: {#sol-0008}
+@exr-0008
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Determinação, segundo a idade do competidor, da categoria a que ele pertence (Infantil A: até 4 anos; Infantil B: 5 e 6 anos; Infantil C: 7 a 10 anos; Juvenil A: 11 a 13 anos; Juvenil B: 14 a 17 anos; Sênior: 18 ou mais anos)
+    \Require a idade do competidor
+    \Ensure apresentação da categoria a que ele pertence
+    \Statex{}
+    \Statep{Obtenha a \Id{idade}}
+    \If{$\Id{idade} \leq 4$}
+        \Statep{Defina \Id{categoria} como Infantil A}
+    \ElsIf{$\Id{idade} \leq 6$}
+        \Statep{Defina \Id{categoria} como Infantil B}
+    \ElsIf{$\Id{idade} \leq 10$}
+        \Statep{Defina \Id{categoria} como Infantil C}
+    \ElsIf{$\Id{idade} \leq 13$}
+        \Statep{Defina \Id{categoria} como Juvenil A}
+    \ElsIf{$\Id{idade} \leq 17$}
+        \Statep{Defina \Id{categoria} como Juvenil B}
+    \Else
+        \Statep{Defina \Id{categoria} como Sênior}
+    \EndIf
+    \Statep{Apresente \Id{categoria}}
+\end{algorithmic}
+```
+:::
+

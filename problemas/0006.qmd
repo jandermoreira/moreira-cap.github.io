@@ -1,0 +1,13 @@
+<!-- Classificação de triângulo quanto aos ângulos internos -->
+::: {#exr-0006}
+Um triângulo, do ponto de vista de seus ângulos internos, pode ser classificado como:
+
+* acutângulo, quando todos seus ângulos forem menores que 90º;
+* retângulo, quando um de seus ângulos for igual a 90º;
+* obtusângulo, quando um de seus ângulos internos for maior que 90º.
+
+
+Escreva um algoritmo completo que, dados dois ângulos internos válidos de um triângulo, determine e apresente sua classificação quanto ao ângulo. Lembre-se que a soma dos ângulos internos de um triângulo é sempre 180º, de forma que dois ângulos são suficientes para definir o triângulo.
+
+@sol-0006
+:::

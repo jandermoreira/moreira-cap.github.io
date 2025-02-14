@@ -1,0 +1,10 @@
+# Problemas com progressões numéricas {#sec-progressoes-numericas} 
+
+<!-- Soma de 1 + 2 + 3 ... + n -->
+{{< include problemas/0040.qmd >}}
+
+<!-- n! -->
+{{< include problemas/0041.qmd >}}
+
+<!-- Função potência e^x -->
+{{< include problemas/0068.qmd >}}

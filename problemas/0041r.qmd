@@ -1,0 +1,21 @@
+<!-- n! -->
+::: {#sol-0041}
+@exr-0041
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Cálculo do fatorial de $n$
+    \Require $n \in \mathbb{Z}^+$
+    \Ensure apresentação de $n!$
+    \Statex
+    \Statep{Obtenha o valor de $n$}
+    \Statep{Inicie \Id{fatorial} com 1}[$1$ é elemento neutro da multiplicação]
+    \For{$i \gets 2$ \To $n$}[necessário somente a partir de $2!$]
+        \Statep{$\Id{fatorial} \gets \Id{fatorial} \times i$}
+    \EndFor
+    \Statep{Apresente \Id{fatorial}}
+\end{algorithmic}
+```
+
+É interessante notar que no algoritmo, o valor $n = 0$ faz com que o laço -para- não seja repetido nenhuma vez, resultando em $\Id{fatorial}$ igual a um. O mesmo ocorre para $n = 1$.
+:::

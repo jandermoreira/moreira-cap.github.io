@@ -1,0 +1,6 @@
+<!-- Triângulo retângulo? -->
+::: {#exr-0058}
+Triângulos retângulos são uma constante em problemas de trigonometria.
+
+Escreva um algoritmo para, a partir dos comprimentos dos lados de um triângulo válido, apresentar se ele é ou não retângulo.
+:::

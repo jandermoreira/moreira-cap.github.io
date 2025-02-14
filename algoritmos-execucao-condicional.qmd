@@ -1,0 +1,19 @@
+# Algoritmos: execução condicional
+
+Meu texto: **Strong** 
+
+```pseudocode {label="#alg-teste" title="Teste."}
+\begin{algorithmic}
+    \Statep{$x \gets 0$}
+\end{algorithmic}
+```
+
+
+## Introdução ao fluxo condicional
+
+## Exemplos
+
+## Desenvolvimento com fluxo condicional
+
+
+

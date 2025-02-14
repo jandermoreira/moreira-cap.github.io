@@ -1,0 +1,10 @@
+<!-- Qual usar? Repetição indefinida com sentinela (Pesagem de gado) -->
+::: {#sol-0013}
+@exr-0013
+
+Como a quantidade de repetições não pode ser antevista, descarta-se a repetição com -para-.
+
+Do ponto de vista do funcionário que faz a pesagem, seu trabalho segue até que a fila de animais termine. Para o que faz a anotação, seu trabalho se encerra ao receber o "acabou", caracterizando um sentinela.
+
+De ambos os pontos de vista, repetições indeterminadas com -enquanto- ou -repita- são as que atendem ao problema.
+:::

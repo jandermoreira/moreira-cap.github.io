@@ -1,0 +1,6 @@
+---
+title: exercícios
+listing:
+    contents:
+        - problemas/*[^0-9].qmd
+---

@@ -1,0 +1,228 @@
+# Escopo básico de declarações
+
+Os códigos fonte em C permitem muitas declarações, como as de variáveis. Este capítulo trata da declaração de variáveis e onde são válidas, além de introduzir superficialmente outras declarações da linguagem.
+
+## Declarações e validade {#sec-declaracoes-e-validade}
+
+O primeiro ponto é, em princípio, bastante intuitivo: para usar uma variável é preciso declará-la antes desse uso. Portanto, a validade de uma variável depende de onde, no código fonte, sua declaração aparece.
+
+O programa seguinte pode ser considerado para exemplificar as validades.
+
+```{c} {code-line-numbers="true"}
+/*
+Conversões de distância de metros para centímetros, pés, jardas e polegadas
+Requer: uma distância em metros
+Assegura: O valor equivalente em centímetros, pés, jardas e polegadas
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite uma distância em metros: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double em_metros;
+    sscanf(entrada, "%lf", &em_metros);
+    //TYPE(0, "300");
+
+    // Centímetros
+    double em_centimetros = em_metros * 100;
+    printf("> %.1lfm = %.1fcm\n", em_metros, em_centimetros);
+
+    // Pés
+    double em_pes = em_metros * 3.281;
+    printf("> %.1lfm = %.1f pés\n", em_metros, em_pes);
+
+    // Jardas
+    double em_jardas = em_metros * 1.094;
+    printf("> %.1lfm = %.1f jardas\n", em_metros, em_jardas);
+
+    // Centímetros
+    double em_polegadas = em_metros * 39.37;
+    printf("> %.1lfm = %.1f polegadas\n", em_metros, em_polegadas);
+
+    return 0;
+}
+// Fim do código fonte
+```
+
+Neste programa, a variável entrada existe desde a linha\ 9 e é válida até a linha\ 33. A variável `em_metros` inicia sua validade na linha\ 13, `em_pes` na linha\ 21, `em_jardas` na\ 25 e `em_polegadas` na\ 29 e, para todas, a validade termina na linha\ 33.
+
+Note-se que, porém, que nenhuma variável é válida na linha\ 34, depois do encerramento do bloco do `main`. As variáveis são válidas apenas dentro do bloco onde foram declaradas. E é importante destacar que um bloco de comandos é aquele iniciado por `{` e finalizado por `}`.
+
+::: {.callout-tip}
+É indicado que a declaração de uma variável seja feita o mais próximo possível de seu uso, o que promove clareza de padronização ao programa.
+:::
+
+O programa que implementa o @alg-escrita-nao-decrescente é reproduzido na sequência.
+
+```{.c code-line-numbers="true"}
+/*
+Apresentação de dois valores em ordem não decrescente
+Requer: dois valores reais v1 e v2
+Assegura: v1 <= v2
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite dois valores reais: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double v1, v2;
+    sscanf(entrada, "%lf%lf", &v1, &v2);
+
+    if(v2 < v1) {
+        double temporario = v1;
+        v1 = v2;
+        v2 = temporario;
+    }
+
+    printf("Valores em ordem não decrescente: %g e %g.\n", v1, v2);
+    
+    return 0;
+}
+```
+
+O ponto de destaque desse código é a variável `temporario` usada para troca de valores. Ela é declarada dentro de um bloco de comandos, formando o comando composto condicionado pelo `if`. Sua validade é efêmera, pois é válida apenas da linha\ 18 até a\ 21, quando o bloco é encerrado. A tentativa de referenciar `temporario` fora do bloco do `if` gera um erro de identificador não declarado.
+
+Nesse ponto específico do programa, é relevante perceber que a utilidade de `temporario` é apenas local e não há qualquer necessidade de que seja declarada como válida em todo o bloco do `main`.
+
+::: {.callout-tip}
+Váriáveis com uso localizado devem ser declaradas apenas dentro do bloco onde são úteis, evitando que tenham validade fora dessa abrangência.
+:::
+
+### Duplicidade de identificadores
+
+Não é possível o uso do mesmo identificador no mesmo escopo de abrangência. Segue um exemplo simples que ilustra o problema.
+
+
+```{c} {intentional-problems="true"}
+/*
+Exemplo de declaração repetida de um identificador no mesmo escopo
+*/
+#include <stdio.h>
+
+int main(void) {
+    int valor = 10;
+    printf("valor: %d.\n", valor);
+    
+    int valor = 100;
+    printf("valor: %d.\n", valor);
+    
+    return 0;
+}
+```
+
+Há, porém, a possibilidade de que um mesmo identificador seja usado em um novo escopo, valendo a regra que sempre a declaração "mais local" é a válida.
+
+```{c}
+/*
+Exemplo de declaração repetida de um identificador em escopos diferentes
+*/
+#include <stdio.h>
+
+int main(void) {
+    int valor = 10;
+    printf("valor: %d (antes do if).\n", valor);
+    
+    if (valor == 10){
+        int valor = 100;
+        printf("valor: %d (dentro do if).\n", valor);
+    }
+
+    printf("valor: %d (depois do if).\n", valor);
+
+    return 0;
+}
+```
+
+Nesse programa, uma variável chamada `valor` é criada dentro do bloco de comandos do condicional `if` e sua validade é apenas local, apesar de uma declaração mais externa de `valor` existir. Dentro do bloco, apenas a variável `valor` interna pode ser utilizada, apesar de `valor` externo continuar existindo. Declarações mais locais obscurecem a visão de identificadores mais externos com mesmo nome.
+
+Apesar de isso ser possível de ser feito, não é uma boa prática redeclarar identificadores, visto que a clareza fica severamente comprometida.
+
+::: {.callout-tip}
+O uso não justificado de um mesmo identificador em escopos diferentes, porém próximos, dificulta a compreensão do código e pode levar a erros difíceis de serem localizados e corrigidos.
+
+O uso de identificadores iguais, porém, é válido e será usado em contextos nos quais a multiplicidade de um mesmo nome seja favorável à clareza ao invés de prejudicial.
+:::
+
+
+Como outro exemplo, o programa seguinte replica a necessidade de escrever dois valores em ordem não decrescente, porém havendo dois valores inteiros e dois valores reais.
+
+```{c}
+/*
+Apresentação de dois valores em ordem não decrescente
+Requer:  dois valores inteiros vi1 e vi2 e dois valores reais vr1 e vr2
+Assegura: vi1 <= vi2 e vr1 <= vr2
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    // Obtenção dos valores
+    printf("Digite dois valores inteiros: ");
+    fgets(entrada, sizeof entrada, stdin);
+    int v_int_1, v_int_2;
+    sscanf(entrada, "%d%d", &v_int_1, &v_int_2);
+    //TYPE(0, "300 200");
+
+    printf("Digite dois valores reais: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double v_real_1, v_real_2;
+    sscanf(entrada, "%lf%lf", &v_real_1, &v_real_2);
+    //TYPE(0, "118.2 302.75");
+
+    // Verificação da ordem
+    if (v_int_2 < v_int_1) {
+        int temporario = v_int_1;
+        v_int_1 = v_int_2;
+        v_int_2 = temporario;
+    }
+
+    if (v_real_2 < v_real_1) {
+        double temporario = v_real_1;
+        v_real_1 = v_real_2;
+        v_real_2 = temporario;
+    }
+
+    // Apresentação de resultados
+    printf("Valores inteiros em ordem não decrescente: %d e %d.\n",
+           v_int_1, v_int_2);
+    printf("Valores reais em ordem não decrescente: %g e %g.\n",
+           v_real_1, v_real_2);
+
+    return 0;
+}
+```
+
+
+É interessante observar que há duas variáveis chamadas `temporario` existindo em momentos distintos do programa. Não há, porém, problemas com essa duplicidade de uso, uma vez que suas existências são muito localizadas e não se misturam. Naturalmente cabe ao programador optar ou não por usar nomes distintos.
+
+
+
+## Outras declarações da linguagem
+
+Um programa não declara apenas variáveis. A própria linha `int main(void)` dos programas é uma declaração da função `main`. Sem essa declaração, o sistema operacional não teria como saber por qual instrução começar a execução. Além disso, dentro de `stdio.h`, por exemplo, estão declarados protótipos das funções `printf`, `sscanf`, `fgets` e etc. Desta forma, depois do `#include` essas funções passam a ser conhecidas e podem ser corretamente usadas.
+
+Uma visão completa de declarações e regras de escopo é tratada no @sec-regras-de-escopo-com-modularizacao.
+
+Este programa seguinte ilustra uma das grandes vantagens das declarações locais suplantarem as declarações mais externas existentes. 
+
+```{c}
+/*
+Exemplo de declaração de uma variável lógica
+*/
+#include <stdio.h>
+#include <stdbool.h>
+
+int main(void) {
+    bool remove = false;
+    printf("Vai remover? %s!\n", remove ? "SIM" : "NÃO");
+
+    return 0;
+}
+```
+
+A declaração deste código cria uma variável lógica chamada `remove`, a qual é usada sem erros. Porém, em `stdlib.h` é declarada uma função `remove` (em inglês, do verbo _to remove_) que pode ser usada para apagar um arquivo. A sobreposição dos identificadores permite ter um código simples, funcional e claro sem conflito com outras declarações preexistentes. 

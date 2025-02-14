@@ -1,0 +1,8 @@
+<!-- Soma de 1 + 2 + 3 ... + n -->
+::: {#exr-0040}
+Escreva um algoritmo que faça, passo a passo, a soma ${\sum_{i=1}^n i}$.
+
+@sol-0040
+
+@rem-0040
+:::

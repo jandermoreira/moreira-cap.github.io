@@ -1,0 +1,18 @@
+<!-- Função volume de esfera dado o raio -->
+::: {#rem-0047}
+@exr-0047
+
+Caso o @exr-0046/@sol-0046 tenha sido resolvido, é possível escrever:
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Função para retornar o volume de uma esfera dado seu diâmetro
+    \Require o comprimento do diâmetro
+    \Ensure o volume da esfera
+    \Statex
+    \Function{VolumeEsferaDiâmetro}{$d$}
+        \Statep{\Return \Call{VolumeEsferaRaio}{$d/2$}}
+    \EndFunction
+\end{algorithmic}
+```
+:::

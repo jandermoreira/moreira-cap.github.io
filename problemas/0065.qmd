@@ -1,0 +1,6 @@
+<!-- Classificação do consumo de um veículo -->
+::: {#exr-0065}
+Uma revista automobilística utiliza os seguintes critérios para classificar o consumo de um veículo: o consumo até 5 km/l é “ruim”, até 8 km/l é “razoável”, até 11 km/l é “bom”, até 14 km/l é “ótimo” e superior a este valor é “excelente”.
+
+Escreva um algoritmo que classifique o consumo nos mesmos critérios da revista, dadas a quantidade de quilômetros rodados e a quantidade de litros consumida em um percurso.
+:::

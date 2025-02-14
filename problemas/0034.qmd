@@ -1,0 +1,6 @@
+<!-- Contagem e porcentagem em relatório de gastos  -->
+::: {#exr-0034}
+Um relatório de gastos é apresentado mensalmente ao gerente de uma empresa. Nesse relatório constam, logo no início, a quantidade de despesas individuais e, seguindo a essa informação, vêm os valores em R$ de cada gasto realizado. Deseja-se saber quantos desses valores são superiores a R$1000,00.
+
+Escreva um algoritmo para processar os dados descritos e apresentar a quantidade desejada e a porcentagem desta em relação ao número total de gastos realizados.
+:::

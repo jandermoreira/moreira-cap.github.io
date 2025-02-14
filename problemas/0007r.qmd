@@ -1,0 +1,28 @@
+<!-- Igualdade de números racionais em representação fracionária -->
+::: {#sol-0007}
+@exr-0007
+
+A solução apresentada considera $q_1 = \frac{n_1}{d_1}$ e $q_2 = \frac{n_2}{d_2}$. Eles serão iguais se $n_1 d_2 = n_2 d_1$.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Determinação se dois valores racionais $q_1$ e $q_2$, ambos em $\mathbb{Q}$ são iguais, dados os numeradores e denominadores de cada um
+    \Require $n_1$ e $d_1$ de $q_1$ e $n_2$ e $d_2$ de $q_2$, ambos racionais válidos
+    \Ensure apresentação se $\frac{n_1}{d_1} = \frac{n_2}{d_2}$
+    \Statex{}
+    \Statep{Obtenha $n_1$, $d_1$, $n_2$ e $d_2$}
+    \If{$n_1 d_2 = n_2 d_1$}
+        \Statep{Defina a resposta como iguais}
+    \Else
+        \Statep{Defina a resposta como diferentes}
+    \EndIf
+    \Statep{Apresente a resposta definida}
+\end{algorithmic}
+```
+
+Sendo $q_1$ e $q_2$ dois racionais válidos, necessariamente $d_1$ e $d_2$ são diferentes de zero. Porém, $n_1$ e $n_2$ podem ser nulos sem violar as pré-condições do problema. Assim, é importante notar que no -se- do algoritmos, $n_1 d_2 = n_2 d_1$ não pode ser substituído por $\frac{n_1 d_2}{n_2 d_1} = 1$, pois se $n_2 = 0$, essa expressão é inválida.
+
+Outras comparações válidas seriam $\frac{n_1}{d_1} = \frac{n_2}{d_2}$, $\frac{n_1}{d_1} - \frac{n_2}{d_2} = 0$ ou $n_1 d_2 - n_2 d_1 = 0$. Nenhuma dessas versões introduzem inconsistência na expressão.
+
+A atenção aos detalhes é sempre relevante.
+:::

@@ -1,0 +1,42 @@
+<!-- Projeto função: conversões notas x conceitos -->
+::: {#sol-0052}
+@exr-0052
+
+As conversões de conceitos para notas e de notas para conceitos são candidatas perfeitas para serem modularizadas.
+
+Conceito para nota:
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Conversão de conceito para nota
+    \Require um conceito
+    \Ensure o retorno do valor numérico correspondente ao conceito
+    \Statex
+    \Function{ConceitoParaNota}{\Id{conceito}}<noend>
+    \EndFunction
+\end{algorithmic}
+```
+
+Nota para conceito:
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Conversão de nota para conceito
+    \Require uma nota de 0 a 10
+    \Ensure o retorno do conceito equivalente
+    \Statex
+    \Function{NotaParaConceito}{\Id{nota}}<noend>
+    \EndFunction
+\end{algorithmic}
+```
+
+Com essas funções, o algoritmo poderia ter as seguintes instruções:
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Statep{Obtenha $\Id{conceito}_1$ e $\Id{conceito}_2$}
+    \Statep{$\Id{média\_numérica} \gets {\dfrac{\Call{ConceitoParaNota}{\Id{conceito}_1} + \Call{ConceitoParaNota}{\Id{conceito}_2}}{2}}$}
+    \Statep{Apresente \Call{NotaParaConceito}{\Id{média\_numérica}}}
+\end{algorithmic}
+```
+:::

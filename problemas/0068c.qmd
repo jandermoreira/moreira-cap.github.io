@@ -1,0 +1,7 @@
+<!-- Função potência e^x -->
+::: {#rem-0068}
+@exr-0068
+
+Nesta soma, quanto maior o número de termos somados, mais o valor de $s$ se aproxima de $e^x$.
+$$e^x = x^0 + \frac{x^1}{1!} + \frac{x^2}{2!} + \frac{x^3}{3!} + \ldots$$
+:::

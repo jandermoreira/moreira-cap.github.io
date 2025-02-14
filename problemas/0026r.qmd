@@ -1,0 +1,19 @@
+<!-- Soma de pontos em quantidade fixa -->
+::: {#sol-0026}
+@exr-0026
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Determinar a pontuação total de uma equipe dadas as pontuações individuais
+    \Require as pontuações de cada um dos 20 atletas da equipe
+    \Ensure apresentação do total de pontos
+    \Statex
+    \Statep{Inicie \Id{soma\_pontos} com zero}
+    \For{$i \gets 1$ \To $20$}
+        \Statep{Obtenha \Id{pontuação\_individual}}
+        \Statep{Adicione \Id{pontuação\_individual} a \Id{soma\_pontos}}
+    \EndFor
+    \Statep{Apresente \Id{soma\_pontos}}
+\end{algorithmic}
+```
+:::

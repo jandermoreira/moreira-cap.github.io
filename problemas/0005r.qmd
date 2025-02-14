@@ -1,0 +1,46 @@
+<!-- Validade de data sem bissexto -->
+::: {#sol-0005}
+@exr-0005
+
+Para este problema são apresentadas duas soluções. A primeira em um nível de abstração mais alto e a segunda usando um nível mais próximo a uma linguagem de programação.
+
+Primeira versão: representação dos meses usando conjuntos.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Determinação se valores inteiros para dia, mês e ano formam uma data válida, desconsiderando anos bissextos e entendendo anos negativos como AC
+    \Require \Id{dia}, \Id{mês} e \Id{ano} inteiros
+    \Ensure apresentação se a data é ou não válida
+    \Statex{}
+    \Statep{Obtenha \Id{dia}, \Id{mês} e \Id{ano}}
+    \If{$\Id{ano} \neq 0$ e $\Id{dia} > 0$ e $\Id{mês} > 0$ e\NewLine
+        ($\Id{dia} \leq 28$ e $\Id{mês} == 2$ ou\NewLine
+        $\Id{dia} \leq 31$ e $\Id{mês} \in \{ 1, 3, 5, 7, 8, 10, 12 \}$ ou\NewLine
+        $\Id{dia} \leq 30$ e $\Id{mês} \in \{ 4, 6, 9, 11 \})$}
+        \Statep{Apresente que a data é válida}
+    \Else
+        \Statep{Apresente que a data é inválida}
+    \EndIf
+\end{algorithmic}
+```
+
+Segunda versão: especificação dos meses usando comparações individuais.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Determinação se valores inteiros para dia, mês e ano formam uma data válida, desconsiderando anos bissextos e entendendo anos negativos como AC
+    \Require \Id{dia}, \Id{mês} e \Id{ano} inteiros
+    \Ensure apresentação se a data é ou não válida
+    \Statex{}
+    \Statep{Obtenha \Id{dia}, \Id{mês} e \Id{ano}}
+    \If{$\Id{ano} \neq 0$ e $\Id{dia} > 0$ e $\Id{mês} > 0$ e\NewLine
+        ($\Id{dia} \leq 28$ e $\Id{mês} == 2$\NewLine ou\NewLine
+        $\Id{dia} \leq 31$ e ($\Id{mês} = 1$ ou $\Id{mês} = 3$ ou $\Id{mês} = 5$ ou $\Id{mês} = 7$ ou $\Id{mês} = 8$ ou $\Id{mês} = 10$ ou $\Id{mês} = 12$)\NewLine ou\NewLine
+        $\Id{dia} \leq 30$ e $\Id{mês}  = 4$ ou $\Id{mês} = 6$ ou $\Id{mês} = 9$ ou $\Id{mês} = 11$)}
+        \Statep{Apresente que a data é válida}
+    \Else
+        \Statep{Apresente que a data é inválida}
+    \EndIf
+\end{algorithmic}
+```
+:::

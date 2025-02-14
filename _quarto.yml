@@ -1,0 +1,112 @@
+# Construção de Algoritmos e Programação
+# Jander Moreira, 2024-atual
+
+# Projeto
+project:
+  type: book
+  execute-dir: project
+  
+# Filtros  
+filters:
+  - cap-filters.lua
+  - runenv.lua
+  - algxpar-quarto
+
+algxpar:
+  algorithm-title: "Algoritmo"
+  algorithm-prefix: "Algoritmo"
+  # pdf-float: false
+
+syntax-definitions: 
+  - terminal.xml
+
+# Estrutura do livro
+book:
+  title: "Construção de Algoritmos e Programação"
+  output-file: "moreira_j-construcao_algoritmos_programacao"
+  author:
+    - name: Jander Moreira
+      affiliation:
+        - name: Universidade Federal de São Carlos
+          department: Departamento de Computação
+          city: São Carlos
+          country: Brasil
+          url: www2.ufscar.br/~jander/cap
+      email: "jander@ufscar.br"
+  date: "08/24/2024"
+  date-format: "DD/MM/YYYY"
+
+
+profile: 
+  default: programacao
+  group: [completo, algoritmos, programacao, pratica-algoritmos]
+
+bibliography: references.bib
+
+# Opções gerais
+lang: pt-BR
+number-sections: true
+toc: true
+crossref: 
+  lst-title: Código
+  lst-prefix: Código
+  # prf-prefix: "Resposta"
+biblio-style: abnt
+
+
+# Formatos de saída
+format:
+
+  html:
+    fontsize: 12pt
+    # materia yeti zephyr
+    theme: materia
+    css: book.css
+    number-depth: 3
+    toc-title: "Nesta página:"
+    toc-depth: 3
+    highlight-style: tango
+    code-block-border-left: true
+    fig-align: center
+    # fig-responsive: false
+    fig-cap-location: bottom
+    
+
+  # epub:
+  #   fontsize: 10pt
+  #   code-overflow: wrap
+
+
+  # pdf:
+  #   documentclass: scrbook
+  #   fontsize: 11pt
+  #   papersize: a4
+  #   include-in-header:
+  #     - text: |
+  #         \usepackage{sty/pagina_e_mancha}
+  #         \usepackage{sty/tipografia}
+  #         \usepackage{sty/estetica_geral}
+  #         \usepackage[brazilian]{algxpar}
+  #         %\usepackage{sty/desenho}
+  #         %\usepackage{sty/livro}
+  #   include-before-body:
+  #     - text: |
+  #         \input{sty/include-before-body.tex}
+  #   include-after-body: 
+  #     - text: |
+  #         \printindex
+  #   number-depth: 2
+  #   toc: false
+  #   toc-title: "Conteúdo"
+  #   toc-depth: 1
+  #   fig-pos: tb
+  #   cap-location: top
+  #   fig-align: center
+  #   default-image-extension: png
+  #   cite-method: biblatex
+  #   highlight-style: tango
+  #   monofont: 'Source Code Pro'
+  #   pdf-engine: pdflatex
+  #   latex-max-runs: 3
+  #   latex-output-dir: "./out"
+  #   keep-tex: true

@@ -1,0 +1,74 @@
+% Comandos incluídos depois do título e antes do conteúdo do livro
+% Jander Moreira
+
+% Reduz a fonte dos códigos-fontes para \scriptsize
+\AddToHook{env/Highlighting/begin}{\scriptsize}% código
+
+% Ajusta os cabeçalhos dos floats de código
+\floatstyle{plaintop}
+\restylefloat{codelisting}
+
+% Sobrepõe as configurações padrão de cores nos links
+\hypersetup{
+  colorlinks,
+  urlcolor = blue!40!black,
+  linkcolor = blue!30!black,
+  citecolor = green!30!black,
+}
+
+% Substitui o ambiente 'verbatim'
+\makeatletter
+\let\verbatim\indefinido
+\let\verbatim@\indefinido
+\let\endverbatim\indefinido
+\makeatother
+\lstnewenvironment{verbatim}{%
+  \lstset{
+    basicstyle = \scriptsize\ttfamily,
+    language = {},
+  }%
+  \vspace{-1.25em}%
+}{}
+
+\lstset{
+  literate =
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+    {à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+    {À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+    {ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+    {ã}{{\~a}}1 {õ}{{\~o}}1
+    {Ã}{{\~A}}1 {Õ}{{\~O}}1
+    {Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+    {â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+    {Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+    {ç}{{\c c}}1 {Ç}{{\c C}}1
+    {ű}{{\H{u}}}1 {Ű}{{\H{U}}}1 {ő}{{\H{o}}}1 {Ő}{{\H{O}}}1
+    {ñ}{{\~n}}1 {Ñ}{{\~N}}1
+    {¿}{{?`}}1
+    {‘}{{\'{}}}1 {’}{{\`{}}}1
+    %{‘}{{\'{}}}1 {’}{{\'{}}}1
+}
+
+% necessário para code block no modo 'terminal'
+% \catcode0=9
+
+% % Troca o \includegraphics
+% \let\includegraphics\insirafigura
+
+
+% \RenewDocumentEnvironment{verbatim}{ +b }{%
+%     \begingroup%
+%     \tiny%
+%     \begin{lstlisting}[language = {}]
+%         #1
+%     \end{lstlisting}%
+%     \endgroup%
+% }{}
+
+\AlgSet{
+  language = brazilian,
+}
+
+
+\endinput

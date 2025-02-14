@@ -1,0 +1,30 @@
+# Respostas e comentários para problemas selecionados {#sec-respostas-vetores-e-matrizes}
+
+<!-- PROBLEMAS DIRETOS -->
+<!-- Contagem de positivos em vetor -->
+{{< include problemas/0075r.qmd >}}
+
+<!-- Valor mínimo em vetor -->
+{{< include problemas/0076r.qmd >}}
+
+<!-- Movimentação do mínimo para início do vetor -->
+{{< include problemas/0077r.qmd >}}
+
+<!-- Preenchimento de vetor com divisores -->
+{{< include problemas/0080r.qmd >}}
+
+<!-- Vetor contém elemento -->
+{{< include problemas/0081r.qmd >}}
+
+<!-- Inserção simples em vetor -->
+{{< include problemas/0082r.qmd >}}
+
+
+
+
+
+
+<!-- PROBLEMAS CONTEXTUALIZADOS -->
+<!-- kNN dadas as distâncias -->
+{{< include problemas/0083r.qmd >}}
+

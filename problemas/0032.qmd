@@ -1,0 +1,6 @@
+<!-- Média de medidas de pressão  -->
+::: {#exr-0032}
+Um sistema monitora a pressão de uma caldeira registrando uma medida a cada cinco minutos. Como o sistema funciona continuamente, os dados são registrados diariamente, com a primeira medida a 0h e a última às 23h55min. 
+
+Escreva um algoritmo para processar todos os dados colhido em um dia e determinar a a pressão média nesse período.
+:::

@@ -1,0 +1,23 @@
+<!-- Contagem de positivos em vetor -->
+::: {#sol-0075}
+@exr-0075
+
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Retorna a quantidade de valores positivos em um vetor
+    \Require um vetor \Id{vetor}
+    \Ensure retorno da quantidade de valores positivos presentes em \Id{vetor}
+    \Statex    
+    \Function{ContePositivos}{\Id{vetor}}
+        \Statep{Inicie \Id{contador} com zero}
+        \For{$i \gets 0$ \To $\Id{vetor}.\Id{comprimento} - 1$}
+            \If{$\Id{vetor}[i] > 0$}[é positivo?]
+                \Statep{Adicione 1 ao \Id{contador}}
+            \EndIf
+        \EndFor
+        \Statep{\Return \Id{contador}}
+    \EndFunction
+\end{algorithmic}
+```
+:::

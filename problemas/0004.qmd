@@ -1,0 +1,30 @@
+<!-- Erro em contagem de notas nulas e < 6 -->
+::: {#exr-0004}
+Um professor precisa, para uma sequência de notas, verificar quantas são menores que 6 (abaixo da média) e quantas são nulas. Para isso, solicitou a um aluno que propusesse um algoritmo para resolver o problema e o resultado é apresentado a seguir.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Contagem do número de total de notas e as ocorrências notas menores que 6,0 e de notas~0,0
+    \Require uma sequência de medidas de notas (0 a 10)
+    \Ensure a quantidade de notas menores que 6,0, de zeros
+    \Statex
+    \Statep{Inicie \Id{contador\_abaixo\_média} com zero}
+    \Statep{Inicie \Id{contador\_zeros} com zero}
+    \While{existem notas na sequência de entrada}
+        \Statep{Obtenha uma \Id{nota}}
+        \If{$\Id{nota} < 6{,}0$}
+            \Statep{Acrescente 1 a \Id{contador\_abaixo\_média}}
+        \ElsIf{$\Id{nota} = 0{,}0$}
+            \Statep{Acrescente 1 a \Id{contador\_zeros}}
+        \EndIf
+    \EndWhile
+    \Statep{Apresente \Id{contador\_abaixo\_média}, \Id{contador\_zeros}}
+\end{algorithmic}
+```
+
+A solução, porém, tem um erro de lógica que a leva a produzir um resultado final incorreto.
+
+Identifique o erro e proponha uma solução.
+
+@sol-0004
+:::

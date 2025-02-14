@@ -1,0 +1,13 @@
+# Algoritmos: dados compostos (registros)
+
+## Conceito de estruturação de dados
+
+## Registros e campos
+
+## Representação de dados compostos em algoritmos
+
+* Abstração alta
+* Abstração baixa (notação `.`)
+
+## Funções com registros
+

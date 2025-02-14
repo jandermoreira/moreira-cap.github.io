@@ -1,0 +1,22 @@
+<!-- Contagem de temperaturas negativas -->
+::: {#sol-0023}
+@exr-0023
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Contagem do número de ocorrências de temperaturas negativas dada a quantidade e as medidas
+    \Require a quantidade seguida por uma sequência de medidas de temperaturas
+    \Ensure a quantidade de medidas negativas
+    \Statex
+    \Statep{Obtenha \Id{quantidade}}[número total de medidas]
+    \Statep{Inicie \Id{contador\_negativas} com zero}
+    \For{$i \gets 1$ \To \Id{quantidade}}
+        \Statep{Obtenha uma \Id{temperatura}}
+        \If{$\Id{temperatura} < 0$}
+            \Statep{Acrescente 1 a \Id{contador\_negativas}}
+        \EndIf
+    \EndFor
+    \Statep{Apresente \Id{quantidade}}
+\end{algorithmic}
+```
+:::

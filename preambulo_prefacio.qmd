@@ -1,0 +1,32 @@
+# {{< meta book.subtitle >}} {.unnumbered}
+
+::: {.content-visible when-profile="completo"}
+Esta é a versão completa do texto
+:::
+
+::: {.content-visible when-profile="algoritmos"}
+Escrever algoritmos é uma habilidade importante tanto para cientistas da computação quanto outros profissionais que representem soluções para problemas computacionais, como analistas, engenheiros e muitos outros.
+
+A programação se dá em diferentes linguagens, como Python, C, C++, Java, PHP e uma infinidade delas. Cada linguagem de programação possui suas próprias características intrínsecas, como sintaxe, estruturas de dados e recursos em bibliotecas ou módulos externos, por exemplo. Também as linguagens se apresentam com diferentes graus de abstração: enquanto Python é uma linguagem mais genérica (chamada de _nível alto_), C está mais próxima da representação de memória e das características da máquina (com _nível mais baixo_, embora não seja dependente do conjunto de instruções do processador).
+
+Algoritmos, por sua vez, são representações abstratas e independentes de linguagem de programação. Podem ser apresentados em nível muito alto de abstração e podem, conforme a necessidade, aproximar-se da representação mais próxima ao hardware. Embora haja regras na escrita de algoritmos, elas nunca serão tão rígidas quanto à sintaxe imposta por uma linguagem de programação.
+
+:::
+
+
+::: {.content-visible when-profile="programacao"}
+Existe uma infinidade de linguagens de programação. Algumas são mais fáceis, outras mais complexas, umas mais abstratas, outras muito concretas. A linguagem\ C se encontra entre as linguagens mais básicas, ou seja, mais próximas ao hardware. Faz parte do grupo conhecido como linguagem de nível baixo.
+
+C abstrai o conceito do processador: o código fonte é escrito de forma a ser independente de qual processador é usado e de qual sistema operacional está instalado. Por outro lado, a abstração em relação à memória é pequena. Em programas mais simples é possível ignorar completamente como a memória é usada para armazenar os dados; porém basta um pequeno aumento na complexidade do problema (e também de sua solução) que questões como quantidade de bytes disponíveis, localização dos dados na memória ou outros aspectos emergem e têm que ser trabalhadas pelo programador. 
+
+Esse aspecto da linguagem que exige um conhecimento mais concreto de como a memória é usada e como as instruções devem ser organizadas gera, por uma lado, um ambiente desafiador e até um pouco intimidador, mas, de outro ponto de vista, traz um conhecimento mais sedimentado da programação, o que é algo bastante enriquecedor.
+
+O conteúdo da linguagem\ C oferecido neste livro não é maior do que muitos outros encontrados por uma simples busca em qualquer ferramenta de busca disponível. O que talvez torne este material diferenciado é a abordagem, a qual visa proporcionar um bom domínio dos principais elementos de forma crescente. O enfoque é a apresentação dos conceitos de forma simples (tanto quanto possível), consolidando-os antes de progredir para a próxima etapa.
+:::
+
+
+<!-- Hack para o documento PDF -->
+\renewcommand*\contentsname{Conteúdo}
+\setcounter{tocdepth}{0}
+\tableofcontents
+\mainmatterreal

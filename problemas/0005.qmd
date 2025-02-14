@@ -1,0 +1,20 @@
+<!-- Validade de data sem bissexto -->
+::: {#exr-0005}
+Nas mais diversas aplicações, datas são dados considerados essenciais.
+
+Dados os valores para dia, mês e ano, é preciso determinar se uma data é válida.
+
+Uma data é válida quando:
+
+* o ano é diferente de zero;
+* o mês pertence a {1,2,3,…,12};
+* o dia é de 1 a 31 para os meses em {1,3,5,7,10,12};
+* o dia é de 1 a 30 para os meses em {4,6,9,11};
+* o dia é 1 a 28 para o mês 2.
+
+Desconsidere anos bissextos.
+
+Escreva um algoritmo completo para, a partir de valores inteiros quaisquer para dia, mês e ano, apresentar se uma data é válida.
+
+@sol-0005
+:::

@@ -1,0 +1,6 @@
+# C: Modularização com matrizes
+
+{{< include oops.qmd >}}
+
+
+## Matrizes como parâmetros

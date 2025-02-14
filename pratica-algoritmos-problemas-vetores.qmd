@@ -1,0 +1,37 @@
+# Problemas com vetores {#sec-problemas-vetores}
+
+Todos os problemas consideram sempre vetores com indexação iniciada em zero. Assim, um vetor $v$ com comprimento $n$, possui os elementos de $v[0]$ a $v[n-1]$.
+
+## Problemas diretos
+
+<!-- Contagem de positivos em vetor -->
+{{< include problemas/0075.qmd >}}
+
+<!-- Valor mínimo em vetor -->
+{{< include problemas/0076.qmd >}}
+
+<!-- Valor do meio no vetor -->
+{{< include problemas/0079.qmd >}}
+
+<!-- Movimentação do mínimo para início do vetor -->
+{{< include problemas/0077.qmd >}}
+
+<!-- Movimentação do máximo para o fim do vetor -->
+{{< include problemas/0078.qmd >}}
+
+<!-- Preenchimento de vetor com divisores -->
+{{< include problemas/0080.qmd >}}
+
+<!-- Vetor contém elemento -->
+{{< include problemas/0081.qmd >}}
+
+<!-- Inserção simples em vetor -->
+{{< include problemas/0082.qmd >}}
+
+
+
+
+## Problemas contextualizados
+
+<!-- kNN dadas as distâncias -->
+{{< include problemas/0083.qmd >}}

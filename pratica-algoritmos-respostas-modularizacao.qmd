@@ -1,0 +1,39 @@
+# Respostas e comentários para problemas selecionados {#sec-respostas-modularizacao}
+
+<!-- FUNÇÕES SIMPLES -->
+<!-- Função volume de esfera dado o raio -->
+{{< include problemas/0046r.qmd >}}
+
+<!-- Função volume de esfera dado o diâmetro -->
+{{< include problemas/0047c.qmd >}}
+
+<!-- Função máximo de 2 -->
+{{< include problemas/0043r.qmd >}}
+
+<!-- Função máximo de 3 -->
+{{< include problemas/0044r.qmd >}}
+
+<!-- Função lógica 'é par' -->
+{{< include problemas/0051r.qmd >}}
+
+<!-- Função número de divisores -->
+{{< include problemas/0056c.qmd >}}
+
+
+
+
+<!-- PROJETO DE FUNÇÕES -->
+<!-- Projeto função: combinação de n, p a p -->
+{{< include problemas/0050r.qmd >}}
+
+<!-- Projeto função: conversões notas x conceitos -->
+{{< include problemas/0052r.qmd >}}
+
+
+
+<!-- PROCEDIMENTOS SIMPLES -->
+<!-- Troca de valores -->
+{{< include problemas/0073r.qmd >}}
+
+<!-- Troca de valores -->
+{{< include problemas/0074r.qmd >}}

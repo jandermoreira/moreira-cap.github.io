@@ -1,0 +1,281 @@
+# Execução condicional com `switch`
+
+A linguagem C provê, além do `if`, uma segunda estrutura para execução condicional: o `switch`. 
+
+## Entendendo o `switch` {#sec-entendendo-o-switch}
+
+O `switch` é uma estrutura da linguagem usada para estabelecer uma sequência de instruções. 
+
+::: {.callout title="Estrutura `switch`"}
+`switch (` _expressão_ `)` _comando_
+:::
+
+A _expressão_ é qualquer expressão que resulte em um valor escalar, como `int`, `char` ou mesmo `bool`. Por sua vez, _comando_ é um bloco delimitado com chaves com uma lista de comandos que serão executados condicionalmente.
+
+O trecho de código seguinte ilustra a estrutura do `switch` com vários chamadas para a função `printf`. A variável `valor` pode ser um `int`, por exemplo.
+
+```c 
+switch(valor) {
+    printf("A\n");
+    printf("B\n");
+    printf("C\n");
+    printf("D\n");
+    printf("E\n");
+    printf("F\n");
+    printf("G\n");
+    printf("H\n");
+    printf("I\n");
+}
+```
+
+Esse código, do jeito que está apresentado, não terá nenhum de seus comandos executados. A especificação para que algo seja executado é feito por rótulos que indicam em que posição da sequência se inicia a execução.
+
+Os rótulos são especificados com `case`.
+
+::: {.callout title="Estrutura da rotulação com `case`"}
+`case` _constante_ `:`
+:::
+
+Segue a lista de comandos com rótulos inseridos. Esses rótulos são as constantes 1, 3 e\ 10.
+
+```c 
+    switch (valor) {
+        case 1:
+            printf("A\n");
+            printf("B\n");
+            printf("C\n");
+            printf("D\n");
+        case 3:
+            printf("E\n");
+            printf("F\n");
+            printf("G\n");
+        case 10:
+            printf("H\n");
+            printf("I\n");
+    }
+```
+
+Para essa organização, o funcionamento do `switch` avalia a expressão (variável `valor`) e inicia a execução da lista de comandos a partir do `case` em que houver igualdade.
+
+Assim, se `valor` for igual a 1, todos os `printf` são executados; se for igual a 3, a execução se inicia no `printf("E\n")` e vai até o final; e se for igual a 10, somente H e I são escritos. Para qualquer outro valor, nada é escrito, pois não existe o rótulo indicando em que posição da lista começa a execução.
+
+O programa seguinte contém a implementação completa do exemplo apresentado.
+
+
+```{c}
+/*
+Exemplo de escolha de execução com switch
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite um valor inteiro: ");
+    fgets(entrada, sizeof entrada, stdin);
+    int valor;
+    sscanf(entrada, "%d", &valor);
+    //TYPE(0, "3");
+
+    switch (valor) {
+        case 1:
+            printf("A\n");
+            printf("B\n");
+            printf("C\n");
+            printf("D\n");
+        case 3:
+            printf("E\n");
+            printf("F\n");
+            printf("G\n");
+        case 10:
+            printf("H\n");
+            printf("I\n");
+    }
+
+    return 0;
+}
+```
+
+O conceito da estrutura `switch` é ter uma lista de comandos e, por meio dos rótulos, indicam em que posição da lista se inicia a execução. 
+
+Para ter um último exemplo de como essa estrutura de seleção funciona, é adicionada uma cláusula `default`, que indica que, se não houver nenhum rótulo coincidente, é nesse ponto que a execução se inicia.
+
+
+```{c}
+/*
+Exemplo de escolha de execução com switch
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite um valor inteiro: ");
+    fgets(entrada, sizeof entrada, stdin);
+    int valor;
+    sscanf(entrada, "%d", &valor);
+    //TYPE(0, "4");
+
+    switch (valor) {
+        case 1:
+            printf("A\n");
+            printf("B\n");
+            printf("C\n");
+            printf("D\n");
+        case 3:
+            printf("E\n");
+            printf("F\n");
+            printf("G\n");
+        case 10:
+            printf("H\n");
+            printf("I\n");
+        default:
+            printf("Y\n");
+            printf("Z\n");
+    }
+
+    return 0;
+}
+```
+
+
+Talvez sejam raros os casos em que um problema consiga usar o `switch` conforme apresentado até o momento, visto que a lista de comandos é sempre executada até o final.
+
+Dessa forma, é comum a inserção de uma interrupção na sequência de comandos e, para isso, é usada a instrução `break`. O exemplo seguinte é uma nova versão do programa, agora limitando até onde a lista executa.
+
+Quando um `break` é encontrado, o `switch` é interrompido naquele ponto.
+
+```{c}
+/*
+Exemplo de escolha de execução com switch
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite um valor inteiro: ");
+    fgets(entrada, sizeof entrada, stdin);
+    int valor;
+    sscanf(entrada, "%d", &valor);
+    //TYPE(0, "1");
+
+    switch (valor) {
+        case 1:
+            printf("A\n");
+            printf("B\n");
+            printf("C\n");
+            printf("D\n");
+            break;
+        case 3:
+            printf("E\n");
+            printf("F\n");
+            printf("G\n");
+            break;
+        case 10:
+            printf("H\n");
+            printf("I\n");
+            break;
+        default:
+            printf("Y\n");
+            printf("Z\n");
+    }
+
+    return 0;
+}
+```
+
+Nesta versão, a mais completa e usual, mostra como, dependendo de um dado valor, apenas uma lista específica de instruções é executada.
+
+Para um exemplo mais prático, pode ser o problema de ler uma expressão com dois operandos e um operador aritmético simples e apresentar o resultado (@alg-operandos-e-operador).
+
+
+```latex {.pseudocode}
+%| title: Cálculo de uma expressão aritmética simples a partir dos operandos e do operador.
+%| label: @alg-operandos-e-operador
+%| pdf-float: false
+
+\begin{algorithmic}
+    \Description Realização de uma operação aritmética simples dados os operandos e o operador
+    \Require dois operandos e um operador
+    \Ensure o resultado da operação ou mensagem se o operador for desconhecido
+    \Statex{}
+    \Statep{Obtenha $\Id{operando}_1$, \Id{operador} e $\Id{operando}_2$}
+    \Statex
+    \Statep{Faça \Id{é\_operador\_válido} igual a \True}
+    \If{\Id{operador} for \texttt{+}}
+        \Statep{Calcule \Id{resultado} como ${\Id{operando}_1 + \Id{operando}_2}$}
+    \ElsIf{\Id{operador} for \texttt{-}}
+        \Statep{Calcule \Id{resultado} como ${\Id{operando}_1 - \Id{operando}_2}$}
+    \ElsIf{\Id{operador} for \texttt{*}}
+        \Statep{Calcule \Id{resultado} como ${\Id{operando}_1 \cdot \Id{operando}_2}$}
+    \ElsIf{\Id{operador} for \texttt{/}}
+        \Statep{Calcule \Id{resultado} como ${\Id{operando}_1 / \Id{operando}_2}$}
+    \Else
+        \Statep{Faça \Id{é\_operador\_válido} igual a \False}
+    \EndIf
+    \Statex
+    \If{\Id{é\_operador\_válido}}
+        \Statep{Apresente o \Id{resultado}}
+    \Else
+        \Statep{Apresente mensagem de operador inválido}
+    \EndIf
+
+\end{algorithmic}
+```
+
+```{c}
+/*
+Realização de uma operação aritmética simples dados os operandos e o
+    operador
+Requer: operando1, operador e operando2
+Assegura: o resultado da operação ou mensagem se o operador for
+    desconhecido
+*/
+#include <stdio.h>
+#include <stdbool.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite uma operação aritmética (sem espaços): ");
+    fgets(entrada, sizeof entrada, stdin);
+    double operando1, operando2;
+    char operador;
+    sscanf(entrada, "%lf%c%lf", &operando1, &operador, &operando2);
+    //TYPE(0, "1.75*-3.1");
+
+    double resultado;
+    bool eh_operador_valido = true;
+    switch (operador) {
+        case '+':
+            resultado = operando1 + operando2;
+            break;
+        case '-':
+            resultado = operando1 - operando2;
+            break;
+        case '*':
+            resultado = operando1 * operando2;
+            break;
+        case '/':
+            resultado = operando1 / operando2;
+            break;
+        default:
+            eh_operador_valido = false;
+    }
+
+    if (eh_operador_valido)
+        printf("%g %c %g = %g.\n", operando1, operador, operando2, resultado);
+    else
+        printf("Operador não reconhecido.\n");
+
+    return 0;
+}
+```
+
+
+## Limitações do `switch`
+
+Embora bastante útil, o `switch` serve apenas para comparações de igualdade, não permitindo verificações de intervalos, por exemplo. 
+
+Outra limitação é que a expressão usada tem que ser inteira ou `char`. Valores reais não podem ser usados.

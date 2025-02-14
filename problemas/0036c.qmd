@@ -1,0 +1,8 @@
+<!-- Soma divisores -->
+::: {#rem-0036}
+@exr-0036
+
+Além da notação $a \bmod b$ para o resto da divisão, são também comuns as representações $\mbox{mod}(a, b)$ e $a\,\%\,b$.
+
+Em algoritmos, também pode ser escrito "-se- $b$ é divisor de $a$ -então-" se o nível de abstração exigido for mais alto.
+:::

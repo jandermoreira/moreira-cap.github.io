@@ -1,0 +1,36 @@
+%! Package = desenho
+%! Author = Jander Moreira
+%! Date = 2023/02
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{desenho}[2023/02/17 Desenhos e diagramas]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DIAGRAMAS E DESENHOS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{dsdraw}
+\usedslibrary{file}
+\usetikzlibrary{decorations.pathreplacing, arrows.meta}
+\RequirePackage[linkedlist, file, array]{drawdc}
+
+\RequirePackage{graphicx}
+\RequirePackage{adjustbox}
+
+\graphicspath{%
+% {/home/jander/multimidia/imagens/tikz}
+        {./figuras}
+        {../figuras}
+        {../../figuras}
+}
+
+% #1: Opções para \includegraphics []
+% #2: proporção em relação ao texto ()
+% #3: nome do arquivo
+\NewAdjustImage{\insirafigura}{ O{} D(){0.95} }{%
+    max width = #2\linewidth,
+    max height = 0.7\paperheight,
+    #1
+}
+
+

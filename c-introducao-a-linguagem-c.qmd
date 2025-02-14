@@ -1,0 +1,319 @@
+# Introdução à linguagem C
+
+Neste capítulo é feita a apresentação da linguagem C, um pouco de suas origens e a evolução de sua especificação. Juntamente a essa introdução, a compilação e os conceitos de código fonte, objeto e executável também são tratados.
+
+
+::: {.content-visible when-profile="completo"}
+## Conexão das linguagens de programação com os algoritmos
+
+O aprendizado do desenvolvimento de algoritmos computacionais requer reconhecer que, em última instância, um programa pode ser elaborado a partir dele. Assim, dentro de um certo limite, a prática na escrita de algoritmos passa por saber um pouco sobre o destino final de uma dada solução algorítmica.
+
+Dessa forma, um primeiro passo para o aprendizado de algoritmos vai começar por entender o que é um programa e, a partir desse conhecimento, proporcionar a capacidade de escrever algoritmos reconhecendo algumas das limitações que códigos reais impõem. Essa tônica será seguida ao longo de todo texto.
+:::
+
+
+## Origens da linguagem C
+
+::: {.content-visible when-profile="programacao"}
+Conhecer um pouco do caminho de uma das mais importantes linguagens de programação deve trazer ao programador, de certa forma, uma sensação de pertencimento e autoridade no uso dessa linguagem.
+:::
+
+A inspiração da linguagem C veio das linguagens BCPL e B, ambas projetadas para a implementação de sistemas operacionais. Muitos elementos de C se originaram dessas linguagens.
+
+C surgiu como uma linguagem de propósito geral que incorporava os principais mecanismos de controle de fluxo, como condicionais e estruturas de repetição, juntamente com estruturas de dados como arranjos e registros. A linguagem não foi estruturada como tendo um alto nível de abstração e não foca em nenhuma área de aplicação em particular.
+
+Dennis Ritchie projetou e implementou a linguagem C em um DEC PDP-11, o qual usava o sistema operacional UNIX. Na realidade, tanto o compilador C quanto o próprio sistema operacional foram implementados em C. Esse desenvolvimento ocorreu de 1969 a 1973. Também à época, compiladores C já haviam sido implementados para executar em diversas outras máquinas, como equipamentos IBM, Honeywell e Interdata.
+
+Este histórico foi baseado em @richards1969, @johnson1973, @ritchie1978 e @ritchie1993.
+
+::: {.content-visible when-profile="programacao"}
+
+Segundo consulta ao índice de popularidade elaborado pela TIOBE[^site-tiobe], C permanece como uma das linguagens de programação mais populares mundialmente, disputando os primeiros lugares com Python, C++ e Java (dados de novembro de 2023).
+
+[^site-tiobe]: TIOBE: <http://www.tiobe.com>.
+
+:::
+
+### Padronização da linguagem {#sec-padronizacao-da-linguagem}
+
+Sem uma padronização *de facto* da linguagem C nos anos seguintes a sua criação, havia uma liberdade grande demais na implementação dos diversos compiladores que apareceram. A especificação conhecida por K&R C era, na ocasião, a única disponível.
+
+De 1983 a 1989, o American National Standards Institute (ANSI) formou um grupo de trabalho para a padronização da linguagem, estabelecendo, ao final o padrão conhecido por C89 ou ANSI C. Esse mesmo padrão foi reeditado em 1990, com o rótulo C90, porém sem modificações relevantes na especificação.
+
+Uma extensão foi incorporada à especificação em 1995, com novas definições e adições à biblioteca padrão. Este padrão foi chamado de C95.
+
+Modificações significativas na linguagem foram introduzidas no padrão C99, finalizado em 1999 e adotado a partir do ano 2000. Merecem destaque novos tipos de dados, como `long long` e `_Bool`, a incorporação de arranjos de comprimento definido durante a execução, a inclusão de novos cabeçalhos de bibliotecas, a possibilidade de comentários com `//`, a mistura de declarações e código e funções *inline*.
+
+Em 2011 foi publicada a especificação C11, a qual provê suporte a caracteres Unicode, expressões com tipos genéricos (`_Generic`) e execução paralela multi-plataforma com `threads.h`.
+
+O padrão atual para a linguagem C, no momento da escrita deste texto, é o C17, publicado em 2018. O C17 não acrescenta novos recursos à linguagem, porém corrige falhas na versão C11. A especificação C17 também é referenciada como C18.
+
+Neste ano de 2023 é esperada a próxima edição do padrão da linguagem C, informalmente designado C23.
+
+A especificação K&R C foi descrita em @ritchie1978; as demais especificações estão apropriadamente descritas em @cprogramminglanguage.
+
+
+
+
+
+## Programa básico
+
+Programar em C não é tão complexo, mas também não é tão natural. Muitos aspectos básicos da linguagem requereriam, em teoria, um conhecimento mais sólido sobre o que são variáveis, como estas existem na memória e como podem ser manipuladas.
+
+Em um primeiro momento, estes detalhes serão ignorados, visto que é possível começar a programar e apenas aceitar que algumas coisas são assim mesmo. Para estes detalhes, por enquanto, basta pensar "não sei, só sei que foi assim"^[Como diria Chicó, em _Auto da Compadecida_, peça de teatro de Ariano Suassuna também retratada em uma minissérie de televisão.].
+
+### Primeiro programa: um programa mínimo (e inútil) {#sec-programa-minimo}
+
+Para começar diferente, o primeiro programa exemplo não será o _Hello, world!_, amplamente utilizado na literatura e em tutoriais. Ele será o código mínimo na linguagem que é válido e coerente. Por ser mínimo, porém, não faz nada útil.
+
+```{c}
+int main(void) {
+    return 0;
+}
+```
+
+Mesmo sendo minimalista, este código contém vários elementos interessantes:
+
+* A função `main` e seu bloco de comandos
+* O comando `return`
+
+Um bloco de comandos é uma coleção de comandos delimitados por chaves. O nome `main` é associado a esse bloco de comandos, que contém apenas um comando simples (o `return 0;`) neste caso. Os tipos `int` e `void` indicados não são relevantes neste momento. Chamar o bloco de comandos de _main_ (principal) é obrigatório, pois indica onde a execução do programa começa.
+
+Neste exemplo, há um único comando dentro de `main`: `return 0;`. Este comando indica que, ao ser terminado, o programa devolve ao sistema operacional um valor inteiro, que é um indicador que indica em que condições o programa encerrou sua execução. Por convenção, o valor zero significa que a execução se encerrou sem erros.
+
+Ao ser compilado e executado, este programa apenas indica ao sistema operacional que terminou sem erros.
+
+### Segundo programa: _Hello, world!_
+
+O segundo exemplo expande o código anterior, agora para apresentar uma mensagem na tela. Para isso, ele usa uma função chamada `printf`, responsável por apresentar uma saída formatada.
+
+```{c}
+#include <stdio.h>
+
+int main(void) {
+    printf("Hello, world!\n");
+    return 0;
+}
+```
+
+Este programa, além do `printf`, também usa a linha `#include <stdio.h>`. O arquivo `stdio.h` é um arquivo de cabeçalho (`stdio` significa _standard input and output_ e `.h` indica _header_) e contém informações sobre como o `printf` deve ser processado pelo compilador. Este arquivo de cabeçalho descreve uma série de funções para entradas e saídas feitas pelos programas.
+
+O argumento do `printf` é o texto _Hello, world!_. Em C, textos são sempre especificados entre aspas duplas. No exemplo, `\n` é um indicador para mudar para a linha seguinte.
+
+Um outro detalhe no código ainda pode ser destacado: cada comando simples é terminado com um ponto e vírgula, que é o caso tanto do `printf` quanto do `return`.
+
+Na sequência é apresentada a versão definitiva do código do _Hello, world!_.
+
+```{c}
+/*
+Programa "Hello, world": código exemplo do clássico primeiro programa em C
+    que apenas apresenta uma mensagem de saudação na tela
+Assegura: a apresentação da mensagem padrão "Hello, world"
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("Hello, world!\n");
+    return 0;
+}
+```
+
+Esta versão acrescenta a documentação do código. Qualquer texto colocado entre  `/*` e `*/` é um comentário e é ignorado completamente pelo compilador ao analisar o código fonte. Os comentários não são para o compilador, mas para humanos que lerão o código do programa.
+
+Neste caso específico, o comentário tem a função de documentar o propósito do código. Ele fornece uma descrição do propósito do código e dá informações relevantes. O grau de detalhe depende sempre do contexto; códigos simples podem ter documentação mais simples, enquanto programas que fazem parte de um projeto compartilhado entre vários desenvolvedores deve conter as informações necessárias para que todos da equipe os compreendam. 
+
+## Comandos simples
+
+`\index{comando!simples}`{=latex}
+Um componente estrutural da linguagem é o chamado comando simples. Esse comando de caracteriza por uma instrução individual no código do programa.
+
+Os comandos simples seguem uma sintaxe também simples.
+
+::: {.callout title="Comando simples"}
+_instrução_ ;
+:::
+
+Nos exemplos dados, cada `printf` usado para apresentar uma informação e também o `return 0` são comandos simples e, desta forma, obrigatoriamente terminados com um ponto e vírgula. A execução do `printf` é uma _instrução_, assim como o término da execução indicado pelo `return`.
+
+Segue um exemplo simples de programa com alguns comandos simples.
+
+```{c}
+/*
+Apresentação de uma série de mensagens na tela
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("Bom dia! ");
+    printf("Este é um exemplo de ");
+    printf("vários comandos simples.\n");
+    printf("Todos são execuções do printf e todos são finalizados com ';'.\n");
+    printf("O 'return 0', naturalmente, também é um comando simples.\n");
+
+    return 0;
+}
+```
+
+::: {.callout-tip}
+Embora a linguagem C não tenha objeções quando a escrever dois comandos simples em uma única linha do programa, sugere-se forntemente que cada comando tenha sua própria linha.
+:::
+
+::: {.callout-warning icon="false" title="Curiosidade"}
+Em C, existe a possibilidade de que o comando simples seja vazio. Para especificá-lo, bastar inserir o ponto e vírgula.
+
+```c
+    printf("Um!");
+    ;  // comando vazio que não faz nada...
+    printf("Dois!");
+```
+
+Resta pensar quando um comando que não faz nada pode ser útil.
+:::
+
+
+## Código fonte, objeto e executável
+
+Todos os programas em C são escritos em arquivos de texto simples, que são os que não dão suporte a negrito e itálico, tipos de fonte ou formatação de parágrafo, entre outros recursos. O código em C segue uma sintaxe bastante específica e os programas escritos são chamados de código fonte.
+
+Para um programa escrito em C ser executado, primeiramente é necessário que ele seja compilado. O compilador é um programa cuja atribuição principal é analisar o código fonte, interpretando as letras, símbolos e dígitos ali escritos e gerar o código objeto, que é o código compilado. O código objeto é guardado em um arquivo e já não é mais legível por humanos, já que contém as instruções que o processador é capaz de entender e executar. 
+
+O código fonte, depois de compilado, leva a um código objeto que é dependente da máquina. Assim, são produzidos códigos objeto específicos para processadores x86, ARM ou outro. Para que um mesmo programa possa ser executado em plataformas diferentes, é preciso que ele seja compilado para cada plataforma alvo individualmente.
+
+Há inúmeros compiladores disponíveis para C, como o GNU e o CLang, por exemplo. Também há implementações de compiladores específicos para cada plataforma de sistema operacional e e de processador. Ou seja, há um compilador GNU para Windows executando em processadores x86 e outro para Linux em um processador ARM. Cada compilador um possui suas próprias regras internas, mas todos obedecem especificações rigorosas e padronizadas.  Desta forma, independente do hardware e do sistema operacional, um mesmo código fonte, ao ser compilado e executado, produz um mesmo resultado. Isso é uma regra e, para ela, naturalmente há exceções.
+
+Neste texto, a especificação conhecida como C17 (da ISO) é a adotada para todas as implementações. Os programas são compilador usando o compilador GNU em um sistema operacional Linux, tudo sobre um hardware x86.
+
+Finalmente, ainda há uma última etapa, na qual o código compilado é colocado em um arquivo que o sistema operacional da vez consegue carregar para a memória e colocá-lo em execução. Este é chamado de código executável e também depende da plataforma. 
+
+Usualmente a etapa do código objeto é escondida de quem usa o compilador e, aparentemente, do código fonte é gerado diretamente o executável. Na prática, esse é o efeito final.
+
+
+### Compilação com o `gcc`
+
+Há uma diversidade de compiladores para a linguagem C, além de diversos IDEs[^explicação-ide] com diferentes facilidades para escrever códigos fonte. Há IDEs que podem ser instalados, como  Visual Studio Code[^site-vscode], Code::Blocks[^site-codeblocks], Visual Studio[^site-visualstudio] ou Eclipse[^site-eclipse], por exemplo, além das disponíveis _online_, como GDB[^site-gdb], Programiz[^site-programiz] ou Replit[^site-replit].
+
+
+<!-- Notas de rodapé -->
+[^explicação-ide]: Um ambiente de desenvolvimento integrado, ou _integrated development environment_ (IDE), é um programa que dá suporte para escrever programas, provendo um editor de texto dedicado, destaque de sintaxe (diferentes elementos do programa aparecem em cores diferenciadas), acesso ao compilador com o clique de um botão ou uma combinação simples no teclado.
+
+[^site-vscode]: Visual Studio Code: <https://code.visualstudio.com>.
+
+[^site-codeblocks]: Code::Blocks: <https://www.codeblocks.org>.
+
+[^site-visualstudio]: Visual Studio: <https://visualstudio.microsoft.com>.
+
+[^site-eclipse]: Eclipse: <https://www.eclipse.org>.
+
+[^site-gdb]: GDB Online: <https://www.onlinegdb.com>.
+
+[^site-programiz]: Programiz: <https://www.programiz.com>.
+
+[^site-replit]: Replit: <https://replit.com>.
+<!-- Notas de rodapé - fim -->
+
+Neste livro os programas foram compilados invocando no terminal o compilador GNU GCC[^site-gcc] na versão mais recente disponível no repositório oficial do Debian.
+
+[^site-gcc]: Gnu Compiler Collection: <https://gcc.gnu.org>.
+
+
+```{bash}
+gcc --version
+```
+
+As opções `-Wall` e `-pedantic` são incluídas automaticamente e ativam uma vasta gama de mensagens de erro e avisos importantes, dando maior controle sobre o código executável que está sendo gerado. A especificação C17 da linguagem C é adotada com a opção `-std=c17` (@sec-padronizacao-da-linguagem).
+
+```bash
+alias gcc='gcc -Wall -pedantic -std=c17'
+```
+
+::: {.runenv}
+Para exemplificar, considere um arquivo com nome `bom_dia.c` com código fonte seguinte.
+
+```c {.textfile to="bom_dia.c"}
+/*
+Apresentação um bom dia!
+Assegura: uma mensagem de bom dia apresentada na tela
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("Bom dia! Que seu dia seja ótimo!\n");
+
+    return 0;
+}
+```
+
+Usando o comando `file` é possível ver (ou tentar ver) o tipo de informação guardada em um arquivo. Para o caso do código fonte, o arquivo é identificado como _C source code_, ou seja, código fonte em C.
+
+```{bash}
+file bom_dia.c
+```
+
+A compilação pode ser feita com o comando apresentado. A opção `-o` permite nomear o arquivo executável que é criado.
+
+```{bash}
+gcc -Wall -pedantic -std=c17 bom_dia.c -o bom_dia
+```
+
+Esse comando compila `bom_dia.c` e gera o arquivo executável `bom_dia`. No caso de sucesso na compilação, o `gcc` não apresenta saídas; apenas eventuais problemas são apresentados na tela.
+
+```{bash}
+file bom_dia
+```
+
+A execução de `file`, nesse caso, apresenta muita informação. A relevante, neste momento, é que o arquivo contém um _ELF 64-bit LSB pie executable_, o que quer dizer que é um programa executável.
+
+Na sequência é apresentada a execução do programa `bom_dia`.
+
+```{bash}
+./bom_dia
+```
+
+:::
+
+### Erros de sintaxe
+
+Sendo uma linguagem de programação, os comandos são sempre analisados de forma rígida. A falta de um parêntese, um espaço no lugar errado ou uma grafia errada (como `prinft`, por exemplo) já dá margem para o compilador reclamar que algo está errado e se recusar a gerar o executável. Esses são os erros de sintaxe e é função do compilador encontrá-los.
+
+O programador deve aprender a ler as mensagens de erro produzidas pelo compilador e interpretá-las, permitindo a remoção dos erros sintáticos.
+
+Como exemplo, segue uma versão incorreta do programa exemplo. Nela, "acidentalmente" o ponto e vírgula foi esquecido.
+
+```{c} {intentional-problems="true"}
+/*
+Programa "Hello, world": código exemplo do clássico primeiro programa em C
+    que apenas apresenta uma mensagem de saudação na tela
+Assegura: a apresentação da mensagem padrão "Hello, world"
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("Hello, world!\n")
+    return 0;
+}
+```
+
+A mensagem de erro aponta em que linha e coluna deveria haver um ponto e vírgula.
+
+Os erros são apresentados conforme o compilador consegue detectar, apresentando mensagens tão boas quanto possível. Além disso, uma única falha pode desencadear uma sequência de erros, como no exemplo seguinte, na qual apenas faltou fechar as aspas no argumento da função `printf`.
+
+```{c} {intentional-problems="true"}
+/*
+Programa "Hello, world": código exemplo do clássico primeiro programa em C
+    que apenas apresenta uma mensagem de saudação na tela
+Assegura: a apresentação da mensagem padrão "Hello, world"
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("Hello, world!\n);
+    return 0;
+}
+```
+
+
+### Erros de lógica
+
+Um programa pode ser compilado e gerar o executável sem erros ou qualquer tipo de aviso que o compilador esteja ajustado para dar. Mas apesar disso, a execução não produz o resultado desejado. Neste caso, mesmo com a sintaxe correta, as instruções contém um erro (uma falha de cálculo, uma comparação equivocada) que invalida o programa. Esse são os erros de lógica e, desta vez, cabe ao programador encontrá-los e corrigi-los.
+
+A evitação de erros de lógica é considerada ao longo de todo o livro.

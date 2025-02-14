@@ -1,0 +1,15 @@
+<!-- Porcentagens e médias na população  -->
+::: {#exr-0035}
+A Universidade promoveu um um show de música folclórica em seu Anfiteatro principal, o qual tem capacidade para 400\ pessoas. Os ingressos foram grátis e distribuídos com antecedência. Na noite do espetáculo, todos os assentos foram ocupados.
+
+Para colher informações sobre o público participante, foi perguntado a cada ingressante sua identidade de gênero e sua idade. Os gêneros foram anotados da seguinte forma: 1 - cisgênero; 2 - transgênero e 3 - não binário.
+
+Os dados de interesse para a análise incluem:
+
+* as porcentagens de cada grupo em relação ao total;
+* as idades médias de cada grupo.
+
+Escreva um algoritmo para processar uma sequência de informações que consiste, para cada um dos presentes no show, no número referente ao seu grupo e sua idade. O pseudocódigo deve apresentar as porcentagens indicadas e as médias que existirem.
+
+@rem-0035
+:::

@@ -1,0 +1,28 @@
+<!-- Máximo e contagem simultâneas (idades) -->
+::: {#sol-0042}
+@exr-0042 
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Determinar a idade máxima e seu número de ocorrências para um grupo de indivíduos
+    \Require uma sequência com 20 idades
+    \Ensure apresentação da idade máxima e de seu número de ocorrências
+    \Statex
+    \Statep{Obtenha \Id{idade}}
+    \Statep{Defina \Id{idade\_máxima} com o valor de \Id{idade}}
+    \Statep{Defina \Id{número\_ocorrências} com valor 1}
+    \Statex
+    \For{$i \gets 2$ \To $20$}[19 idades restantes]
+        \Statep{Obtenha \Id{idade}}
+        \If{$\Id{idade} = \Id{idade\_máxima}$}[mais uma ocorrência]
+            \Statep{Some 1 a \Id{número\_ocorrências}}
+        \ElsIf{$\Id{idade} > \Id{idade\_máxima}$}[nova idade máxima]
+            \Statep{Redefina \Id{idade\_máxima} com \Id{idade}}
+            \Statep{Reinicie \Id{número\_ocorrências} com 1}[começa a contar de novo]
+        \EndIf
+    \EndFor
+    \Statex
+    \Statep{Apresente \Id{idade\_máxima} e \Id{número\_ocorrências}}
+\end{algorithmic}
+```
+:::

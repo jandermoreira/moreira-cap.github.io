@@ -1,0 +1,6 @@
+<!-- Qual usar? Repetição definida conhecida (Média de temperaturas) -->
+::: {#sol-0017}
+@exr-0017
+
+O número de repetições neste problema é definido. Sabendo-se o mês, que é dado de entrada, é possível determinar o número de dias para a repetição. Mesmo para o mês de fevereiro, que pode variar entre 28 ou 29 dias, sabe-se qual a quantidade, visto que o ano também é um valor conhecido e, a partir dele, determinar se se trata ou não de um ano bissexto.
+:::

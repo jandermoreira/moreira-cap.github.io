@@ -1,0 +1,31 @@
+<!-- Movimentação do mínimo para início do vetor -->
+::: {#sol-0077}
+@exr-0077
+
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Troca da posição do mínimo para o início do vetor
+    \Require um vetor \Id{vetor} de comprimento mínimo 1
+    \Ensure \Id{vetor} modificado com $\Id{vetor}[0]$ contendo o valor mínimo
+    \Statex    
+    \Procedure{MovaMínimoParaInício}{\Id{vetor}:\ByRef}
+        \Statep{\Commentl{Localização do mínimo}}
+        \Statep{Inicie \Id{mínimo} com $\Id{vetor}[0]$}
+        \Statep{Inicie \Id{posição\_minímo} com zero}
+        \For{$i \gets 1$ \To $\Id{vetor}.\Id{comprimento} - 1$}[do 2º ao último]
+            \If{$\Id{vetor}[i] < \Id{mínimo}$}
+                \Statep{Armazene em \Id{mínimo} o valor $\Id{vetor}[i]$}
+                \Statep{Atualize \Id{posição\_minímo} com $i$}
+            \EndIf
+        \EndFor
+        \Statex
+        \Statep{\Commentl{Troca com a posição inicial}}
+        \If{$\Id{posição\_mínimo} \neq 0$}
+            \Statep{$\Id{vetor}[\Id{posição\_minímo}] \gets \Id{vetor}[0]$}[preserva o valor $\Id{vetor}[0]$ original]
+            \Statep{$\Id{vetor}[0] \gets \Id{mínimo}$}[ajusta o valor mínimo para o início]
+        \EndIf
+    \EndProcedure
+\end{algorithmic}
+```
+:::

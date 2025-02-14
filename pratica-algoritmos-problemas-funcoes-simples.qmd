@@ -1,0 +1,30 @@
+# Problemas com funções simples
+
+<!-- Função volume de esfera dado o raio -->
+{{< include problemas/0046.qmd >}}
+
+<!-- Função volume de esfera dado o diâmetro -->
+{{< include problemas/0047.qmd >}}
+<!-- Função máximo de 2 -->
+{{< include problemas/0043.qmd >}}
+
+<!-- Função máximo de 3 -->
+{{< include problemas/0044.qmd >}}
+
+<!-- Função número perfeito -->
+{{< include problemas/0045.qmd >}}
+
+<!-- Função h min s para segundos -->
+{{< include problemas/0048.qmd >}}
+
+<!-- Função h min s para segundos -->
+{{< include problemas/0049.qmd >}}
+
+<!-- Função lógica 'é par' -->
+{{< include problemas/0051.qmd >}}
+
+<!-- Função número de divisores -->
+{{< include problemas/0056.qmd >}}
+
+<!-- Função lógica 'é divisível' -->
+{{< include problemas/0072.qmd >}}

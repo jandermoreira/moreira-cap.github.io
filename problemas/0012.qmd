@@ -1,0 +1,11 @@
+<!-- Qual usar? Repetição definida (Pressão em caldeira) -->
+::: {#exr-0012}
+Considere o problema: 
+
+> Um sistema monitora a pressão de uma caldeira registrando uma medida a cada cinco minutos. Como o sistema funciona continuamente, os dados são registrados diariamente, com a primeira medida a 0h e a última às 23h55min. Escreva um algoritmo para processar todos os dados colhido em um dia e determinar a  a pressão média nesse período.
+
+A solução algorítmica para esse problema requer, em princípio, uma repetição.
+Qual a melhor escolha de estrutura de repetição?
+
+@sol-0012
+:::

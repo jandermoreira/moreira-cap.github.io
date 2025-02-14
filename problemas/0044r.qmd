@@ -1,0 +1,36 @@
+<!-- Função máximo de 3 -->
+::: {#sol-0044}
+@exr-0044
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Função para retornar o máximo entre três valores numéricos
+    \Require três valores numéricos
+    \Ensure retorno do valor máximo
+    \Statex
+    \Function{Máximo3}{$v_1$, $v_2$, $v_3$}
+        \If{$v_1 > v_2$ e $v1 > v_3$}
+            \Statep{Defina \Id{máximo} como $v_1$}
+        \ElsIf{$v_2 > v_3$}
+            \Statep{Defina \Id{máximo} como $v_2$}
+        \Else
+            \Statep{Defina \Id{máximo} como $v_3$}
+        \EndIf
+        \Statep{\Return \Id{máximo}}
+    \EndFunction
+\end{algorithmic}
+```
+Caso o @exr-0043/@sol-0043 tenha sido resolvido, a solução abaixo faz sentido:
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Função para retornar o máximo entre três valores numéricos
+    \Require três valores numéricos
+    \Ensure retorno do valor máximo
+    \Statex
+    \Function{Máximo3}{$v_1$, $v_2$, $v_3$}
+        \Statep{\Return \Call{Máximo}{$v_1$, \Call{Máximo}{{$v_2$, $v_3$}}}}
+    \EndFunction
+\end{algorithmic}
+```
+:::

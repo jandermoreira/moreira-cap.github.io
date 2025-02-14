@@ -1,0 +1,464 @@
+# Repetições com `while` {#sec-repeticoes-com-while}
+
+A linguagem C permite laços de repetição usando `while`, `for` e `do while`. Neste capítulo a estrutura e aspectos lógicos do `while` são apresentados. O `for` é abordado no @sec-repeticoes-com-for e o `do while`, no @sec-repeticoes-com-do-while.
+
+## A estrutura de repetição `while`
+
+A estrutura de repetição que o `while` implementa pode ser chamada de indefinida, pois o número de repetições depende de uma condição que se altera ao longo do tempo. Sua estrutura é apresentada na sequência.
+
+`\index{while@\texttt{while}}`{=latex}
+
+::: {.callout title="Estrutura do `while`"}
+`while` `(` _expressão\_lógica_ `)` _comando_
+:::
+
+O uso dessa estrutura é intuitivo: enquanto a _expressão\_lógica_ for avaliada como verdadeira, o _comando_ é executado. Este último pode ser um comando simples terminado em ponto e vírgula ou um comando composto delimitado por chaves.
+
+O `while` sempre testa a condição antes de iniciar cada execução, o que leva à possibilidade que nada seja repetido se a condição já for falsa previamente. Caso a condição seja verdadeira, todo os comandos condicionados são executados antes de ser feita nova verificação.
+
+Para que a estrutura de repetição em si faça sentido, em _comando_ deve haver alguma alteração que leve a condição a se tornar falsa em algum momento.
+
+
+Segue um exemplo simples de uso do `while` na forma de um programa que implementa o @alg-conversao-pressao-com-sentinela.
+
+```latex {.pseudocode}
+%| title: Conversão de unidades de pressão para uma sequência de valores.
+%| label: #alg-conversao-pressao-com-sentinela
+\begin{algorithmic}
+    \Description Conversão de uma sequência de valores de pressão dadas em mmHg para atm, usando um valor nulo como sentinela
+    \Require Uma sequência potencialmente vazia de valores de pressão (mmHg) não nulos seguidos por um valor sentinela nulo
+    \Ensure O valor de cada medida de pressão convertido para atm
+    \Statex{}
+    \Statep{Obtenha $\Id{pressão}_\Id{mmHg}$}[primeiro valor da entrada]
+    \While{$\Id{pressão}_\Id{mmHg}$ não for zero}[verificação se é sentinela]
+        \Statep{Calcule $\Id{pressão}_\Id{atm}$ como $\frac{1}{760}\times\Id{pressão}_\Id{mmHg}$}
+        \Statep{Apresente $\Id{pressão}_\Id{atm}$}
+        \Statex
+        \Statep{Obtenha $\Id{pressão}_\Id{mmHg}$}[próximo valor da sequência]
+    \EndWhile
+\end{algorithmic}
+```
+
+A implementação desse algoritmo em C pode ser dada como o código seguinte.
+
+```{c}
+/*
+Conversão de uma sequência de valores de pressão dadas em mmHg para atm,
+    usando um valor nulo como sentinela
+Requer: Uma sequência potencialmente vazia de valores de pressão (mmHg)
+    não nulos seguidos por um valor sentinela nulo
+Assegura: O valor de cada medida de pressão convertido para atm
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite o valor da pressão (mmHg) ou 0 para terminar: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double pressao_mmhg;
+    sscanf(entrada, "%lf", &pressao_mmhg);
+    //TYPE(0, "500");
+
+    while (pressao_mmhg != 0) {
+        double pressao_atm = pressao_mmhg / 760;
+        printf("Pressão em ATM: %.2f.\n", pressao_atm);
+
+        printf("Digite o valor da pressão (mmHg) ou 0 para terminar: ");
+        fgets(entrada, sizeof entrada, stdin);
+        sscanf(entrada, "%lf", &pressao_mmhg);
+        //TYPE(0, "1000");
+        //TYPE(1, "2565.26");
+        //TYPE(2, "760.0");
+        //TYPE(3, "0");
+        //STEP
+    }
+
+    return 0;
+}
+
+```
+
+O mapeamento do @alg-conversao-pressao-com-sentinela para\ C é bastante direto. Inicialmente é feita a primeira leitura, que pode ser tanto um valor válido quanto o valor sentinela e, em seguida, é feito o teste. Sendo bem sucedida a verificação (i.e, não é o sentinela), é feita apresentado o resultado da conversão de unidade e solicitado o próximo valor da sequência. Este ciclo de verificação e execução é repetido, sendo encerrado quando a verificação se torna falsa e `return 0` é finalmente executado.
+
+Se a sequência for vazia e na entrada de dados constar apenas o valor sentinela, a condição do `while` falha já na primeira tentativa e o programa se encerra sem que nenhuma conversão seja feita.
+
+Outro ponto curioso sobre a implementação é a verificação de igualdade feita com um valor `double`. Neste caso, a tolerância não é necessária, pois `pressao_mmhg` não é o resultado calculado e, portanto, quando for digitado o valor nulo, a conversão será exata.
+
+Para outro exemplo, segue um algoritmo para contabilização do resultado de uma pesquisa, que considera 
+
+
+## O `double` nas verificações do `while`
+
+Um cuidado essencial ao programador são as verificações que, embora façam sentido no código, falham por conta da precisão dos tipos numéricos reais, como `double` ou `float`.
+
+Para exemplificar essa questão, o trecho de código seguinte pode ser considerado.
+
+
+```c
+double a = 0;
+while (a != 1) {
+    printf("a = %g.\n", a);
+    a += 0.1;
+}
+```
+
+Essa repetição nunca termina, pois `a` nunca será igual a 1. Na precisão dupla que o `double` proporciona, o valor mais próximo de 0,1 é, na realidade, 0.100000000000000005551115123126. Assim, quando se espera que a variável tenha valor 1, ha uma diferença de 1,11022\ $\times$\ 10^-6^ pelos erros acumulados.
+
+Assim, salvaguardas devem ser adotadas para evitar essas ocorrências. 
+
+No exemplo dado, uma solução seria interromper a repetição caso o valor de `a` ultrapassasse 1.
+
+```c
+double a = 0;
+while (a <= 1) {  // garantia de não ultrapassar o limite
+    printf("a = %g.\n", a);
+    a += 0.1;
+}
+```
+
+Outra alternativa é o estabelecimento de uma tolerância.
+
+```c
+double a = 0;
+while (fabs(a - 1) < 0.00001) {  // considera próximo o suficiente
+    printf("a = %g.\n", a);
+    a += 0.1;
+}
+```
+
+::: {.callout-note title="Curiosidade"}
+No exemplo de incremento desta seção foi destacado que 0,1 não tem representação exata em um `double`. O valor 0,25, porém, é exato. Nesse caso, o código seguinte funcionaria conforme o esperado.
+
+```c
+double a = 0;
+while (a != 1) {
+    printf("a = %g.\n", a);
+    a += 0.25;
+}
+```
+
+Mesmo assim, recomenda-se fortemente que a igualdade ou desigualdade não seja empregada. O uso de `while (a <= 1)` deve ser usado mesmo neste caso.
+:::
+
+
+## Repetições baseadas na entrada
+
+Muitas das repetições nos programas são necessárias para processar uma sequência de dados de entrada. De forma geral, o `while` é usado quando não se conhece a quantidade de repetições que serão executadas, relacionadas neste caso ao número de dados que servirão como entrada para o programa.
+
+Nesse contexto, há duas formas importantes para a entrada, uma usando um valor sentinela (que indica o fim dos dados) e outra que reconhece que os dados acabaram por si, em um indicador explícito.
+
+### Entrada com sentinela
+
+Uma forma comum de entrada de dados é o uso de um valor sentinela que indica o fim dos dados. O programa seguinte apresenta uma sequência de leituras para a soma de valores inteiros maiores que zero, usando o valor nulo como sentinela para indicar o fim dos dados.
+
+```{c} 
+/*
+Exemplo de leitura de valores inteiros positivos, usando o zero como sentinela
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite um valor inteiro positivo ou zero para terminar: ");
+    fgets(entrada, sizeof entrada, stdin);
+    int valor;
+    sscanf(entrada, "%d", &valor);
+    //TYPE(0, "12");
+
+    while (valor != 0) {
+        printf("Valor digitado: %d.\n", valor);
+
+        printf("Digite um valor inteiro positivo ou zero para terminar: ");
+        fgets(entrada, sizeof entrada, stdin);
+        sscanf(entrada, "%d", &valor);
+        //TYPE(0, "26");
+        //TYPE(1, "13");
+        //TYPE(2, "3");
+        //TYPE(3, "20");
+        //TYPE(4, "0");
+        //STEP
+    }
+    printf("Encerrado!\n");
+
+    return 0;
+}
+```
+
+Não é incomum o programador optar por expandir o conceito do valor sentinela. Sem prejuízo aos propósitos do programa original, o programador poderia usar na condição do `while` a a expressão `valor > 0`, o que incluiria qualquer valor negativo como sentinela. 
+
+
+
+### Detecção do encerramento do fluxo de entrada
+
+Outra alternativa para indicar o fim da sequência de dados é o encerramento da entrada em si. Em sistemas Linux, ao se digitar `Ctrl-D` em uma linha vazia é indicado ao programa que a entrada de dados foi encerrada. No Windows, o equivalente é digitar `Ctrl-Z` seguido de `ENTER`.
+
+Uma leitura com função `fgets` é capaz de entender o encerramento dos dados. Essa função, como outras funções, retorna um valor resultante, o qual tem sido sistematicamente ignorado. Como exemplo, os comandos seguintes fazem uma leitura e apresentam o resultado lido. Neste caso, o valor de retorno do `fgets` é ignorado.
+
+```c
+char entrada[160];
+fgets(entrada, sizeof entrada, stdin);
+printf("%s", entrada);
+```
+
+Entretanto, essa função retorna um valor que pode ser verificado. O valor `NULL` é retornado em caso de erro. Assim, com uma verificação extra, a leitura da linha poderia ser escrita conforme apresentado na sequência.
+
+```c
+char entrada[160];
+if (fgets(entrada, sizeof entrada, stdin) != NULL)
+    printf("%s", entrada);
+else
+    printf("Houve algum problema com a leitura.\n");
+```
+
+O "problema" mais comum da falha na leitura é o fim do fluxo de entrada. Assim, um programa pode usar essa verificação para repetir a leitura condicionalmente. O programa seguinte exemplifica leituras de linha de texto e contagem do número de linhas[^site-dom-casmurro].
+
+[^site-dom-casmurro]: O texto digitado como exemplo foi extraído de Dom Casmurro, de Machado de Assis, obtido em <http://www.educadores.diaadia.pr.gov.br/arquivos/File/2010/literatura/obras_completas_literatura_brasileira_e_portuguesa/MACHADO_ASSIS/DCASMURRO/CASMURRO5.HTM>.
+
+
+```{c}
+/*
+Contagem do número de linhas no fluxo de entrada
+Requer: uma sequência de linhas de texto
+Assegura: a apresentação do número de linhas desse texto
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite seu texto linha a linha (Ctrl-D) para terminar.\n");
+    int contador_linhas = 0;
+    while (fgets(entrada, sizeof entrada, stdin) != NULL) //{
+        contador_linhas++;
+        //TYPE(0, "CAPITULO V ");
+        //TYPE(1, "O AGREGADO ");
+        //TYPE(2, "");
+        //TYPE(3, "Nem sempre ia naquele passo vagaroso e rígido. Também se descompunha em ");
+        //TYPE(4, "acionados, era muita vez rápido e lépido nos movimentos, tao natural nesta como ");
+        //TYPE(5, "naquela maneira. Outrossim, ria largo, se era preciso, de um grande riso sem ");
+        //TYPE(6, "vontade, mas comunicativo, a tal ponto as bochechas, os dentes, os olhos, toda a ");
+        //TYPE(7, "cara, toda a pessoa, todo o mundo pareciam rir nele. Nos lances graves, ");
+        //TYPE(8, "gravíssimo.");
+        //STEP
+    //}
+
+    printf("Número de linhas: %d.\n", contador_linhas);
+
+    return 0;
+}
+```
+::: {.callout-tip}
+As funções de leitura, quando detectam o fim do fluxo de entrada associado a `stdin`, ignoram entradas subsequentes. Assim, depois de terminada uma sequência com `Ctrl-D`, outras chamadas a `fgets` são ignoradas. Isso acontece devido a um controle do fluxo feito pelo sistema operacional. Entretanto, é possível retomar a leitura com `clearerr`, que limpa o indicador de fim de fluxo.
+
+
+```c
+/*
+Contagem do número de linhas no fluxo de entrada
+Requer: uma sequência de linhas de texto
+Assegura: a apresentação do número de linhas desse texto
+*/
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite seu texto linha a linha (Ctrl-D) para terminar.\n");
+    int contador_linhas = 0;
+    while (fgets(entrada, sizeof entrada, stdin) != NULL)
+        contador_linhas++;
+
+    printf("Número de linhas: %d.\n", contador_linhas);
+
+    // Reassumindo a leitura de stdin
+    clearerr(stdin);
+    printf("Digite seu nome: ");
+    char nome[80];
+    fgets(nome, sizeof nome, stdin);
+    nome[strlen(nome) - 1] = '\0';  // eliminação do \n
+    printf("Obrigado, %s, por sua digitação!\n", nome);
+
+    return 0;
+}
+```
+
+Sem a chamada a `clearerr`, a leitura do nome é ignorada.
+:::
+
+## Exemplos
+Esta seção apresenta alguns exemplos mais realistas do uso do `while` na codificação de alguns algoritmos.
+
+
+### Contagem regressiva
+
+Um exemplo simples de repetição com `while` é apresentado na sequência. O programa implementa um cronômetro regressivo simples e segue o @alg-cronometro-regressivo.
+
+
+```latex {.pseudocode}
+%| title: Contagem regressiva segundo a segundo
+%| label: #alg-cronometro-regressivo
+\begin{algorithmic}
+    \Description Realiza a contagem regressiva para um tempo determinado
+    \Require o tempo total para contagem
+    \Ensure a apresentação de uma contagem regressiva e mensagem de finalização
+    \Statex{}
+    \Statep{Obtenha o tempo de contagem}
+    \While{o tempo for maior ou igual a zero}
+        \Statep{Apresente o tempo restante}
+        \Statep{Aguarde 1s}
+        \Statep{Reduza tempo de contagem em 1s}
+    \EndWhile
+    \Statep{Apresente uma mensagem de término da contagem}
+\end{algorithmic}
+```
+
+
+```c
+/*
+Realiza a contagem regressiva para um tempo determinado
+Requer: o tempo para contagem (inteiro)
+Assegura: a apresentação de uma contagem regressiva e mensagem de finalização
+*/
+#include <stdio.h>
+#include <unistd.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite o tempo para contagem.\n"
+           "Exemplos: '10' ou '10s' para 10s, '3m' para 3 minutos "
+           "ou '5h' para 5 horas.\n"
+           "Tempo: ");
+    fgets(entrada, sizeof entrada, stdin);
+    int tempo_restante;
+    char unidade_tempo = 's';  // padrão: segundos
+    sscanf(entrada, "%d%c", &tempo_restante, &unidade_tempo);
+
+    // Conversão de unidades se necessário; senão considera segundos
+    switch (unidade_tempo) {
+        case 'h':  // horas
+            tempo_restante = tempo_restante * 3600;
+            break;
+        case 'm':  // minutos
+            tempo_restante = tempo_restante * 60;
+            break;
+    }
+
+    // Contagem
+    printf("Contagem para %d segundo(s):\n", tempo_restante);
+    while (tempo_restante >= 0) {
+        int tempo_horas = tempo_restante / 3600;
+        int tempo_minutos = (tempo_restante - tempo_horas * 3600) / 60;
+        int tempo_segundos = tempo_restante % 60;
+        printf("> Tempo restante: %02dh %02dmin %02ds\r", tempo_horas,
+               tempo_minutos, tempo_segundos);
+        fflush(stdout);
+
+        sleep(1);  // aguarda 1 segundo
+        tempo_restante--;
+    }
+    printf("\nObrigado pela paciência!\n");
+
+    return 0;
+}
+```
+
+Este código usa o `while` para a contagem regressiva. A cada execução, é apresentando o valor do cronômetro (dado por `tempo_restante`) e esse tempo é decrescido de um segundo. A chamada `sleep(1)` (declarada em `unistd.h`) suspende a execução do processo por um segundo antes de retomar a contagem.
+
+Valem ainda dois comentários sobre esse programa. O primeiro é sobre o uso de `\r` ao apresentar o cronômetro. Esse caractere faz com que o cursor do terminal volte para o início da linha sem passar para a linha de baixo e, assim, o próximo `printf` sobrescreve o horário anterior, atualizando-o. O outro ponto é o uso da função `fflush(stdout)` (incluído via `stdio.h`), a qual faz com que o texto escrito pelo programa seja imediatamente colocado no terminal. Sem ele, há atrasos na escrita e o contador parece irregular.
+
+O programa de contagem regressiva não é preciso. Ele se baseia em intervalos de um segundo, mas a cada repetição outras operações são feitas. A longo prazo, o cronômetro ficará atrasado em relação ao tempo real. Este programa é para ser um mero exemplo da repetição e não tem maiores pretensões.
+
+
+
+### Atualização de saldo
+
+Um saldo bancário tem um valor inicial e, dependendo de uma série de transações de crédito ou débito, o montante é modificado. Esta é a proposta do @alg-atualizacao-de-saldo.
+
+
+```latex {.pseudocode}
+%| title: Atualização de saldo bancário a partir de créditos e débitos.
+%| label: #alg-atualizacao-de-saldo
+
+\begin{algorithmic}
+    \Description Atualização de um saldo bancário a partir de uma sequência de movimentações de crédito ou débito ocorridas em um período
+    \Require o saldo inicial e uma sequência de transações compostas pelo valor da transação e indicador se é crédito ou débito
+    \Ensure a apresentação do saldo atualizado
+    \Statex{}
+    \Statep{Obtenha o saldo inicial}
+    \While{existem transações para serem processadas}
+        \Statep{Obtenha o tipo da transação}[tipo = crédito ou débito]
+        \Statep{Obtenha o valor da transação}
+        \Statep{Atualize o valor do saldo de acordo com a transação}
+    \EndWhile
+    \Statep{Apreente o saldo atualizado}
+\end{algorithmic}
+```
+
+A implementação em C apresentada na sequência considera que cada transação é entrada expressando o tipo da transação com `C` para crédito ou `D` para débito em uma linha e o valor monetário em outra. Não há valor sentinela para finalizar a entrada e o programa assume que o encerramento do fluxo de entrada implica no fim dos dados.
+
+```{c} 
+/*
+Atualização de um saldo bancário a partir de uma sequência de movimentações de crédito ou débito ocorridas em um período
+Requer: o saldo inicial e uma sequência de transações, cada um fazendo indicando separadamente o tipo 'C' ou 'D' (crédito ou débito) e o valor
+Assegura: a apresentação do saldo atualizado
+
+Transações não reconhecidas são rejeitadas
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    // Obtenção do saldo inicial
+    printf("Digite o saldo inicial: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double saldo;
+    sscanf(entrada, "%lf", &saldo);
+    //TYPE(0, "5800.00");
+
+    // Atualização do saldo de acordo com as transações
+    printf("Digite Ctrl-D (Linux) ou Ctrl-Z (Windows) para encerrar.\n\n"
+           "Tipo (C ou D): ");
+    while (fgets(entrada, sizeof entrada, stdin) != NULL) {  // leitura do tipo
+        char tipo_transacao = '*';  // '*' = inválido
+        sscanf(entrada, "%c", &tipo_transacao);
+        //TYPE(0, "D");
+        //TYPE(1, "C");
+        //TYPE(2, "C");
+        //TYPE(3, "D");
+        //TYPE(4, "D");
+
+        printf("Valor: R$ ");
+        double valor_transacao;
+        fgets(entrada, sizeof entrada, stdin);  // leitura do valor
+        sscanf(entrada, "%lf", &valor_transacao);
+        //TYPE(0, "300.00");
+        //TYPE(1, "82.50");
+        //TYPE(2, "181.00");
+        //TYPE(3, "1.25");
+        //TYPE(4, "789.42");
+        //STEP
+
+        switch (tipo_transacao) {
+            case 'C':
+                saldo += valor_transacao;
+                break;
+            case 'D':
+                saldo -= valor_transacao;
+                break;
+            default:
+                printf("Transação não reconhecida (%c).\n", tipo_transacao);
+        }
+
+        printf("Tipo (C ou D): ");  // próxima transação
+    }
+
+    // Apresentação do saldo atualizado
+    printf("\nSaldo final: R$ %.2f.\n", saldo);
+
+    return 0;
+}
+```

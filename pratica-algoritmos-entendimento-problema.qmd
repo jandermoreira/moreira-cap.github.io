@@ -1,0 +1,10 @@
+# Entendimento do problema {#sec-entendimento-problema}
+
+Um dos pontos principais na elaboração de um algoritmo é que ele resolva um dado problema que foi apresentado. O erro na interpretação da descrição da situação a ser resolvida leva, invariavelmente, à proposição de uma solução equivocada.
+
+Nesta seção são discutidas os problemas e as interpretações, sejam corretas ou incorretas.
+
+
+* Problemas com proposições simples
+* Problemas com proposições longas
+* Exemplos de problemas com interpretações incorretas

@@ -1,0 +1,468 @@
+# Parâmetros das funções na linguagem C {#sec-parametros-de-funcoes}
+
+Neste capítulo são retomados os conceitos de parâmetros de funções, detalhando seu funcionamento interno e dando alternativas para algumas necessidades reais dos programas.
+
+
+## Passagem de parâmetros por valor
+
+A ideia de se ter parâmetros nas funções é bastante intuitivo. Considerando-se uma função simples, pode ser escrito o código seguinte para o cálculo do quadrado de um valor real.
+
+```c
+/*!
+ * Retorna x^2
+ * @param x 
+ * @return x^2
+ */
+double quadrado(double x);
+```
+
+A implementação dessa função pode ser dada como se segue.
+
+```c
+// Retorna o quadrado de x
+double quadrado(double x) {
+    return x * x;
+}
+```
+
+Dessa forma, um comando usando essa função é bastante direto.
+
+```c
+double x = 32.2;
+double y = quadrado(x);
+
+printf("%g^2 = %g.\n", x, y);
+```
+
+Como não existe uma única forma de se implementar uma função, uma nova versão pode ser usada, como a que é apresentada na sequência.
+
+```c
+// Retorna o quadrado de x
+double quadrado(double x) {
+    x = x * x;  // transforma x em x^2
+    return x;
+}
+```
+
+Para essa implementação, não há dúvidas de que o valor retornado sempre será igual ao da primeira implementação. A diferença aqui é que o parâmetro `x` é modificado dentro da função. 
+
+O que se pode colocar em dúvida aqui é, ao se escrever `y = quadrado(x)`, o valor de `x` não é também alterado? Da discussão apresentada no @sec-regras-de-escopo-com-modularizacao já é possível deduzir que o parâmetro `x` é uma declaração local e, portanto, independente de qualquer outro `x` que exista no programa. A execução do programa exemplo seguinte demonstra isso.
+
+```{c}
+/*
+ * Cálculo do quadrado de um valor real
+ * Assegura: apresentação do quadrado de um valor exemplo
+ */
+#include <stdio.h>
+
+/*!
+ * Retorna x^2
+ * @param x
+ * @return x^2
+ */
+double quadrado(double x);
+
+/*
+ * Main
+ */
+int main(void) {
+    double x = 32.2;
+    double y = quadrado(x);
+
+    printf("%g^2 = %g.\n", x, y);
+
+    return 0;
+}
+
+// Retorna o quadrado de x
+double quadrado(double x) {
+    x = x * x;
+    return x;
+}
+```
+
+No `printf` usado em `main` é possível verificar que o valor de `x` local continua com o valor inicialmente atribuído.
+
+Para um segundo exemplo, um outro programa é apresentado, o qual contém uma função para apresentar uma cadeia de caracteres entre aspas.
+
+```{c}
+/*
+ * Cálculo do quadrado de um valor real
+ * Assegura: apresentação do quadrado de um valor exemplo
+ */
+#include <stdio.h>
+#include <string.h>
+
+/*!
+ * Escreve o texto na tela entre aspas
+ * @param texto: referência ao texto que será escrito
+ */
+void escreva_entre_aspas(char *texto);
+
+/*
+ * Main
+ */
+int main(void) {
+    // Constante textual
+    char *texto_constante = "Programação em C é legal!";
+    escreva_entre_aspas(texto_constante);
+    printf("\n");
+
+    // Variável textual
+    char texto_variavel[100];
+    strncpy(texto_variavel, "Outras linguagens também são!",
+            sizeof texto_variavel - 1);
+    escreva_entre_aspas(texto_variavel);
+    printf("\n");
+
+    return 0;
+}
+
+// Escreve texto entre aspas
+void escreva_entre_aspas(char *texto) {
+    printf("\"%s\"", texto);
+}
+```
+
+Neste caso, como cadeias de caracteres não podem ser copiadas diretamente em C, a opção foi usar as referências às cadeias, como está apresentado na @sec-ponteiros-para-cadeias-de-caracteres. O "truque" é passar o endereço do que se deseja apresentar na tela, lembrando que, em `main`, nas duas chamadas para o procedimento `escreva_entre_aspas` o argumento é sempre o endereço do primeiro byte da cadeia de caracteres de interesse.
+
+
+Para especificar claramente as passagens de parâmetros, no exemplo da função `quadrado`, o parâmetro `x` recebe uma cópia do valor do `x`. Para o caso da função `escreva_entre_aspas`, o parâmetro `texto` (que é um ponteiro), recebe uma cópia do valor do endereço de `texto_constante` (na primeira chamada) e de `texto_variavel` (na segunda).
+
+Em programação, quando um parâmetro recebe a cópia do valor de seu argumento, essa passagem de parâmetros é chamada passagem por valor.
+
+
+
+
+## Passagem de referências {#sec-passagem-por-referencia}
+
+Para introduzir uma nova necessidade, um novo programa é apresentado. Nele, dois valores são dados pelo usuário e eles devem ser trocados se estiverem em ordem decrescente. Esta implementação é uma nova versão para o @alg-escrita-nao-decrescente, agora usando um procedimento.
+
+```{c}
+/*
+Apresentação de dois valores em ordem não decrescente
+Requer: dois valores reais v1 e v2
+Assegura: apresentação de v1 e v2, v1 <= v2
+*/
+#include <stdio.h>
+
+/*!
+ * Troca o valor do primeiro com o do segundo
+ * @param valor1: o primeiro valor
+ * @param valor2: o segundo valor
+ */
+void troque_valores(double valor1, double valor2);
+
+/*
+ * Main
+ */
+int main(void) {
+    printf("Digite dois valores reais: ");
+    char entrada[160];
+    fgets(entrada, sizeof entrada, stdin);
+    double v1, v2;
+    sscanf(entrada, "%lf%lf", &v1, &v2);
+    //TYPE(0, "120 28");
+
+    if (v2 < v1)
+        troque_valores(v1, v2);
+
+    printf("Valores em ordem não decrescente: %g e %g.\n", v1, v2);
+
+    return 0;
+}
+
+// Troca os valores de valor1 e valor2 (versão incorreta)
+void troque_valores(double valor1, double valor2) {
+    double temporario = valor1;
+    valor1 = valor2;
+    valor2 = temporario;
+}
+```
+
+Há uma óbvia frustração ao se executar o programa, visto que os valores não são apresentados na ordem esperada. Isso se deve à passagem por valor de `v1` e `v2`, pois efetivamente os conteúdos de `valor1` e `valor2` são trocados, porém as variáveis usadas nas chamadas são mantidas intactas.
+
+Muitas linguagens dispõe de uma forma de passagem de parâmetros conhecida como passagem por referência, de forma que modificações feitas nos parâmetros se refletem nas variáveis usadas para chamar a função. Seguem exemplos de implementações com passagem por referência em Pascal e C++.
+
+Em Pascal, a palavra chave `var` indica que os dados serão alterados externamente ao procedimento.
+
+```pascal
+{ Troca os valores de Valor1 e Valor2 }
+procedure TroqueValores(var Valor1, Valor2: Real);
+var Temporario: Real;
+begin
+    Temporario := Valor1;
+    Valor1 := Valor2;
+    Valor2 := Temporario;
+end;
+```
+
+Em C++, o `var` do Pascal é substituído por `&`, com o mesmo significado.
+
+```c++
+// Troca os valores de valor1 e valor2
+void troque_valores(double &valor1, double &valor2) {
+    double temporario = valor1;
+    valor1 = valor2;
+    valor2 = temporario;
+}
+```
+
+Em C, porém, há um limitante importante para códigos similares: a linguagem não possui passagem por referência. A solução, portanto, é contornar essa restrição.
+
+Conforme se discute no @sec-enderecamento-de-memoria-e-ponteiros, é possível alterar o valor de uma variável se houver um ponteiro que a referencie. É essa a estratégia usada nos programas em C, passando os endereços das variáveis que devem ser modificadas e usando os ponteiros para fazer as alterações desejadas.
+
+Segue a versão funcional do programa para a troca dos valores das variáveis.
+
+```{c}
+/*
+Apresentação de dois valores em ordem não decrescente
+Requer: dois valores reais v1 e v2
+Assegura: v1 <= v2
+*/
+#include <stdio.h>
+
+/*!
+ * Troca o valor do primeiro com o do segundo
+ * @param valor1: referência ao primeiro valor
+ * @param valor2: referência ao segundo valor
+ */
+void troque_valores(double *valor1, double *valor2);
+
+/*
+ * Main
+ */
+int main(void) {
+    char entrada[160];
+
+    printf("Digite dois valores reais: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double v1, v2;
+    sscanf(entrada, "%lf%lf", &v1, &v2);
+    //TYPE(0, "120 28");
+
+    if (v2 < v1)
+        troque_valores(&v1, &v2);
+
+    printf("Valores em ordem não decrescente: %g e %g.\n", v1, v2);
+
+    return 0;
+}
+
+// Troca os valores de valor1 e valor2
+void troque_valores(double *valor1, double *valor2) {
+    double temporario = *valor1;
+    *valor1 = *valor2;
+    *valor2 = temporario;
+}
+```
+
+Inicialmente, é preciso notar que os parâmetros para chamar as funções não são mais os valores das variáveis, mas seus endereços.
+
+```c
+troque_valores(&v1, &v2);  // passagem dos endereços das variáveis
+```
+
+Para receber os endereços, os parâmetros formais da função agora são ponteiros.
+
+```c
+void troque_valores(double *valor1, double *valor2);  // parâmetros: ponteiros
+```
+
+Na implementação da função, `temporario` é uma variável local do tipo `double`, sem nada de especial. Para realizar as trocas, o conteúdo apontado pelos parâmetros é usado.
+
+```c
+double temporario = *valor1;  // copia o que está no endereço passado para o
+                              // primeiro parâmetro (valor1) para temporario
+*valor1 = *valor2;  // copia o conteúdo de um endereço para o outro
+*valor2 = temporario;  // recupera o temporario e o copia para o endereço 
+                       // do segundo parâmetro (valor2)
+```
+
+Na linguagem C, como não há passagem por referência, as referências têm que ser passadas explicitamente.
+
+
+
+
+### Cadeias de caracteres são sempre passagem por referência
+
+Para as variáveis que armazenam cadeias de caracteres, tem-se que seu identificador já representa seu endereço. Em consequência, quando a função `fgets` é usada, seu primeiro parâmetro é uma passagem da referência. Isso é ilustrado a seguir.
+
+```c
+char texto[100];
+fgets(texto, sizeof texto, stdin);  // o parâmetro texto é o endereço onde
+                                    // os dados da variável são guardados
+```
+
+Dessa forma a função `fgets` consegue, por meio do ponteiro passado, modificar o conteúdo da variável `texto`. A declaração de `fgets` é equivalente à apresentada na sequência[^ressalva-declaracao-fgets].
+
+[^ressalva-declaracao-fgets]: A declaração foi levemente modificada para maior clareza, porém mantendo a equivalência.
+
+```c
+char *fgets(char s*, int size, FILE *stream);
+```
+
+O primeiro parâmetro da função espera que seja passado um endereço de um `char`, que é para onde os bytes lidos serão transferidos. 
+
+A consequência é que, na linguagem C, sempre são passadas as referências (endereços) das cadeias de caracteres.
+
+::: {.callout-tip}
+Quando se desejar passar uma cadeia de caracteres por valor (o que não é tecnicamente possível), pode-se contornar o problema especificando que a função não tem autorização para mudar o conteúdo da variável. O valor passado como parâmetro continua sendo a referência, mas o compilador gerará um erro caso o programador tente modificar o valor.
+
+Segue um exemplo simples.
+
+```{c} {intentional-problems="true"}
+/*
+ * Exemplo de erro ao tentar mudar uma cadeia de caracteres
+ */
+#include <stdio.h>
+
+/*!
+ * Apresenta uma mensagem na tela
+ * @param mensagem: texto a ser apresentado
+ */
+void apresente_mensagem(char const *mensagem);
+
+/*
+ * Main
+ */
+int main(void) {
+    char minha_mensagem[] = "Olá a todos!";
+    apresente_mensagem(minha_mensagem);
+
+    return 0;
+}
+
+// Apresenta a mensagem 
+void apresente_mensagem(const char *mensagem) {
+    mensagem[0] = 'X';  // tentativa de alteração
+    printf("%s\n", mensagem);
+}
+```
+
+O modificador `const` adicionado ao parâmetro alerta o compilador que o identificador `mensagem` (parâmetro) não pode ser usado para alterar o valor.
+:::
+
+
+## Exemplos
+
+Nesta seção alguns exemplos interessantes são apresentados.
+
+
+
+### "Já usei passagem por referência muitas vezes"
+
+Ao longo dos inúmeros exemplos usados neste livro, a passagem por referência já vinha sendo utilizada. Por exemplo, na leitura de um valor real, a conversão é feita pelo `sscanf`, que pode ter o formato seguinte.
+
+```c
+sscanf(entrada, "%lf", &valor);
+```
+
+É importante notar que o endereço da variável `valor` foi passado para `sscanf`. Depois de interpretar a cadeia de caracteres em `entrada` procurando por um `%lf` presente, o resultado dessa conversão é guardado como um `double` na posição de memória passada, ou seja, exatamente onde está a variável `valor`.
+
+Sem o operador `&`, a função `sscanf` não conseguiria ter acesso à variável `valor`, que tem escopo externo a ela, e usa seu endereço para conseguir modificá-la.
+
+E, naturalmente, também `fgets` usa referência para fazer a leitura.
+
+
+
+### Simplificação de números racionais
+
+Um número racional ($\mathbb{Q}$) é aquele que pode ser escrito na forma $a/b$, sendo $a \in \mathbb{Z}$ com $b \in \mathbb{Z}^*$. O @alg-simplificacao-padronizacao-racionais apresenta uma solução de como fazer a simplificação de um valor racional, padronizando sua apresentação. 
+
+A seguir é apresentada uma versão de implementação desse algoritmo, agora com o emprego de um procedimento para fazer a simplificação.
+
+```{c}
+/*
+ * Leitura e escrita de um número racional na forma de fração
+ * Requer: a digitação de um valor a/b, a,b inteiros, a, b != 0
+ * Assegura: apresentação do mesmo valor em forma simplificada e padronizada
+ */
+#include <stdio.h>
+
+/*!
+ * Simplificação de um número racional dados numerador e denominador
+ * @param numerador: numerador
+ * @param denominador: denominador (não nulo)
+ */
+void simplifique_racional(int *numerador, int *denominador);
+
+/*!
+ * Retorna o MDC de dois inteiros quaisquer (máximo divisor comum).
+ * @param n1: primeiro valor
+ * @param n2: segundo valor
+ * @return MDC(n1, n2)
+ */
+unsigned int mdc(int n1, int n2);
+
+/*!
+ * Retorna o valor absoluto de um inteiro
+ * @param n: valor inteiro
+ * @return o valor absoluto do número, |n|
+ */
+int valor_absoluto(int n);
+
+/*
+ * Main
+ */
+int main() {
+    // Leitura
+    printf("Digite um número racional a/b (a e b inteiros e b não nulo): ");
+    char entrada[160];
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "18/-26");
+    int numerador, denominador;
+    sscanf(entrada, "%d/%d", &numerador, &denominador);
+
+    // Simplificação e apresentação da razão
+    simplifique_racional(&numerador, &denominador);
+    printf("O racional digitado foi: %d/%d.\n", numerador, denominador);
+
+    return 0;
+}
+
+// Máximo divisor comum: MDC(n1, n2)
+unsigned int mdc(int n1, int n2) {
+    // Converte n1 e n2 para valores positivos
+    n1 = valor_absoluto(n1);
+    n2 = valor_absoluto(n2);
+
+    // Resolução pelo método de Euclides
+    int resto;
+    do {
+        resto = n1 % n2;
+        n1 = n2;
+        n2 = resto;
+    } while (resto != 0);
+
+    return (unsigned int)n1;  // Contém o MDC no final
+}
+
+// Valor absoluto de um inteiro
+int valor_absoluto(int n) {
+    return (n >= 0) ? n : -n;
+}
+
+// Simplificação de um racional
+void simplifique_racional(int *numerador, int *denominador) {
+    if (*numerador == 0) {
+        *denominador = 1;  // padroniza zero para 0/1
+    }
+    else {
+        int sinal_da_fracao = ((double)*numerador / *denominador >= 0) ? 1 : -1;
+        int fator_divisao = (int)mdc(*numerador, *denominador);
+        *numerador = valor_absoluto(*numerador);
+        *denominador = valor_absoluto(*denominador);
+        *numerador /= sinal_da_fracao * fator_divisao;
+        *denominador /= fator_divisao;
+    }
+}
+```
+
+A função `simplifique_racional` determina o sinal (-1 ou 1, o qual será associado ao numerador) e qual o MDC entre o numerador e o denominador. Como são passadas referências às variáveis que estão em `main`, dentro da função são usados `*numerador` e `*denominador` para acesso às variáveis externas. A chamada para a simplificação, também, requer que os endereços das variáveis sejam passados.
+
+```c
+simplifique_racional(&numerador, &denominador);  // endereços das variáveis
+```
+
+Um ponto positivo de ter funções para realizar as diversas tarefas é que a função `main` fica mais simples e mais legível.

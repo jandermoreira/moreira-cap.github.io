@@ -1,0 +1,300 @@
+# Dados textuais em C {#sec-dados-textuais}
+
+A linguagem C não é uma linguagem simples para trabalhar com cadeias de caracteres, as chamadas _strings_. O suporte para textos na linguagem é feito por constantes inseridas diretamente no código ou manipuladas em variáveis simples ou compostas do tipo `char`.
+
+Este capítulo apresenta uma visão inicial das constantes textuais da linguagem e como fazer referências a essas constantes.
+
+## Revisitando as constantes textuais
+
+No @sec-tipos-de-dados foram apresentados os principais tipos de dados da linguagem\ C, incluindo os dados textuais, mas ainda é preciso complementar as informações sobre os tipos literais.
+
+A linguagem C apresenta duas notações para especificar valores textuais. A primeira é para caracteres únicos, como uma letra ou um símbolo de pontuação, e é expressa usando aspas simples, como `'A'` ou `'@'`, por exemplo.
+
+O programa seguinte ilustra três escritas usando o formato `%c` (caractere) para apresentar cada valor.
+
+```{c}
+/*
+Apresentação de caracteres simples
+Assegura: escrita de caracteres únicos
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("Uma letra simples: %c.\n", 'f');
+    printf("Um símbolo de pontuação: %c.\n", ';');
+    printf("O espaço: %c.\n", ' ');
+
+    return 0;
+}
+```
+
+A segunda forma de expressar constantes literais usa aspas duplas e indica uma sequência de caracteres, como `"linguagem"` e `"compilador gcc"`. O `printf` usa a especificação de formato `%s` para substituir cadeias de caracteres.
+
+```{c}
+/*
+Apresentação de cadeias de caracteres
+Assegura: escrita de sequências de caracteres
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("Um texto: %s.\n", "Era uma vez...");
+    printf("Texto com uma tabulação: %s\n", "n =\t20");
+
+    return 0;
+}
+```
+
+A principal diferença entre um caractere simples e uma cadeia de caracteres é, além do evidente número de caracteres em si, é a representação. Enquanto caracteres simples apenas são representados apenas por um valor, a cadeia usa uma sequência de caracteres simples seguida pelo terminador `\0`, chamado caractere nulo e que é representado com todos os bits iguais a zero. Na prática, quando o compilador encontra uma constante como `"programa"` em um código, ele armazena esse valor como `programa\0`, ou seja, sempre com um byte nulo depois do texto em si. Para explicitar um pouco mais, `'Y'` é só o `Y`, enquanto `"Y"` é `Y\0`.
+
+
+## Armazenamento de caracteres simples: o tipo `char`
+
+Para criar uma variável para armazenar um único caractere deve ser usado o tipo `char`. Segue um programa simples ilustrando o conceito.
+
+```{c}
+/*
+Armazenamento em um char
+Assegura: escrita dos valores armazenados
+*/
+#include <stdio.h>
+
+int main(void) {
+    char pontuacao = '?';
+    char letra = 'A';
+
+    printf("Qual é a letra%c Resposta: %c!\n", pontuacao, letra);
+
+    printf("Quantidade de bytes em um char: %zu.\n", sizeof letra);
+
+    return 0;
+}
+```
+
+A linguagem C usa o tipo `char` para caracteres mas, na prática, trata esse valor como um valor inteiro. Apenas a apresentação com o `printf` é que escolhe usar o caractere como valor apresentado.
+
+Seguem dois programas para mostrar que `char` e `int` são muito próximos (mas não iguais!).
+
+```{c}
+/*
+Apresentação do char como caractere e como inteiro
+Assegura: apresentação de um char e seu valor associado
+*/
+#include <stdio.h>
+
+int main(void) {
+    char letra = 'Z';
+    printf("O caractere %c é armazenado usando o valor decimal %d.\n",
+           letra, letra);
+
+    int valor = 90;
+    printf("O valor decimal %d pode ser visto como o caractere %c.\n",
+            valor, valor);
+
+    return 0;
+}
+```
+
+Nesse programa, o valor de `letra`, que é do tipo `char`, é apresentado usando-se tanto a interpretação como um caractere, com `%c`, quanto como um valor decimal, com `%d`.  O mesmo é feito para a variável inteira `valor`. Nenhum erro ou aviso é emitido pelo compilador.
+
+```{c}
+/*
+Apresentação de manipulações curiosas com char
+Assegura: apresentação de resultados de manipulação
+*/
+#include <stdio.h>
+
+int main(void) {
+    char letra = 'A';
+    printf("A letra atual é %c. ", letra);
+    printf("Depois dela vem o %c.\n", letra + 1);
+
+    printf("\nAlfabeto minúsculo: ");
+    for (char letra = 'a'; letra <= 'z'; letra++)
+        printf("%c", letra);
+    printf("\n");
+
+    printf("Alfabeto maiúsculo: ");
+    for (char letra = 'A'; letra <= 'Z'; letra++)
+        printf("%c", letra);
+    printf("\n");
+
+    printf("\nA quantidade de letras de %c até %c é %d.\n",
+           'H', 'T', 'T' - 'H' + 1);
+
+    printf("\nA letra que fica no meio de %c e %c é %c.\n",
+           'G', 'K', ('G' + 'K') / 2);
+
+    return 0;
+}
+```
+
+Reforçando a associação de `char` com um valor inteiro, o programa exemplifica operações como `letra + 1` e incrementos como `letra++`. Adicionalmente há ainda uma expressão interessante: `('G' + 'K') / 2`, que soma `'G'` (71) com de `'K'` (75) e divide o resultado por 2 (divisão inteira), resultando em 73, que é `'I'`.
+
+::: {.callout-warning title="Curiosidade"}
+Cada letra possui um valor específico associado a ela, assim como cada um dos outros caracteres. Por exemplo, `'A'` é o 65, `'\n'` é o 10 e `' '` (espaço) é o 32.
+
+Como esperado, se `'A'` é 65, `'B'` é 66, `'C'` é 67 e assim por diante. Portanto, é possível verificar se `letra1 <= letra2`, pois uma comparação de inteiros é feita.
+
+Há um "porém" nessa história: `'Z'` é 90, mas `'a'` é 97. Na realidade, as minúsculas se iniciam no 97 e vão até o 122. Isso gera uma situação confusa, pois C tem certeza que `'a' > 'Z'` é verdadeiro.
+:::
+
+::: {.callout-tip}
+Embora haja um prejuízo quanto á clareza, o tipo `char` pode ser usado como um "pequeno inteiro" de um byte de comprimento. Dessa forma, usando o primeiro bit para indicar o sinal, uma variável desse tipo guardaria valores de -128 a 127. Caso necessário, pode-se usar a declaração de um `unsigned char` para ter valores de 0 até 255.
+
+Para se ter programas mais claros, entretanto, mesmo nesse caso é melhor usar os tipos de comprimento fixo definidos em `stdint.h`. Assim, para se ter um inteiro com sinal de oito bits, o tipo seria `int8_t`, e poderia ser usado o `uint8_t` para o mesmo comprimento sem o sinal. O tipo `char` deve ser deixado de fato apenas para caracteres. O uso de `stdint.h` é abordado no @sec-arquivos-binarios.
+:::
+
+### Caracteres acentuados {#sec-caracteres-acentuados}
+
+Na década de 1960 cada sistema computacional usava sua própria tabela para associar um dado caractere a um valor numérico. Para que os diferentes sistemas pudessem trocar informações, foi elaborada em 1964 uma codificação padronizada denominada _American Standard Code for Information Interchange_, ou tabela ASCII. Essa tabela definia tanto os caracteres de controle (`\n` ou `\t`, por exemplo) quanto os caracteres legíveis (letras, dígitos e pontuação).
+
+Na prática, tanto os caracteres de controle quanto os símbolos legíveis significativos poderiam ser representados com apenas sete bits. Em sistemas com palavras de oito bits, o primeiro bit era usualmente zero, de forma que praticamente metade dos bytes não tinham uso. O ponto em questão é que o conjunto de caracteres era baseado na lingua inglesa, na qual acentuações ou outros símbolos de outras línguas não eram incluídos, como `á`, `ã`, `Ç`, `ß` (alemão) ou `č` (esloveno). Os bytes não usados na codificação ASCII (aqueles cujos bits começavam com 1) eram usados para esse fim, cada sistema usando uma codificação específica e particular para atender suas necessidades.
+
+`\index{Unicode}`{=latex}
+`\index{UTF-8}`{=latex}
+Em grande parte dos sistemas atuais é empregado o Unicode[^site-unicode], que se propõe a ter representações para todas as línguas do planeta e usa com frequência a codificação UTF-8 para representar os símbolos (letras, ideogramas, emojis) em bytes. Como exemplo, o símbolo monetário do Euro é designado por `U+20AC` no Unicode e usa a sequência de bytes `E282AC` para representação em UTF-8.
+
+[^site-unicode]: Unicode Consortium: <https://home.unicode.org>.
+
+
+:::::: {.runenv}
+
+O problema que surge dessa representação é que UTF-8 usa uma quantidade de bytes variável conforme o símbolo. Os caracteres ASCII usam um único byte e possuem representação igual, o que mantém a compatibilidade. Outros símbolos, porém usam dois, três ou até quatro bytes, o que torna impossível armazená-los em uma variável `char`.
+
+```{c} {name="acentuacao.c"} 
+/*
+Incompatibilidade de símbolos Unicode/UTF-8
+*/
+#include <stdio.h>
+
+int main(void) {
+    char c = 'é';
+    printf("c = %c.\n", c);
+
+    return 0;
+}
+```
+
+A falha na compilação acima é que o caractere `é` (`U+00E9`) é codificado em dois bytes, `C3` e `A9`, dos quais apenas o valor `A9` (decimal 169) é guardado na variável `c`. Esse valor 169, sozinho, não representa um caractere UTF-8 válido.
+
+Esse código fonte, armazenado no arquivo `acentuacao.c`, está codificado com UTF-8, como se indica com o comando `file`.
+
+```{bash}
+file acentuacao.c
+```
+
+Existe a codificação de caracteres ISO-8859, conhecida como _latin1_, que inclui os caracteres latinos acentuados e que usa apenas um byte por caractere. O comando `iconv` pode ser usado para criar um novo arquivo fonte (`acentuacao-latin1.c`) com essa codificação, conforme segue.
+
+
+```{bash}
+iconv -f utf8 -t latin1 acentuacao.c > acentuacao-latin1.c
+file acentuacao-latin1.c
+```
+
+Como o caractere `é` usado no código fonte agora possui um único byte, ele pode ser guardado em um `char` e a compilação ocorre sem problemas.
+
+```{bash}
+gcc -Wall -pedantic -std=c17 acentuacao-latin1.c
+```
+
+Ao executar o programa, como a saída produzida é ISO-8859, ela tem que ser convertida de volta para UTF-8 para que o terminal a exiba corretamente.
+
+```{bash}
+./a.out | iconv -f latin1 -t utf8
+```
+
+
+::::::
+<!-- runenv -->
+
+
+Nos programas exemplificados neste texto, simplesmente são evitados os casos em que um `char` armazenará um caractere Unicode com mais que um byte, pois todas as codificações de caractere usam UTF-8. Para efetivamente usar caracteres de múltiplos bytes, C disponibiliza uma série de funções em `wchar.c`, as quais lidam com os "caracteres largos" (_wide characters_). Porém, o uso dessas funções não é tratado neste livro.
+
+## Acesso às cadeias de caracteres constantes {#sec-ponteiros-para-strings-constantes}
+
+Nesta seção é apresentada uma visão básica sobre cadeias de caracteres em\ C, sendo que a manipulação de variáveis com conteúdo textual é coberta pelo @sec-manipulacao-de-dados-textuais.
+
+Em programas escritos em C, cadeias de caracteres são indicadas entre aspas duplas e, internamente, é acrescido um byte nulo para indicar seu fim. Quando uma constante literal é parte de um programa, ela é incluída na seção de dados do arquivo executável.
+
+:::::: {.runenv}
+
+Um exemplo trivial dessa inclusão pode ser vista com um código simples, como o seguinte.
+
+```{c}
+/*
+Apresentação de mensagens simples
+Assegura: apresentação de duas mensagens na tela
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("Bom dia!\n");
+    printf("Boa noite.\n");
+
+    return 0;
+}
+```
+
+Esse programa gera um executável denominado `a.out`, como observado pelos comandos que seguem.
+
+```{bash}
+ls -l a.out
+file a.out
+```
+
+O comando `strings` usado na sequência mostra as cadeias de caracteres detectadas no arquivo `a.out` (o `egrep` é usado para remover outras linhas, de forma a reduzir o tamanho da saída).
+
+```{bash}
+strings a.out | egrep -v '(^\.|^_)'
+```
+
+Como pode ser observado, `"Bom dia!"` e `"Boa noite."` fazem parte dos literais fisicamente presentes no arquivo.
+
+::::::
+<!-- runenv -->
+
+
+Com base no fato de que as constantes fazem parte do arquivo executável e que quando o programa é colocado em execução elas são também carregadas para a memória, o programa seguinte mostra como fazer referência a essas cadeias.
+
+```{c}
+/*
+Exemplificação de referência a constantes literais presentes em um programa
+Assegura: apresentação de textos
+*/
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void) {
+    char *texto1 = "Um primeiro texto";
+    char *texto2 = "Texto número 2";
+
+    char *texto_selecionado;
+    if (rand() % 100 < 50)
+        texto_selecionado = texto1;
+    else
+        texto_selecionado = texto2;
+
+    printf("1) %s\n", texto1);
+    printf("2) %s\n", texto2);
+    printf("\nSorteado: %s\n", texto_selecionado);
+
+    return 0;
+}
+```
+
+Neste programa há dois textos importantes: `"Um primeiro texto"` e `"Texto número 2"`. Essas duas constantes textuais ficam em algum lugar do programa. Existem também as duas variáveis `texto1` e `texto2`, que são declaradas como sendo do tipo `char *`. O asterisco, nesse contexto, indica que as variáveis são referências aos textos e não que sejam um `char` comum. Dessa forma, `texto1` está referenciando a constante `"Um primeiro texto"`, por exemplo.
+
+Essas variáveis que guardam referências às coisas recebem, em programação, o nome de ponteiros[^referencia-ponteiros]. Como elas são usadas apenas como referência a um texto já existente, não podem ser diretamente usadas para outras manipulações, como para guardar um valor digitado pelo usuário ou tentar modificar a constante referenciada.
+
+[^referencia-ponteiros]: Esse tema é tratado em mais detalhes no @sec-enderecamento-de-memoria-e-ponteiros.
+
+No jargão computacional, diz-se que "`texto1` aponta para a constante `"Um primeiro texto"`", da mesma forma que `texto2` aponta para a constante `"Texto número 2"`.
+
+No código há ainda a variável `texto_selecionado`, também do tipo `char *`, cujo valor inicialmente é indefinido (lixo). A expressão `rand() % 100` resulta em um valor (pseudo)aleatório de 0 a 99. Assim, a referência ser guardada em `texto_selecionado` depende desse valor aleatório, com praticamente 50% de chance para cada caso. Se o valor aleatório for menor que 50, `texto_selecionado` guarda a mesma referência guardada em `texto1`, ou seja, ela também aponta para a constante `"Um primeiro texto"`
+
+Nas chamadas a `printf`, a especificação de formato `%s` apresenta o texto apontado por cada variável. Desse modo, `printf("2) %s\n", texto2);` significa mostre o texto que `texto2` está apontando.
+
+O uso desse recurso é relativamente simples de der feito, porém muito limitado, visto que apenas aceita mudar para qual constante cada variável aponta.
+
+Para finalizar, é interessante ver que esse recurso foi empregado na implementação do @alg-classificacao-triangulo-lados.

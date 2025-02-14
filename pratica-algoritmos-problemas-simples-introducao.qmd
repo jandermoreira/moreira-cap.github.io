@@ -1,0 +1,9 @@
+# Problemas simples e diretos {#sec-problemas-simples-introducao}
+
+Os problemas a serem apresentados são, via de regra, simples e diretos. Apesar do risco de parecerem triviais, há elementos importantes envolvidos ao se apresentar uma solução algorítmica na forma de pseudocódigo.
+
+Deste modo, são os objetivos principais desta prática:
+
+* O entendimento correto do problema proposto;
+* A identificação precisa de seus requisitos e do que produzirá como resultado;
+* Apresentação do algoritmo na forma de um pseudocódigo estruturado e visualmente bem organizado.

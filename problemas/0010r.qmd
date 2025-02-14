@@ -1,0 +1,33 @@
+<!-- Equação ax^2 + bx + c = 0, incluindo solução para primeiro grau -->
+::: {#sol-0010}
+@exr-0010
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Determinação, dados os coeficientes, das raízes reais de uma equação $ax^2 + bx + c = 0$, nunca sendo $a$ e $b$ simultaneamente nulos
+    \Require valores de $a$, $b$ e $c$
+    \Ensure apresentação das raízes reais ou sem apresentar nada se não houver nenhuma
+    \Statex{}
+    \Statep{Obtenha os valores de $a$, $b$ e $c$}[coeficientes da equação]
+    \If{$a$ for igual a zero}
+        \Statep{\Commentl{Trata equação $bx + c = 0$}}
+        \Statep{Calcule $x$ como $-\dfrac{c}{b}$}[raiz da equação de primeiro grau]
+        \Statep{Apresente o valor de $x$}
+    \Else
+        \Statep{\Commentl{Trata equação $ax^2 + bx + c = 0$}}
+        \Statep{Calcule o discriminante $\Delta$ como $b^2 - 4ac$}
+        \Statex
+        \Statep{\Commentl{Calculas as raízes, ignorando quando $\Delta < 0$}}
+        \If{$\Delta$ for igual a zero}[apenas uma raiz]
+            \Statep{Calcule $x$ como $-\dfrac{b}{2a}$}
+            \Statep{Apresente o valor de $x$}
+        \ElsIf{$\Delta > 0$}[duas raízes]
+            \Statep{Calcule $x_1$ como $\dfrac{-b - \sqrt{\Delta}}{2a}$}
+            \Statep{Calcule $x_2$ como $\dfrac{-b + \sqrt{\Delta}}{2a}$}
+            \Statep{Apresente $x_1$ e $x_2$}
+        \EndIf
+    \EndIf
+\end{algorithmic}
+```
+
+:::

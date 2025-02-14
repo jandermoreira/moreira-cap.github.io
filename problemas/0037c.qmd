@@ -1,0 +1,9 @@
+<!-- Erro em determinação do maior (inteiros positivos)  -->
+::: {#rem-0037}
+@exr-0037 
+
+Teste a lógica do algoritmo com as seguintes sequências:
+
+* 18 5 10 2 -1
+* 27 24 18 1 25 -1
+:::

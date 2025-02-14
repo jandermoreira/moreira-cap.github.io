@@ -1,0 +1,31 @@
+<!-- Erro em contagem de notas nulas e < 6 -->
+::: {#sol-0004}
+@exr-0004
+
+A solução apresentada não funciona porque as verificações de "menor que 6,0" e "igual a 0" não são mutuamente exclusivas. Uma nota igual a zero tem que contar nas duas categorias. Ainda assim, o código somente faz a comparação de notas nulas caso a verificação de "menor que 6,0" tenha falhado, pois é usado um -senão-se- na estruturação.
+
+Como as duas condições devem ser verificadas separadamente, uma solução é o uso de uma estrutura -se- independente para cada uma, o que leva à soução que segue.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Contagem do ocorrências notas menores que 6,0 e de notas~0,0
+    \Require uma sequência de medidas de notas (0 a 10)
+    \Ensure a quantidade de notas menores que 6,0, de zeros
+    \Statex
+    \Statep{Inicie \Id{contador\_abaixo\_média} com zero}
+    \Statep{Inicie \Id{contador\_zeros} com zero}
+    \While{existem notas na sequência de entrada}
+        \Statep{Obtenha uma \Id{nota}}
+        \If{$\Id{nota} < 6{,}0$}
+            \Statep{Acrescente 1 a \Id{contador\_abaixo\_média}}
+        \EndIf
+        \If{$\Id{nota} = 0{,}0$}
+            \Statep{Acrescente 1 a \Id{contador\_zeros}}
+        \EndIf
+    \EndWhile
+    \Statep{Apresente \Id{contador\_abaixo\_média}, \Id{contador\_zeros}}
+\end{algorithmic}
+```
+
+Desta forma uma nota igual a zero provocaria o incremento dos dois contadores.
+:::

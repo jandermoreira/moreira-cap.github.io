@@ -1,0 +1,220 @@
+# Tipos de dados da linguagem C {#sec-tipos-de-dados}
+
+Qualquer linguagem de programação, dentre as milhares existentes, têm como premissa a manipulação e a transformação de dados. Esta parte do texto trata de como dados são representados em computação e faz uma apresentação dos principais tipos de dados usados na linguagem\ C.
+
+A ilustração dos tipos de dados, suas limitações e principais características envolvem, adicionamente, a apresentação da função `printf`, responsável por apresentar os dados do programa para o usuário.
+
+
+## Representação de dados {#sec-representacao-de-dados}
+
+Em computação, as informações são estruturadas em bits. A forma mais básica de circuitos eletrônicos representarem algo é pela ausência ou presença de corrente elétrica. Assim, um bit é uma parte do circuito que indica "desligado" ou "ligado", "sem corrente elétrica" ou "com corrente elétrica", "ausente" ou "presente" ou, simplificadamente, "zero" ou "um". O uso dos valores binários 0 e 1 é a forma tradicional de se representar um bit.
+
+Para serem usados de forma prática, os bits são sempre organizados em sequências de comprimento oito. O grupo de oito bits é chamado de byte. Nos sistemas computacionais, os circuitos responsáveis por armazenar os bytes são chamados de memória. Esta é usualmente medida em gigabytes, sendo cada gigabyte correspondente a 1.073.741.824 bytes (2^30^).
+
+Cada byte, com seus oito bits, pode assumir os valores 00000000, 00000001, 00000010, 000000011... até 11111111. São 2^8^ possíveis combinações.
+
+Programas manipulam dados, como nomes de localidades, taxas de câmbio, velocidade de veículos, listas de espera e tantos outros. Para representar os dados, programas usam essa memória estruturada em bytes. Tanto as instruções que serão executadas pelo processador quanto os dados precisam ser representados com bytes.
+
+Para representar um dado qualquer, portanto, é preciso fazer seu mapeamento para bytes.
+
+A letra `A` é usualmente representada pelo byte 01000001 e o símbolo `!`, pelo 00100001. Essas escolhas foram arbitrárias e o mapeamento do conjunto básico de caracteres pode ser consultado em uma tabela chamada de *American Standard Code for Information Interchange*, ou tabela ASCII[^outras-codificações-de-caracteres]. Textos são representados por sequências de bytes representando os caracteres.
+
+[^outras-codificações-de-caracteres]: Existem outras estratégias para representação de caracteres, principalmente para incorporar acentuações (como `ñ` do espanhol), caracteres particulares (`ß` do alemão) ou ainda caracteres como os japoneses e hebraicos.
+
+Números inteiros são frequentemente representados por uma certa quantidade fixa de bytes consecutivos. Assim, considerando-se quatro bytes para um inteiro, é possível associar a sequência 00000000 00000000 00000000 00000000 ao valor zero, 00000000 00000000 00000000 00000001 ao valor 1 e assim, sucessivamente, até 11111111 11111111 11111111 11111111, que equivaleria a 4.294.967.295 (ou 2^32^-1). Números negativos separam o primeiro bit para indicar o sinal (0 é positivo, 1 é negativo) e os demais 31 bits seriam usados para representar os diversos valores, indo de -2.147.483.648 a 2.147.483.647 considerando-se os quatro bytes. Naturalmente, quanto mais bytes, maior o intervalo de valores representados.
+
+Outros tipos de valores, como números reais, valores lógicos e endereços internos da memória também escolhem uma estratégia para representar seus valores usando um mapeamento adequado para um ou mais bytes.
+
+
+## Constantes e seus tipos {#sec-constantes-e-seus-tipos}
+
+Tendo em vista que quaisquer dados (números, textos ou qualquer outro) usam bytes para serem representados, a linguagem C também designa uma codificação específica para os valores ao interpretar um código fonte.
+
+Nos programas em C, valores explícitos no código, como um texto ou um valor numérico, é chamado de valor constante. O texto clássico expresso por `"Hello, world!"` é uma constante literal (textual). Em C, as constantes com sequências de caracteres são sempre expressas usando-se aspas duplas.
+
+O código seguinte visa apresentar como saída o valor de $\pi$, que foi (grosseiramente) aproximando no código fonte para 3,1416.
+
+```{c}
+/*
+Apresentação do valor aproximado de pi
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("pi vale, aproximadamente, %g\n", 3.1416);
+    return 0;
+}
+```
+
+O comando `printf` possui dois parâmetros. O primeiro é uma constante textual com o que deve ser apresentado (elemento obrigatório da função); o segundo é um valor real expresso na forma de uma constante (`3.1416`). O símbolo `%g` é um indicador de local usado para valores reais, ou seja ele representa onde o valor 3,1416 será inserido no texto.
+
+A constante `3.1416` (expressa usando o ponto como separador decimal) possui, em C, o tipo `double`. Esse tipo corresponde a uma representação de precisão dupla, seguindo o padrão IEC 60559. Qualquer constante real em C é representada por um `double`, exceto quando explicitamente indicado de outra forma.
+
+Constantes inteiras expressas em base 10 são representadas pelo tipo `int`, que tem mínimo de 16 bits, embora implementações atuais comumente usem 32 bits. Com o mínimo de bits, os valores representados vão de -32.768 a 32.767; já com 32 bits a variação é de -2.147.483.648 a 2.147.483.647. Desta forma, dependendo da implementação do compilador, os limites podem variar consideravelmente. As constantes inteiras seguem essa regra, exceto quando declaradas explicitamente com um tipo específico.
+
+Caso uma constante inteira exceda a capacidade de representação de um `int`, um `long int` é usado em seu lugar, partindo de um mínimo de 32 bits. Essa escolha é transparente para o programador.
+
+```{c}
+/*
+Apresentação do valor de 5234 elevado ao cubo
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("O cubo de %d é igual a %ld\n", 5234, 143384152904);
+    return 0;
+}
+```
+
+Neste programa, o `printf` usa a especificação `%d`, significando um `int` apresentado na base 10 (decimal). A especificação `%ld` é usada para um `long int` expresso em decimal. Os valores são substituídos na ordem em que aparecem no `printf`.
+
+Particularmente no compilador usado para produzir esse exemplo, o valor 5.234 pode ser representado em um `int` e escrito com `%d`; já 143.384.152.904 (5.234^3^) necessitou de mais bits e foi automaticamente promovido para um `long int`, cuja especificação de formato é `%ld`. O compilador poderá apresentar um aviso caso o valor maior tente ser escrito apenas com `%d`, embora o executável seja gerado e o resultado apresentado seja incorreto.
+
+Da mesma forma que há especificadores para valores numéricos, há também para valores textuais.
+
+```{c}
+/*
+Apresentação de valores textuais
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("%s é primo de %s\n", "Nereu", "Eutália");
+    printf("%s é prima de %s\n", "Eutália", "Nereu");
+    printf("%s começa com a letra %c\n", "Yolanda", 'Y');
+
+    return 0;
+}
+```
+
+`\index{char@\texttt{char}}`{=latex}
+A indicação `%s` é compatível com textos de comprimento variado, ou seja, cadeias de caracteres. Por outro lado, C define um tipo específico para um único caractere: o tipo `char`. Ele usa oito bits (mínimo), ou seja, um byte, e é representado por aspas simples: `'Y'`. Para caracteres simples do tipo `char`, usa-se a especificação de formato `%c`.
+
+A diferença entre `"Y"` e `'Y'` é abordada em mais detalhes no @sec-dados-textuais.
+
+
+## Mais sobre o `printf`
+
+O nome `printf` vem de *print formatted*, ou seja, apresente algo de forma formatada. O uso desta função requer o carregamento do arquivo de cabeçalho `stdio.h`.
+
+A função apresenta um texto na saída padrão (a tela do terminal) e este deve ser o primeiro parâmetro. Além de apresentar o texto, a função também faz conversões de valores, usando os marcadores iniciados com `%`. Por exemplo, `%d` é usado para um valor inteiro decimal, `%g` para apresentar um valor real e `%s` é usado para apresentar valores textuais, chamados cadeias de caracteres ou *strings*. Outro elemento de formatação são os caracteres especiais como `\n`, que indica a mudança de linha, `\t`, que é uma tabulação similar à dos editores de texto, ou ainda `\"`, que indica aspas duplas.
+
+Cada marcador com o símbolo `%` é substituído em ordem. Assim, se houver várias substituições, cada uma delas é feita sucessivamente.
+
+```{c}
+/*
+Exemplo de escrita de vários valores
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("Meu nome é %s, nasci em %d e ganho R$ %g de salário.\n",
+        "Fulano", 2003, 2512.17);
+
+    return 0;
+}
+```
+
+Para valores inteiros, segue um exemplo para a escrita do valor de uma expressão usando variações de formato. Algumas opções diferentes de escrita são acrescentadas. 
+
+```{c}
+/*
+Exemplo de escrita de valores inteiros
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("Um valor inteiro    : %d\n", 481);
+    printf("Outro valor inteiro : %8d\n", 481);
+    printf("E mais outro        : %08d\n", 481);
+
+    return 0;
+}
+```
+
+Quando um número inteiro é inserido entre o `%` e o `d`, como em `%8d`, e reservado um espaço fixo para o inteiro, que é formatado à direita. No exemplo, como o valor escrito possui três dígitos, antes dele são acrescentados cinco espaços para, no total, preencher as oito posições especificadas. No caso de `%08d`, o dígito `0` indica que os espaços faltantes devem ser preenchidos com o dígito zero.
+
+No caso de valores reais, o formato `%g` é uma representação que busca a "melhor" forma de se apresentar um valor, seguindo um algoritmo interno.
+
+```{c}
+/*
+Exemplo de escrita de valores reais com %g
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("Um valor real    : %g\n", 23.0);
+    printf("Outro valor real : %g\n", 163778837773.32998827);
+    printf("E mais outro     : %g\n", 3.3/1234567.8);
+    printf("E um último      : %g\n", 1.23432624324);
+
+    return 0;
+}
+```
+
+Neste programa, o valor 23,0, como não possui casas decimais, é mostrado como se fosse um valor inteiro. Os outros dois valores usam a notação científica para deixar a escrita mais concisa, lembrando que `1.63779e+11` equivale a 1,63779 $\times$ 10^11^ e `2.673e-07`, a 2,673 $\times$ 10^-7^. O último exemplo mostra um arredondamento do valor escrito.
+
+É possível acrescentar ao `%g` o comprimento total que o valor deve ter (`%10g` para 10 espaços), o número de casas decimais que serão apresentadas (`%.5g` para cinco decimais), além de outras opções.
+
+Além da especificação `%g`, é possível usar `%f` (nunca usa notação científica) ou `%e` (sempre notação científica) para valores reais.
+
+Finalmente, ainda há especificações para apresentação de endereços de memória (`%p`) e valores inteiros nas bases hexadecimal (`%x`) e octal (`%o`).
+
+```{c}
+/*
+Exemplo de escrita alguns formatos de apresentação
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("O decimal %d pode ser escrito %x (hexadecimal) ou %o (octal).\n",
+        125, 125, 125);
+    printf("Este é o endereço nulo: %p\n", NULL);
+
+    return 0;
+}
+```
+
+
+## Constantes com tipo explícito {#sec-constante-com-tipo-explicito}
+
+As constantes expressas em C possuem tipos automáticos ligados à ela, como apresentado na @sec-constantes-e-seus-tipos. A linguagem, porém, permite escrever um valor constante e associar a ele um tipo específico.
+
+```{c}
+/*
+Exemplos de constantes com tipo explícito
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("Este %d é int, mas este %ld é long int\n", 10, 10L);
+    printf("Este %u é um unsigned int\n", 10U);
+
+    printf("A diferença entre %g (precisão dupla) e %g (simples) é %g\n",
+        1e-7, 1e-7f, 1e-7 - 1e-7f);
+
+    return 0;
+}
+```
+
+
+## Hexadecimal e octal
+
+As constantes inteiras são, usualmente, escritas usando a base 10. A linguagem C permite, além desta, escrever constantes na base oito (octal) e 16 (hexadecimal). O uso dessas bases é prático quando quando a linguagem é usada para manipulação em nível baixo, ou seja, no nível dos bits.
+
+```{c}
+/*
+Exemplos de constantes em hexadecimal e em octal
+Constante hexadecimais se iniciam com 0x
+Valores em octal são expressos iniciando o número com zero
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("Três maneiras de escrever %d: %d e %d\n", 10, 0xA, 012);
+    printf("Três maneiras de escrever %x: %x e %x\n", 10, 0xA, 012);
+    printf("Três maneiras de escrever %o: %o e %o\n", 10, 0xA, 012);
+
+    return 0;
+}
+```

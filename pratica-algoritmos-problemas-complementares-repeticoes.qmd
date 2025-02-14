@@ -1,0 +1,4 @@
+# Problemas complementares: repetições {#sec:problemas-complementares-repeticoes}
+
+Aqui se apresentam, em volume, problemas variados que podem ser usados para praticar o desenvolvimento dos algoritmos.
+

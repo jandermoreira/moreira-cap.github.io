@@ -1,0 +1,1011 @@
+# Variáveis e leituras em C {#sec-variaveis-e-leitura}
+
+Um programa em C lida com dados, que podem ser de diferentes tipos, como `int`, `long int` ou `double`, por exemplo. Neste capítulo são apresentados onde os dados são armazenados nos programas (variáveis), seus nomes (identificadores) e como guardar e substituir os valores desses dados (atribuição e leitura).
+
+
+## Variáveis, declarações e atribuição
+
+Conforme abordado na @sec-representacao-de-dados, qualquer informação precisa ser mapeada para bytes para poder ser utilizada em um sistema computacional. 
+
+Para que um programa faça sua tarefa de resolver um dado problema, é preciso que ele tenha acesso à memória e sua representação. Quase na totalidade das linguagens de programação, uma área da memória na qual está guardado um dado é referenciado por um nome arbitrário. Por exemplo, se o ano de um evento é um dado que precisa ser guardado, os bytes reservados para o armazenamento dessa informação é referenciado por um identificador. E dado que o conteúdo da memória possa eventualmente ser modificado, a esse armazenamento é dado o nome de variável, no sentido de mutável.
+
+`\index{variável}`{=latex}
+Assim, uma variável corresponde a uma área da memória principal e os bytes que a compõe são referenciados por um identificador.
+
+O programa seguinte exemplifica o uso de duas variáveis para o armazenamento de valores de temperatura.
+
+```{c}
+/*
+Conversão de escalas termométricas, de graus Celsius para Fahrenheit
+*/
+#include <stdio.h>
+
+int main(void) {
+    double celsius = 25.5; 
+    double fahrenheit = 1.8 * celsius + 32;
+
+    printf("%g graus Celsius = %g Fahrenheit\n", celsius, fahrenheit);
+
+    return 0;
+}
+```
+
+A variável cujo identificador é `celsius` armazena valores reais usando o tipo `double`. Ela representa alguns bytes na memória principal na qual o valor de 25,5ºC é representado. Uma segunda variável do tipo `double` também é usada para armazenar outro valor real. Neste caso, o valor armazenado é um cálculo que envolve a primeira variável e equivale à conversão da escala Celsius para Fahrenheit (notando que o operador `*` denota a multiplicação). O identificador desta segunda variável é `fahrenheit`. Ambos os nomes (identificadores) foram escolhidos pelo programador à sua conveniência.
+
+Há pontos importantes neste programa:
+
+* Há a declaração de duas variáveis;
+* Existem valores atribuídos a ambas;
+* O valor armazenado nas variáveis é consultado.
+
+A primeira variável, `celsius`, é declarada precedendo-se seu identificador por seu tipo, que, no caso, é `double`. Valores reais, via de regra, devem usar o tipo `double` como tipo para a representação e armazenamento.
+
+```c
+double celsius = 25.5; 
+```
+
+O sinal de igual é o operador de atribuição. Ele indica que o valor à direita (o valor `25.5`, que é um `double`) será armazenado na área de memória reservada para a variável. Assim, a variável é criada (declaração) e tem um valor atribuído a ela (com o `=`) na mesma linha de código. Estas duas ações são finalizadas por um ponto e vírgula.
+
+O mesmo ocorre com a segunda variável, que é declarada e a ela é atribuído um valor resultante de uma expressão que envolve uma multiplicação (`*`) e uma soma (`+`).
+
+```c
+double fahrenheit = 1.8 * celsius + 32;
+```
+
+A diferença aqui é que o valor atribuído à variável, isto é, armazenado nela, é o resultado de uma expressão aritmética cujo objetivo é a conversão entre as unidades de temperatura. Outra diferença é que a expressão usa o valor de `celsius`, ou seja, ela usa o conteúdo armazenado nessa variável específica.
+
+Deste modo, é importante salientar que, por meio do identificador de uma variável, um conteúdo pode ser armazenado nela e também esse valor pode ser consultado para uso.
+
+Por fim, vale ainda comentar que na função `printf` os valores armazenados nas duas variáveis são novamente consultados para serem convertidos para uma representação textual e apresentados.
+
+
+
+## Identificadores
+
+Nas linguagens de programação, muitos de seus elementos possuem nomes, chamados de identificadores. O nome dado a uma variável é seu identificador; `main` é o identificador da função por onde o programa em C começa sua execução.
+
+`\index{identificador}`{=latex}
+Um identificador é uma sequência de caracteres usada como nome. Existem palavras reservadas na linguagem, como `void`, `return`, `int` e `double`, entre outras, que não podem ser usadas como identificadores. Até agora, foram usados nos exemplos identificadores para variáveis (`celsius`) e funções (`printf`).
+
+Um identificador válido na linguagem\ C é formado exclusivamente por letras, dígitos e pela sublinha (`_`), nunca se iniciando com um dígito. A @tbl-identificadores-e-validades apresenta exemplos.
+
+::: {#tbl-identificadores-e-validades layout-ncol="2"}
+
+| Identificador   | Validade |
+| :-------------- | :------: |
+| `nome`          |   sim    |
+| `idade`         |   sim    |
+| `salario_medio` |   sim    |
+| `prefixo1`      |   sim    |
+| `prefixo2`      |   sim    |
+| `massa_kg`      |   sim    |
+| `a1b2c3d4__`    |   sim    |
+| `__estado__`    |   sim    |
+
+: Identificadores válidos.
+
+
+| Identificador   |          Validade          |
+| :-------------- | :------------------------: |
+| `2pi`           |  não (inicia com dígito)   |
+| `salario-medio` |    não (hífen presente)    |
+| `km/h`          |    não (barra presente)    |
+| `massa total`   |   não (espaço presente)    |
+| `nota.geral`    |    não (ponto presente)    |
+| `total:geral`   | não (dois pontos presente) |
+| `valor~`        |     não (til presente)     |
+| `montante_r$`   |   não (cifrão presente)    |
+: Identificadores inválidos.
+
+Identificadores e sua validade.
+:::
+
+As letras podem ser maiúsculas ou minúsculas, como `valor`, `Idade` e `ponto_A`, por exemplo. O jargão da computação para referenciar maiúsculas e minúsculas é caso. A linguagem C tem identificadores sensíveis ao caso: `total`, `Total` e `TOTAL` são identificadores distintos e podem coexistir.
+
+A escolha dos identificadores é responsabilidade do programador.
+
+### Estilo
+
+Nos programas apresentados neste livro, todos os identificadores de variáveis e de funções são escritos em _snake case_, que é um estilo de escrita. No _snake case_, todas as letras usadas são minúsculas e, quando um identificador é composto de duas ou mais palavras, é usada a sublinha para separá-las.
+
+Essa regra é seguida mesmo quando os nomes possuem sua combinação de maiúsculas e minúsculas característicos. Desta forma, o armazenamento do CPF usará uma variável `cpf`, um cálculo envolvendo o pH usará `ph` ou a temperatura em Fahrenheit usará `fahrenheit`.
+
+Esse padrão não é necessariamente adotado pelas bibliotecas da linguagem, que usam abreviações e combinações de estilo próprias e independentes. Como exemplos, não é usado `print_formatted`, mas `printf`, e na manipulação de caracteres há uma função chamada `strcat`, que significa _string concatenation_ (sim, _concatenation_ é abreviada para _cat_).
+
+
+::: {.callout-tip}
+A aderência a um padrão no formato dos identificadores, qualquer que ela seja, é muito importante para códigos claros e compreensíveis. Uma vez escolhido um padrão, este deve ser mantido constante em todo o código.
+:::
+
+Os estilos usados nos programas implementados neste material estão descritos no @sec-guia-de-estilo.
+
+
+
+::: {.callout-tip}
+A versões mais atuais das especificações para a linguagem C permitem o uso de caracteres acentuados nos identificadores. Essa é uma prática de uso raro, porém. 
+
+```{c}
+/*
+Aumento de salário
+*/
+#include <stdio.h>
+
+int main(void) {
+    double salário_atual = 3500.00;
+    double porcentagem_aumento = 0.15;  // 15%
+
+    printf("Salário anterior: %.2f.\n", salário_atual);
+
+    salário_atual = salário_atual * (1 + porcentagem_aumento);
+    printf("Salário novo: %.2f.\n", salário_atual);
+
+    return 0;
+}
+```
+
+Fica registrada uma recomendação de que somente caracteres ASCII simples sejam usados para os identificadores. A manutenção do código por terceiros, por exemplo, pode se tornar complicada se outros programadores, com configurações de teclado diferentes, simplesmente não conseguirem digitar o nome de uma variável, como um código escrito em tcheco com uma variável chamada `stáří` (idade).
+:::
+
+### Identificadores significativos
+
+Em programas bem escritos a clareza é importante. O compilador não se importa com o nome escolhido para uma variável; essa escolha é para os humanos que leem o código fonte. A escolha de bons nomes ajuda a entender melhor o que o comandos fazem e, em consequência, permitem a identificação de erros, a correção dessas falhas e a incorporação de novas funcionalidades.
+
+A regra básica para escolher um nome de variável é deixar claro o que ela contém. A opção por um ou outro nome depende bastante do contexto e é nesse contexto que deve haver clareza. Como um exemplo, uma variável chamada `nível` pode conter um valor numérico correspondente ao nível de um reservatório ou então ser uma valor textual com valores esperados `"fácil"`, `"médio"` ou `"difícil"`.
+
+Há uma tendência natural (e bem comum) de associar as variáveis dos programas às variáveis da matemática, o que leva a escolha de variáveis com identificadores genéricos e não significativos, como `x`, `t` ou `a`. Em geral, se uma variável possui uma única letra, essa escolha não é uma boa opção. Há, porém, exceções.
+
+::: {.callout-tip}
+Se um programador precisar explicar, de alguma forma, o que uma variável contém, é porque o identificador dela foi mal escolhido.
+:::
+
+Ao longo do livro, os programas usam variáveis com nomes significativos. Muitas vezes os nomes são longos, o que pode levar o programador a ter preguiça de digitá-los. Felizmente, os IDEs modernos possuem recursos de auto-completar as digitações, que eliminam essa dificuldade.
+
+Um problema de identificadores muito longos é que as linhas de código também ficam muito longas. Abreviações nos nomes podem ser empregadas, porém de forma criteriosa. Se `temperatura` é uma escolha clara para guardar um valor de temperatura, `temp` também pode ser. Porém `temp` é uma abreviação comum para um valor temporário e, em um contexto de temperaturas, não deve ser empregado. 
+
+::: {.callout-tip}
+A decisão do comprimento de um identificador envolve clareza do código e a facilidade de visualização do código fonte por um humano. O programador deve balancear esses e quaisquer outros aspectos, sempre com o objetivo de tornar o código o mais inteligível possível.
+:::
+
+Uma amostra de um código com identificadores pobremente escolhidos é apresentando na sequência. A ausência de documentação é proposital neste caso.
+
+```{c}
+#include <stdio.h>
+
+int main(void) {
+    int i = 57;
+    int a = 1967;
+
+    int e = a + i;
+    printf("%d ou %d\n", e, e + 1);
+
+    return 0;
+}
+```
+
+Segue agora uma nova versão do mesmo código, para o qual o compilador gera resultados idênticos (e provavelmente códigos executáveis iguais também).
+
+```{c}
+#include <stdio.h>
+
+int main(void) {
+    int idade = 10;
+    int ano_nascimento = 2013;
+
+    int estimativa_ano_atual = ano_nascimento + idade;
+    printf("%d ou %d\n", estimativa_ano_atual, estimativa_ano_atual + 1);
+
+    return 0;
+}
+```
+
+Há claramente uma maior compreensão do propósito do programa nesta segunda versão. Nomes significativos ajudam a entender melhor o contexto como um todo.
+
+Segue, para fins didáticos, a versão final do código.
+
+```{c}
+/*
+Estimativa do ano atual dadas a idade e o ano de nascimento de uma pessoa.
+Duas estimativas são feitas, pois o ano corrente depende se a pessoa fez ou 
+não aniversário nesse ano.
+*/
+#include <stdio.h>
+
+int main(void) {
+    int idade = 10;
+    int ano_nascimento = 2013;
+
+    int estimativa_ano_atual = ano_nascimento + idade;
+    printf("%d ou %d\n", estimativa_ano_atual, estimativa_ano_atual + 1);
+
+    return 0;
+}
+```
+
+
+## Mais sobre declarações de variáveis {#sec-mais-sobre-declaracoes-de-variaveis}
+
+Na prática, a atribuição a uma variável não é sempre necessária quando uma declaração é feita e, portanto, pode ser suprimida. Uma declaração simples de uma variável pode ser feita como se segue.
+
+```{c}
+/*
+Escrevendo o valor de pi com cinco casas decimais
+*/
+#include <stdio.h>
+
+int main(void) {
+    double pi;
+    
+    pi = 3.141592654;
+    printf("pi = %.5f\n", pi);
+
+    return 0;
+}
+```
+
+A variável `pi` é criada com valor indefinido, mas antes de ser usada no `printf` tem um valor apropriado atribuído a ela. Sem a atribuição, o conteúdo da variável é considerado indeterminado e, portanto, não deve ser usado antes de se garantir uma atribuição prévia[^veja-modularização]. 
+
+[^veja-modularização]: Mais detalhes sobre valores iniciais de variáveis são apresentados no @sec-regras-de-escopo-com-modularizacao.
+
+
+`\index{declaração}`{=latex}
+A declaração segue o formato seguinte.
+
+::: {.callout title="Declaração de variáveis"}
+_especificação\_tipo_ _lista\_especificação\_identificador_ ;
+:::
+
+O tipo base da variável, a _especificação\_tipo_, é o primeiro elemento de uma declaração e é indicado por um tipo já existentes, como `int`, `long int` ou `double`, por exemplo. A _lista\_especificação\_identificador_ é uma relação de especificações de identificador separados por vírgulas. O ponto e vírgula é obrigatório para indicar o término de uma declaração.
+
+O exemplo seguinte apresenta declarações de variáveis simples, sem atribuição conjugada.
+
+```c
+int idade;
+int ano;
+```
+
+De forma equivalente, essa declaração poderia ser expressa como se segue.
+
+```c
+int idade, ano;
+```
+
+Qualquer uma das duas formas podem ser usadas.
+
+
+::: {.callout-tip}
+Uma fonte de erro comum é o uso do valor de uma variável para a qual nenhuma atribuição ainda foi feita, pois seu conteúdo não pode ser previsto.
+
+O programa seguinte exemplifica esse problema.
+
+```{c} {.hide-compiler-output}
+/* 
+Exemplo de uso de uma variável sem valor previamente atribuído
+*/
+#include <stdio.h>
+
+int main(void) {
+    double valor;
+    printf("valor: %g\n", valor);
+
+    return 0;
+}
+```
+
+O valor que é apresentado é efetivamente o conteúdo da variável dado pelos bytes que estão na memória. A saída produzida pelo programa é imprevisível.
+:::
+
+Na declaração, segundo conveniência, cada variável declarada pode ter sua própria atribuição.
+
+```c
+int dia = 7, mes = 9, ano = 1822;
+double salario_inicial = 4321.12, salario_final;
+```
+
+Neste exemplo, cada uma das três variáveis `int` são declaradas já com valores iniciais. Para as variáveis `double`, apenas `salario_inicial` possui atribuição, enquanto `salario_final` permanece sem iniciação.
+
+Nos programas em C, todas as variáveis que forem usadas precisam ser declaradas.
+
+
+
+## Mais sobre atribuições
+
+`\index{atribuição}`{=latex}
+A atribuição de um valor a uma variável utiliza a sintaxe seguinte.
+
+::: {.callout title="Atribuição"}
+_expressão\_esquerda_ `=` _expressão\_direita_
+:::
+
+Na atribuição, _expressão\_esquerda_ indica onde será armazenado o valor resultante de _expressão\_direita_. Para realizar essa operação, inicialmente a _expressão\_direita_ é completamente avaliada e, obtido o valor resultante, a _expressão\_esquerda_ é considerada para indicar o local de armazenamento na memória. Em geral, _expressão\_esquerda_ é somente um identificador de uma variável, enquanto _expressão\_direita_ pode ser qualquer expressão cujo resultado tenha tipo compatível.
+
+No exemplo seguinte, para cada das duas atribuições, tanto a variável que é usada como local de armazenamento quanto o valor final da expressão que é atribuído a ela são do tipo `double`.
+
+```c
+double valor_cheio, valor_reduzido;
+
+valor_cheio = 417.8;
+valor_reduzido = valor_cheio / 3;
+```
+
+Ambas as atribuições são caracterizadas como comandos simples e, assim, devem ser terminadas com pontos e vírgulas.
+
+
+::: {.callout-tip}
+A atribuição de um valor a uma variável somente deve ser feita se ele for essencial. Uma atribuição desnecessária ou irrelevante pode prejudicar o entendimento do código.
+
+```{c}
+/* 
+Apresentação de um cálculo simples
+*/
+#include <stdio.h>
+
+int main(void) {
+    double fator1 = 1.2;
+    double fator2 = 4.8;
+    double resultado = 0;  // atribuição irrelevante
+
+    resultado = fator1 * fator2;
+    printf("%g * %g = %g\n", fator1, fator2, resultado);
+
+    return 0;
+}
+```
+
+Nesse programa, a atribuição de zero para `resultado` é irrelevante, pois esse valor será substituído logo na sequência. É curioso notar que poderia ser `resultado = -1.2e14` e o programa funcionaria normalmente.
+
+Neste caso, apenas a declaração simples da variável deve ser feita.
+:::
+
+## Leitura para programas interativos
+
+Até o momento, a manipulação de variáveis foi exemplificada apenas com atribuições diretas, o que torna o programa demasiadamente restrito. Por exemplo, no exemplo de conversão de Celsius para Fahrenheit, o programa não precisaria fazer as contas nem usar variáveis, pois como tudo é fixo, bastaria conter o comando seguinte e o resultado seria precisamente o mesmo.
+
+```c
+printf("25.5 graus Celsius = 77.9 Fahrenheit\n");
+```
+
+Tornar os programas mais úteis, então, requer escrever códigos mais gerais, como para converter qualquer temperatura em graus Celsius para Fahrenheit. Para isso, o programa precisa obter qual o valor que deve ser convertido e isso não pode ser feito por uma atribuição.
+
+Quando um programa obtém um dado externo ao código, esse processo é chamado de leitura. Desta forma, um programa geralmente faz a leitura de dados, realiza um processamento com eles e escreve os resultados.
+
+A leitura do que o usuário digita em um terminal usualmente opera em duas etapas. Na primeira, o usuário digita seu texto (podendo eventualmente apagar um erro de digitação) e, quando tiver terminado, ele pressiona a tecla `ENTER`. Aí se inicia a segunda etapa, que consiste em repassar para o programa todos os caracteres digitados, incluindo a mudança de linha (`\n`) produzida pelo `ENTER`.
+
+### Leitura conteúdo textual com `fgets` {#sec-leitura-de-valores-textuais}
+
+No programa seguinte, um nome é solicitado pelo programa e, em seguida, apresentado de volta juntamente com uma saudação.
+
+```{c}
+/* 
+Saudação
+*/
+#include <stdio.h>
+
+int main(void) {
+    printf("Digite seu nome: ");
+
+    char nome[80];
+    fgets(nome, sizeof nome, stdin);
+    //TYPE(0, "Alfonso Cardoso");
+
+    printf("Olá, %s!\n", nome);
+
+    return 0;
+}
+```
+
+Uma variável _string_ é usada para o armazenamento de cadeias de caracteres. Em C, o tipo básico `char` é usado para indicar uma único caractere; porém, como textos são sequências de caracteres (letras, dígitos, pontuações), os colchetes colocados depois do identificador `nome` indicam o comprimento máximo de caracteres que a variável suporta. No caso, o programa pode armazenar até 80 caracteres, o que é suficiente para um nome.
+
+A função `fgets` (`stdio.h`) copia o que o usuário digitou no terminal, byte a byte, para a cadeia de caracteres. Esta função possui três parâmetros: o primeiro é para onde os dados digitados serão copiados (variável `nome`), o segundo é o comprimento da memória disponível para copiar (`sizeof nome`) e, por final, o último que é `stdin`, que é o fluxo de bytes vindo do teclado.
+
+Na execução do programa anterior, é possível notar que a exclamação é apresentada na linha de baixo, logo depois do nome. A razão para isso é que o `ENTER` também é passado ao programa. Assim, para que se obtenha apenas o nome, é preciso remover esse `\n`. Essa ação é feita substituindo-se a mudança de linha por um caractere nulo (`\0`).
+
+
+```{c}
+/* 
+Saudação
+*/
+#include <stdio.h>
+#include <string.h>  // para strlen
+
+int main(void) {
+    printf("Digite seu nome: ");
+
+    char nome[80];
+    fgets(nome, sizeof nome, stdin);
+    nome[strlen(nome) - 1] = '\0';  // sobrepõe '\0' ao '\n'
+    //TYPE(0, "Alfonso Cardoso");
+
+    printf("Olá, %s!\n", nome);
+
+    return 0;
+}
+```
+
+O comando `nome[strlen(nome) - 1] = '\0'` determina a posição do `\n` usando o comprimento do texto digitado dado por `strlen` e atribui ali o `\0`. É importante notar que `'\0'` é escrito usando aspas simples, pois é um único caractere. Esses aspectos são abordados em mais detalhes no @sec-dados-textuais.
+
+### Leitura de valores numéricos
+
+Toda digitação provida pelo usuário e passada ao programa é textual. Como exemplo, se o usuário digita 10 como entrada, o programa recebe os caracteres `1`, `0` e o `ENTER`, ou seja, `"10\n"`. Para transformar essa sequência de caracteres em um `int`, por exemplo, é preciso convertê-la.
+
+A função `sscanf` pode ser usada para diversas conversões, pois ela analisa os caracteres e os interpreta adequadamente.
+
+Para exemplificar a leitura de dados numéricos, considere o problema de estimar qual é o ano atual baseado na idade de uma pessoa e de seu ano de nascimento. O cálculo é simples, apesar da resposta depender se a pessoa já fez ou não aniversário no ano atual. Desta forma, o @alg-estimativa-ano-atual dá os dois possíveis resultados.
+
+
+```latex {.pseudocode}
+%| title: Determinação do ano atual baseado na idade e no ano de nascimento de uma pessoa.
+%| label: #alg-estimativa-ano-atual
+
+\begin{algorithmic}
+    \Description Determinação do ano atual com base na idade e do ano de nascimento de uma pessoa
+    \Require A idade e o ano de nascimento de uma pessoa
+    \Ensure As duas possibilidades do ano corrente, considerando se a pessoa já fez ou não aniversário
+    \Statex{}
+    \Statep{Obtenha \Id{idade} e \Id{ano\_nascimento}}
+    \Statep{Calcule \Id{ano\_estimado} como ${\Id{idade} + \Id{ano\_nascimento}}$}
+    \Statep{Apresente \Id{ano\_estimado} e $\Id{ano\_estimado} + 1$ como possibilidades}
+\end{algorithmic}
+```
+
+
+
+```{c}
+/*
+Determinação do ano atual com base na idade e do ano de nascimento de uma
+    pessoa
+Requer: A idade e o ano de nascimento de uma pessoa
+Assegura: As duas possibilidades do ano corrente, considerando se a
+    pessoa já fez ou não aniversário
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Qual sua idade? ");
+    fgets(entrada, sizeof entrada, stdin);
+    int idade;
+    sscanf(entrada, "%d", &idade);
+    //TYPE(0, "20");
+
+    printf("Que ano você nasceu? ");
+    fgets(entrada, sizeof entrada, stdin);
+    int ano_nascimento;
+    sscanf(entrada, "%d", &ano_nascimento);
+    //TYPE(0, "2003");
+
+    int estimativa_ano_atual = ano_nascimento + idade;
+    printf("Se você já fez aniversário este ano, estamos em %d.\n",
+        estimativa_ano_atual);
+    printf("Se não, o ano é %d.\n", estimativa_ano_atual + 1);
+    printf("Bem, este é meu chute...\n");
+
+    return 0;
+}
+```
+
+A linha que merece atenção neste programa é a que segue.
+
+```c
+sscanf(entrada, "%d", &idade);
+```
+
+A função `sscanf` faz uma varredura na variável `entrada` (seu primeiro parâmetro), buscando um valor inteiro escrito em decimal (`%d`). Se achar o valor, faz a interpretação adequada e coloca o valor na variável inteira `idade`. É importante neste caso que a função precisa saber onde a variável está na memória e, assim, o operador `&`, que significa algo como "o local onde está", é obrigatório. A linha de comando pode ser, então, lida da seguinte forma: "procure no texto contido em `entrada` um valor no formato `%d` e o armazene na memória onde está a variável `idade`".
+
+Para o ano de nascimento o procedimento é exatamente igual e a variável entrada é reaproveitada para fazer a segunda leitura.
+
+Uma observação relevante é que, na interpretação da linha pela busca do valor inteiro, o `sscanf` ignora qualquer texto em branco antes dos dígitos numéricos esperados, como espaços e tabulações. Ele também encerra a interpretação ao encontrar qualquer coisa que não seja compatível com o tipo buscado e, desta forma, o `\n` no final de `entrada` é automaticamente ignorado.
+
+Segue novo exemplo, com leituras simples, agora usando valores reais armazenados em variáveis `double`.
+
+```{c}
+/*
+Leitura de variáveis do tipo double
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite um valor real: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double valor1;
+    sscanf(entrada, "%lf", &valor1);
+    //TYPE(0, "872.2");
+
+    printf("Digite outro valor real: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double valor2;
+    sscanf(entrada, "%lf", &valor2);
+    //TYPE(0, "1.03e5");
+
+    printf("%g + %g = %g\n", valor1, valor2, valor1 + valor2);
+
+    return 0;
+}
+```
+
+Valores do tipo `double` usam a especificação de formato `%lf` (`%g` só é usado no `printf`) e a interpretação é feita agora pela busca de qualquer combinação que possa ser interpretada como um valor real válido, incluindo a notação científica usada no exemplo.
+
+### Leitura de um único caractere
+
+A função `fgets`, por si só, obtém o texto digitado no terminal. O filtro para que apenas o primeiro caractere seja capturado em uma variável do tipo `char` pode ser feito também com o `sscanf` usando-se o indicador de formato `%c`.
+
+```{c}
+/*
+Leitura de um valor em uma variável do tipo char com sscanf
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite um caractere: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "M");
+
+    char caractere;
+    sscanf(entrada, "%c", &caractere);
+    printf("O caractere digitado foi o %c\n", caractere);
+    printf("Seu código hexadecimal ASCII é %X\n", caractere);
+
+    return 0;
+}
+```
+
+No exemplo, na variável `entrada` é armazenada a sequência `M\n`, ou seja o `M` digitado e o `ENTER` usado para enviar a linha ao programa. Com o `%c` do `sscanf`, somente o primeiro caractere da entrada é considerado, ignorando-se tudo o que existe depois dele. Na prática, depois do `M` do exemplo poderiam vir quaisquer outros caracteres e somente o primeiro é extraído de `entrada`.
+
+Para este exemplo em particular, há uma forma mais simples e direta de obter o primeiro caractere do que o usuário digitou. Isso é feito explicitamente selecionando o primeiro caractere da variável: `entrada[0]`.
+
+```{c}
+/*
+Leitura de um valor em uma variável do tipo char usando indexação da cadeia
+de entrada
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite um caractere: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "m");
+
+    char caractere = entrada[0];
+    printf("O caractere digitado foi o %c\n", caractere);
+    printf("Seu código hexadecimal ASCII é %X\n", caractere);
+
+    return 0;
+}
+```
+
+Esta última versão é, na opinião do autor, mais simples e direta, superando a leitura a obtenção do caractere com o `sscanf`.
+
+
+### Várias leituras em uma única linha
+
+É bastante comum, em programas que processam dados, que uma linha possa conter mais que um valor. Desta forma, é preciso indicar ao `sscanf` para varrer a cadeia de entrada por mais que um valor.
+
+O programa seguinte implementa o @alg-distancia-xy-origem e mostra a leitura de coordenadas em $\mathbb{R}^2$. O programa solicita os valores para $x$ e para $y$, mas ambos devem ser digitados na mesma linha. Como resultado, o programa apresenta a distância desse ponto à origem do sistema de coordenadas.
+
+```latex {.pseudocode}
+%| title: Distância de um ponto $(x, y)$ à origem
+%| label: #alg-distancia-xy-origem
+
+\begin{algorithmic}
+    \Description Cálculo da distância de um ponto em $\mathbb{R}^2$ à origem.
+    \Require valores para $x$ e $y$
+    \Ensure a distância de $(x, y)$ à origem
+    \Statex{}
+    \Statep{Obtenha $x$ e $y$}
+    \Statep{Calcule \Id{distância} como $\sqrt{x^2 + y^2}$}
+    \Statep{Apresente \Id{distância}}
+\end{algorithmic}
+```
+
+```{c}
+/*
+Cálculo e apresentação da distância de um ponto em R^2 à origem, tendo como
+    entrada os valores das coordenadas x e y desse ponto
+Requer: x e y
+Assegura: a distância de (x, y) à (0, 0)
+*/
+#include <stdio.h>
+#include <math.h>  // para sqrt (raiz quadrada)
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite os valores de x e y: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "3.2 -1.8");
+
+    double x, y;
+    sscanf(entrada, "%lf%lf", &x, &y);
+
+    double distancia_origem = sqrt(x * x + y * y);
+    printf("A distância de (%g, %g) a (0, 0) é %g.\n", x, y, distancia_origem);
+
+    return 0;
+}
+```
+
+Primeiramente é relevante destacar o uso da função `sqrt` (_square root_) para o cálculo da raiz quadrada, a qual está especificada no arquivo de cabeçalho `math.h`, que deve ser incluído no preâmbulo do código fonte. Para o cálculo do quadrado foi usado o "truque" elementar que ${x^2 = x\cdot x}$. Além disso, como biblioteca de funções matemáticas não é automaticamente incluída durante a compilação, deve ser acrescentada a opção `-lm` (i.e., faça a ligação, _link_,  com a biblioteca matemática `m`) no final da linha de compilação com o `gcc`.
+
+Voltando agora para leitura, o destaque é para a especificação de formato `%lf%lf` usada no `sscanf`. Ela indica que dois valores reais devem ser buscados em `entrada` e cada um deve ser armazenado, respectivamente, nas variáveis `x` e `y`, ambas `double`. A ordem das variáveis deve corresponder à ordem em que os valores são digitados. Como já apresentado, as leituras de valores numéricos ignoram caracteres brancos antes de encontrar o valor em si, de forma que espaços ou tabulações antes de cada `%lf` são descartadas na varredura da linha, o que significa que, na digitação, a quantidade de espaços antes de cada valor é irrelevante. De forma complementar, tudo o que não corresponder a um valor real que apareça depois do segundo valor também é descartado.
+
+A mistura de diferentes tipos em uma única linha também é possível, como indica o exemplo na sequência.
+
+```{c}
+/*
+Exemplos de leituras de tipos diferentes em uma mesma linha
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+    double d;
+    int i1, i2;
+    char c;
+
+    printf("Digite um inteiro e um real: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "320 44.5");
+    sscanf(entrada, "%d%lf", &i1, &d);
+    printf("O inteiro é %d e o o real é %g.\n\n", i1, d);
+
+    printf("Digite um inteiro, um real e outro inteiro: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "10 1.1 20");
+    sscanf(entrada, "%d%lf%d", &i1, &d, &i2);
+    printf("Os inteiros são %d e %d; o o real é %g.\n\n", i1, i2, d);
+
+    printf("Digite um real seguido por um caractere: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "0.125ee");
+    sscanf(entrada, "%lf%c", &d, &c);
+    printf("O real é %g e o caractere é %c.\n\n", d, c);
+
+    return 0;
+}
+```
+
+Existem, naturalmente e previsivelmente, limitações nas leituras. Por exemplo, a última varredura usando `%lf%c` para obter um número real e um caractere esbarra na capacidade de análise dos caracteres digitados. Por exemplo, se o usuário digitar `0.1235A` é possível separar o 0,125 da letra `A`; se for digitado `0.125 A`, a variável `d` conterá o valor 0,125, mas `c` conterá o espaço, que é o próximo caractere depois do número, sendo o `A\n` que sobram ignorados. Além disso, é impossível com esse formato que o caractere seja um dígito, pois ele seria interpretado como parte do número e não como o caractere depois do número.
+
+O contorno de tais limitações foge do escopo deste material.
+
+<!-- ::: {#exr-leitura-caractere-e}
+No exemplo acima, na última leitura, é possível que o caractere seja `E` ou `e`? Justifique.
+::: -->
+
+
+### Um pouco mais sobre o `sscanf`
+
+O objetivo da função `sscanf` é analisar uma cadeia de caracteres procurando por padrões, os quais, reconhecidos adequadamente, são convertidos para o tipo indicado e atribuído às variáveis indicadas por seus endereços (razão do operador `&` usado nos exemplos diversos). Assim, ao se especificar `%d%d%lf` o `sscanf` espera encontrar dois inteiros e um real, nesta ordem. Para sumarizar, a @tbl-formatos-sscanf apresenta as principais especificações de formato usadas no `sscanf`.
+
+
+| Especificação | Tipo associado |
+| :-----------: | :------------: |
+|     `%d`      |     `int`      |
+|     `%ld`     |   `long int`   |
+|     `%f`      |    `float`     |
+|     `%lf`     |    `double`    |
+|     `%c`      |     `char`     |
+|     `%s`      | `char[`$n$`]`  |
+
+: Relação entre formatos e tipos utilizados pelo `sscanf`. {#tbl-formatos-sscanf}
+
+
+#### Sobre os padrões interpretados no `sscanf`
+
+O padrão especificado no segundo parâmetro da função `sscanf` é muito mais poderoso do que apenas a busca por números ou caracteres. Seguem alguns poucos exemplos sobre a versatilidade do `sscanf` na sua interpretação.
+
+```{c}
+/*
+Cálculo e apresentação da distância de um ponto em R^2 à origem, tendo como
+    entrada os valores das coordenadas x e y desse ponto
+Requer: o ponto (x, y)
+Assegura: a distância de (x, y) à (0, 0)
+*/
+#include <stdio.h>
+#include <math.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite um ponto no formato (x, y): ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "(3.2, -1.8)");
+
+    double x, y;
+    sscanf(entrada, "(%lf,%lf)", &x, &y);
+
+    double distancia_origem = sqrt(x * x + y * y);
+    printf("A distância de (%g, %g) a (0, 0) é %g.\n", x, y, distancia_origem);
+
+    return 0;
+}
+```
+
+Este exemplo é uma releitura do programa que calcula a distância de um ponto à raiz, com referência ao @alg-distancia-xy-origem. Nesta nova versão, a digitação da entrada deve seguir o formato convencional de representação de um ponto no plano, ou seja, circundar os valores com parênteses e usar uma vírgula para separar os $x$ de $y$. O padrão que foi dado é `(%lf,%lf)`, o que significa que a função espera, nesta sequência, um abre parênteses, um valor real, uma vírgula, outro valor real e um fecha parênteses. O conteúdo provavelmente não será interpretado corretamente se o padrão não for completamente satisfeito.
+
+O padrão de interpretação pode indicar que um dado valor será ignorado da interpretação. Para isso, um asterisco deve ser adicionado logo depois do símbolo `%`. Por exemplo, `%*lf` significa que um valor real deve ser reconhecido, mas seu valor será descartado. O exemplo seguinte mostra como, de uma linha com dois valores inteiros, utilizar apenas o segundo.
+
+```{c}
+/*
+Leitura de uma linha com quatro inteiros, porém descartando o primeiro e
+o terceiro
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite quatro valores inteiros: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "6652 943 7609 -7");
+
+    int segundo, quarto;
+    sscanf(entrada, "%*d%d%*d%d", &segundo, &quarto);
+
+    printf("Valores de interesse: %d e %d.\n", segundo, quarto);
+
+    return 0;
+}
+```
+
+::: {.content-visible when-profile="programacao"}
+#### Interpretação em bases decimal, octal e hexadecimal
+
+Além dos valores inteiros em decimal (`%d`), é possível interpretá-los nas bases 8 e 16. Nestes dois últimos casos, os valores devem ser sempre positivos e, para tanto, o tipo da variável tem que ser `unsigned int`, ou seja, um inteiro sem sinal.
+
+```{c}
+/*
+Leituras de valores inteiros nas bases decimal, octal e hexadecimal (10, 8
+e 16, respectivamente)
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+    unsigned int valor;
+
+    printf("Digite inteiro decimal: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "63");
+    sscanf(entrada, "%u", &valor);
+    printf("O valor é %d(10), %o(8) e %X(16).\n\n", valor, valor, valor);
+
+    printf("Digite inteiro octal: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "63");
+    sscanf(entrada, "%o", &valor);
+    printf("O valor é %d(10), %o(8) e %X(16).\n\n", valor, valor, valor);
+
+    printf("Digite inteiro hexadecimal: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "63");
+    sscanf(entrada, "%x", &valor);
+    printf("O valor é %d(10), %o(8) e %X(16).\n\n", valor, valor, valor);
+
+    return 0;
+}
+```
+
+Os dígitos 6 e 3 são dígitos válidos nas três bases exemplificadas e 63~10~, 63~8~ e 63~16~ têm sua interpretação descrita na @tbl-63-em-bases-diferentes. A conversão do valor digitado depende do formato expresso no `sscanf`: decimal (`%d`), octal (`%o`) ou hexadecimal (`%x`). A escolha de um dos formatos invalida a interpretação dos outros dois.
+
+
+| Valor  |            Interpretação            | Valor decimal equivalente |
+| :----: | :---------------------------------: | :-----------------------: |
+| 63~10~ | 6 $\times$ 10^1^ + 3 $\times$ 10^0^ |            63             |
+| 63~8~  |  6 $\times$ 8^1^ + 3 $\times$ 8^0^  |            51             |
+| 63~16~ | 6 $\times$ 16^1^ + 3 $\times$ 16^0^ |            99             |
+
+: Interpretação dos dígitos 63 nas bases decimal, octal e hexadecimal. {#tbl-63-em-bases-diferentes}
+
+É possível dar liberdade ao usuário na escolha da base que será usada. A especificação de formato `%i` significa um valor inteiro, independente da base. Valores decimais são, como esperado, interpretados como decimais; valores iniciados com 0 são interpretados como números octais e os precedidos da sequência `0x` são considerados na base 16.
+
+
+```{c}
+/*
+Leituras genérica de valores inteiros
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+    int valor;
+
+    printf("Digite inteiro: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "63");
+    sscanf(entrada, "%i", &valor);
+    printf("O valor é %d(10), %o(8) e %X(16).\n\n", valor, valor, valor);
+
+    printf("Digite inteiro: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "063");
+    sscanf(entrada, "%i", &valor);
+    printf("O valor é %d(10), %o(8) e %X(16).\n\n", valor, valor, valor);
+
+    printf("Digite inteiro: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "0x63");
+    sscanf(entrada, "%i", &valor);
+    printf("O valor é %d(10), %o(8) e %X(16).\n\n", valor, valor, valor);
+
+    return 0;
+}
+```
+
+Neste exemplo, `63` é o decimal 63, `063` é 63~8~ e `0x63` é 63~16~.
+:::
+
+
+#### Erros de interpretação do padrão
+
+A função `sscanf` é capaz de interpretar corretamente um valor numérico tanto quanto o valor faça sentido. Se houver um erro na interpretação, a análise da varredura é interrompida e o valores corretamente convertidos são atribuídos às respectivas variáveis; as variáveis restantes não têm seu valor modificado.
+
+O exemplo seguinte apresenta a situação de duas leituras 
+
+```{c}
+/*
+Leituras corretas e incorretas
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    // Valores iniciais
+    int i1 = 1, i2 = 2, i3 = 3, i4 = 4;
+    printf("i1 = %d; i2 = %d; i3 = %d; i4 = %d.\n\n", i1, i2, i3, i4);
+
+    // Leitura 1
+    printf("Digite os valores para i1, i2, i3 e i4: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "10 20 30 40");
+    sscanf(entrada, "%d%d%d%d", &i1, &i2, &i3, &i4);
+    printf("i1 = %d; i2 = %d; i3 = %d; i4 = %d.\n\n", i1, i2, i3, i4);
+
+    // Leitura 2
+    printf("Digite os valores para i1, i2, i3 e i4: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "100 200 abc 400");
+    sscanf(entrada, "%d%d%d%d", &i1, &i2, &i3, &i4);
+    printf("i1 = %d; i2 = %d; i3 = %d; i4 = %d.\n\n", i1, i2, i3, i4);
+
+    return 0;
+}
+```
+
+Na primeira leitura do programa, todos os valores são lidos corretamente e todas as atribuições são feitas. Na segunda leitura a varredura falha ao encontrar `abc` quando um número inteiro era esperado. Com o erro na interpretação, apenas `i1` e `i2` são atualizados, enquanto `i3` e `i4` não têm seus valores modificados.
+
+::: {.content-visible when-profile="programacao"}
+#### `sscanf` é uma função e tem valor de retorno
+
+Embora frequentemente usada como um comando simples, `sscanf` é, na realidade, uma função que retorna o número de leituras corretamente realizadas. Com essa característica, é possível contornar erros de leitura e deixar o código mais robusto.
+
+```{c}
+/*
+Verificação de leituras corretas
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite os valores para i1, i2, i3 e i4: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "10 20 abc 40");
+    int i1, i2, i3, i4;
+    int numero_atribuicoes = sscanf(entrada, "%d%d%d%d", &i1, &i2, &i3, &i4);
+    printf("i1 = %d; i2 = %d; i3 = %d; i4 = %d.\n\n", i1, i2, i3, i4);
+    printf("Na leitura feita, %d valores foram corretamente lidos.\n",
+        numero_atribuicoes);
+
+    return 0;
+}
+```
+
+Com apenas dois valores corretamente lidos, a execução do programa mostra que os valores originais de `i3` e `i4` são preservados. Essas variáveis recaem na categoria variáveis não iniciadas, como exemplificado em uma das dicas da @sec-mais-sobre-declaracoes-de-variaveis.
+
+:::
+
+
+## Ressalvas quanto ao `scanf`
+
+Em grande parte do material disponível em páginas na Internet é comum que a leitura use a função `scanf` no lugar de um `fgets` seguido de um `sscanf`. O objetivo da função `scanf` é aplicar as especificações de formato diretamente na entrada de dados, sem usar a variável `entrada` como nos exemplos apresentados.
+
+Essa prática de usar diretamente `scanf` leva a uma dificuldade muito grande quando leituras de cadeias de caracteres e de valores numéricos, visto que essa função varre o que foi digitado, porém mantém o que ainda não foi analisado. O próprio manual do `scanf` apresenta o conteúdo seguinte.
+
+``` {.output-code}
+The scanf() family  of functions scans input like sscanf(3), but read
+from a FILE.  It is very difficult to use  these  functions  correctly,
+and  it  is preferable to read entire lines with fgets(3) or getline(3)
+and parse them later with sscanf(3) or more specialized functions  such
+as strtol(3).
+```
+
+Traduzindo livremente as partes mais relevantes: "é muito difícil usar essas funções corretamente"; "é preferível ler linhas inteiras com `fgets` (...) e analisá-las com `sscanf` (...)". Em outras palavras, o uso de `scanf` diretamente exige conhecimento mais detalhado de como o fluxo de entrada é tratado e, desta forma, foi substituído por outros comandos, conforme a recomendação do próprio manual.
+
+::: {.content-visible when-profile="programacao"}
+`\index{getline@\texttt{getline}}`{=latex}
+`\index{strtol@\texttt{strtol}}`{=latex}
+O texto também dá como alternativas `getline` (muito similar a `fgets`), e `strtol` (com os mesmos objetivos de `sscanf`). A função `getline` tem os mesmos parâmetros de `fgets` e pode ser usada sem seu lugar, mas tem vantagens quando se usa memória alocada dinamicamente. Por sua vez, `strtol` é também interessante, mas exige o uso de ponteiros e o entendimento de endereçamento de memória.
+
+O emprego de `getline` e `strtol` em substituição a `fgets` e `sscanf` é uma sugestão interessante para quando os conceitos de alocação dinâmica de memória e ponteiros fizerem parte dos conhecimentos do programador. Ponteiros são tratados no @sec-enderecamento-de-memoria-e-ponteiros, enquanto o @sec-alocacao-dinamica-de-memoria aborda a alocação dinâmica de memória.
+:::
+
+
+
+::: {.content-visible when-profile="programacao"}
+
+## Sobre a função `gets`
+
+`\index{gets@\texttt{gets}}`{=latex}
+Infelizmente, quando se procura por informações sobre leitura de dados em C nos diversos mecanismos de busca, ainda são comuns os exemplos usando a função `gets`. Esta função é uma "versão simplificada" de `fgets` que não precisa informar o espaço de memória disponível para a leitura nem requer a especificação do `stdin`, que é usado automaticamente. 
+
+O problema desta função é exatamente a falta de especificação da área de memória disponível, pois a leitura não respeita qualquer limite e pode sobrescrever outras áreas importantes da memória, modificando indiretamente outras variáveis e até as instruções que serão executadas.
+
+O exemplo seguinte mostra o uso, a compilação e o resultado de uma leitura usando `gets`.
+
+```{c}
+/*
+Leitura de um texto com gets
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite algo: ");
+    gets(entrada);
+    //TYPE(0, "C é legal, mas não é simples...");
+    printf("Você digitou: '%s'\n", entrada);
+
+    return 0;
+}
+```
+
+Da compilação desse programa, o destaque é feito para a linha com o aviso: "a função `gets` é perigosa e não deve ser usada".
+
+Além dessa recomendação do próprio compilador, há ainda no manual da função o trecho reproduzido na sequência. Nesse segmento do texto, o destaque é para a sentença: "nunca use esta função".
+
+``` {.output-block}
+DESCRIPTION
+       Never use this function.
+
+       gets()  reads  a  line from stdin into the buffer pointed to by s until
+       either a terminating newline or EOF, which it replaces with a null byte
+       ('\0').  No check for buffer overrun is performed (see BUGS below).
+```
+
+Para deixar bem claras as consequências dessa função, considere o programa seguinte. Nele, o tamanho disponível para `entrada` é de 20\ bytes, o que limita o texto máximo a 19. Também foi acrescentada uma variável inteira, usada apenas para ilustrar o problema.
+
+```{c}
+/*
+Leitura de um texto com gets
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[20];
+    int valor = 10;
+
+    printf("'valor' vale %d\n", valor);
+    printf("Digite algo: ");
+    gets(entrada);
+    //TYPE(0, "C é legal, mas não é simples...");
+    printf("Você digitou: '%s'\n", entrada);
+    printf("'valor' vale %d\n", valor);
+
+    return 0;
+}
+```
+
+É importante reparar que o código permite, inadvertidamente, que a variável inteira `valor` tenha seus bytes modificados pela insegurança de `gets`. Dado que não há verificação do espaço disponível para armazenar a leitura, os bytes digitados pelo usuário ultrapassam os 20\ bytes de `entrada` e destroem os bytes de `valor`. Este programa aparentemente não tem problemas, até que uma entrada seja maior que o espaço disponível.
+
+
+A conclusão simples e prática desta seção é, portanto, não usar `gets`. Nunca.
+:::

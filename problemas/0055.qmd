@@ -1,0 +1,8 @@
+<!-- Conversão de nota para conceito -->
+::: {#exr-0055}
+{{< include problemas/comum-notas-e-conceitos.qmd >}}
+
+É necessário que um professor obtenha a média numérica de uma turma com 30\ alunos, sendo que as informações disponíveis são os conceitos de cada um deles. 
+
+Escreva um algoritmo para, a partir de 30\ conceitos, apresentar a média numérica referente a esses conceitos.
+:::

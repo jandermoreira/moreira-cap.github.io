@@ -1,0 +1,23 @@
+<!-- Crescimento simultâneo de aplicações -->
+::: {#exr-0038}
+Adson Biardeyson da Gama e Rafaela Xiomara Corocher são investidores.
+
+Adson tem uma aplicação com valor atual de R$12.000,00. Essa aplicação rende 1,2% de juros ao mês.
+
+Rafaela, por sua vez, tem uma aplicação de R$11.500,00, cujo rendimento mensal é de 1,9%.
+
+Escreva um algoritmo que apresente a evolução simultânea dos saldos de ambas as aplicações mês a mês (incluindo o mês inicial), até que a aplicação de Rafaela supere a de Adson. O número de meses decorridos até esta situação deve também ser apresentado.
+
+Para referência, o algoritmo deveria produzir um resultado como o seguinte:
+```
+    12000.00 11500.00
+    12144.00 11718.50
+    12289.73 11941.15
+    12437.20 12168.03
+    12586.45 12399.23
+    12737.49 12634.81
+    12890.34 12874.87
+    13045.02 13119.50
+    7 meses
+```
+:::

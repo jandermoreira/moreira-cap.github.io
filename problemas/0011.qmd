@@ -1,0 +1,10 @@
+<!-- Qual usar? Repetição indefinida com sentinela (Processo seletivo) -->
+::: {#exr-0011}
+Considere o problema: 
+
+> Em um processo seletivo, cada candidato faz uma prova e obtém uma nota inteira de 0 a 100. No final do processo, a organização deseja saber a porcentagem de candidatos com pontuação maior que 90 e inferior a 10. Escreva um algoritmo que processe uma sequência de notas e apresente o resultado desejado. O final da sequência é indicado pelo valor -1, que não deve ser considerado nos cálculos.
+
+A solução algorítmica para esse problema requer, em princípio, uma repetição; Qual a melhor escolha de estrutura de repetição?
+
+@sol-0011
+:::

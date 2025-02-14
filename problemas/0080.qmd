@@ -1,0 +1,16 @@
+<!-- Preenchimento de vetor com divisores -->
+::: {#exr-0080}
+Escreva um procedimento que modifique um vetor de inteiros para que contenha, em ordem, todos os divisores de um valor dado.
+
+O procedimento poderia ser executado com a seguinte instrução:
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Statep{\Call{PreenchaDivisores}{\Id{vetor\_divisores}, $n$}}
+\end{algorithmic}
+```
+
+Como resultado, no caso de $n = 10$, o vetor deverá conter os valores 1, 2, 5 e\ 10 em suas posições iniciais.
+
+@sol-0080
+:::

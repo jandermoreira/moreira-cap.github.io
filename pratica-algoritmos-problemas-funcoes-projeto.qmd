@@ -1,0 +1,8 @@
+# Projeto de funções {#sec-projeto-funcoes}
+
+<!-- Projeto função: combinação de n, p a p -->
+{{< include problemas/0050.qmd >}}
+
+<!-- Projeto função: conversões notas x conceitos -->
+{{< include problemas/0052.qmd >}}
+

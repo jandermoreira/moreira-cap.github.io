@@ -1,0 +1,66 @@
+%! suppress = MightBreakTexify
+%! suppress = FileNotFound
+%! Package = LINGUAGEM
+%! Author = Jander
+%! Date = 23/04/2022
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{linguagem}[2022/04/23 Linguagem de arquivos]
+
+\newlength{\itemmaislongo}
+\newlength{\itematual}
+\newlength{\itemtmp}
+\newcommand{\descricaosintaxe}[3]{%
+    \noindent%
+    \begin{minipage}{\linewidth}
+        \vspace{0.5em}
+        \noindent Sintaxe para #1:\par
+        \noindent\hspace{0.3cm}%
+        \begin{minipage}[t]{0.95\linewidth}
+        {\formatosintaxe#2}
+            \par
+            \vspace{0.25em}
+            \setlength{\itemmaislongo}{0pt}
+            \foreach \arg/\desc in {#3}{
+                \settowidth{\itematual}{~\argumento{\arg}}
+                \pgfmathsetlength{\itemtmp}{max(\itemmaislongo, \itematual)}
+                \global\setlength{\itemmaislongo}{\itemtmp}
+            }
+            \def\separador{\hspace*{0.3em}--\hspace*{0.5em}}
+            \settowidth{\itemtmp}{\separador}
+            \vspace{0.2em}
+            \foreach \arg/\desc in {#3}{%
+                \noindent\hspace*{0.5cm}\begin{minipage}[t]{\dimexpr\itemmaislongo}
+                                            \argumento{\arg}
+                \end{minipage}\separador%
+                \begin{minipage}[t]{\dimexpr\textwidth-\itemmaislongo-\itemtmp-0.5cm}
+                    \RaggedRight\desc
+                \end{minipage}%
+                \par\vspace{0.25em}
+            }
+        \end{minipage}
+    \end{minipage}%
+    \par\vspace{1.5ex}
+}
+
+\newcommand{\formatosintaxe}{\small\ttfamily}
+\newcommand{\elementosintaxe}[1]{\mbox{{\formatosintaxe#1}}}
+\newenvironment{exemplocomando}{%
+    \vspace{0.25em}
+    \noindent%
+    \hspace{0.2cm}%
+    \begin{minipage}[t]{\dimexpr\linewidth-0.3cm}
+        \formatosintaxe\hangindent=2em \raggedright
+        }{
+    \end{minipage}%
+    \vspace{0.8em}
+}
+\newcommand{\argumento}[1]{\mbox{\normalsize\ensuremath{\langle{\normalfont\textsl{#1}}\rangle}}}
+\newcommand{\argopcional}[1]{\mbox{\ensuremath{\left[\mbox{#1}\right]}}}
+\newcommand{\ou}{$\,\mid\,$}
+\newcommand{\repeticao}{{\normalfont\ldots}}
+
+\newcommand{\langindex}[2]{%
+    \index{#1@\elementosintaxe{#1}}%
+    \index{#2@\elementosintaxe{#2}|see{\elementosintaxe{#1}}}%
+}

@@ -1,0 +1,6 @@
+<!-- Existência de triângulo dados os lados -->
+::: {#exr-0060}
+Não são quaisquer segmentos de reta que podem formar um triângulo. Por exemplo, não é possível "fechar" a figura com segmentos de comprimentos 1, 2 e 4. Ou seja, todo segmento tem que ter comprimento menor que a soma dos dos outros dois.
+
+Escreva um algoritmo para, a partir dos comprimentos de três segmentos de reta, apresentar se eles podem ou não serem usados para formar um triângulo.
+:::

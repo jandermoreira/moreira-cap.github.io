@@ -1,0 +1,40 @@
+# Problemas com resultados lógicos {#sec-problemas-resultados-logicos}
+
+Alguns problemas requerem apenas a avaliação de condições lógicas, ou seja, se algo é +verdadeiro+ ou +falso+.
+
+
+Escreva um algoritmo que leia dois
+números inteiros. Assuma que cada um seja
+digitado com exatamente três dígitos. Deve-se
+escrever se os dois valores digitados formam um
+palíndromo, i.e., se os dígitos do primeiro estão na
+ordem inversa no segundo (e.g.: 773 e 377; 982 e
+289; 31 e 130).
+
+
+Escreva um algoritmo que, a partir dos
+coeficientes, verifique se a equação de segundo
+grau existe e se todas as raízes são imaginárias.
+
+
+Escreva um algoritmo que leia duas datas (dia, mês e ano) e
+escreva se elas correspondem ao mesmo dia.
+
+
+Escreva um algoritmo que leia duas datas
+e escreva se a primeira é anterior à segunda.
+
+Leia dois intervalos sobre um eixo e um
+ponto sobre este eixo, determinando se o ponto
+pertence ao primeiro, ao segundo ou a ambos os
+intervalos (veja figura abaixo). Escreva um
+algoritmo que resolva este problema.
+
+
+Um aluno precisa saber se foi aprovado
+em um teste. Para tanto, é preciso saber se a
+média ponderada é, no mínimo, 7. O teste é
+composto por quatro provas, cada uma com um
+peso individual. Escreva um algoritmo que leia
+os dados necessários e escreva se houve ou não
+a aprovação do aluno.

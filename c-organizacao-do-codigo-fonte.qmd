@@ -1,0 +1,430 @@
+# Organização do código fonte {#sec-organizacao-do-codigo-fonte}
+
+@abelson1996 escreveram uma vez que "programas devem ser escritos para que humanos os leiam e para que, somente como consequência, máquinas os executem"[^citacao-abelson]. Em outras palavras, compiladores não ligam para como os programas são escritos, para os nomes das variáveis nem para o bom ou mau gosto do programador. Programas apenas são compilados e executados.
+
+[^citacao-abelson]: Tradução livre de "_programs must be written for people to read, and only incidentally for machines to execute_".
+
+
+
+## Documentação
+
+A primeira etapa para se ter um bom código fonte passa longe do código\ C em si. Ela consiste em ter, no início do código, um comentário com a descrição do conteúdo do arquivo.
+
+`\index{documentação}`{=latex}
+Esse comentário estabelece a documentação do código e deve conter uma descrição de seu propósito e de seu contexto, bem como as condições necessárias para sua utilização e execução. Seguem, a título de exemplo, documentações encontradas no Github[^site-github].
+
+[^site-github]: Github: <https://github.com>.
+
+
+Arquivo `sysctl.c`[^github-sysctl]:
+```c
+/*
+ * sysctl wrapper for library version of Linux kernel
+ * Copyright (c) 2015 INRIA, Hajime Tazaki
+ *
+ * Author: Mathieu Lacage <mathieu.lacage@gmail.com>
+ *         Hajime Tazaki <tazaki@sfc.wide.ad.jp>
+ */
+```
+
+[^github-sysctl]: <https://github.com/libos-nuse/net-next-nuse/blob/46e2206969943ba3fb87441dee0b433624daf35c/arch/lib/sysctl.c>.
+
+Arquivo `ubsan.c`[^github-ubsan]
+```c 
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * UBSAN error reporting functions
+ *
+ * Copyright (c) 2014 Samsung Electronics Co., Ltd.
+ * Author: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+ */
+```
+
+[^github-ubsan]: <https://github.com/KSPP/linux/blob/e0756cfc7d7cd08c98a53b6009c091a3f6a50be6/lib/ubsan.c>.
+
+
+Arquivo `seg6.py`[^github-seg6]:
+
+```c 
+/*
+ *  SR-IPv6 implementation
+ *
+ *  Author:
+ *  David Lebrun <david.lebrun@uclouvain.be>
+ *
+ *
+ *  This program is free software; you can redistribute it and/or
+ *	  modify it under the terms of the GNU General Public License
+ *	  as published by the Free Software Foundation; either version
+ *	  2 of the License, or (at your option) any later version.
+ */
+ ```
+
+[^github-seg6]: <https://github.com/linux-wpan/linux-wpan-next/blob/107bc0aa95ca572df42da43c30a2079266e992e4/net/ipv6/seg6.c>.
+
+Arquivo `writing_a_custom_training_loop_in_tensorflow.py`[^github-tensorflow] (em Python):
+
+```python
+"""
+Title: Writing a training loop from scratch in TensorFlow
+Author: [fchollet](https://twitter.com/fchollet)
+Date created: 2019/03/01
+Last modified: 2023/06/25
+Description: Writing low-level training & evaluation loops in TensorFlow.
+Accelerator: None
+"""
+```
+
+[^github-tensorflow]: <https://github.com/keras-team/keras/blob/419973ee15ecd0e2d085e077399ce3bd5437df15/guides/writing_a_custom_training_loop_in_tensorflow.py>.
+
+
+O conteúdo e o nível de detalhe de cada comentário depende do programador, das regras da empresa em que trabalha ou da equipe envolvida, entre outros muitos fatores.
+
+Neste livro, os programas são sempre precedidos por um comentário contendo:
+
+* O propósito do programa;
+* As pré e pós-condições a que o código atende.
+
+Segue um exemplo simples desta forma de documentação.
+
+```c 
+/*
+Cálculo de juros compostos
+Requer: o capital investido, a taxa de juros (a.m.) e o tempo
+    de investimento em meses
+Assegura: o montante final da transação
+*/
+```
+
+Com base nessa descrição, que é relativamente simples, não é necessário olhar os comandos do programa para se saber a que ele se propõe, o que ele requer para ser executado e qual o resultado que apresentará ao final.
+
+
+
+
+## Organização visual
+
+O código fonte de um programa é escrito para que outros programadores (ou seja, pessoas) leiam e entendam os comandos e a intenção do programador.
+
+Segue um programa em C válido. Sua qualidade, entretanto, é discutível e é apenas uma nova versão do código que implementa o @alg-pseudocodigo-raizes-equacao.
+
+```{c}
+/*
+Cálculo e apresentação das raízes reais de uma equação de segundo grau na
+    forma ax^2 + bx + c = 0
+Requer: Os coeficientes a, b e c da equação
+Assegura: as raízes reais da equação; ou mensagem que a equação é
+    inválida; ou mensagem que não há raízes reais
+*/
+#include <stdio.h>
+#include <math.h>
+int main(void) { char entrada[160];printf(
+"Digite os valores de a, b e c da equação: "); fgets(entrada, sizeof
+entrada
+
+, stdin); double a, b,           c; sscanf(entrada
+,    "%lf%lf%lf" , &    a, &b, &
+c);
+//TYPE(0, "-2 10 13");
+if(a == 0) printf(             "Não é equação do segundo grau (a = 0).\n"    )
+
+; else { double discriminante = pow
+(
+b
+                                                                             ,
+2) - 4 * a * c; if(discriminante <
+0) printf("A equação não possui raízes reais.\n");
+else
+if
+(discriminante < 1.0e-10) {  double x = -b / (2*    a
+            ); printf("Uma raiz: %g.\n", x); } else { double x1 = (-b -
+            sqrt(discriminante)) / (2 * a); double x2 = (-b + 
+sqrt(discriminante))
+            / (2 * a); printf("Raízes reais: %g e %g.\n", x1
+
+,
+ 
+ x2);}}return
+ 0;}
+```
+
+Para ilustrar a dificuldade que o código, mesmo correto na sua lógica e sintaxe, proporciona quando é mal escrito, considere o problema de localizar a vírgula na expressão `pow(b, 2)` que calcula $b^2$ para o discriminante.
+
+Se a ordem dos comandos estiver correta, o compilador entende o que tem que ser feito e gera o código executável sem problemas ou dificuldades. Porém, caso o compilador aponte um erro como seguinte, qual seria a dificuldade de encontrar o problema?
+
+```
+main.c: In function ‘main’:
+main.c:28:62: warning: unused variable ‘x1’ [-Wunused-variable]
+   28 |             ); printf("Uma raiz: %g.\n", x); } else { double x1 = (-b -
+      |                                                              ^~
+main.c:31:59: error: ‘x1’ undeclared (first use in this function);
+      |              did you mean ‘x2’?
+   31 |             / (2 * a); printf("Raízes reais: %g e %g.\n", x1
+      |                                                           ^~
+      |                                                           x2
+main.c:31:59: note: each undeclared identifier is reported only once for each
+                    function it appears in
+main.c: At top level:
+main.c:35:8: error: expected identifier or ‘(’ before ‘return’
+   35 |  x2);}}return
+      |        ^~~~~~
+main.c:36:4: error: expected identifier or ‘(’ before ‘}’ token
+   36 |  0;}
+      |    ^
+```
+
+O erro acima foi causado apenas por um `}` inserido no lugar errado. Todas as outras mensagens são decorrentes desta falha na interpretação, a qual impede a sequência da análise e gera uma cascata de erros.
+
+Em suma, os programas são para as pessoas lerem.
+
+No @sec-guia-de-estilo são apresentadas as orientações de escrita seguidas neste livro, mas as seções seguintes introduzem os pontos iniciais, justificando suas importâncias.
+
+
+A escrita de um bom programa em C recai, necessariamente, na organização visual do código, ou seja, pela disposição espacial dos comandos, instruções e pontuações ao longo do código.
+
+
+
+## Indentação
+
+A indentação é o espaço dado da margem esquerda até o comando e ela serve para indicar a hierarquia dos comandos. Esse recurso visual é essencial para um bom programa e tem sido consistentemente usado em todos os exemplos de programas dados.
+
+Segue o exemplo simples de um programa que faz conversões de unidades de distância.
+
+```c 
+/*
+Conversões de distância de metros para centímetros, pés, jardas e polegadas
+Requer: uma distância em metros
+Assegura: O valor equivalente em centímetros, pés, jardas e polegadas
+*/
+#include <stdio.h>
+int main(void) {
+char entrada[160];
+printf("Digite uma distância em metros: ");
+fgets(entrada, sizeof entrada, stdin);
+double em_metros;
+sscanf(entrada, "%lf", &em_metros);
+double em_centimetros = em_metros * 100;
+printf("> %.1lfm = %.1fcm\n", em_metros, em_centimetros);
+double em_pes = em_metros * 3.281;
+printf("> %.1lfm = %.1f pés\n", em_metros, em_pes);
+double em_jardas = em_metros * 1.094;
+printf("> %.1lfm = %.1f jardas\n", em_metros, em_jardas);
+double em_polegadas = em_metros * 39.37;
+printf("> %.1lfm = %.1f polegadas\n", em_metros, em_polegadas);
+return 0;
+}
+```
+
+O código acima é apresentando sem indentações e isso dificulta enxergar os comandos e até a abrangência do `main`. O acréscimo da indentação indica um nível para os comandos contidos no bloco da função principal e isso leva à versão seguinte do programa.
+
+```c 
+/*
+Conversões de distância de metros para centímetros, pés, jardas e polegadas
+Requer: uma distância em metros
+Assegura: O valor equivalente em centímetros, pés, jardas e polegadas
+*/
+#include <stdio.h>
+int main(void) {
+    char entrada[160];
+    printf("Digite uma distância em metros: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double em_metros;
+    sscanf(entrada, "%lf", &em_metros);
+    double em_centimetros = em_metros * 100;
+    printf("> %.1lfm = %.1fcm\n", em_metros, em_centimetros);
+    double em_pes = em_metros * 3.281;
+    printf("> %.1lfm = %.1f pés\n", em_metros, em_pes);
+    double em_jardas = em_metros * 1.094;
+    printf("> %.1lfm = %.1f jardas\n", em_metros, em_jardas);
+    double em_polegadas = em_metros * 39.37;
+    printf("> %.1lfm = %.1f polegadas\n", em_metros, em_polegadas);
+    return 0;
+}
+```
+
+A indentação tem que ser constante para um mesmo nível de comandos, o que leva a que comandos de mesmo nível sempre se iniciem na mesma coluna. 
+
+No exemplo seguinte há problemas com a declaração da variável `entrada`, que deveria estar indentada, e também com o conjunto de comandos que realizam as conversões. Neste último caso, estes comandos parecem estar de alguma forma "subordinados" aos comandos anteriores, o que não o caso.
+
+```c 
+/*
+Conversões de distância de metros para centímetros, pés, jardas e polegadas
+Requer: uma distância em metros
+Assegura: O valor equivalente em centímetros, pés, jardas e polegadas
+*/
+#include <stdio.h>
+int main(void) {
+char entrada[160];
+    printf("Digite uma distância em metros: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double em_metros;
+    sscanf(entrada, "%lf", &em_metros);
+        double em_centimetros = em_metros * 100;
+        printf("> %.1lfm = %.1fcm\n", em_metros, em_centimetros);
+        double em_pes = em_metros * 3.281;
+        printf("> %.1lfm = %.1f pés\n", em_metros, em_pes);
+        double em_jardas = em_metros * 1.094;
+        printf("> %.1lfm = %.1f jardas\n", em_metros, em_jardas);
+        double em_polegadas = em_metros * 39.37;
+        printf("> %.1lfm = %.1f polegadas\n", em_metros, em_polegadas);
+    return 0;
+}
+```
+
+Segue, por fim, um último péssimo exemplo de indentação, no qual transparece o desleixo do programador.
+
+```c 
+/*
+Conversões de distância de metros para centímetros, pés, jardas e polegadas
+Requer: uma distância em metros
+Assegura: O valor equivalente em centímetros, pés, jardas e polegadas
+*/
+#include <stdio.h>
+int main(void) {
+ char entrada[160];
+    printf("Digite uma distância em metros: ");
+   fgets(entrada, sizeof entrada, stdin);
+  double em_metros;
+    sscanf(entrada, "%lf", &em_metros);
+        double em_centimetros = em_metros * 100;
+       printf("> %.1lfm = %.1fcm\n", em_metros, em_centimetros);
+       double em_pes = em_metros * 3.281;
+       printf("> %.1lfm = %.1f pés\n", em_metros, em_pes);
+          double em_jardas = em_metros * 1.094;
+        printf("> %.1lfm = %.1f jardas\n", em_metros, em_jardas);
+     double em_polegadas = em_metros * 39.37;
+        printf("> %.1lfm = %.1f polegadas\n", em_metros, em_polegadas);
+  return 0;
+}
+```
+
+
+## Linhas de espaçamento
+
+Outro ponto que auxilia uma melhor visualização do código é o uso de linhas em branco, cuja função é separar as diferentes tarefas que o programa tem que cumprir. 
+
+É apresentado na sequência o programa de conversão de unidades de distância com o acréscimo de linhas em branco. 
+
+```c 
+/*
+Conversões de distância de metros para centímetros, pés, jardas e polegadas
+Requer: uma distância em metros
+Assegura: O valor equivalente em centímetros, pés, jardas e polegadas
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite uma distância em metros: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double em_metros;
+    sscanf(entrada, "%lf", &em_metros);
+
+    double em_centimetros = em_metros * 100;
+    printf("> %.1lfm = %.1fcm\n", em_metros, em_centimetros);
+
+    double em_pes = em_metros * 3.281;
+    printf("> %.1lfm = %.1f pés\n", em_metros, em_pes);
+
+    double em_jardas = em_metros * 1.094;
+    printf("> %.1lfm = %.1f jardas\n", em_metros, em_jardas);
+
+    double em_polegadas = em_metros * 39.37;
+    printf("> %.1lfm = %.1f polegadas\n", em_metros, em_polegadas);
+
+    return 0;
+}
+```
+
+Uma linha em branco deve ser incluída para separar as linhas com `#include` do início da função `main`, o que dá destaque a esta função.
+
+Foram introduzidas linhas em branco dentro do `main` para isolar, primeiramente, os comandos que fazem a leitura da distância em metros, incluindo mensagem, leitura, declaração da variável e conversão para `double`. Todos estes comandos são, em essência, "obtenha a distância em metros".
+
+Outros blocos que são agrupados são os de cada uma das conversões, com declaração de variável e a escrita do resultado.
+
+Por último aparece o indicador de sucesso da execução: `return 0`, também destacado dos demais comandos.
+
+::: {.callout-tip}
+As linhas em branco devem ser, via de regra, apenas uma, devendo ser evitadas duas ou mais linhas separando os grupos de comandos.
+:::
+
+O agrupamento de comandos depende do programador, de forma que o mesmo código possa ter sua organização conforme o exemplo seguinte.
+
+```c 
+/*
+Conversões de distância de metros para centímetros, pés, jardas e polegadas
+Requer: uma distância em metros
+Assegura: O valor equivalente em centímetros, pés, jardas e polegadas
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite uma distância em metros: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double em_metros;
+    sscanf(entrada, "%lf", &em_metros);
+
+    double em_centimetros = em_metros * 100;
+    double em_pes = em_metros * 3.281;
+    double em_jardas = em_metros * 1.094;
+    double em_polegadas = em_metros * 39.37;
+ 
+    printf("> %.1lfm = %.1fcm\n", em_metros, em_centimetros);
+    printf("> %.1lfm = %.1f pés\n", em_metros, em_pes);
+    printf("> %.1lfm = %.1f jardas\n", em_metros, em_jardas);
+    printf("> %.1lfm = %.1f polegadas\n", em_metros, em_polegadas);
+
+    return 0;
+}
+```
+
+Neste caso, o agrupamento se refere à leitura, seguida pelos cálculos e finalizada pelas apresentações dos resultados.
+
+
+
+
+## Um comando por linha
+
+Uma regra básica de clareza é separar os comandos de forma que cada um fique em sua própria linha.
+
+Como exemplo, o programa de conversão de distâncias foi reescrito de forma a violar essa regra e é apresentado na sequência.
+
+
+```c
+/*
+Conversões de distância de metros para centímetros, pés, jardas e polegadas
+Requer: uma distância em metros
+Assegura: O valor equivalente em centímetros, pés, jardas e polegadas
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite uma distância em metros: "); fgets(entrada,
+          sizeof entrada, stdin);
+    double em_metros; sscanf(entrada, "%lf", &em_metros);
+
+    double em_centimetros = em_metros * 100; double em_pes = em_metros *
+        3.281; double em_jardas = em_metros * 1.094; double em_polegadas
+        = em_metros * 39.37;
+
+    printf("> %.1lfm = %.1fcm\n> %.1lfm = %.1f pés\n", em_metros,
+           em_centimetros, em_metros, em_pes);
+    printf("> %.1lfm = %.1f jardas\n", em_metros, em_jardas); printf(
+        "> %.1lfm = %.1f polegadas\n", em_metros, em_polegadas);
+
+    return 0;
+}
+```
+
+Essa versão coloca alguns comandos e declarações individuas em uma mesma linha, o que está sintaticamente correto, mas dificulta a visão dos limites entre os diversos elementos.
+
+É importante lembrar que quando os problemas se tornam mais complexos, o código será mais longo e com mais nuances, assim como terá maior número de variáveis. Nesta situação, mais preciosa essa recomendação se torna.
+
+
+::: {.content-visible when-profile="programacao"}
+{{< include c-organizacao-do-codigo-fonte-complemento.qmd >}}
+:::

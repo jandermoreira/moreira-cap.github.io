@@ -1,0 +1,47 @@
+<!-- Maior altura em um grupo fixo -->
+::: {#sol-0021}
+@exr-0021
+
+Como soluções para este problema são apresentados dois algoritmos.
+
+O primeiro algoritmo considera o fato de que as possíveis alturas dos participantes da equipe são, necessariamente, maiores que zero. Desta forma, inicia a verificação iniciando uma variável $h_\Id{máx}$ com zero. Inevitavelmente, ao verificar a primeira altura da sequência, ela será maior que esse valor inicial e $h_\Id{máx}$ será atualizado.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Determinação da altura máxima em uma equipe de 20 competidores
+    \Require uma sequência com 20 medidas de altura
+    \Ensure a altura máxima 
+    \Statex
+    \Statep{Obtenha a primeira altura $h$}
+    \Statep{Defina $h_\Id{máx}$ com valor zero}[valor inválido que será substituído]
+    \Statep{Defina $h_\Id{máx}$ com o valor de $h$}
+    \For{$i \gets 1$ \To $20$}
+        \Statep{Obtenha a próxima altura $h$}
+        \If{$h$ for maior que $h_\Id{máx}$}
+            \Statep{Redefina $h_\Id{máx}$ com o valor atual de $h$}
+        \EndIf
+    \EndFor
+    \Statep{Apresente o valor de $h_\Id{máx}$}
+\end{algorithmic}
+```
+
+O algoritmo seguinte usa a mesma estrutura geral. Porém, ao invés de "forçar" a primeira troca, obtém a primeira altura e a atribui a $h_\Id{máx}$. A partir daí, verifica as demais alturas, substituindo o valor máximo apenas se necessário.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Determinação da altura máxima em uma equipe de 20 competidores
+    \Require uma sequência com 20 medidas de altura
+    \Ensure a altura máxima 
+    \Statex
+    \Statep{Obtenha a primeira altura $h$}
+    \Statep{Defina $h_\Id{máx}$ com o valor de $h$}
+    \For{$i \gets 2$ \To $20$}[da 2ª à 20ª medidas]
+        \Statep{Obtenha a próxima altura $h$}
+        \If{$h$ for maior que $h_\Id{máx}$}
+            \Statep{Redefina $h_\Id{máx}$ com o valor atual de $h$}
+        \EndIf
+    \EndFor
+    \Statep{Apresente o valor de $h_\Id{máx}$}
+\end{algorithmic}
+```
+:::

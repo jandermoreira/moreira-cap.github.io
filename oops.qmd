@@ -1,0 +1,10 @@
+::: {.callout-important title="Ooops!"}
+`\huge`{=latex}
+[**404** Conteúdo não encontrado???]{style="font-size: 300%;"}
+
+É que este capítulo não está pronto (ainda).
+
+Desculpe o autor por isso!
+
+[`;-)`]{style="font-size: 500%;"}
+:::

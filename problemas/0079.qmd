@@ -1,0 +1,12 @@
+<!-- Valor do meio no vetor -->
+::: {#exr-0079}
+Escreva uma função para retornar o valor do item que está "no meio" de um vetor de números reais. Caso o vetor contenha número par de elementos, o "meio" será o último valor da primeira metade. Considere que o comprimento mínimo do vetor seja 1.
+
+Como exemplos, considere os seguintes comprimentos de um vetor $v$:
+
+* 1: retornar $v[0]$
+* 5: retornar $v[2]$
+* 6: retornar $v[2]$
+* 100: retornar $v[50]$
+* 101: retornar $v[50]$
+:::

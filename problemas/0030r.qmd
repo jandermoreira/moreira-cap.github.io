@@ -1,0 +1,24 @@
+<!-- Valor máximo de multa e identificação do motorista -->
+::: {#sol-0030}
+@exr-0030
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Determinação do motorista que possui o maior valor em multas nos últimos 12~meses, e o valor das multas
+    \Require uma sequência não vazia contendo, em pares, o número da CNH e o valor total de multas de cada motorista
+    \Ensure a apresentação do número da CNH e do valor das multas do motorista com maior valor de multas (primeira ocorrência em caso de empates)
+    \Statex
+    \Statep{Inicie \Id{multas\_máximo} com valor 0}[força 1ª substituição]
+    \While{há motorista na lista de entrada}
+        \Statep{Obtenha \Id{número\_cnh} e \Id{valor\_multas}}
+        \If{$\Id{valor\_multas} > \Id{multas\_máximo}$}
+            \Statep{Redefina \Id{multas\_máximo} com o valor \Id{valor\_multas}}
+            \Statep{Guarde em \Id{pior\_motorista} o \Id{número\_cnh}}
+        \EndIf
+    \EndWhile
+    \Statep{Apresente \Id{pior\_motorista} e \Id{multas\_máximo}}
+\end{algorithmic}
+```
+
+Nesta solução, sempre que o valor máximo é atualizado, também é o número da CNH. O primeiro motorista da lista sempre será considerado, iniciando o processo.
+:::

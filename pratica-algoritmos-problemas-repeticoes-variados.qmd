@@ -1,0 +1,40 @@
+# Problemas variados com repetições e condicionais {#sec-problemas-repeticoes-variados}
+
+<!-- Contagens de vários intervalos (categorias natação) -->
+{{< include problemas/0031.qmd >}}
+
+<!-- Média de medidas de pressão  -->
+{{< include problemas/0032.qmd >}}
+
+<!-- Porcentagem de cada resposta de uma pesquisa de opinião  -->
+{{< include problemas/0033.qmd >}}
+
+<!-- Contagem e porcentagem em relatório de gastos  -->
+{{< include problemas/0034.qmd >}}
+
+<!-- Porcentagens e médias na população  -->
+{{< include problemas/0035.qmd >}}
+
+<!-- Soma dos divisores  -->
+{{< include problemas/0036.qmd >}}
+
+<!-- Erro em determinação do maior (inteiros positivos)  -->
+{{< include problemas/0037.qmd >}}
+
+<!-- Crescimento simultâneo de aplicações -->
+{{< include problemas/0038.qmd >}}
+
+<!-- Crescimento simultâneo de aplicações 2-->
+{{< include problemas/0039.qmd >}}
+
+<!-- Máximo e contagem simultâneas (idades) -->
+{{< include problemas/0042.qmd >}}
+
+<!-- Conversões sucessivas de conceito para nota -->
+{{< include problemas/0055.qmd >}}
+
+<!-- Separação de inteiro em potências de 10  -->
+{{< include problemas/0069.qmd >}}
+
+<!-- Geração de palíndromo numérico  -->
+{{< include problemas/0070.qmd >}}

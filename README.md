@@ -1,2 +1,2 @@
-# moreira-cap.github.io
-Construção de algoritmos e programação
+# livro-cap
+Livro: Construção de Algoritmos e Programação

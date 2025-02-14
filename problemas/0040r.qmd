@@ -1,0 +1,19 @@
+<!-- Soma de 1 + 2 + 3 ... + n -->
+::: {#sol-0040}
+@exr-0040
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Cálculo de apresentação de ${\sum_{i=1}^n i}$
+    \Require $n \in \mathbb{Z}^+$
+    \Ensure apresentação da soma ${1 + 2 + \ldots + n}$
+    \Statex
+    \Statep{Obtenha o valor de $n$}
+    \Statep{Inicie \Id{soma} com zero}
+    \For{$i \gets 1$ \To $n$}
+        \Statep{$\Id{soma} \gets \Id{soma} + i$}
+    \EndFor
+    \Statep{Apresente \Id{soma}}
+\end{algorithmic}
+```
+:::

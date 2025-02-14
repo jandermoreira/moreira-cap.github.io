@@ -1,0 +1,23 @@
+<!-- Vetor contém elemento -->
+::: {#sol-0081}
+@exr-0081
+
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Retorna se um valor está presente em um vetor
+    \Require um valor \Id{elemento} e um vetor \Id{vetor}
+    \Ensure retorno de \True\ se \Id{elemento} está em $v$, \False\ caso contrário
+    \Statex    
+    \Procedure{EstáNoVetor}{\Id{elemento}, \Id{vetor}}
+        \Statep{Inicie \Id{achou} com \False}[assume que não está]
+        \Statep{$i \gets 0$}
+        \While{$i < \Id{vetor}.\Id{comprimento}$ e não \Id{achou}}[termina no final ou se achou]
+            \Statep{$\Id{achou} \gets \Id{vetor}[i] = \Id{elemento}$}
+            \Statep{$i \gets i + 1$}[próximo!]
+        \EndWhile
+        \Statep{\Return \Id{achou}}
+    \EndProcedure
+\end{algorithmic}
+```
+:::

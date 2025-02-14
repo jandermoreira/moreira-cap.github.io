@@ -1,0 +1,87 @@
+project: 
+  output-dir: /home/jander/pessoal/jandermoreira.github.io/cap
+
+book: 
+  subtitle: "Pseudocódigo e implementação em\ C"
+  output-file: "moreira_j-construcao_algoritmos_programacao"
+  cover-image: capa-completo.png
+  edition: Versão 0.1-alfa
+
+  sidebar:
+    pinned: true
+    tools:
+      - icon: save
+        menu:
+          - text: "Versão PDF"
+            url: "moreira_j-construcao_algoritmos_programacao.pdf"
+          # - text: "Versão EPUB"
+          #   url: "moreira_j-construcao_algoritmos_programacao.epub"
+
+  chapters: 
+    - index.qmd
+    - preambulo_prefacio.qmd
+
+    - part: "Algoritmos computacionais e linguagens"
+      chapters:
+        - algoritmos-nocoes.qmd
+        - c-introducao-a-linguagem-c.qmd
+        - c-tipos-de-dados.qmd
+        - c-variaveis-identificadores-e-leitura.qmd
+        - algoritmos-formalizacao.qmd
+        - c-expressoes-aritmeticas.qmd
+        - c-expressoes-relacionais-e-logicas.qmd
+        - c-organizacao-do-codigo-fonte.qmd
+        - algoritmos-desenvolvimento-basico-e-codificacao.qmd
+        - algoritmos-execucao-condicional.qmd
+        - c-execucao-condicional-com-if.qmd
+        - c-execucao-condicional-com-switch.qmd
+        - c-escopo-basico-de-declaracoes.qmd
+        - c-organizacao-do-codigo-fonte-complemento.qmd
+        - algoritmos-desenvolvimento-com-condicionais-e-codificacao.qmd
+        - algoritmos-processamento-basico-de-sequencias-de-dados.qmd
+        - c-repeticoes-com-while.qmd
+        - c-repeticoes-com-for.qmd
+        - c-repeticoes-com-do-while.qmd
+    - part: "Desenvolvimento de algoritmos"
+      chapters:
+        - algoritmos-desenvolvimento-por-refinamentos-sucessivos.qmd
+        - algoritmos-testes-de-mesa.qmd
+    - part: "Estruturação de dados e código"
+      chapters:
+        - algoritmos-cadeias-de-caracteres.qmd
+        - c-dados-textuais.qmd
+        - c-manipulacao-de-dados-textuais.qmd
+        - c-conversoes-de-dados-textuais.qmd
+        - c-arquivos-texto.qmd
+        - algoritmos-modularizacao.qmd
+        - c-funcoes.qmd
+        - c-enderecamento-de-memoria-e-ponteiros.qmd
+        - c-procedimentos.qmd
+        - c-parametros-de-funcoes.qmd
+        - algoritmos-desenvolvimento-com-modularizacao.qmd
+        - algoritmos-dados-compostos-registros.qmd
+        - c-dados-com-struct.qmd
+        - c-modularizacao-com-struct.qmd
+        - algoritmos-dados-compostos-vetores.qmd
+        - c-dados-em-vetores.qmd
+        - c-modularizacao-com-vetores.qmd
+        - c-alocacao-dinamica-de-memoria.qmd
+        - algoritmos-dados-compostos-matrizes.qmd
+        - c-dados-em-matrizes.qmd
+        - c-modularizacao-com-matrizes.qmd
+        - c-alocacao-dinamica-de-memoria-matrizes.qmd
+        - algoritmos-manipulacao-de-arquivos-de-registros.qmd
+        - c-arquivos-binarios.qmd
+    - part: "Recursividade"
+      chapters:
+        - algoritmos-recursividade.qmd
+        - c-recursividade.qmd
+    - part: "Organização do código fonte"
+      chapters:
+        - c-organizacao-do-codigo-separado.qmd
+
+  appendices:
+    - c-desvirtuacao-das-repeticoes.qmd
+    - c-guia-de-estilo.qmd
+  
+    - referencias.qmd

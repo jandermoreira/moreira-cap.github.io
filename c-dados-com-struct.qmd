@@ -1,0 +1,835 @@
+# C: Dados com `struct`
+
+Este capítulo discute como variáveis compostas heterogêneas, comumente chamadas de registros, são declaradas e usadas em\ C. São cobertos os aspectos de declaração, atribuição e seu uso com funções.
+
+## Variáveis compostas
+
+A exploração de variáveis compostas se inicia com a apresentação de um problema envolvendo pontos em $\mathbb{R}^3$. Se três pontos no espaço são especificados, então um triângulo é formado e sua área pode ser calculada. O @alg-area-triangulo-espaco apresenta a estratégia para esse cálculo.
+
+
+```latex {.pseudocode}
+%| title: Cálculo da área de um triângulo no espaço $\mathbb{R}^3$.
+%| label: #alg-area-triangulo-espaco
+\begin{algorithmic}
+    \Description Determinação da área de um triângulo dados seus três vértices em $\mathbb{R}^3$
+    \Require três pontos em $\mathbb{R}^3$
+    \Ensure apresentação da área do triângulo formado
+    \Statex
+    \Statep{Obtenha os pontos $P_1$, $P_2$ e $P_3$}
+    \Statep{Apresente \Call{ÁreaTriângulo}{$P_1$, $P_2$, $P_3$}}
+\end{algorithmic}
+```
+
+A função +ÁreaTriângulo+ está apresentada no @alg-funcao-area-triangulo-espaco, assim como uma função +DistânciaPontos+ necessária à sua execução.
+
+
+```latex {.pseudocode}
+%| title: Função para cálculo da área de um triângulo dados seus vértices.
+%| label: #alg-funcao-area-triangulo-espaco
+\begin{algorithmic}
+    \Description Cálculo da área de um triângulo dados seus três vértices em $\mathbb{R}^3$
+    \Require três pontos em $\mathbb{R}^3$
+    \Ensure retorno área do triângulo formado
+    \Statex
+    \Function{ÁreaTriângulo}{$P_1$, $P_2$, $P_3$}
+        \Statep{Calcule $l_1$ como \Call{DistânciaPontos}{$P_1, P_2$}}
+        \Statep{Calcule $l_2$ como \Call{DistânciaPontos}{$P_1, P_3$}}
+        \Statep{Calcule $l_3$ como \Call{DistânciaPontos}{$P_2, P_3$}}
+        \Statep{Calcule o semiperímetro $p$ como $\dfrac{l_1 + l_2 + l_3}{2}$}
+        \Statep{\Return $\sqrt{p(p - l_1)(p - l_2)(p - l_3)}$}
+    \EndFunction
+
+    \Statex{}
+    \Statex{}
+    \Description Cálculo da distância entre dois pontos em $\mathbb{R}^3$
+    \Require pontos $P_1$ e $P_2$
+    \Ensure distância entre os pontos
+    \Statex
+    \Function{DistânciaPontos}{$P_1$, $P_2$}
+        \Statep{\Return $\sqrt{(P_1.x - P_2.x)^2 + (P_1.y - P_2.y)^2 + (P_1.z - P_2.z)^2}$}
+    \EndFunction
+\end{algorithmic}
+```
+
+Com base nessas especificações, é possível escrever um programa em C para implementar essa solução.
+
+```{c}
+/*
+ * Determinação da área de um triângulo dados seus vértices em R^3
+ * Requer: três pontos, cada um composto por suas coordenadas x, y e z
+ * Assegura: a apresentação da área do triângulo definido pelos vértices
+ */
+#include <stdio.h>
+#include <math.h>
+
+/*!
+ * Retorna a área de um triângulo dados seus vértices
+ * @param x1: x de P1
+ * @param y1: y de P1
+ * @param z1: z de P1
+ * @param x2: x de P2
+ * @param y2: y de P2
+ * @param z2: z de P2
+ * @param x3: x de P3
+ * @param y3: y de P3
+ * @param z3: z de P3
+ * @return área do triângulo
+ */
+double area_triangulo(double x1, double y1, double z1,
+                      double x2, double y2, double z2,
+                      double x3, double y3, double z3);
+
+/*!
+ * Retorna a distância entre P1 e P2
+ * @param x1: x de P1
+ * @param y1: y de P1
+ * @param z1: z de P1
+ * @param x2: x de P2
+ * @param y2: y de P2
+ * @param z2: z de P2
+ * @return a distância
+ */
+
+double distancia_pontos(double x1, double y1, double z1,
+                        double x2, double y2, double z2);
+
+/*!
+ * Leitura de um ponto em R^3
+ * @param mensagem: mensagem solicitando a digitação dos dados
+ * @param x: referência a x
+ * @param y: referência a y
+ * @param z: referência a z
+ */
+void leia_ponto(char *mensagem, double *x, double *y, double *z);
+
+/*
+ * Main
+ */
+int main(void) {
+    double x1, y1, z1;
+    leia_ponto("Digite as coordenadas de P1: ", &x1, &y1, &z1);  // P1
+    //TYPE(0, "-1 7 3");
+
+    double x2, y2, z2;
+    leia_ponto("Digite as coordenadas de P2: ", &x2, &y2, &z2);  // P2
+    //TYPE(0, "-1 0 0");
+
+    double x3, y3, z3;
+    leia_ponto("Digite as coordenadas de P3: ", &x3, &y3, &z3);  // P3
+    //TYPE(0, "2 3 5");
+
+    double area = area_triangulo(x1, y1, z1, x2, y2, z2, x3, y3, z3);
+    printf("Área do triângulo: %.2f.\n", area);
+}
+
+// Retorna a área do triângulo dados os vértices
+double area_triangulo(double x1, double y1, double z1,
+                      double x2, double y2, double z2,
+                      double x3, double y3, double z3) {
+    double lado1 = distancia_pontos(x1, y1, z1, x2, y2, z2); // P1 e P2
+    double lado2 = distancia_pontos(x1, y1, z1, x3, y3, z3); // P1 e P3
+    double lado3 = distancia_pontos(x2, y2, z2, x3, y3, z3); // P2 e P3
+    double semiperimetro = (lado1 + lado2 + lado3) / 2;
+
+    return sqrt(semiperimetro * (semiperimetro - lado1) *
+                (semiperimetro - lado2) * (semiperimetro - lado3));
+}
+
+// Retorna a distância entre dois pontos
+double distancia_pontos(double x1, double y1, double z1,
+                        double x2, double y2, double z2) {
+    return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2) + pow(z1 - z2, 2));
+}
+
+// Leitura de um ponto
+void leia_ponto(char *mensagem, double *x, double *y, double *z) {
+    printf("%s", mensagem);
+    char entrada[160];
+    fgets(entrada, sizeof entrada, stdin);
+    sscanf(entrada, "%lf%lf%lf", x, y, z);
+}
+```
+
+A grande distância entre o algoritmo e a implementação é a complexidade introduzida pelo número de parâmetros que as funções possuem. Enquanto no algoritmo a instrução +ÁreaTriângulo+($P_1$, $P_2$, $P_3$) é clara, a codificação `area_triangulo(x1, y1, z1, x2, y2, z2, x3, y3, z3)` é mais longa e propensa a erros[^dificuldade-autor].
+
+[^dificuldade-autor]: Este autor reconhece que um certo número de recompilações foi necessário por erros na digitação dos parâmetros ao criar o exemplo.
+
+A questão envolvida nesse momento é como representar +ÁreaTriângulo+($P_1$, $P_2$, $P_3$) no código `area_triangulo(p1, p2, p3)`.
+
+Para esse fim, cada ponto pode ser estruturado como um registro e, em C, esse agrupamento é feito na forma de um `struct`.
+
+
+
+
+## Declaração e uso do `struct`
+
+As variáveis compostas, chamadas registros, são criadas com `struct` em C. A declaração de registros na linguagem pode assumir diversos formatos. Neste texto será adotado, com poucas exceções, um formato padronizado para manter a clareza.
+
+Um grupo de informações pode ser agrupado em uma única variável criando-se um registro. Como exemplo, um ponto no espaço, composto de coordenadas $x$, $y$ e $z$ pode ser estruturado como segue.
+
+```c
+/*! @struct Ponto em R^3 */
+struct ponto {
+    double x, y, z;
+};
+```
+
+Essa instrução define um novo tipo na linguagem, chamado `struct ponto`. Ela é apenas uma declaração e nenhuma variável criada ou espaço de armazenamento é reservado.
+
+Variáveis podem ser criadas usando-se o formato geral de declarações: o tipo da variável é precedido pelo identificadores.
+
+```c
+struct ponto ponto1, ponto2;  // duas variáveis (ponto1 e ponto2), ambas
+                              // do tipo struct ponto
+```
+
+### Uso e acesso a campos
+
+O acesso aos campos é feito com o operador `.` (ponto). Assim, `ponto1.x` é o campo `x` da variável `ponto1`.
+
+```c
+// Definição de ponto1 como o ponto (1.5, 0, 3.9)
+ponto1.x = 1.5;
+ponto1.y = 0;
+ponto1.z = 3.9;
+```
+
+Uma vantagem interessante de variáveis `struct` é a capacidade de atribuição direta. Por exemplo, a instrução `ponto2 = ponto1` pode ser usada sem problemas. Na prática, o compilador não está ciente dos campos ou de seus valores, mas copia todos os bytes que formam um registro para o outro, resultando em uma cópia idêntica.
+
+
+
+
+### Declaração com iniciação
+
+É possível, ao declarar uma varável do tipo registro, já incluir a iniciação de seus valores. O programa seguinte ilustra essa manipulação.
+
+```{c}
+/*
+ * Exemplo de iniciação de valores de um registro
+ * Assegura: apresentação dos valores iniciados
+ */
+#include <stdio.h>
+
+int main(void) {
+    struct pessoa {
+        char nome[100];
+        char cpf[15];
+        int ano_nascimento;
+    };
+
+    struct pessoa alguem = {"Fulano de tal", "123.456.789-00", 2008};
+
+    printf("Nome: %s,\nCPF: %s,\nAno: %d.\n", alguem.nome, alguem.cpf,
+           alguem.ano_nascimento);
+
+    return 0;
+}
+```
+
+Esse recurso, porém, apenas está disponível na declaração. Tentativas de atribuição posteriores não são aceitas. Nestes casos as atribuições necessariamente têm que ser feitas campo a campo.
+
+
+
+```{c} {intentional-problems="true"}
+/*
+ * Exemplo de falha na atribuição de registros
+ */
+#include <stdio.h>
+
+int main(void) {
+    struct pessoa {
+        char nome[100];
+        char cpf[15];
+        int ano_nascimento;
+    };
+
+    struct pessoa alguem;
+    alguem = {"Muriel Gomes Faruak", "123.456.789-00", 2008};  // não funciona!
+
+    printf("Nome: %s,\nCPF: %s,\nAno: %d.\n", alguem.nome, alguem.cpf,
+           alguem.ano_nascimento);
+
+    return 0;
+}
+```
+
+
+
+## Modularização com `struct`
+
+Um ponto positivo do `struct` na linguagem C é a possibilidade da atribuição de um registro para outro, copiando todos os campos de uma única vez, desde que sejam do mesmo tipo. Essa característica é interessante, em particular, ao passar um registro completo como parâmetro.
+
+Retomando o @alg-area-triangulo-espaco, a função para o cálculo da área da distância entre dois pontos pode se apresentar conforme segue, juntamente com a nova versão de +DistânciaPontos+.
+
+```c
+/*! @struct ponto */
+struct ponto {
+    double x, y, z;
+};
+
+/*!
+ * Retorna a área de um triângulo dados seus vértices
+ * @param ponto1: primeiro vértice
+ * @param ponto2: segundo vértice
+ * @param ponto3: terceiro vértice
+ * @return área do triângulo
+ */
+double area_triangulo(struct ponto ponto1,
+                      struct ponto ponto2,
+                      struct ponto ponto3);
+
+/*!
+ * Retorna a distância entre P1 e P2
+ * @param ponto1: P1
+ * @param ponto2: P2
+ * @return a distância
+ */
+double distancia_pontos(struct ponto ponto1, struct ponto ponto2);
+```
+
+As funções possuem como parâmetros formais registros do tipo `struct ponto`. A declaração de tipo desse `struct`tem que ser global, uma vez que precisa ser conhecida nas funções subsequentes e, depois, dentro da função `main`.
+
+Na sequência é apresentada a implementação da função `area_triangulo`.
+
+
+```c
+// Retorna a área do triângulo dados os vértices
+double area_triangulo(struct ponto ponto1,
+                      struct ponto ponto2,
+                      struct ponto ponto3) {
+    double lado1 = distancia_pontos(ponto1, ponto2);
+    double lado2 = distancia_pontos(ponto1, ponto3);
+    double lado3 = distancia_pontos(ponto2, ponto3);
+    double semiperimetro = (lado1 + lado2 + lado3) / 2;
+
+    return sqrt(semiperimetro * (semiperimetro - lado1) *
+                (semiperimetro - lado2) * (semiperimetro - lado3));
+}
+```
+
+Todas as chamadas são por valor, uma vez que uma cópia do registro inteiro é feita na passagem dos parâmetros.
+
+O código completo pode ser, então. apresentado.
+
+```{c}
+/*
+ * Determinação da área de um triângulo dados seus vértices em R^3
+ * Requer: três pontos, cada um composto por suas coordenadas x, y e z
+ * Assegura: a apresentação da área do triângulo definido pelos vértices
+ */
+#include <stdio.h>
+#include <math.h>
+
+/*! @struct ponto */
+struct ponto {
+    double x, y, z;
+};
+
+/*!
+ * Retorna a área de um triângulo dados seus vértices
+ * @param ponto1: primeiro vértice
+ * @param ponto2: segundo vértice
+ * @param ponto3: terceiro vértice
+ * @return área do triângulo
+ */
+double area_triangulo(struct ponto ponto1,
+                      struct ponto ponto2,
+                      struct ponto ponto3);
+
+/*!
+ * Retorna a distância entre P1 e P2
+ * @param ponto1: P1
+ * @param ponto2: P2
+ * @return a distância
+ */
+double distancia_pontos(struct ponto ponto1, struct ponto ponto2);
+
+/*!
+ * Leitura de um ponto em R^3
+ * @param mensagem: mensagem solicitando a digitação dos dados
+ * @param x: referência a x
+ * @param y: referência a y
+ * @param z: referência a z
+ */
+void leia_ponto(char *mensagem, double *x, double *y, double *z);
+
+/*
+ * Main
+ */
+int main(void) {
+    struct ponto vertice1;
+    leia_ponto("Digite as coordenadas 1: ", &vertice1.x, &vertice1.y,
+               &vertice1.z);
+    //TYPE(0, "-1 7 3");
+
+    struct ponto vertice2;
+    leia_ponto("Digite as coordenadas 2: ", &vertice2.x, &vertice2.y,
+               &vertice2.z);
+    //TYPE(0, "-1 0 0");
+
+    struct ponto vertice3;
+    leia_ponto("Digite as coordenadas 1: ", &vertice3.x, &vertice3.y,
+               &vertice3.z);
+    //TYPE(0, "2 3 5");
+
+    double area = area_triangulo(vertice1, vertice2, vertice3);
+    printf("Área do triângulo: %.2f.\n", area);
+}
+
+// Retorna a área do triângulo dados os vértices
+double area_triangulo(struct ponto ponto1,
+                      struct ponto ponto2,
+                      struct ponto ponto3) {
+    double lado1 = distancia_pontos(ponto1, ponto2);
+    double lado2 = distancia_pontos(ponto1, ponto3);
+    double lado3 = distancia_pontos(ponto2, ponto3);
+    double semiperimetro = (lado1 + lado2 + lado3) / 2;
+
+    return sqrt(semiperimetro * (semiperimetro - lado1) *
+                (semiperimetro - lado2) * (semiperimetro - lado3));
+}
+
+// Retorna a distância entre dois pontos
+double distancia_pontos(struct ponto ponto1, struct ponto ponto2) {
+    return sqrt(pow(ponto1.x - ponto2.x, 2) +
+                pow(ponto1.y - ponto2.y, 2) +
+                pow(ponto1.z - ponto2.z, 2));
+}
+
+// Leitura de um ponto
+void leia_ponto(char *mensagem, double *x, double *y, double *z) {
+    printf("%s", mensagem);
+    char entrada[160];
+    fgets(entrada, sizeof entrada, stdin);
+    sscanf(entrada, "%lf%lf%lf", x, y, z);
+}
+```
+
+
+
+### Passagem de registro por referência
+
+Da mesma forma que outras variáveis, é possível passar a referência de um registro para uma função. O endereço de um registro é o endereço de seu primeiro byte, independentemente de seus campos.
+
+No caso do exemplo da área do triângulo, a leitura de cada ponto está passando cada campo de forma independente. Essa situação pode ser modificada passando um único parâmetro (o registro) para a função, todo ele por referência.
+
+Segue a nova versão do procedimento `leia_ponto`.
+
+```c
+/*!
+ * Leitura de um ponto em R^3
+ * @param mensagem: mensagem solicitando a digitação dos dados
+ * @param ponto: referência a um ponto
+ */
+void leia_ponto(char *mensagem, struct ponto *ponto);
+```
+
+O primeiro parâmetro, `mensagem`, está inalterado e as três coordenadas foram substituídas pelo registro todo. Agora, o parâmetro formal aguarda o endereço de uma variável `struct ponto`, estruturando uma passagem por referência. A chamada para essa função pode ser, por exemplo, como apresentada logo na sequência.
+
+```c
+struct ponto ponto;
+leia_ponto("Digite as coordenadas: ", &ponto);
+```
+
+
+### Ponteiros para `struct` e acesso a campos
+
+O entendimento da passagem por referência quando os parâmetros são `struct` requer entender a natureza da notação específica usada em C para esses casos. Dessa forma, uma sequência de exemplos proporcionam o entendimento dos operadores utilizados.
+
+O programa seguinte mostra o uso de um ponteiro para fazer acesso ao conteúdo de um registro.
+
+```{c}
+/*
+ * Registros e ponteiros para registros
+ */
+#include <stdio.h>
+
+int main(void) {
+    /*! @struct registro com campos diversos */
+    struct registro {
+        int i;
+        double d;
+        char c;
+    };
+
+    // Variável comum para registro
+    struct registro r1 = {9, 3.7, 'x'};
+    printf("r1 = %d / %g / '%c'.\n", r1.i, r1.d, r1.c);
+
+    // Ponteiro para registro
+    struct registro *pr = &r1;  // pr aponta para r1
+
+    // Uso do ponteiro com outra variável comum
+    struct registro r2 = *pr;  // copia r1 para r2
+    printf("r2 = %d / %g / '%c'.\n", r2.i, r2.d, r2.c);
+
+    return 0;
+}
+```
+
+Nesse programa, `r1` é um registro com três campos, iniciados com alguns valores ilustrativos. Há, também, uma variável do tipo ponteiro, cujo tipo base é `struct registro`.
+
+```c
+struct registro *pr;  // para guardar o endereço de um registro
+```
+
+Da mesma forma que outras variáveis e respectivos ponteiros, `pr` é usado para guardar um endereço (no caso, de `r1`) e a notação `*pr` permite o acesso aos dados apontado. Dessa forma, escrever `r2 = *pr` equivale, no código, a `r2 = r1`, já que `pr` aponta para `r1`. Em outras palavras, o tipo de `pr` é `struct registro*` (um ponteiro) e de `*pr` é `struct registro` (o registro real que está sendo apontado).
+
+A questão que se apresenta é o acesso aos campos de um registro apontado. C disponibiliza uma notação particular para essa situação, usando o operador `->`, como se ilustra a seguir.
+
+```{c}
+/*
+ * Registros e ponteiros para registros
+ */
+#include <stdio.h>
+
+int main(void) {
+    /*! @struct registro com campos diversos */
+    struct registro {
+        int i;
+        double d;
+        char c;
+    };
+
+    struct registro r1 = {9, 3.7, 'x'};
+    printf("r1 = %d / %g / '%c'.\n", r1.i, r1.d, r1.c);
+
+    struct registro *pr = &r1;
+    printf("r2 = %d / %g / '%c'.\n", pr->i, pr->d, pr->c);
+
+    return 0;
+}
+```
+
+Quando uma variável `p` é um ponteiro para um `struct`, `*p` é o registro apontado inteiro e `p->c` indica o acesso ao campo `c` de `*p`.
+
+
+
+### Uso dos ponteiros na passagem por referência
+
+Com o uso de ponteiros, a passagem por referência de um registro pode ser feita. O programa seguinte modifica a função de leitura de um ponto, trocando as três coordenadas separadas pelo registro como um todo. As demais funções ficaram inalteradas e foram suprimidas para simplificar a listagem.
+
+```{c} {.hide-compiler-output}
+/*
+ * Determinação da área de um triângulo dados seus vértices em R^3
+ * Requer: três pontos, cada um composto por suas coordenadas x, y e z
+ * Assegura: a apresentação da área do triângulo definido pelos vértices
+ */
+#include <stdio.h>
+#include <math.h>
+
+/*! @struct ponto */
+struct ponto {
+    double x, y, z;
+};
+
+// --- Alguns protótipos foram suprimidos
+
+//HIDE /*!
+//HIDE  * Retorna a área de um triângulo dados seus vértices
+//HIDE  * @param ponto1: primeiro vértice
+//HIDE  * @param ponto2: segundo vértice
+//HIDE  * @param ponto3: terceiro vértice
+//HIDE  * @return área do triângulo
+//HIDE  */
+//HIDE double area_triangulo(struct ponto ponto1,
+//HIDE                       struct ponto ponto2,
+//HIDE                       struct ponto ponto3);
+//HIDE 
+//HIDE /*!
+//HIDE  * Retorna a distância entre P1 e P2
+//HIDE  * @param ponto1: P1
+//HIDE  * @param ponto2: P2
+//HIDE  * @return a distância
+//HIDE  */
+//HIDE double distancia_pontos(struct ponto ponto1, struct ponto ponto2);
+
+/*!
+ * Leitura de um ponto em R^3
+ * @param mensagem: mensagem solicitando a digitação dos dados
+ * @param ponto: referência para o ponto
+ */
+void leia_ponto(char *mensagem, struct ponto *ponto);
+
+/*
+ * Main
+ */
+int main(void) {
+    struct ponto vertice1;
+    leia_ponto("Digite as coordenadas 1: ", &vertice1);
+    //TYPE(0, "-1 7 3");
+
+    struct ponto vertice2;
+    leia_ponto("Digite as coordenadas 2: ", &vertice2);
+    //TYPE(0, "-1 0 0");
+
+    struct ponto vertice3;
+    leia_ponto("Digite as coordenadas 1: ", &vertice3);
+    //TYPE(0, "2 3 5");
+
+    double area = area_triangulo(vertice1, vertice2, vertice3);
+    printf("Área do triângulo: %.2f.\n", area);
+}
+
+// --- Algumas implementações foram suprimidas
+
+//HIDE // Retorna a área do triângulo dados os vértices
+//HIDE double area_triangulo(struct ponto ponto1,
+//HIDE                       struct ponto ponto2,
+//HIDE                       struct ponto ponto3) {
+//HIDE     double lado1 = distancia_pontos(ponto1, ponto2);
+//HIDE     double lado2 = distancia_pontos(ponto1, ponto3);
+//HIDE     double lado3 = distancia_pontos(ponto2, ponto3);
+//HIDE     double semiperimetro = (lado1 + lado2 + lado3) / 2;
+//HIDE 
+//HIDE     return sqrt(semiperimetro * (semiperimetro - lado1) *
+//HIDE                 (semiperimetro - lado2) * (semiperimetro - lado3));
+//HIDE }
+//HIDE 
+//HIDE // Retorna a distância entre dois pontos
+//HIDE double distancia_pontos(struct ponto ponto1, struct ponto ponto2) {
+//HIDE     return sqrt(pow(ponto1.x - ponto2.x, 2) +
+//HIDE                 pow(ponto1.y - ponto2.y, 2) +
+//HIDE                 pow(ponto1.z - ponto2.z, 2));
+//HIDE }
+
+// Leitura de um ponto
+void leia_ponto(char *mensagem, struct ponto *ponto) {
+    printf("%s", mensagem);
+    char entrada[160];
+    fgets(entrada, sizeof entrada, stdin);
+    sscanf(entrada, "%lf%lf%lf", &ponto->x, &ponto->y, &ponto->z);
+}
+```
+
+O procedimento `leia_ponto` mantém o primeiro parâmetro original, que é a mensagem apresentada e define mais um único parâmetro que é o `struct` passado como referência (com tipo `struct ponto*`). Dado que dentro desse procedimento o parâmetro `ponto` é um ponteiro, o acesso aos campos é escrito `ponto->x`, `ponto->y` e `ponto->z`. Para o `sscanf`, que também espera passagens por referência, são indicados os endereços de cada campo individualmente: `&ponto->x`, `&ponto->y` e `&ponto->z`.
+
+Na função `main`, a chamada para `leia_ponto` requer que seja passado o endereço do registro que será modificado.
+
+```c
+leia_ponto("Digite as coordenadas 1: ", &vertice1);
+```
+
+
+
+
+## Mais sobre as declarações de `struct`
+
+Declarações de registros na linguagem C apresentam uma certa variedade de formatos. Nesta seção há comentários sobre algumas variações, embora nem todas sejam consideradas.
+
+
+
+
+### Declaração sem nome de registro {#sec-declaracao-struct-sem-nome}
+
+Em algumas situações, é possível agrupar os campos em um registro sem que o `struct` tenha um nome próprio. 
+
+Segue um exemplo
+
+```{c} {.hide-compiler-output}
+/*
+ * Exemplo de struct sem nome
+ * Assegura: apresentação dos valores iniciados
+ */
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    struct {
+        char nome[100];
+        char cpf[15];
+        int ano_nascimento;
+    } alguem;
+    
+    strncpy(alguem.nome, "Muriel Gomes Faruak", sizeof alguem.nome - 1);
+    strncpy(alguem.cpf, "123.456.789-00", sizeof alguem.cpf - 1);
+    alguem.ano_nascimento = 2008;
+
+    printf("Nome: %s,\nCPF: %s,\nAno: %d.\n", alguem.nome, alguem.cpf,
+           alguem.ano_nascimento);
+
+    return 0;
+}
+```
+
+Nesse exemplo, o registro é criado e a variável é declarada de uma única vez. Um nome para o registro, dado que a variável já está criada, é irrelevante e pode ser omitido.
+
+
+
+
+### Declarações "iguais" {#sec-declaracoes-struct-iguais}
+
+Em C, ao se encontrar a definição do registro como um tipo, o compilador adiciona esse novo `struct` a uma tabela interna de novos tipos. Se duas definições são idênticas, porém criadas em momentos diferentes, elas não são compatíveis.
+
+Segue um exemplo no qual duas variáveis são criadas sem especificação do nome do `struct` (@sec-declaracao-struct-sem-nome) para, em seguida, ser declarada uma terceira variável com `struct` idêntico no formato.
+
+```{c} {intentional-problems="true"}
+
+/*
+ * Exemplo de struct sem nome
+ * Assegura: apresentação dos valores iniciados
+ */
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    // registro1 e registro2 são compatíveis
+    struct {
+        int i;
+        double d;
+    } registro1, registro2;
+    registro1.i = 10;
+    registro1.d = 1.1;
+    registro2 = registro1;  // cópia completa
+
+    // registro3 possui a mesma organização, porém é incompatível
+    struct {
+        int i;
+        double d;
+    } registro3;
+    registro3 = registro1;
+
+    return 0;
+}
+```
+
+O uso de `struct` com nome permite a declaração de novas variáveis referenciando um único tipo e, assim, mantendo a compatibilidade entre as variáveis.
+
+
+
+
+## Exemplos
+
+Mais alguns exemplos com registros são apresentados.
+
+
+
+### Apresentação de um registro em uma função
+
+O programa seguinte mostra mais um exemplo de passagem de um registro como parâmetro por valor.
+
+```{c}
+/*
+ * Apresentação de dados de um vetor 2D com rótulo
+ * Assegura: apresentação dos campos do registro
+ */
+#include <stdio.h>
+
+/*! @struct vetor 2D */
+struct vetor {
+    char rotulo;
+    double x, y;
+};
+
+/*!
+ * Escreve o conteúdo de um vetor
+ * @param vetor: vetor a ser escrito
+ */
+void escreva_vetor(struct vetor vetor);
+
+/*
+ * Main
+ */
+int main(void) {
+    struct vetor vetor1 = {'A', 0.0, 0.0};
+    struct vetor vetor2 = {'B', -2.2, 1.7};
+
+    escreva_vetor(vetor1);
+    escreva_vetor(vetor2);
+
+    return 0;
+}
+
+// Apresenta um vetor na tela
+void escreva_vetor(struct vetor vetor) {
+    printf("vetor %c: (%.1f, %.1f).\n", vetor.rotulo, vetor.x, vetor.y);
+}
+```
+
+É reforçado, aqui, que a declaração de `struct vetor` deve ser global, pois isso é necessário para que o registro definido possa ser usado tanto na função `escreva_vetor` quanto na função `main`. 
+
+Dessa forma, a função `escreva_vetor` tem como único parâmetro um `struct vetor`. Em `main`, duas variáveis (`vetor1` e `vetor2`) são declaradas e compartilham o mesmo tipo do parâmetro. Nas chamadas à função, cada um dos registros é passado por valor, com cópia do registro de `main` para o parâmetro `vetor` de `escreva_vetor`.
+
+
+### Normalização de vetores
+
+Um vetor $\vec{v}$ é usualmente representando por um segmento orientado, indicando sua direção e intensidade. A norma de um vetor, também chamada módulo, é representada por $\lvert\vec{v}\rvert$ e corresponde, graficamente, ao comprimento do segmento. 
+
+Quando um vetor é normalizado, é mantida sua direção e sentido, alterando-se sua norma para uma unidade, ou seja ${\lvert\vec{v'}\rvert = 1}$. O programa seguinte ilustra como vetores são normalizados. Cada vetor é organizado em um `struct` e são usadas funções para as diversas manipulações.
+
+```{c}
+/*
+ * Apresentação de dados de um vetor 2D com rótulo
+ * Assegura: apresentação dos campos do registro
+ */
+#include <stdio.h>
+#include <math.h>
+
+/*! @struct vetor 2D */
+struct vetor {
+    char rotulo;
+    double x, y;
+};
+
+/*!
+ * Escreve o conteúdo de um vetor
+ * @param vetor: vetor a ser escrito
+ */
+void escreva_vetor(struct vetor vetor);
+
+/*!
+ * Faz a normalização de um vetor para que tenha norma igual a 1
+ * @param vetor: referência para o vetor
+ */
+void normalize_vetor(struct vetor *vetor);
+
+/*!
+ * Retorna a norma (módulo) de um vetor
+ * @param vetor
+ * @return norma do vetor
+ */
+double norma_vetor(struct vetor vetor);
+
+/*
+ * Main
+ */
+int main(void) {
+    struct vetor vetor1 = {'A', 3.0, 4.0};
+    escreva_vetor(vetor1);
+    normalize_vetor(&vetor1);
+    escreva_vetor(vetor1);
+
+    struct vetor vetor2 = {'B', 300.0, 400.0};
+    escreva_vetor(vetor2);
+    normalize_vetor(&vetor2);
+    escreva_vetor(vetor2);
+
+    struct vetor vetor3 = {'C', -18.7, 41.1};
+    escreva_vetor(vetor3);
+    normalize_vetor(&vetor3);
+    escreva_vetor(vetor3);
+
+    return 0;
+}
+
+// Apresenta um vetor na tela
+void escreva_vetor(struct vetor vetor) {
+    printf("vetor %c: (%.1f, %.1f); norma %.2f.\n", vetor.rotulo, vetor.x,
+            vetor.y, norma_vetor(vetor));
+}
+
+// Normalização de um vetor
+void normalize_vetor(struct vetor *vetor) {
+    double norma = norma_vetor(*vetor);
+
+    vetor->x /= norma;
+    vetor->y /= norma;
+}
+
+// Calcula a norma de um vetor
+double norma_vetor(struct vetor vetor) {
+    return sqrt(vetor.x * vetor.x + vetor.y * vetor.y);
+}
+```
+
+As funções `escreva_vetor` e `norma_vetor` recebem um `struct vetor` por valor, com cópia do conteúdo do argumento. A normalização, por sua vez, recebe seu parâmetro por referência e altera o conteúdo do registro apontado.

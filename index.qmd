@@ -1,0 +1,82 @@
+# Apresentação {.unnumbered}
+
+
+::: {.callout-important}
+Este material está **em produção** e, assim, é necessária atenção quanto à precisão do conteúdo e às possíveis alterações que serão promovidas ao longo do tempo.
+
+{{< meta book.edition >}}
+:::
+
+::: {.content-visible when-format="html"}
+Este sítio é a versão *online* do livro **"{{< meta book.title >}}: {{< meta book.subtitle >}}"**. 
+:::
+
+A disciplina de graduação _Construção de Algoritmos e Programação_, que é ofertada regularmente pelo [Departamento de Computação](https://www.dc.ufscar.br) para os cursos de Bacharelado em Ciência da Computação e Bacharelado em Engenharia da Computação da [Universidade Federal de São Carlos](https://www.ufscar.br), motivou a escrita deste livro, pensando em uma abordagem distinta da usualmente feita em cursos básicos de programação.
+
+## A versão _{{< meta book.subtitle >}}_
+
+::: {.content-visible when-profile="completo"}
+A presente versão do livro busca fazer uma jornada traçando uma rota por caminhos similares que se cruzam o tempo todo: desenvolver algoritmos computacionais e realizar a codificação dessas soluções algorítmicas em uma linguagem de programação.
+
+Algoritmos são soluções abstratas, independentes de linguagem, porém com cunho computacional. Eles representam um raciocínio que apresenta os passos para a solução de problemas específicos. Um passo seguinte à solução algorítmica é sua implementação em uma linguagem de programação, tendo como produto final um código executável real.
+
+Este texto busca mesclar os caminhos de aprender a programar usando a linguagem C com o desenvolvimento da habilidade de pensar soluções computacionais e representá-las na forma de pseudocódigo.
+:::
+
+::: {.content-visible when-profile="algoritmos"}
+Não é incomum, ainda mais em tempos recentes, que as pessoas já tenham, de alguma forma, tido contato com uma linguagem de programação e já tenham produzidos programas. Ambientes de desenvolvimento de código cada vez mais sofisticados, tanto executados localmente quanto disponíveis _online_, ajudam na escrita do código fonte, dando suporte relevante ao programador.
+
+Programas de qualidade, porém, envolvem em um raciocínio para se chegar a uma boa solução. Isso pode ser esquecido quando o código final passa a ser o foco da atenção em detrimento de uma boa organização da solução do problema que será tratado.
+
+Neste texto, um caminho que envolve a abordagem de problemas e a propostas de soluções algorítmicas para resolvê-los é traçado, supondo que o leitor já possua algum conhecimento em uma linguagem de programação imperativa e estruturada. Embora a linguagem C seja empregada nos exemplos, a experiência prévia com outras linguagens não invalida os conceitos apresentados.
+:::
+
+::: {.content-visible when-profile="programacao"}
+A linguagem C é uma linguagem básica, na qual a proximidade do código com as representações internas da memória é uma característica importante. Outras linguagens possuem nível de abstração mais alto, ocultando muitos detalhes do programador, como é o caso de Python e R, por exemplo.
+
+Na experiência do autor, dominar minimamente uma linguagem de programação de nível de abstração mais baixo auxilia qualquer programador a entender muitos dos aspectos, sejam vantagens ou ciladas, existentes em qualquer outra linguagem procedural ou mesmo orientada a objetos. Isso torna aprender C uma experiência efetivamente enriquecedora.
+
+As questões mais básicas da linguagem C são o assunto deste texto, fornecendo uma visão geral da codificação e de elementos de memória e representação que compõem um conhecimento precioso para quem desenvolve programas. 
+:::
+
+::: {.content-visible when-profile="pratica-algoritmos"}
+Desenvolver algoritmos, ou seja, apresentar uma solução para um problema para ser resolvida por uma sequência coerente de ações, em um primeiro momento, não parece ser uma tarefa complexa. O quanto pode ser difícil dar as instruções para que alguém consiga chegar a um dado endereço? Ou qual seria a dificuldade de gerar as instruções para que alguém inserisse um novo contato em uma agenda específica?
+
+Quando os problemas são computacionais, os quais requerem algoritmos que possam, em algum momento, ser codificados em um programa de computador, a solução apresentada também possui requisitos específicos. Algoritmos computacionais precisam ser claros, precisos e específicos para um dado problema.
+
+Aderir uma solução a essas características implica em atenção na escrita da solução, da estruturação dos passos e escolha de como dados serão armazenados e processados.
+
+Escrever bons algoritmos requer prática. E é esse o objetivo deste texto.
+:::
+
+
+<!-- ## Outras as versões
+
+O material deste livro foi elaborado em três versões, todas com conteúdo compartilhado. Além desta, as seguintes versões estão disponíveis.
+
+::: {.content-visible unless-profile="completo"}
+### Pseudocódigo e implementação em\ C
+Esta é a versão completa do texto e tem como objetivo prover um material de estudo para quem nunca programou ou tem pouco conhecimento sobre uma linguagem de programação.
+:::
+
+::: {.content-visible unless-profile="algoritmos"}
+### Algoritmos para quem já sabe programar
+A versão _Algoritmos para quem já sabe programar_ é direcionada àqueles que já detém conhecimento de uma linguagem de programação e que buscam representar soluções de forma independente de linguagem.
+:::
+
+::: {.content-visible unless-profile="programacao"}
+### Programação em\ C 
+Para todos que buscam ter uma visão geral sobre a linguagem C, prática e básica, esta versão é a melhor opção.
+:::
+ -->
+
+## Disponibilidade _online_
+
+<!-- * Pseudocódigo e implementação em\ C: <https://www2.dc.ufscar.br/~jander/livros/cap> -->
+
+* Algoritmos para quem já sabe programar: <https://jandermoreira.github.io/cap-algoritmos>
+
+* Programação em\ C : <https://jandermoreira.github.io/cap-linguagem-c>
+
+* Prática com algoritmos: <https://jandermoreira.github.io/cap-pratica-algoritmos>
+

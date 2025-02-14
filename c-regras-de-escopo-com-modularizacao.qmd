@@ -1,0 +1,432 @@
+# Regras de escopo com a modularização {#sec-regras-de-escopo-com-modularizacao}
+
+Este capítulo estende os conceitos de escopo de validade das declarações na linguagem C. A @sec-declaracoes-e-validade abordou as declarações de variáveis internas (locais) a `main`, enquanto na @sec-escopo-da-declaracao-de-funcoes. Esses assuntos são revisitados e integrados.
+
+Além de variáveis e funções, há outros elementos em C que podem ser declarados. Esses não serão cobertos diretamente neste texto e, em grande parte, a discussão exposta aqui também se aplica a eles.
+
+## Local $\times$ global
+
+Um código fonte escrito em C contém declarações, sejam de funções ou de variáveis. Esse código fonte está contido em um arquivo texto, usualmente com extensão `.c`. 
+
+Qualquer função declarada no arquivo tem escopo global, o que quer dizer que sua validade vai desde a linha em que ocorre a declaração até a última linha do arquivo. Em outras palavras, essa função é conhecida e pode ser usada dentro de seu escopo de declaração. Essa regra aplica-se tanto à declaração simples, na forma de protótipo de função, quanto às implementações sem o protótipo (@sec-escopo-da-declaracao-de-funcoes).
+
+Outra forma de olhar para essa questão é considerar global qualquer declaração feita fora de uma função.
+
+Como existe o conceito de "fora de uma função", também há o de "dentro de uma função". Assim, variáveis declaradas no corpo da implementação de uma função estão dentro da função e são chamadas de declarações locais. O termo se aplica também aos parâmetros formais da função.
+
+### Validade das declarações globais e locais
+
+Para exemplificar tanto declarações globais quanto locais quanto suas validades, segue um programa para simplificação de números racionais, o qual emprega uma função para o cálculo do máximo divisor comum (MDC) entre dois números inteiros e outra para o cálculo do valor absoluto (módulo, $\lvert n\rvert$) de um inteiro. O objetivo do programa é simplificar um número racional, lembrando que $q \in \mathbb{Q}$ é um valor expresso na forma $a/b$, sendo $a \in \mathbb{Z}$ com $b \in \mathbb{Z}^*$.
+
+A lógica de modificação do número racional é apresentada no @alg-simplificacao-padronizacao-racionais.
+
+```latex {.pseudocode}
+%| title: Leitura e apresentação de números racionais.
+%| label: #alg-simplificacao-padronizacao-racionais
+
+\begin{algorithmic}
+    \Description Leitura de um valor racional na forma $\frac{a}{b}$ e sua apresentação, padronizando para mostrar o sinal (se negativo) e sua forma fracionária simplificada
+    \Require número racional $\frac{a}{b}$
+    \Ensure apresentação do racional em forma padronizada
+    \Statex{}
+    \Statep{Obtenha o racional $r = \frac{a}{b}$}
+    \Statep{Determine o valor do sinal de $r$}[$1$ ou $-1$]
+    \Statep{Calcule o MDC entre $a$ e $b$, guardando em \Id{fator}}
+    \Statep{Calcule $a'$ e $b'$ com, respectivamente, $\lvert a\rvert$ e $\lvert b\rvert$}
+    \Statep{Modifique o valor de $a'$ para ter o sinal de $r$ e o valor $\frac{a'}{\Id{fator}}$}[simplifica o numerador]
+    \Statep{Modifique o valor de $b'$ para $\frac{b'}{\Id{fator}}$}[simplifica o denominador]
+    \Statep{Apresente $r' = \frac{a'}{b'}$}[o sinal já está presente em $a'$]
+\end{algorithmic}
+```
+
+A codificação em C é apresentada na sequência.
+
+
+```{c} {code-line-numbers="true"}
+/*
+ * Leitura e escrita de um número racional na forma de fração
+ * Requer: a digitação de um valor a/b, a,b inteiros, b != 0
+ * Assegura: apresentação do mesmo valor em forma simplificada e padronizada
+ */
+#include <stdio.h>
+
+/*!
+ * Retorna o MDC de dois inteiros quaisquer (máximo divisor comum).
+ * @param n1: primeiro valor
+ * @param n2: segundo valor
+ * @return MDC(n1, n2)
+ */
+unsigned int mdc(int n1, int n2);
+
+/*!
+ * Retorna o valor absoluto de um inteiro
+ * @param n: valor inteiro
+ * @return o valor absoluto do número, |n|
+ */
+int valor_absoluto(int n);
+
+/*
+ * Main
+ */
+int main() {
+    // Leitura
+    printf("Digite um número racional a/b (a e b inteiros e b não nulo): ");
+    char entrada[160];
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "-3553/-627");
+    int numerador, denominador;
+    sscanf(entrada, "%d/%d", &numerador, &denominador);
+
+    // Simplificação da fração e colocação do sinal no numerador
+    if (numerador == 0)
+        denominador = 1;  // o valor zero é padronizado para 0/1
+    else {
+        int fator_divisao = mdc(numerador, denominador);
+        int sinal_da_fracao = ((double)numerador / denominador >= 0) ? 1 : -1;
+        numerador = valor_absoluto(numerador);
+        denominador = valor_absoluto(denominador);
+        numerador /= sinal_da_fracao * fator_divisao;
+        denominador /= fator_divisao;
+    }
+
+    // Resultado
+    printf("O racional digitado foi: %d/%d.\n", numerador, denominador);
+
+    return 0;
+}
+
+// Máximo divisor comum: MDC(n1, n2)
+unsigned int mdc(int n1, int n2) {
+    // Converte n1 e n2 para valores positivos
+    n1 = valor_absoluto(n1);
+    n2 = valor_absoluto(n2);
+
+    // Resolução pelo método de Euclides
+    int resto;
+    do {
+        resto = n1 % n2;
+        n1 = n2;
+        n2 = resto;
+    } while (resto != 0);
+
+    return n1;  // Contém o MDC no final
+}
+
+// Valor absoluto de um inteiro
+int valor_absoluto(int n) {
+    return (n >= 0) ? n : -n;
+}
+```
+
+Para esse programa, há declarações tanto de variáveis quanto de funções. A @tbl-validade-declaracoes-racionais apresenta as declarações de interesse no programa e destaca o escopo e validade (linhas do código) de cada uma.
+
+| Declaração                   |   Tipo    | Escopo                   | Início | Fim |
+| :--------------------------- | :-------: | :----------------------: | :----: | :-: |
+| `mdc`                        |  função   | global                   |   14   | 68  |
+| `valor_absoluto`             |  função   | global                   |   21   | 68  |
+| `entrada`                    | variável  | local (`main`)           |   29   | 46  |
+| `numerador`, `denominador`   | variável  | local (`main`)           |   31   | 46  |
+| `fator_divisao`              | variável  | local (`main`)           |   35   | 46  |
+| `sinal_da_fracao`            | variável  | local (`main`)           |   36   | 46  |
+| `n1`, `n2`                   | parâmetro | local (`mdc`)            |   49   | 63  |
+| `resto`                      | variável  | local (`mdc`)            |   55   | 63  |
+| `n`                          | parâmetro | local (`valor_absoluto`) |   66   | 68  |
+
+: Declarações relevantes feitas no programa de apresentação de números racionais, seu tipo, escopo e linhas em que são válidas. {#tbl-validade-declaracoes-racionais}
+
+
+::: {.callout-tip title="Curiosidade"}
+É interessante apontar que `n1` e `n2` na linha 14, assim como `n` na linha 21 do programa apresentado não possuem validade, pois o protótipo de uma função é apenas sua declaração e, como tal, seus parâmetros não são realmente criados, mas apenas informados ao compilador.
+
+Na prática, a linha 14 do código do programa poderia ser escrita como segue, mas com o prejuízo de reduzir as informações de documentação do programa ao não informar semanticamente a que cada parâmetro se refere.
+
+```c
+unsigned int mdc(int, int);  // o nome dos parâmetros é irrelevante, mas sua
+                             // omissão prejudica a documentação e legibilidade
+```
+:::
+
+
+## Reuso de identificadores
+
+Nos programa em C é possível usar um mesmo identificador desde que eles suas declarações atendam escopos diferentes. Dessa forma, um identificador `p` pode ser parâmetro para diversas funções diferentes. Da mesma forma, uma variável local a uma função não conflita com qualquer outra declaração. O compilador reclamará, assim, apenas de duas declarações globais com mesmo identificador ou então o uso de um mesmo nome em duplicidade no mesmo contexto local.
+
+A seguir é apresentado um código fonte genérico, não realiza qualquer processamento útil, O objetivo é indicar como identificadores iguais são tratados.
+
+```{c}
+/*
+ * Programa exemplo de declarações
+ */
+#include <stdio.h>
+
+int f1(int a, int b);
+
+double f2(double a);
+
+int f3(double f1, double f2);
+
+int main(void) {
+    int a, b, c;
+    double d = 1.25;
+
+    a = (int)f2(d);
+    b = f3(d, 0.5 * a);
+    c = f1(a, b);
+
+    printf("%d %d %d %g\n", a, b, c, d);
+
+    return 0;
+}
+
+int f1(int a, int b) {
+    int n = f3(a, b);
+    return a + b + n;
+}
+
+double f2(double a) {
+    int n = 1;
+    double b = f1(a, n);
+    return b;
+}
+
+int f3(double f1, double f2) {
+    int main = (int)f1 + (int)f2;
+    return main;
+}
+```
+
+Os pontos que requerem atenção neste programa são os seguintes:
+
+* As funções `f1`, `f2` e `f3` têm validade em praticamente todo o programa;
+* Ambas as funções `f1` e `f2` possuem parâmetro com identificador `a`, mas eles são independentes pois estão em escopos diferentes;
+* A função principal `main` também possui variáveis locais `a` e `b`, também disjuntas dos parâmetros e outras declarações locais;
+* Tanto `f1` quanto `f2` possuem variáveis locais chamadas `n`, sendo elas completamente separadas dado seu escopo local diferente;
+* A função `f1` chama `f3`, que é conhecida dado o escopo global, sendo que o mesmo ocorre com a chamada de `f1` em `f2`;
+* `f3` possui parâmetros `f1` e `f2`, cujos nomes se sobrepõem às funções globais `f1` e `f2`, significando que, dentro de `f3`, essas funções não estão acessíveis pois são obscurecidas pelas declarações locais;
+* `f3` possui uma variável local `main`, que não conflita com a função global com mesmo nome.
+
+Dessa forma, seguem algumas orientações gerais de escopo:
+
+* Declarações globais valem em todo o código fonte a partir de sua declaração;
+* Parâmetros e declarações em funções são locais, têm apenas validade no escopo da função e são independentes de qualquer outra declaração com mesmo nome em escopo maior;
+* Declarações locais podem se sobrepor e ocultar declarações globais;
+* Blocos de comandos podem ter declarações cujo escopo é o próprio bloco apenas (@sec-declaracoes-e-validade).
+
+
+## Variáveis globais
+
+Assim como funções, também variáveis podem ser globais. Uma variável declarada fora do escopo de qualquer função é uma variável global e, como tal, tem sua validade definida e conhecida desde a linha em que é declarada até o final do arquivo.
+
+Variáveis declaradas como globais possuem duas diferenças importantes em relação às locais, sejam variáveis ou parâmetros de funções:
+
+* Local e momento de criação;
+* Iniciação automática.
+
+ A primeira diferença, portanto, é que as variáveis globais são criadas juntamente com a execução do programa e possuem um espaço de memória específico para elas. As variáveis locais e os parâmetros são criados apenas no momento em que a função é chamada e, dependendo de quando isso ocorre, podem ser criadas em diferentes locais da memória dependendo da chamada.
+
+ Variáveis globais são consideradas estáticas enquanto as locais são criadas dinamicamente em função do momento em que as funções são chamadas
+
+ O segundo ponto é que as variáveis locais nunca possuem lixo, ou seja, são sempre iniciadas com valores nulos. Assim, se uma variável global `int i` é criada sem atribuição, seu valor será necessariamente zero. Caso exista um `double d` global, o valor de `d` será 0,0, exceto se houver outro valor inicial. De forma similar, se uma cadeia de caracteres for criada em escopo global com `char s[100]`, ela terá comprimento zero, pois todas suas posições terão `\0`.
+
+
+
+
+### Declaração de variáveis globais
+
+Para que uma variável seja global, basta que sua declaração seja feita fora de uma função. Segue um exemplo simples em que foi criado um contador global para monitorar o número de vezes que uma 
+
+
+```{c}
+/*
+ * Programa exemplo com variável global
+ * O código cria duas funções, volta_igual e volta_negativo, mantendo
+ *      controle sobre o número de vezes que elas são chamadas
+ * Assegura: apresentações diversas do uso da função e do número de vezes
+ *      em que foram chamadas
+ */
+#include <stdio.h>
+
+//! Contador para uso global
+int numero_chamadas;
+
+/*!
+ * Retorna igual ao que foi passado
+ * @param n
+ * @return n
+ */
+int volta_igual(int n);
+
+/*!
+ * Retorna o oposto do que foi passado
+ * @param n
+ * @return -n
+ */
+int volta_negativo(int n);
+
+/*
+ * Main
+ */
+int main(void) {
+    printf("%d = %d.\n", 10, volta_igual(10));
+    printf("%d = -1 * %d.\n\n", -10, volta_negativo(-10));
+    for (int n = -5; n <= 5; n++)
+        printf("%d = %d = -1 * %d.\n", n, volta_igual(n), volta_negativo(n));
+
+    printf("\nAs funções volta_igual e volta_negativo foram chamadas %d "
+           "vezes no total.\n", numero_chamadas);
+    return 0;
+}
+
+// Retorna igual
+int volta_igual(int n) {
+    numero_chamadas++;  // conta a chamada à função
+    return n;
+}
+
+// Retorna negativo
+int volta_negativo(int n) {
+    numero_chamadas++;  // conta a chamada à função
+    return -n;
+}
+```
+
+A variável `numero_chamadas` é global e seu escopo de validade se inicia na linha de declaração, de forma que ela pode ser usada em todas as funções seguintes, incluindo `main`. Como ela é global e não há iniciação explícita, seu valor inicial é zero. Cada vez que as funções `volta_igual` e `volta_negativo` são chamadas, essa variável é incrementada.
+
+
+### Quando usar variáveis globais?
+
+ A resposta rápida e curta para a pergunta do título da seção é simples: nunca. Claro que "nunca" é um exagero, pois há exceções. O ponto é sempre que qualquer variável global deve ser evitada, pois pode induzir a erros no código extremamente difíceis de serem localizados.
+
+O exemplo do contador de chamadas pode, talvez, ser caracterizado como uma exceção. O programa é pequeno e o uso da variável global para o contador oculta a contagem separando-a do uso da função. Se outro programador fizer modificações no programa, ele poderia até ignorar a contagem e usar as duas funções definidas sem problemas.
+
+O problema do uso de variáveis locais, entretanto, é exatamente alguém fazer uma modificação no programa e, por um descuido simples, interferir inadvertidamente no valor de uma variável que ele nem sabia que existia.
+
+Para exemplificar, suponha que seja solicitado a outro programador uma pequena modificação na função `main`: a inclusão de uma série de exemplos de chamadas à função `volta_negativo` antes dos exemplos já existentes. O programa seguinte mostra a solução feita rapidamente pelo novo programador.
+
+```{c}
+/*
+ * Programa exemplo com variável global
+ * O código cria duas funções, volta_igual e volta_negativo, mantendo
+ *      controle sobre o número de vezes que elas são chamadas
+ * Assegura: apresentações diversas do uso da função e do número de vezes
+ *      em que foram chamadas
+ */
+#include <stdio.h>
+
+//! Contador para uso global
+int numero_chamadas;
+
+/*!
+ * Retorna igual ao que foi passado
+ * @param n
+ * @return n
+ */
+int volta_igual(int n);
+
+/*!
+ * Retorna o oposto do que foi passado
+ * @param n
+ * @return -n
+ */
+int volta_negativo(int n);
+
+/*
+ * Main
+ */
+int main(void) {
+    // Exemplos novos para volta_negativo
+    int numero_chamadas;
+    for (numero_chamadas = 10; numero_chamadas >= 0; numero_chamadas--)
+        printf("> volta_negativo(%d) = %d.\n", numero_chamadas,
+               volta_negativo(numero_chamadas));
+
+    // Código com os exemplos orginais
+    printf("%d = %d.\n", 10, volta_igual(10));
+    printf("%d = -1 * %d.\n\n", -10, volta_negativo(-10));
+    for (int n = -5; n <= 5; n++)
+        printf("%d = %d = -1 * %d.\n", n, volta_igual(n), volta_negativo(n));
+
+    printf("\nAs funções volta_igual e volta_negativo foram chamadas %d "
+           "vezes no total.\n", numero_chamadas);
+    return 0;
+}
+
+// Retorna igual
+int volta_igual(int n) {
+    numero_chamadas++;  // conta a chamada à função
+    return n;
+}
+
+// Retorna negativo
+int volta_negativo(int n) {
+    numero_chamadas++;  // conta a chamada à função
+    return -n;
+}
+```
+
+O programa foi compilado com sucesso, sem erros e sem avisos. Porém o resultado agora está incorreto. Uma vez criada a variável local `numero_chamadas`, ela se sobrepõe à global. No último `printf`, o valor mostrado para a contagem é o da nova variável local e não mais o do contador global, produzindo um resultado inconsistente, provavelmente de fácil detecção, já que o novo resultado é incongruente.
+
+Um erro mais sutil poderia ser introduzido, gerando uma situação em que o programa afirma que 11\ =\ -10.
+
+```{c} {clip="14,5"}
+/*
+ * Programa exemplo com variável global
+ * O código cria duas funções, volta_igual e volta_negativo, mantendo
+ *      controle sobre o número de vezes que elas são chamadas
+ * Assegura: apresentações diversas do uso da função e do número de vezes
+ *      em que foram chamadas
+ */
+#include <stdio.h>
+
+//! Contador para uso global
+int numero_chamadas;
+
+/*!
+ * Retorna igual ao que foi passado
+ * @param n
+ * @return n
+ */
+int volta_igual(int n);
+
+/*!
+ * Retorna o oposto do que foi passado
+ * @param n
+ * @return -n
+ */
+int volta_negativo(int n);
+
+/*
+ * Main
+ */
+int main(void) {
+    // Exemplo adicional 
+    numero_chamadas = 10;
+    printf("> volta_negativo(%d) = %d.\n", numero_chamadas,
+           volta_negativo(numero_chamadas));
+
+    // Código com os exemplos originais
+    printf("%d = %d.\n", 10, volta_igual(10));
+    printf("%d = -1 * %d.\n\n", -10, volta_negativo(-10));
+    for (int n = -5; n <= 5; n++)
+        printf("%d = %d = -1 * %d.\n", n, volta_igual(n), volta_negativo(n));
+
+    printf("\nAs funções volta_igual e volta_negativo foram chamadas %d "
+           "vezes no total.\n", numero_chamadas);
+    return 0;
+}
+
+// Retorna igual
+int volta_igual(int n) {
+    numero_chamadas++;  // conta a chamada à função
+    return n;
+}
+
+// Retorna negativo
+int volta_negativo(int n) {
+    numero_chamadas++;  // conta a chamada à função
+    return -n;
+}
+```
+
+
+Em programas mais longos, mais complexos e com muitas funções, diagnosticar problemas com variáveis globais pode ser uma tarefa árdua e desmotivante.

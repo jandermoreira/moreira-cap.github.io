@@ -1,0 +1,25 @@
+<!-- Classificação de triângulo quanto aos ângulos internos -->
+::: {#sol-0006}
+@exr-0006
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Classificação de um triângulo quanto a seus ângulos dados dois ângulos internos
+    \Require ângulos internos $\alpha$ e $\beta$ (em graus)
+    \Ensure apresentação de uma classificação entre acutângulo, retângulo ou obtusângulo
+    \Statex{}
+    \Statep{Obtenha $\alpha$ e $\beta$}
+    \Statep{Calule $\gamma$ como $180\mbox{º} - \alpha - \beta$}
+    \If{$\alpha < 90\mbox{º}$ e $\beta < 90\mbox{º}$ e $\gamma < 90\mbox{º}$}
+        \Statep{Defina a classificação como acutângulo}
+    \ElsIf{$\alpha = 90\mbox{º}$ ou $\beta = 90\mbox{º}$ ou $\gamma = 90\mbox{º}$}
+        \Statep{Defina a classificação como retângulo}
+    \Else
+        \Statep{Defina a classificação como obtusângulo}
+    \EndIf
+    \Statep{Apresente a classificação definida}
+\end{algorithmic}
+```
+
+É importante notar que, para este problema, a ordem das verificações pode variar de solução para solução.
+:::

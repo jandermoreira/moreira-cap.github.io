@@ -1,0 +1,8 @@
+<!-- Função número de divisores -->
+::: {#rem-0056}
+@exr-0056
+
+Nesta função, é interessante notar que, dado um $n \in \mathbb{N}$, 1 e $n$ sempre serão seus divisores. Além disso, não existe nenhum divisor de $n$ que seja maior que $n/2$.
+
+Um exercício mental relevante é como incorporar essas informações à solução algorítmica para que sejam evitadas verificações desnecessárias.
+:::

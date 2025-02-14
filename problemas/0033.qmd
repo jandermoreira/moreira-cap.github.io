@@ -1,0 +1,8 @@
+<!-- Porcentagem de cada resposta de uma pesquisa de opinião  -->
+::: {#exr-0033}
+É preciso processar o resultado de uma pesquisa de opinião para a qual era possível escolher entre sim, não e não sei.
+
+Escreva um algoritmo para processar uma sequência de respostas (com mínimo de uma resposta) e determinar as porcentagens de cada categoria.
+
+**Dica:** Represente as comparações usando texto em nível alto de abstração (exemplo: "se a resposta foi sim, então...").
+:::

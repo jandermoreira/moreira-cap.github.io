@@ -1,0 +1,20 @@
+<!-- Procedimento troca de valores -->
+::: {#sol-0073}
+@exr-0073
+
+A troca requer a passagem por referência.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Realiza a troca de valores entre duas variáveis
+    \Require duas variáveis por referência
+    \Ensure a troca de conteúdo das variáveis
+    \Statex
+    \Procedure{TroqueValores}{$v_1$:\ByRef, $v_2$:\ByRef}
+        \Statep{$\Id{temporário} \gets v_1$}
+        \Statep{$v_1 \gets v_2$}
+        \Statep{$v_2 \gets \Id{temporário}$}
+    \EndProcedure
+\end{algorithmic}
+```
+:::

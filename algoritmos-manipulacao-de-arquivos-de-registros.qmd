@@ -1,0 +1,5 @@
+# Algoritmos: Manipulação de arquivos de registros
+
+## Arquivos de registros de comprimento fixo
+
+## Operações em arquivos

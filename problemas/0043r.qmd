@@ -1,0 +1,42 @@
+<!-- Função máximo de 2 -->
+::: {#sol-0043}
+@exr-0043 
+
+Solução mais didática:
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Função para retornar o máximo entre dois valores numéricos
+    \Require dois valores numéricos
+    \Ensure retorno do valor máximo
+    \Statex
+    \Function{Máximo}{$v_1$, $v_2$}
+        \If{$v_1 > v_2$}
+            \Statep{Defina \Id{máximo} como $v_1$}
+        \Else
+            \Statep{Defina \Id{máximo} como $v_2$}
+        \EndIf
+        \Statep{\Return \Id{máximo}}
+    \EndFunction
+\end{algorithmic}
+```
+Solução prática e comum:
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Função para retornar o máximo entre dois valores numéricos
+    \Require dois valores numéricos
+    \Ensure retorno do valor máximo
+    \Statex
+    \Function{Máximo}{$v_1$, $v_2$}
+        \If{$v_1 > v_2$}
+            \Statep{\Return $v_1$}
+        \Else
+            \Statep{\Return $v_2$}
+        \EndIf
+    \EndFunction
+\end{algorithmic}
+```
+
+Nesta última solução, é importante notar que não há possibilidade de que a execução chegue ao fim sem nenhum -return-.
+:::

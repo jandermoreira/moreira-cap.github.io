@@ -1,0 +1,354 @@
+# C: Dados em vetores
+
+Os vetores são estruturas de dados que agrupam coleções de itens, todos com o mesmo tipo. Cada item de um vetor é individualizado por seu índice, que é um valor inteiro. Neste capítulo é abordado como vetores são criados em C e quais as peculiaridades que possuem.
+
+
+## Declaração de vetores em C
+
+Ao se criar uma coleção de itens como um arranjo (outro nome comum para vetor), é preciso especificar o tipo que cada item deve ter e a quantidade de itens.
+
+```c
+int v[100];  // criação de 100 valores do tipo int
+```
+
+Cada item individual pode ser especificado por seu índice, que é um valor inteiro sempre iniciado em zero. Dessa forma, se um vetor `v` possui $n$ itens, seu primeiro item é `v[0]` e seu último, `v[`$n-1$`]`. Os comandos seguintes ilustram como preencher um vetor `v` com dados.
+
+```c
+int v[100];
+for(int i = 0; i < 100; i++)  // de 0 a 99
+    v[i] = i;
+```
+
+::: {.callout-tip}
+A atenção aos índices é sempre importante, tanto para se ter acesso ao item desejado quanto não ultrapassar os limites do vetor, atribuindo valores a áreas que não pertencem à variável.
+
+É sempre importante lembrar que C não faz verificações de acesso fora dos índices válidos e cabe, portanto, ao programador garantir que esse acesso não aconteça.
+:::
+
+Quando um vetor é criado, um bloco de memória contínuo é criado, de forma que, por exemplo, os endereços do bytes de `v[i]` vêm na sequência de `v[i - 1]`.
+
+Se não houver uma atribuição inicial de valores junto com uma declaração local, os valores contidos no vetor devem ser considerados como não iniciados, ou seja, lixo. Se houver uma declaração global, todos os valores conterão bytes nulos, o que implica em zero para inteiros e reais, `\0` para caracteres, `NULL` para ponteiros, mesmo que o tipo base do vetor seja um registro.
+
+No programa C seguinte, dois vetores de `double` são criados, um global e outro local. Nenhum deles é explicitamente iniciado com valores.
+
+```{c}
+/*
+ * Programa mostrando a declaração de vetores
+ * Assegura: apresentação da quantidade de valores nulos em cada vetor
+ */
+#include <stdio.h>
+
+double vetor_global[1000];  // criado com todos itens iguais a zero
+
+int main(void) {
+    double vetor_local[1000];  // criado sem iniciação (i.e., contém lixo)
+
+    int contador_de_zeros_global = 0;
+    int contador_de_zeros_local = 0;
+    for (int i = 0; i < 1000; i++) {
+        if (vetor_global[i] == 0)
+            contador_de_zeros_global++;
+        if (vetor_local[i] == 0)
+            contador_de_zeros_local++;
+    }
+    printf("No vetor global: %d de 1000 valores zero.\n",
+           contador_de_zeros_global);
+    printf("No vetor local: %d de 1000 valores zero.\n",
+           contador_de_zeros_local);
+
+    return 0;
+}
+```
+
+É interessante observar que o compilador ajuda o programador com uma mensagem sobre a possibilidade de uso de `vetor_local` com valores não iniciados (o que é, propositalmente, o caso), porém nada é apresentado sobre o vetor global, visto que esse foi, necessariamente, iniciado com zeros.
+
+A saída produzida pelo programa, que o a quantidade de zeros em cada variável, atesta que todos os valores de `vetor_global` são zeros, mas o mesmo não é verdade para `vetor_local`.
+
+Como sempre, o programador nunca deve usar uma variável sem que um valor tenha sido anteriormente atribuído a ela, mesmo que essa "variável" seja uma posição qualquer em um vetor.
+
+
+
+### Declarações com atribuição explícita
+
+Assim como outras variáveis, é possível iniciar os valores de um vetor juntamente com sua declaração.
+
+Para vetores com itens inteiros ou reais, a iniciação é indicada por uma atribuição com os valores indicados entre chaves. Segue um exemplo simples com a iniciação de um vetor de valores reais.
+
+```{c}
+/*
+ * Programa mostrando a declaração de vetor com iniciação
+ * Assegura: apresentação dos valores do vetor
+ */
+#include <stdio.h>
+
+int main(void) {
+    double vetor[5] = {1.7, 8.2, -6.5, 0.0, 1.2};
+
+    for(int i = 0; i < 5; i++)
+        printf("%g ", vetor[i]);
+    printf("\n");
+
+    return 0;
+}
+```
+
+Também é possível atribuir apenas às posições iniciais do vetor, como se exemplifica.
+
+```{c}
+/*
+ * Programa mostrando a declaração de vetor com iniciação
+ * Assegura: apresentação dos valores do vetor
+ */
+#include <stdio.h>
+
+int main(void) {
+    double vetor[10] = {-8.23, 0.0, -6.5};
+
+    for(int i = 0; i < 10; i++)
+        printf("%g ", vetor[i]);
+    printf("\n");
+
+    return 0;
+}
+```
+
+No programa, apenas são indicados valores para as três primeiras posições de `vetor`, sendo que para as demais nada é explicitamente especificado. Neste caso, todas as posições não especificadas terão valores nulos (ou equivalente, dependendo do tipo base do vetor).
+
+O programa seguinte exemplifica um vetor que tem apenas suas duas posições iniciais com valores explicitamente atribuídos. As demais, uma vez que houve a atribuição, têm seus valores zerados.
+
+```{c}
+/*
+ * Programa mostrando a declaração de vetores com iniciação parcial
+ * Assegura: apresentação da quantidade de zeros no vetor
+ */
+#include <stdio.h>
+
+int main(void) {
+    double vetor[1000] = {1.1, 2.2};  // valores para posições 0 e 1
+
+    int contador_de_zeros = 0;
+    for (int i = 0; i < 1000; i++)
+        if (vetor[i] == 0)
+            contador_de_zeros++;
+    printf("No vetor local: %d de 1000 valores zero.\n", contador_de_zeros);
+
+    return 0;
+}
+```
+
+A execução mostra que, exceto pelos pelas duas posições iniciais do vetor, todas as demais possuem valor nulo.
+
+Essa atribuição é interessante para casos em que se precisa de um vetor com zeros inicialmente em todas suas posições. Assim, uma declaração como a seguinte é suficiente.
+
+```c
+int v[500000] = {0};  // todo o vetor é iniciado com 500.000 zeros
+```
+
+Quando o tipo base do vetor é `char`, as mesmas regras gerais valem. Se um vetor local sem iniciação explícita é criado, seu conteúdo é considerado lixo.
+
+```c
+char s[300];  // 300 caracteres simples
+```
+
+A iniciação do vetor pode ser realizada juntamente com a declaração da variável especificando-se os valores, posição a posição. Como nos casos de inteiros e reais, as primeiras posições recebem valores e as demais ficam com bytes nulos. No caso de cadeias de caracteres, o byte nulo é o caractere `\0`.
+
+```c
+char s[10] = {'H', 'e', 'l', 'l', 'o'};
+```
+
+O programa seguinte comprova esse comportamento.
+
+```{c}
+/*
+ * Criação de vetor de caracteres com iniciação parcial
+ * Assegura: apresentação do conteúdo do vetor, posição a posição
+ */
+#include <stdio.h>
+
+int main(void) {
+    char s[10] = {'H', 'e', 'l', 'l', 'o'};
+
+    for (int i = 0; i < 10; i++)
+        printf("s[%d] = '%c' \t(código %d)\n", i, s[i], s[i]);
+
+    return 0;
+}
+```
+
+Aqui é importante relembrar a compatibilidade dessa iniciação com a representação de cadeias de caraceteres. Por exemplo, a função printf, usando o formato `%s`, escreva na tela o texto _Hello_, pois interpreta o `\0` de `s[5]` com fim da cadeia.
+
+Há também que se ter uma concordância dos programadores que digitar `'H', 'e', 'l', 'l', 'o'` é uma tarefa, no mínimo, aborrecida. A linguagem aceita a iniciação com os valores entre aspas, usando o conceito dos valores textuais. Dessa forma, a mesma declaração com a mesma iniciação pode ser escrita usando as aspas duplas, com o mesmo resultado.
+
+```c
+char s[10] = "Hello";
+```
+
+A versão que especifica o conteúdo caractere a caractere é útil se o vetor não for usado como uma cadeia de caracteres usual, mas como um vetor de caracteres qualquer. O programa seguinte, variação do anterior, ilustra que o conteúdo do vetor é tratado como vários caracteres e não como uma _string_.
+
+```{c}
+/*
+ * Criação de vetor de caracteres com iniciação parcial
+ * Assegura: apresentação do conteúdo do vetor, posição a posição
+ */
+#include <stdio.h>
+
+int main(void) {
+    char s[10] = {'a', 'e', 'K', '\0', 'G', '\t', 'o', '\a', '\0', 'A'};
+
+    for (int i = 0; i < 10; i++)
+        printf("s[%2d] = '%c' \t(código %d)\n", i, s[i], s[i]);
+
+    return 0;
+}
+```
+
+
+### Declarações com tamanho automático
+
+A linguagem permite uma facilidade ao programador quando um vetor é criado com valores inicialmente atribuídos, que é omitir a quantidade de itens que o vetor possui. Esse tamanho é determinado pelos valores atribuídos. Segue um exemplo.
+
+
+```{c}
+/*
+ * Programa mostrando a declaração de vetores com tamanho automático
+ * Assegura: apresentação dos valores do vetor
+ */
+#include <stdio.h>
+
+int main(void) {
+    int vetor[] = {5, 4, 3, 2, 1};  // vetor com 5 itens
+
+    for (int i = 0; i < 5; i++)
+        printf("%d ", vetor[i]);
+    printf("\n");
+
+    return 0;
+}
+```
+
+A variável `vetor` é criada com exatamente cinco itens, já que há especificação de cinco valores na iniciação. A declaração feita no programa é exatamente equivalente à declaração seguinte.
+
+```c
+int vetor[5] = {5, 4, 3, 2, 1};
+```
+
+A vantagem dessa omissão do tamanho é facilitar a escrita do código, sem que o programador tenha que contar quantos valores estão sendo usados na iniciação para colocá-lo dentro dos colchetes.
+
+Embora esse recurso de escrita facilite a declaração, ele não se estende ao resto do código. Por exemplo, no programa exemplo o `for` usou a condição `i < 5`, o que significa que o programador tem que saber quantos valores há efetivamente no vetor. Para esses casos, um truque de programação pode ser usado e ele é exemplificado no programa seguinte.
+
+```{c}
+/*
+ * Programa mostrando a declaração de vetores com tamanho automático
+ * Assegura: apresentação do tamanho de vetor em bytes, do tamanho do 
+ *  tipo base em bytes e a quantidade de itens no vetor
+ */
+#include <stdio.h>
+
+int main(void) {
+    int vetor[] = {18, -2, 0, 3, 1, 7, 22, 13, 255, 1, 0, 0, 3};
+    printf("O vetor de int possui %zu bytes.\n", sizeof vetor);
+    printf("Um único int possui %zu bytes.\n", sizeof(int));
+    printf("Portanto, o vetor possui %zu/%zu = %zu itens!\n",
+           sizeof vetor, sizeof(int), sizeof vetor / sizeof(int));
+
+    return 0;
+}
+```
+
+Sabendo-se o tamanho total em bytes do vetor (`sizeof vetor`) e o tamanho em bytes de cada um de seus itens (`sizeof (int)`), é possível deduzir quantos itens há no vetor. Segue um novo programa exemplo que usa essa estratégia.
+
+```{c}
+/*
+ * Apresentação das unidades monetárias da moeda brasileira
+ * Assegura: apresentação de cada valor de cédula ou moeda (reais ou
+ *  centavos)
+ */
+#include <stdio.h>
+
+int main(void) {
+    printf("Moeda brasileira\n"
+           "----------------\n\n"
+           "Notas:\n");
+    double valores_notas[] = {200.00, 100.00, 50.00, 20.00, 10.00, 5.00, 2.00};
+    for (int i = 0; i < (int)(sizeof valores_notas / sizeof(double)); i++)
+        printf("R$ %6.2f\n", valores_notas[i]);
+
+    printf("\nMoedas:\n");
+    double valores_moedas[] = {1.00, 0.50, 0.25, 0.10, 0.05, 0.01};
+    for (int i = 0; i < (int)(sizeof valores_moedas / sizeof(double)); i++)
+        printf("R$ %.2f\n", valores_moedas[i]);
+
+    return 0;
+}
+```
+
+
+### Vetores com tamanho sob demanda
+
+O número de itens de um vetor pode ser especificado de duas formas básicas: com a especificação explícita do tamanho nos colchetes ou fazendo a iniciação com o número desejado de itens. Uma possibilidade adicional, relativa ao primeiro formato, é o uso de uma expressão para indicar a quantidade.
+
+```c
+int n = 10;
+double v1[n];  // vetor com 10 itens
+double v2[2 * n];  // vetor com 20 itens
+```
+
+Na prática, a quantidade de itens usada para dimensionar o vetor pode depender de um cálculo ou uma informação em tempo de execução.
+
+O programa seguinte mostra vetores criados com tamanhos aleatórios, usando a função `rand` de `stdlib.h`.
+
+```{c}
+/*
+ * Criação de vetores com diferentes quantidades de itens
+ * Assegura: apresentação do número de itens de cada vetor
+ */
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void) {
+    for (int exemplo = 1; exemplo <= 10; exemplo++) {
+        // rand() % 20 + 1 resulta em um valor aleatório de 1 até 20
+        double vetor[rand() % 20 + 1];
+        printf("Exemplo %d: vetor criado com %zu itens.\n", exemplo,
+               sizeof vetor/sizeof (double));
+    }
+
+    return 0;
+}
+```
+
+A cada repetição do `for` é criado um vetor com um tamanho aleatório, podendo ter de 1 a 20 itens. A quantidade de itens é apresentada verificando o tamanho real do vetor.
+
+O uso desse recurso é interessante, por exemplo, quando o usuário fornece a quantidade de itens inicialmente, seguida dos valores de cada dado. O vetor pode ser criado exatamente do tamanho para armazenar os dados esperados.
+
+
+
+## Vetores de `struct`
+
+O tipo base de um vetore pode ser um registro (`struct`), de modo que uma coleção de registros pode ser facilmente organizada.
+
+Como exemplo, pode-se considerar um registro contendo as três coordenadas de um ponto em $\mathbb{R}^3$.
+
+```c
+struct ponto3d {
+    double x, y, z;
+};
+
+struct ponto3d lista_pontos[200];  // 200 registros
+```
+
+Cada elemento do vetor `lista_pontos` é um registro. Assim, `lista_pontos[0]` é o primeiro registro do vetor, o que leva a `lista_pontos[0].x`, `lista_pontos[0].y` e `lista_pontos[0].z` serem a especificação de cada um dos seus campos.
+
+## Ponteiros para vetores
+
+Em C, quando o identificador de um vetor é usado, o compilador associa a ele o endereço dessa variável na memória.
+
+```c
+int i; 
+int vet[10];
+
+// &i é o endereço de i
+// vet é o endereço de vet
+```
+
+

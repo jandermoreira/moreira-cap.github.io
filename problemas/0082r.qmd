@@ -1,0 +1,18 @@
+<!-- Inserção simples em vetor -->
+::: {#sol-0082}
+@exr-0082
+
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Inserção de um novo valor a um vetor (no final)
+    \Require um vetor \Id{vetor} e um valor $n$
+    \Ensure modificação de $v$ para que contenha, em ordem, os divisores de $n$
+    \Statex    
+    \Procedure{InsiraNoFim}{\Id{vetor}:\ByRef, $n$:\ByValue}
+        \Statep{Aumente $v.\Id{comprimento}$ em 1}
+        \Statep{$v[v.\Id{comprimento} - 1] \gets n$}
+    \EndProcedure
+\end{algorithmic}
+```
+:::

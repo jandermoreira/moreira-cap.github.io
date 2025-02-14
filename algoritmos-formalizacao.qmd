@@ -1,0 +1,410 @@
+# Formalização dos algoritmos computacionais
+
+Neste livro as soluções algorítmicas serão apresentadas por meio de pseudocódigo, embora haja uma certa variedade de outras opções de representação.
+
+A formalização do pseudocódigo a ser adotado neste livro é o foco deste capítulo.
+
+
+## Objetivos do pseudocódigo
+
+O pseudocódigo pode ser visto como uma mistura de aspectos mais formais, como computação ou notação matemática, com linguagem natural.
+
+Como um primeiro exemplo é apresentado o @alg-estimativa-altura-predio, que considera uma forma de se obter indiretamente a altura de um prédio dados os comprimentos das sombras do prédio de de uma pessoa, juntamente com a altura dessa pessoa. Este tipo de algoritmo pode ser facilmente implementado em C.
+
+```latex {.pseudocode}
+ %| label: #alg-estimativa-altura-predio
+ %| title: Estimativa da altura de um prédio em função de sobras projetadas.
+\begin{algorithmic}
+    \Description Estimativa da altura de um prédio baseada no comprimento da sombra do prédio causada pelo Sol e no da sombra da pessoa que faz a medição, usando a semelhança de triângulos para se obter o resultado mediante a altura da pessoa.
+    \Require O comprimento da sombra do prédio, o comprimento da sombra da pessoa e a altura da pessoa; todos os valores em metros e maiores que zero
+    \Ensure a altura estimada do prédio em metros
+    \Statex{}
+    \Statep{Obtenha os valores de \Id{compr\_sombra\_prédio}, \Id{compr\_sombra\_pesssoa} e \Id{altura\_pessoa}}
+    \Statep{Calcule \Id{altura\_prédio} como $\Id{compr\_sombra\_prédio}\times \Id{altura\_pessoa}/\Id{compr\_sombra\_pessoa}$}
+    \Statep{Apresente a estimativa \Id{altura\_prédio}}
+\end{algorithmic}
+```
+
+Este é um típico problema e programa solicitado em listas de exercícios de cursos de programação. O algoritmo apresenta uma solução praticamente pronta para a implementação do programa, incluindo sugestões para os nomes das variáveis e até induzindo os comandos que serão usados. A escrita do @alg-estimativa-altura-predio foi feita considerando que o algoritmo seria lido por um programador com, minimamente, as capacidades básicas de codificação.
+
+Como um segundo exemplo de pseudocódigo, o @alg-alexandre-levada pode ser considerado.
+
+```latex {.pseudocode}
+%| label: #alg-alexandre-levada
+%| title: PNN based LPP, adaptado de @levada
+\begin{algorithmic}
+    \Description Algoritmo PNN-LPP para redução de dimensionalidade baseado em aprendizado não supervisionado métrico
+    \Require A matriz de dados $X$, o número de vizinhos $K$, a dimensão do espaço de saída $d$ e a variância do \emph{kernel} gaussiano $t$
+    \Ensure Retorna a matriz de dados com dimensionalidade reduzida $Y$
+    \Statex{}
+    %\Function{PNN-LPP}{$X$, $K$, $d$, $t$}
+        \Statep{Obtenha a matriz de dados $X$, o número de vizinhos $K$, a dimensão do espaço $d$ e a variância $t$}
+        \Statep{Para cada amostra $\vec{x}_i$ do conjunto de dados, calcule as distâncias para todas as demais amostras $\vec{x}_j$, armazenando-as no vetor $\vec{d}_i$}
+        \Statep{Ordene as distâncias em ordem crescente}
+        \Statep{Calcule os pesos das arestas usando $s_{ij} = \dfrac{d_{ik+1}-d_{ij}}{d_{ik+1}-d_{i1}}$}
+        \Statep{Use um \emph{kernel} gaussiano para definir a matriz de adjacência $W$. \[ W_{ij} = \exp\left\{ -\dfrac{s_{ij}}{t} \right\}\quad\mbox{\ if\ } v_j \in N(v_i) \]}
+        \Statep{Calcule a matriz diagonal $D$ com os graus $d_i$, para $i = 1, 2, \ldots, n$.}
+        \Statep{Calcule a matriz laplaciana $L = D - W$}
+        \Statep{Selecione $d$ autovetores inferiores da matriz $(XDX^T)^{-1}XLX^T$ para construir a matriz de projeção $A$.}
+        \Statep{Faça a projeção dos dados usando a matriz $A$, obtendo $Y = A^TX$}
+        \Statep{Retorne como resultado a matriz $Y$}
+    %\EndFunction
+\end{algorithmic}
+```
+
+Este algoritmo é uma adaptação do apresentado no artigo de @levada e, para entendê-lo por completo, tanto o texto do artigo deve ser lido quanto o leitor deve ter conhecimento sobre o tema abordado. O objetivo do algoritmo não é o entendimento do procedimento que ele realiza em detalhes, mas observar a sequência de passos para produzir o resultado desejado. Ele ainda envolve a integração da linguagem natural com notação matemática para representar as expressões e matrizes utilizadas. No algoritmo original não há a documentação com a descrição nem as pré e pós-condições, uma vez que ele está inserido na discussão apresentada pelo artigo como um todo.
+
+O @alg-alexandre-levada não foi escrito para pronta implementação. Ele deixa muitos pontos em aberto, mesmo sendo claro quanto a todos os cálculos que devem ser feitos e em que sequência. Esse é um algoritmo de nível alto de abstração, ou seja, muitos detalhes são omitidos propositalmente em função do público-alvo, que são os leitores do artigo científico. Apresentar todos os detalhes, como o passo a passo da criação dos vetores de distâncias $\vec{d}_i$ ou a própria fórmula usada para a distância somente tornaria o código desnecessariamente complexo, prejudicando a compreensão da estratégia da solução.
+
+### Público-alvo e nível de abstração
+
+Quando um algoritmo vai ser escrito, é preciso ter claro qual é o público-alvo que ele pretende atingir. As instruções, portanto, assumem uma forma baseada no conhecimento prévio de quem vai interpretá-las. Essa decisão implica na escolha do nível de abstração que será empregado.
+
+Um algoritmo escrito com nível de abstração baixo é aquele mais próximo do programa que será implementado. Ele costuma apresentar as variáveis e comandos de forma mais explícita. Quando o nível de abstração sobe, os detalhes de implementação são substituídos por descrições mais genéricas.
+
+Supondo que o problema a ser resolvido seja a soma de duas matrizes de mesma dimensão, são apresentados algoritmos em níveis de abstração diferentes, todos corretos e abordando exatamente a mesma solução. O @alg-soma-matrizes-nivel-alto possui um nível de abstração bastante alto, seguido pelo @alg-soma-matrizes-nivel-medio, o qual apresenta mais detalhes e pode ser considerado de nível médio; por sua vez, o @alg-soma-matrizes-nivel-mais-baixo e o @alg-soma-matrizes-nivel-baixo já possuem nível baixo e se aproximam mais de uma possível implementação em um programa.
+
+
+```pseudocode {label="#alg-soma-matrizes-nivel-alto" title="Soma de duas matrizes de mesma dimensão (nível alto)."}
+\begin{algorithmic}
+    \Description Cálculo da soma de duas matrizes de dimensões compatíveis
+    \Require Duas matrizes $A$ e $B$
+    \Ensure A soma $A + B$
+    \Statex{}
+    \Statep{Obtenha as matrizes $A$ e $B$}
+    \Statep{Calcule $S$ como $A + B$}
+    \Statep{Apresente a matriz $S$}
+\end{algorithmic}
+```
+
+```pseudocode {label="#alg-soma-matrizes-nivel-medio" title="Soma de duas matrizes de mesma dimensão (nível médio)."}
+\begin{algorithmic}
+    \Description Cálculo da soma de duas matrizes de dimensões compatíveis
+    \Require Os valores de duas matrizes $A$ e $B$
+    \Ensure Os valores de $S = A + B$
+    \Statex{}
+    \Statep{Obtenha cada valor $a_{ij}$ de $A$}
+    \Statep{Obtenha cada valor $b_{ij}$ de $B$}
+    \Statep{Calcule a matriz soma $S$ de forma que todo $s_{ij}$ seja calculado como $a_{ij} + b_{ij}$}
+    \Statep{Apresente cada $s_{ij}$ de $S$}
+\end{algorithmic}
+```
+
+```pseudocode {label="#alg-soma-matrizes-nivel-mais-baixo" title="Soma de duas matrizes de mesma dimensão (nível mais baixo)."}
+\begin{algorithmic}
+    \Description Cálculo da soma de duas matrizes de dimensões compatíveis
+    \Require As dimensões das matrizes $A$ e $B$ seguida por todos os valores de $a_{ij}$ e $b_{ij}$
+    \Ensure Os valores $s_{ij}$ de $S = A + B$
+    \Statex{}
+    \Statep{Obtenha o número de linhas, \Id{número\_linhas}, e colunas, \Id{número\_colunas}, das matrizes}
+    \Statep{Para cada linha $i$, ${i = 1, 2, \ldots, \Id{número\_linhas}}$, e cada coluna $j$, ${j = 1, 2, \ldots, \Id{número\_colunas}}$, obtenha o valor para $\Id{matriz\_a}_{ij}$ de \Id{matriz\_a}}
+    \Statep{Para cada linha $i$, ${i = 1, 2, \ldots, \Id{número\_linhas}}$, e cada coluna $j$, ${j = 1, 2, \ldots, \Id{número\_colunas}}$, obtenha o valor para $\Id{matriz\_b}_{ij}$ de \Id{matriz\_b}}
+    \Statep{Calcule \Id{matriz\_soma}, fazendo ${\Id{matriz\_soma}_{ij} = \Id{matriz\_a}_{ij} + \Id{matriz\_b}_{ij}}$, para cada linha $i$, ${i = 1, 2, \ldots, \Id{número\_linhas}}$, e cada coluna $j$, ${j = 1, 2, \ldots, \Id{número\_colunas}}$}
+    \Statep{Para cada linha $i$, ${i = 1, 2, \ldots, \Id{número\_linhas}}$, e cada coluna $j$, ${j = 1, 2, \ldots, \Id{número\_colunas}}$, apresente $\Id{matriz\_soma}_{ij}$}
+\end{algorithmic}
+```
+
+```pseudocode {label="#alg-soma-matrizes-nivel-baixo" title="Soma de duas matrizes de mesma dimensão (nível baixo)."}
+\begin{algorithmic}
+    \Description Cálculo da soma de duas matrizes de dimensões compatíveis
+    \Require As dimensões das matrizes $A$ e $B$ seguida por todos os valores de $a_{ij}$ e $b_{ij}$
+    \Ensure Os valores $s_{ij}$ de $S = A + B$
+    \Statex{}
+    \Statep{Obtenha o número de linhas, \Id{número\_linhas}, e colunas, \Id{número\_colunas}, das matrizes}
+    \ForEach{linha $i$, ${i = 1, 2, \ldots, \Id{número\_linhas}}$}
+        \ForEach{coluna $j$, ${j = 1, 2, \ldots, \Id{número\_colunas}}$}
+            \Statep{Obtenha o valor para $\Id{matriz\_a}_{ij}$ de \Id{matriz\_a}}
+        \EndFor
+    \EndFor
+    \ForEach{linha $i$, ${i = 1, 2, \ldots, \Id{número\_linhas}}$}
+        \ForEach{coluna $j$, ${j = 1, 2, \ldots, \Id{número\_colunas}}$}
+            \Statep{Obtenha o valor para $\Id{matriz\_b}_{ij}$ de \Id{matriz\_b}}
+        \EndFor
+    \EndFor
+    \ForEach{linha $i$, ${i = 1, 2, \ldots, \Id{número\_linhas}}$}
+        \ForEach{coluna $j$, ${j = 1, 2, \ldots, \Id{número\_colunas}}$}
+            \Statep{Calcule $\Id{matriz\_soma}_{ij}$ como ${\Id{matriz\_a}_{ij} + \Id{matriz\_b}_{ij}}$}
+        \EndFor
+    \EndFor
+    \ForEach{linha $i$, ${i = 1, 2, \ldots, \Id{número\_linhas}}$}
+        \ForEach{coluna $j$, ${j = 1, 2, \ldots, \Id{número\_colunas}}$}
+            \Statep{Apresente $\Id{matriz\_soma}_{ij}$}
+        \EndFor
+    \EndFor
+
+\end{algorithmic}
+```
+
+Os algoritmos são apresentados em quatro níveis de abstração diferentes. A @tbl-comparacao-niveis-abstracao sumariza uma comparação desses algoritmos.
+
+
+| Algoritmo                           |   Nível    | Comentário |
+| :---------------------------------: | :--------: | :--------- |
+| @alg-soma-matrizes-nivel-alto       |    Alto    | Pressupõe o conhecimento de matrizes e suas operações; detalhes como as dimensões são omitidos.        |
+| @alg-soma-matrizes-nivel-medio      |   Médio    | Ainda considera o conhecimento sobre matrizes; há mais detalhes de como os dados são obtidos e como o cálculo da soma é feito.         |
+| @alg-soma-matrizes-nivel-mais-baixo | Mais baixo | A necessidade de conhecer matrizes é mínima, bastando assumir cada elemento como uma variável separada; introduz a necessidade das dimensões para controle da somas; mantém uma linguagem mais natural.        |
+| @alg-soma-matrizes-nivel-baixo      |   Baixo    | Não há praticamente necessidade de entender o que é uma matriz; uma estruturação de pseudocódigo é adicionada; cada ação é hiperdetalhada; a linguagem natural é mínima.        |
+
+: Comparação da soma de matrizes com algoritmos em diferentes níveis de abstração. {#tbl-comparacao-niveis-abstracao}
+
+
+Da mesma forma que o nível de abstração depende do público-alvo, também inexiste a necessidade de que um mesmo algoritmo mantenha o nível de abstração constante para todas suas partes. Desse modo, pontos menos importantes, ou seja, que não são o foco do algoritmo, podem ter nível mais alto enquanto outras partes podem ser mais detalhadas, deixando o nível mais baixo para explicitar pontos relevantes da solução.
+
+
+
+## Formalização do pseudocódigo
+
+Não existem regras para a escrita de pseudocódigo. Nada é necessariamente fixo, nem existem estruturas imutáveis que possam ser empregadas. O principal ponto é a representação clara do algoritmo para o leitor.
+
+Embora as regras não existam absolutamente, há um convenção geral adotada pela comunidade, ficando um grupo de estruturas e aspectos relativamente consolidados.
+
+### Padronização
+
+Os algoritmos apresentados neste livro seguem um pseudocódigo próprio, baseado no uso geral dos algoritmos escritos pela comunidade de computação. Alguns elementos são mais usuais (condicionais, repetições e funções), outras são menos utilizadas (documentação com pré e pós-condições) e outras não são convencionais (condicional de seleção).
+
+A opção por ter tanto os elementos de uso geral e quanto algumas "invovações" vem do caráter didático a que este material se propõe a ter.
+
+### Documentação
+
+Todos os algoritmos neste livro conterão um cabeçalho de documentação. Nele são exibidos os seguintes elementos:
+
+* Descrição;
+* Pré-condições;
+* Pós-condições.
+
+
+A descrição é a caracterização do problema que o algoritmo resolve e tem a extensão necessária para apresentar com clareza o problema. Em particular, a descrição não apresenta como o problema é resolvido, pois isso é a parte das instruções.
+
+As pré-condições e pós-condições reportam de forma tão precisa quanto possível, o que o algoritmo precisa e em que condições esses dados devem estar e também o que ele produz, dando detalhes para que não haja problemas em interpretar o que o algoritmo produz como resultado. Estes dois elementos são apresentados no @sec-nocoes-de-algoritmos.
+
+### Declaração e uso de variáveis
+
+Embora ocorram em alguns algoritmos, as declarações de variáveis não são empregadas nas soluções apresentadas. A ideia de declaração introduz um detalhamento desnecessário no pseudocódigo, pois levaria à necessidade de especificar tipos de dados e impor, eventualmente, limitações e particularidades a eles. Manteve-se, assim, um nível mais alto de abstração para as variáveis.
+
+Os identificadores são expressos de forma relativamente livre, usando _snake case_ e notação matemática. As atribuições usam `**teste**`{=md}`$\gets$`{=latex}
+
+
+## Elementos estruturais
+
+Seguindo uma convenção geral, o pseudocódigo adotado segue padrões comuns a artigos científicos e muitos outros materiais disponíveis. Em particular, a formalização adotada no texto segue alguns elementos de estruturação importantes.
+
+### Execução sequencial
+
+Cada instrução do algoritmo é escrita em sua própria linha, estabelecendo uma execução sequencial das instruções. Uma nova instrução somente será executada depois da anterior ter sido completamente finalizada.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Statep{Pergunte a idade de cada pessoa próxima a você selecionando o valor mínimo}
+    \Statep{Apresente o valor mínimo de idade}
+\end{algorithmic}
+```
+
+Muitas vezes a inversão na ordem não impacta no resultado, mas uma ordem incorreta implica em uma solução incorreta.
+
+Como o algoritmo é uma sequência de ordens que devem ser seguidas à risca, o modo verbal usado será sempre o imperativo.
+
+
+### Obtenção e apresentação de dados
+
+Nos algoritmos, os dados necessários devem ser "entrados" de forma a produzir "saídas". Por uma associação livre e direta, as entradas são as informações que um usuário digitaria para o programa utilizar, enquanto as saídas são os resultados apresentados no terminal.
+
+Neste texto, as entradas estarão associadas principalmente ao verbo _obter_, enquanto a saída usa o verbo _apresentar_. Por associação às linguagens de programação, também é comum o uso dos verbos _ler_ e _escrever_, respectivamente.
+
+Na sequência é apresentada uma entrada e uma saída de dados.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Statep{Obtenha um valor para $x$}
+    \Statep{Apresente o seno de $x$}
+\end{algorithmic}
+```
+
+Alternativamente, as mesmas instruções podem ser apresentadas como se segue. Nesta versão a verbosidade dá lugar a uma apresentação mais compacta e mais próxima a uma linguagem de programação.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Statep{\Read $x$}
+    \Statep{\Write seno de $x$}
+\end{algorithmic}
+```
+
+
+### Execução condicional
+
+A execução condicional assume a forma tradicional da estrutura -se-, na qual a lista de instruções indicada somente deve ser executada quando a condição verificada for verdadeira.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \If{uma condição}
+        \Statep{Execute uma ação}
+    \EndIf
+\end{algorithmic}
+```
+
+Nesta estrutura condicional, a ação somente será executada se a condição indicada for verdadeira. Caso seja falsa, essa ação é simplesmente ignorada.
+
+Alternativamente, uma ação pode ser indicada caso a condição não seja satisfeita, usando-se uma alternativa com -senão-.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \If{uma condição}
+        \Statep{Execute uma ação}
+    \Else
+        \Statep{Execute uma outra ação}
+    \EndIf
+\end{algorithmic}
+```
+
+Uma terceira forma de expressar a execução condicional com -se- é pelo sequenciamento de condições, cada uma excluindo a condição anterior.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \If{$v < 0$}
+        \Statep{Execute uma ação para valores negativos}
+    \ElsIf{$v \leq 1$}
+        \Statep{Execute uma ação para valores no intervalo $0 \leq v \leq 1$}
+    \ElsIf{$v \leq 10$}
+        \Statep{Execute uma ação para valores no intervalo $1 < v \leq 10$}
+    \Else
+        \Statep{Execute uma outra ação para valores maiores que 10}
+    \EndIf
+\end{algorithmic}
+```
+
+Cada novo -se- somente é verificado caso o imediatamente anterior tenha condição avaliada como falsa.
+
+Esta última construção da estrutura condicional equivale à apresentada na sequência.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \If{$v < 0$}
+        \Statep{Execute uma ação para valores negativos}
+    \Else
+        \If{$v \leq 1$}
+            \Statep{Execute uma ação para valores no intervalo $0 \leq v \leq 1$}
+        \Else
+            \If{$v \leq 10$}
+                \Statep{Execute uma ação para valores no intervalo $1 < v \leq 10$}
+            \Else
+                \Statep{Execute uma outra ação para valores maiores que 10}
+            \EndIf
+        \EndIf
+    \EndIf
+\end{algorithmic}
+```
+
+As duas formas são equivalentes, porém a primeira é mais sintética e clara.
+
+
+Outro modo de execução condicional pode ser indicado pela estrutura de seleção. Embora estruturas similares estejam presentes em linguagens de programação, esta alternativa é raramente usada em pseudocódigos em geral.
+
+
+A estrutura de seleção é uma comparação por igualdades e tem a estrutura seguinte.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Switch{um valor}
+        \Case{$c_1$}
+            \Statep{Execute uma ação quando igual a $c_1$}
+        \EndCase
+        \Case{$c_2$}
+            \Statep{Execute uma ação quando igual a $c_2$}
+        \EndCase
+        \Case{$c_3$}
+            \Statep{Execute uma ação quando igual a $c_3$}
+        \EndCase
+        \Otherwise
+            \Statep{Execute uma ação se não houver coincidência com nenhuma das anteriores}
+        \EndOtherwise
+    \EndSwitch
+\end{algorithmic}
+```
+
+O conceito desta estrutura de condicional é a indicação de seleções diretas. Assim, entende-se que apenas uma das alternativas será executada e que os valores constantes indicados (cada $c_i$ do exemplo anterior) serão distintos entre si. 
+
+A omissão do -caso-contrário- representa a situação em que, não havendo coincidência com nenhuma das opções, nenhuma ação é realizada.
+
+Qualquer seleção pode ser escrita com a estrutura condicional -se-.
+
+### Repetições
+
+Instruções executadas repetidamente são representadas pelas repetições com -enquanto-, -repita- e -para-.
+
+A estrutura -enquanto- utiliza o teste de continuidade da repetição no início, permitindo zero ou mais repetições. Para a condição é esperado uma expressão que resulte em verdadeiro ou falso.
+
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \While{uma condição for válida}
+        \Statep{Execute uma ação}
+    \EndWhile
+\end{algorithmic}
+```
+
+A repetição com teste no final utiliza a estrutura -repita-, encerrada com -até-que-, na qual consta a condição de término das repetições. A condição é avaliada apenas ao final de cada execução, o que implica que pelo menos a primeira das repetições tem que ser completada.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Repeat
+        \Statep{Execute uma ação}
+    \Until{uma condição seja atingida}
+\end{algorithmic}
+```
+
+Tanto as repetições com -enquanto- quanto com -repita- são "abertas", ou seja, dependem das ações nas instruções internas alterarem a condição para que laço seja interrompido.
+
+As repetições definidas (i.e., não "abertas") são expressas com -para-. Usualmente uma repetição deste tipo pressupões o conhecimento do número de vezes que as instruções serão executadas. Na sequência são apresentadas as estruturas com -para-.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \For{$i = 1$ \To $10$}[$i = 1, 2, 3, \ldots, 10$ (10 vezes)]
+        \Statep{Execute uma ação}
+    \EndFor
+\end{algorithmic}
+```
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \ForEach{\Id{item} em $\langle 100, 50, 20, 10, 2 \rangle$}[5 repetições]
+        \Statep{Execute uma ação com \Id{elemento}}
+    \EndFor
+\end{algorithmic}
+```
+
+::: {.callout-note}
+Repetições com -para- podem ser abertas como no exemplo seguinte. 
+
+```latex {.pseudocode}
+%| pdf-float: false
+\begin{algorithmic}
+    \ForEach{\Id{item} na entrada de dados}
+        \Statep{Execute uma ação usando \Id{item}}
+    \EndFor
+\end{algorithmic}
+```
+Esse uso é evitado (com sucesso relativo) neste livro, dando-se preferência para laços com -enquanto- e -repita- quando o número de repetições é desconhecido.
+
+```latex {.pseudocode}
+%| pdf-float: false
+\begin{algorithmic}
+    \While{há dados na entrada}
+        \Statep{Obtenha um \Id{item} da entrada}
+        \Statep{Execute uma ação usando \Id{item}}
+    \EndWhile
+\end{algorithmic}
+```
+:::
+
+
+
+### Modularização
+### Comentários
+
+
+## Algoritmos estruturados
+
+## Notação programática _versus_ notação matemática
+
+`temperatura_celsius` vs. $t_c$.
+
+

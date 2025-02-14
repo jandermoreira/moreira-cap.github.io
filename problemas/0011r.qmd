@@ -1,0 +1,8 @@
+<!-- Qual usar? Repetição indefinida com sentinela (Processo seletivo) -->
+::: {#sol-0011}
+@exr-0011
+
+A sequência de entrada especificada contém os valores e um sentinela. O processamento requer uma repetição que use -enquanto- ou -repita-.
+
+O uso do -para-, considerando que requeira a especificação do intervalo, não é possível, já que não há possibilidade de antever o número de repetições.
+:::

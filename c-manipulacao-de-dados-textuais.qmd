@@ -1,0 +1,562 @@
+# Manipulação de dados textuais em C {#sec-manipulacao-de-dados-textuais}
+
+O uso de variáveis para guardar valores textuais tem sido usado em praticamente todos os programas até o momento e seu uso para leitura está descrito na @sec-leitura-de-valores-textuais. Este capítulo apresenta com mais detalhes as cadeias de caracteres e introduz recursos para sua manipulação.
+
+## As cadeias de caracteres em variáveis
+
+Variáveis declaradas como `char *` armazenam, como visto na @sec-ponteiros-para-strings-constantes, apenas uma referência a uma cadeia de caracteres já existentes. Para que se tenha uma variável para guardar dados textuais de forma genérica, é preciso ter espaço para armazenar tanto os caracteres quanto o terminador `\0`.
+
+Como C não dispões de um tipo nativo para o armazenamento de textos, a alternativa é o uso de um vetor de caracteres. A declaração seguinte ilustra uma declaração para armazenamento de um valor literal. Ela cria um espaço na memória capaz de armazenar 50 valores do tipo `char`, ou seja, 50 caracteres.
+
+```c
+char texto[50];
+```
+
+Esse espaço reservado na declaração é fixo a partir da declaração da variável, ou seja, uma vez escolhido um comprimento, não é possível aumentá-lo ou diminuí-lo.
+
+O que se faz nos programas é ter um espaço máximo, que é o tamanho declarado para o vetor de caracteres, porém usá-lo apenas parcialmente. Como exemplo, se na variável `texto` declarada com 50 posições estiver armazenado o texto "grandes responsabilidades", os caracteres do _g_ inicial até o _s_ final ocupam os primeiros 25 `char` dela, sendo o 26º caractere necessariamente um `\0`. Restam na variável 24 posições sem uso e seu conteúdo é ignorado.
+
+Com essa estratégia de uso, o conteúdo textual pode ser aumentado pelo uso dos caracteres sobressalentes, deslocando-se o `\0` mais para o final do vetor, ou encolhido, quando o terminador ocupa uma posição mais para o início. O limite evidente é o espaço total reservado para o armazenamento, sempre se lembrando que deve haver um espaço para o terminador. Assim, a variável texto pode ter comprimento máximo de 49 `char`, pois tem que haver espaço para o `\0` final.
+
+Desse modo, pelo uso desse mecanismo de armazenamento, mantém-se uma compatibilidade com as constantes usadas no código: se existe uma constante `"bom dia!"` ocupando nove bytes no programa, esse mesmo valor pode ser guardado em uma variável, ocupando as nove primeiras posições do vetor de caracteres.
+
+
+
+## Manipulação de conteúdo
+
+Uma dificuldade imediata é que os vetores de caracteres não são uma variável simples, mas uma coleção de variáveis individuais tratadas como uma coisa só. Como não são variáveis como as declaradas como `int`, `double` ou mesmo `char` simples, não admitem atribuições ou manipulações diretas. Para tratar as variáveis textuais C provê uma série de funções, as quais podem ser usadas pela importação do cabeçalho `string.h`.
+
+::: {.callout-tip}
+O arquivo de cabeçalho é `string.h`.
+
+```c
+#include <string.h>
+```
+
+Existe, porém, outro arquivo de cabeçalhos chamado `strings.h` (no plural) e eles não podem ser confundidos.
+:::
+
+Para que se tenha utilidade prática na manipulação de variáveis textuais, é preciso que se possa ver o comprimento do texto e fazer atribuições de valores, realizar concatenações e comparações.
+
+
+
+### Comprimento de cadeias de caracteres
+
+Uma função que já foi usada anteriormente em diversos programas é a `strlen` (_string length_), que retorna o comprimento da cadeia de caracteres sem o `\0` final.
+
+```{c}
+/*
+Comprimento de cadeias de caracteres
+Assegura: a apresentação de textos e respectivos comprimentos
+*/
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    char *texto1 = "C: a linguagem";
+    printf("\"%s\" tem comprimento %zu.\n", texto1, strlen(texto1));
+
+    char *texto2 = "";
+    printf("\"%s\" tem comprimento %zu.\n", texto2, strlen(texto2));
+
+    char *texto3 = "Programas estruturados";
+    printf("\"%s\" tem comprimento %zu.\n", texto3, strlen(texto3));
+
+    return 0;
+}
+```
+
+
+
+### Atribuições de cadeias de caracteres
+
+O programa seguinte foca na questão da atribuição. Porém, esse código serve apenas para mostrar o que não funciona.
+
+```{c} {intentional-problems="true"}
+/*
+Tentativa malsucedida de atribuir um valor a uma variável
+Assegura: absolutamente nada (infelizmente)
+*/
+#include <stdio.h>
+
+int main(void) {
+    char texto[50];
+
+    texto = "Bom dia!";
+    printf("%s\n", texto);
+
+    return 0;
+}
+```
+
+O humilde autor desse texto tem convicção que praticamente a totalidade dos programadores C do planeta desejariam que esse programa funcionasse. A realidade, porém, não é essa: o erro principal do código é exatamente a atribuição. Basicamente, `texto` é o nome para a coleção de caracteres e, na linguagem, não faz sentido armazenar nela uma constante.
+
+O programa seguinte mostra como a função `strncpy` (_string copy_) pode ser usada para obter o mesmo efeito da atribuição.
+
+```{c}
+/*
+Atribuição e apresentação de valor textual
+Assegura: apresentação do valor guardado em uma string
+*/
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    char texto[50];
+
+    strncpy(texto, "Bom dia!", sizeof texto - 1);
+    printf("%s\n", texto);
+
+    return 0;
+}
+```
+
+O processo da atribuição é copiar um dado valor para uma variável. 
+
+```c
+strncpy(texto, "Bom dia!", sizeof texto - 1);
+```
+
+O primeiro parâmetro de `strncpy` é a variável que receberá o valor. O segundo parâmetro é o valor que será atribuído, que pode ser uma constante ou outra variável. Há, ainda, um terceiro parâmetro, que é o tamanho da variável, que é importante para garantir que o limite de espaço reservado para a variável será respeitado. Ultrapassar o tamanho da variável pode trazer consequências imprevisíveis à execução.
+
+::: {.callout-tip}
+Existem funções de manipulação de cadeias de caracteres que não verificam o tamanho da variável destino. É importante nunca usá-las.
+:::
+
+
+### Concatenação de cadeias de caracteres
+
+Além da cópia de uma sequência de caracteres para uma variável, é possível estender seu conteúdo, fazendo a concatenação. A função `strncat` (_string catenation_) faz a cópia de uma cadeia anexando-a a outra.
+
+```{c}
+/*
+Criação de uma única linha a partir de leituras separadas
+Requer: Uma sequência de linhas de texto
+Assegura: apresentação da concatenação de todas as linhas em uma só
+*/
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+int main(void) {
+    char texto[160];
+    char linha_unica[5000];
+
+    // Inicia uma cadeia vazia
+    strncpy(linha_unica, "", sizeof linha_unica - 1);
+
+    // Acrescenta cada linha digitada à linha única
+    printf("Digite linhas, usando Ctrl-D para encerrar:\n");
+    bool primeira_palavra = true;
+    while (fgets(texto, sizeof texto, stdin) != NULL) {
+        //TYPE(0, "Era");
+        //TYPE(1, "uma");
+        //TYPE(2, "vez");
+        //TYPE(3, "uma linda menina");
+        //TYPE(4, "que possuia uma capa vermelha com");
+        //TYPE(5, "capuz.");
+        //STEP
+
+        texto[strlen(texto) - 1] = '\0';
+        if (primeira_palavra)
+            primeira_palavra = false;
+        else
+            strncat(linha_unica, " ",
+                    sizeof linha_unica - strlen(linha_unica) - 1);
+
+        strncat(linha_unica, texto,
+                sizeof linha_unica - strlen(linha_unica) - 1);
+    }
+
+    // Texto total
+    printf("\n\"%s\"\n", linha_unica);
+
+    return 0;
+}
+```
+
+A função de concatenação acrescenta à variável do primeiro parâmetro (`linha_unica`) uma cópia dos caracteres contidos no segundo parâmetro (`texto`). O terceiro parâmetro é a quantidade máxima de caracteres a serem copiados, a qual é usada para respeitar o tamanho do espaço da variável destino. No código, a quantidade máxima para cada concatenação corresponde ao cálculo do espaço livre existente em `linha_unica`, respeitando um byte para ter espaço para o `\0` final.
+
+
+### Comparações de cadeias de caracteres {#sec-comparacao-strings}
+
+A comparação entre duas cadeias de caracteres é feita no sentido alfabético usual, sempre comparando os primeiros caracteres das duas cadeias e, sendo iguais, passando para os segundos, terceiros e assim por diante. Nas funções de `string.h`, a função `strncmp` (_string comparison_) tem a finalidade realizar as comparações.
+
+A função `strncmp` retorna sempre um valor inteiro, como apresentado na @tbl-resultados-strncmp.
+
+
+|   Resultado    | Significado |
+| :------------: | :---------- |
+|      zero      | Iguais      |
+| menor que zero | Anterior    |
+| maior que zero | Posterior   |
+
+: Resultados possíveis para a função `strncmp`. {#tbl-resultados-strncmp}
+
+
+Segue um programa ilustrando o uso de `strncmp`.
+
+
+```{c}
+/*
+Comparações de cadeias de caracteres
+Requer: a digitação de pares de palavras em cada linha
+Assegura: a apresentação da comparação entre as palavras de cada par
+*/
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    char linha[160];
+    printf("Digite duas palavras por linha, usando Ctrl-D para encerrar:\n");
+    while (fgets(linha, sizeof linha, stdin) != NULL) {
+        char palavra1[80], palavra2[80];
+        sscanf(linha, "%79s%79s", palavra1, palavra2);  // palavras simples
+        //TYPE(0, "abacaxi abacaxi");
+        //TYPE(1, "marca marcas");
+        //TYPE(2, "vermelho azul");
+        //TYPE(3, "azul vermelho");
+        //TYPE(4, "contraponto contraindicado");
+        //STEP
+
+        if (strncmp(palavra1, palavra2, sizeof palavra1) == 0)
+            printf("%s é igual a %s.\n", palavra1, palavra2);
+        else if (strncmp(palavra1, palavra2, sizeof palavra1) < 0)
+            printf("%s é anterior a %s.\n", palavra1, palavra2);
+        else
+            printf("%s é posterior a %s.\n", palavra1, palavra2);
+    }
+
+    return 0;
+}
+```
+
+
+Uma discussão sobre comparações de palavras acentuadas é apesentada na @sec-acentuacao-em-strings.
+
+
+## Mais sobre declaração de variáveis textuais
+
+Assim como variáveis aritméticas e lógicas, variáveis literais também podem ser iniciadas na declaração. Há formatos diferentes para essa iniciação.
+
+O programa seguinte ilustra os diferentes formatos, os quais serão abordados individualmente na sequência.
+
+```{c}
+/*
+Exemplificação de declaração de cadeias de caracteres juntamente com iniciação
+Assegura: apresentação dos textos atribuídos e do tamanho de cada variável
+*/
+#include <stdio.h>
+
+int main(void) {
+    // Referência a uma constante
+    char *texto1 = "Um texto constante e fixo";
+    printf("texto1 = '%s'.\n", texto1);
+
+    // Variável com comprimento explícito
+    char texto2[100] = "Uma variável de até 99 posições";
+    printf("texto2 = '%s'.\n", texto2);
+
+    // Variável com comprimento automático
+    char texto3[] = "Variável com comprimento dependente do valor atribuído";
+    printf("texto3 = '%s'.\n", texto3);
+
+    // Comprimentos das variáveis
+    printf("\ntexto1: %zu bytes, pois é apenas referência a uma constante.\n",
+           sizeof texto1);
+    printf("texto2: %zu bytes, conforme tamanho especificado.\n",
+           sizeof texto2);
+    printf("texto3: %zu bytes, pois depende do texto de iniciação.\n",
+           sizeof texto3);
+
+    return 0;
+}
+```
+
+O primeiro formato é o utilizado na @sec-ponteiros-para-strings-constantes, que declara uma variável que é apenas uma referência a um texto em outro lugar. No caso, esse texto é uma constante que o compilador insere no código fonte. Ao longo do código, a variável `texto1` pode ser alterada de forma a apontar para outro texto.
+
+```c
+char *texto = "Texto";  // a variável é uma referência à constante "Texto"
+```
+
+Outra possibilidade é a mais usual, criando-se um vetor de caracteres com um tamanho predeterminado e, juntamente a isso, fazer a cópia de um valor para ele. Para o caso da variável `texto2` do programa, há a alocação de um espaço total de 100\ bytes, permitindo um texto de até 99 bytes. Ao fazer a declaração, um cópia da constante textual é feita para a variável. Como `texto2` recebe uma cópia, os dados da variável podem ser alterados.
+
+```c
+char *texto[20] = "Texto";  // a variável tem 20 posições, usando as 6
+                            // primeiras para guardar "Texto" e \0
+```
+
+Finalmente, `texto3` é uma variável declarada como `texto2`, porém omitindo seu comprimento. Neste caso, a variável é criada com capacidade para guardar exatamente o valor atribuído, ou seja, o espaço para os caracteres e para o `\0` terminal.
+
+```c
+char *texto[] = "Texto";  // a variável tem exatamente as 6 posições
+                          // necessárias para guardar "Texto" e \0
+```
+
+É importante lembrar que as declarações que usam os colchetes, seja com tamanho explícito ou omitido, o espaço reservado para a variável deve sempre ser respeitado.
+
+
+
+
+## Acesso direto ao conteúdo
+
+Uma forma prática de usar cadeias de caracteres é fazendo acesso a cada posição individual do vetor. Para isso, é possível indicar um `char` qualquer armazenado especificando sua posição no vetor.
+
+O programa seguinte mostra como cada posição de uma cadeia de caracteres pode ser acessada.
+
+
+```{c} 
+/*
+Apresentação de um texto caractere a caractere
+Requer: um texto digitado pelo usuário
+Assegura: apresentação de cada caractere, posição a posição
+*/
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    printf("Digite um texto qualquer:\n");
+    char texto[160];
+    fgets(texto, sizeof texto, stdin);
+    //TYPE(0, "Subi no ombro de gigantes!");
+
+    for (int posicao = 0; posicao < strlen(texto) - 1; posicao++)
+        printf("%2d: '%c'\n", posicao, texto[posicao]);
+
+    return 0;
+}
+```
+
+A variável `texto` possui um espaço de armazenamento para 160 caracteres simples. Cada uma dessas posições pode ser indica por um índice, que vai de zero a 159. Assim, o primeiro caractere do texto está em `texto[0]`, o segundo em `texto[1]` e o último em `texto[strlen(texto) - 1]`. No programa, o laço de repetição claramente se inicia na posição zero, mas é relevante ressaltar que a última posição apresentada na tela é a `strlen(texto) - 2`, o que evita escrever o `\n` que está na última posição.
+
+::: {.callout-tip}
+Uma das grandes fontes de erro no acesso aos índices de uma cadeia de caracteres é errar nos limites dos índices. Não é incomum, em uma repetição, faltar uma posição ou passar uma posição.
+
+Atenção é sempre necessária nesse ponto.
+:::
+
+
+Além das funções em `string.h`, há algumas interessantes em `ctype.h`, que permitem facilmente verificar caracteres. A @tbl-funcoes-para-caractere apresenta uma lista de várias funções interessantes.
+
+
+|    Função     | Significado                                                                                                            |
+| :-----------: | :--------------------------------------------------------------------------------------------------------------------- |
+| `isalpha(c)`  | Verifica se `c` é um caractere alfabético (i.e., uma letra).                                                           |
+| `isdigit(c)`  | Verifica se `c` é um dígito de 0 a 9.                                                                                  |
+| `isalnum(c)`  | Verifica se `c` é alfanumérico, ou seja se é alfabético ou dígito.                                                     |
+| `isascii(c)`  | Verifica se `c` é um caractere ASCII do escopo de 7\ bits.                                                             |
+| `iscntrl(c)`  | Verifica se `c` é um caractere de controle.                                                                            |
+| `islower(c)`  | Verifica se `c` é uma letra minúscula.                                                                                 |
+| `isupper(c)`  | Verifica se `c` é uma letra maiúscula.                                                                                 |
+| `isspace(c)`  | Verifica se `c` é qualquer caractere de "espaço branco" (_white-space_), ou seja espaço, `\f`, `\n`, `\r`, \t' e `\v`. |
+| `isblank(c)`  | Verifica se `c` é um caractere "branco" (_blank_), o seja, se é espaço ou tabulação.                                   |
+| `isprint(c)`  | Verifica se `c` é um caractere imprimível, incluindo o espaço.                                                         |
+| `isgraph(c)`  | Verifica se `c` é um caractere imprimível, exceto o espaço.                                                            |
+| `ispunct(c)`  | Verifica se `c` é um caractere imprimível que não seja um espaço ou um caractere alfanumérico.                         |
+| `isxdigit(c)` | Verifica se `c` for hexadecimal digits, that is, one of 0 1 2 3 4 5 6 7 8 9 a b c d e f A B C D E F.                   |
+
+: Funções para verificação de caracteres simples (`ctype.h`). Todas as funções retornam um inteiro não nulo em caso de sucesso ou zero, caso contrário. {#tbl-funcoes-para-caractere}
+
+
+Para exemplificar o uso de algumas funções, segue um programa que conta alguns itens de interesse em um texto digitado pelo usuário.
+
+
+```{c}
+/*
+Contagem de maiúsculas, minúsculas, pontuação, dígitos e caracteres de
+    controle em um texto
+Requer: um texto digitado pelo usuário
+Assegura: apresentação das contagens de maiúsculas, minúsculas, pontuação,
+    dígitos e caracteres de controle presentes no texto
+*/
+#include <stdio.h>
+#include <ctype.h>
+
+int main(void) {
+    printf("Digite um texto qualquer:\n");
+    char texto[160];
+    fgets(texto, sizeof texto, stdin);
+    //TYPE(0, "Moro na rua XV de Novembro, 2605");
+
+    int contador_minusculas = 0;
+    int contador_maiusculas = 0;
+    int contador_pontuacao = 0;
+    int contador_digitos = 0;
+    int contador_controle = 0;
+
+    int i = 0;
+    while (texto[i] != '\0') {
+        if (islower(texto[i]))
+            contador_minusculas++;
+        else if (isupper(texto[i]))
+            contador_maiusculas++;
+        else if (ispunct(texto[i]))
+            contador_pontuacao++;
+        else if (isdigit(texto[i]))
+            contador_digitos++;
+        else if (iscntrl(texto[i]))
+            contador_controle++;
+
+        i++;
+    }
+
+    printf("Maiúsculas: %d.\n", contador_maiusculas);
+    printf("Minúsculas: %d.\n", contador_minusculas);
+    printf("Pontuação: %d.\n", contador_pontuacao);
+    printf("Dígitos: %d.\n", contador_digitos);
+    printf("Caracteres de controle: %d.\n", contador_controle);
+
+    return 0;
+}
+```
+
+Esse programa usa algumas das funções da @tbl-funcoes-para-caractere para fazer a contagem de alguns tipos de caracteres. O resultado para o texto `Moro na rua XV de Novembro, 2605` pode ser visto diretamente. Um destaque é feito para o número de caracteres de controle, que incluiu o `\n` existente no fim do texto de entrada.
+
+
+
+### A remoção do `\n` incluído pelo `fgets`
+
+Uma ação bastante comum quando a leitura de um valor textual é feito com a função `fgets` é a remoção do `\n` que ela deixa na cadeia de caracteres lida. Essa remoção é importante para ficar somente com o texto digitado. Em mais detalhes, essa remoção parte de dois princípios: primeiro, que a leitura com o `fgets` sempre terá um `\n` no seu final e, segundo, que tudo que estiver na variável a partir do `\0` é ignorado.
+
+Dessa forma, a eliminação do `\n` é feita pela simples atribuição do `\0` sobre ele. Como consequência, a cadeia de caracteres contém um novo final.
+
+```c
+texto[strlen(texto) - 1] = '\0';  // elimina o último caractere sobrepondo
+                                  // a ele um novo terminador de cadeia
+```
+
+
+O programa seguinte tem o objetivo de apresentar essa remoção em detalhes, mostrando o conteúdo da variável antes e depois da eliminação do `\n`.
+
+
+```{c}
+/*
+Apresentação de todos os valores contidos em uma variável literal
+Requer: um texto de até 24 caracteres digitados pelo usuário
+Assegura: apresentação detalhada do texto posição a posição antes e
+    depois da remoção do \n remanescente do fgets
+*/
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+//HIDE #include <stdlib.h>
+
+int main(void) {
+    // Leitura do texto
+    char texto[25];
+    //HIDE for (int i = 0; i < (int)sizeof texto; i++) texto[i] = (char)rand();
+    //HIDE texto[21] = texto[15] = '\0'; texto[12] = '@'; texto[7] = '~';
+    printf("Digite um texto qualquer:\n");
+    fgets(texto, sizeof texto, stdin);
+    //TYPE(0, "Teste");
+
+    // Apresentação do vetor inteiro
+    printf("\nAntes:\n");
+    for (int i = 0; i < (int)sizeof texto; i++)
+        printf("%3d", i);
+    printf("\n");
+    for (int i = 0; i < (int)sizeof texto; i++) {
+        if (texto[i] == '\0')
+            printf(" \\0");
+        else if (texto[i] == '\n')
+            printf(" \\n");
+        else if (texto[i] == ' ')
+            printf("   ");
+        else if (isprint(texto[i]))
+            printf("%3c", texto[i]);
+        else
+            printf(" ??");
+    }
+    printf("\n");
+
+    // Remoção do \n final
+    texto[strlen(texto) - 1] = '\0';  // remoção do \n
+
+    // Reapresentação do vetor depois da alteração
+    printf("\nDepois:\n");
+    for (int i = 0; i < (int)sizeof texto; i++)
+        printf("%3d", i);
+    printf("\n");
+    for (int i = 0; i < (int)sizeof texto; i++) {
+        if (texto[i] == '\0')
+            printf(" \\0");
+        else if (texto[i] == '\n')
+            printf(" \\n");
+        else if (texto[i] == ' ')
+            printf("   ");
+        else if (isprint(texto[i]))
+            printf("%3c", texto[i]);
+        else
+            printf(" ??");
+    }
+    printf("\n");
+
+    return 0;
+}
+```
+
+O objetivo desse programa é apresentar todas as posições da variável, incluindo as inválidas depois do `\0` final. Na saída, os valores `\n`  e `\0` são verificados para serem apresentados de forma coerente, enquanto quaisquer caracteres não imprimíveis são apresentados como `??`. Para visualização, o vetor foi definido com tamanho\ 25. Tudo que está depois do `\0` é, naturalmente, lixo.
+
+Pode-se observar que depois da leitura, a posição\ 5 contém o `\n` e a 6 o `\0` final. Depois da eliminação do `\n`, há um `\0` na posição\ 5, fazendo com que o conteúdo válido seja somente as posições de 0 a\ 4.
+
+
+
+
+## Acentuações nas cadeias de caracteres {#sec-acentuacao-em-strings}
+
+Como abordado na @sec-caracteres-acentuados, o uso de Unicode como tabela de caracteres e sua a codificação UTF-8 são bastante comuns nos sistemas computacionais atuais e seu suporte em C é muito limitado. Há, entretanto, uma boa notícia. Da forma em que foi desenvolvido o sistema de representação de caracteres com múltiplos bytes, as funções especificadas em `string.h` continuam funcionando a contento. Há, claro, exceções.
+
+A função `strncpy` apenas copia todos os bytes até que o terminador `\0` seja encontrado. Assim, independentemente da codificação adotada, a cópia é fiel ao original. O mesmo raciocínio se aplica a `strncat`. Na comparação por meio de `strncmp`, a comparação pela igualdade funciona perfeitamente, pois se o texto é igual, também é sua codificação UTF-8, e a comparação ocorre entre os bytes e não entre os caracteres representados em si.
+
+A comparação por desigualdade com `strncmp`, como abordado na @sec-comparacao-strings, tem suas limitações, uma vez que, por exemplo, `Y` vem antes de `b` na ordenação das tabelas de caracteres. Com UTF-8, essas limitações são agravadas. Por exemplo, `"aí"` é codificado para a sequência de bytes 97, 195 e 173 (`a` usa um byte, enquanto `í` necessita de dois) e `"abc"` tem codificação 97, 98 e 99 (um byte para cada letra), de modo que na comparação, `b` é comparado com uma parte de `í` e `c` é emparelhado com o seu segundo byte. Nada disso é coerente.
+
+A pior situação fica com `strlen`, que retorna sempre o número de bytes e não o de caracteres. Ela é prática para determinar o número de caracteres simples do início até o `\0`, mas não considera múltiplos bytes por caractere. 
+
+Quando o espaço total na variável comporta o conteúdo que está sendo atribuído ou concatenado, o comportamento descrito até agora prevalece. O problema ocorre quando não há espaço e somente parte de um caractere de múltiplos bytes é copiada. O resultado, então, é um caractere inválido.
+
+O programa seguinte ilustra o uso de caracteres acentuados nas strings.
+
+
+```{c}
+/*
+Ilustração do uso de acentuação em cadeias de caracteres e algumas de suas
+    limitações
+Assegura: apresentação de atribuições bem sucedidas, da incoerência no
+    comprimento da string e falha na atribuição parcial de um caractere
+    longo
+*/
+#include <stdio.h>
+#include <string.h>
+
+
+int main(void) {
+    char texto[160];
+
+    // Situação normal
+    strncpy(texto, "Acentuação e Unicode são assim", sizeof texto - 1);
+    printf("%s.\n", texto);
+    strncat(texto, ": hvaða tungumál er þetta?", sizeof texto - strlen(texto) - 1);
+    printf("%s\n", texto);
+
+    // Comprimento é infiel ao número de caracteres
+    strncpy(texto, "Ímã", sizeof texto - 1);
+    printf("'%s' tem comprimento %zu.\n", texto, strlen(texto));
+
+    // Problema com espaço insuficiente
+    char texto_pequeno[5];  // cabem 4 bytes
+    strncpy(texto_pequeno, texto, sizeof texto_pequeno - 1);
+    printf("Atribuição parcial: '%s'.\n", texto_pequeno);
+
+    return 0;
+}
+```
+
+Nesse programa, a atribuição e uso de textos em Unicode funcionam normalmente no geral. O comprimento, como é o número de bytes, pode não corresponder ao número de caracteres. Um problema mais grave ocorre quando um caractere é copiado de forma incompleta, como ocorre quando apenas o primeiro byte que forma o `ã` é transferido por não haver espaço na variável `texto_pequeno`.
+
+A conclusão é que, havendo espaço suficiente para o armazenamento, a codificação de caracteres pode ser usada com as funções convencionais sem uma implicação negativa significativa. Isso ocorre para a maioria dos casos e, em geral, não é uma preocupação muito grande. Ainda vale apontar que `wchar.h` contém funções específicas para trabalhar com caracteres de múltiplos bytes.
+
+::: {.callout-tip}
+Declarar variáveis texto com espaço um pouco superdimensionado ajuda a evitar problemas, principalmente quando se espera uma variabilidade grande no comprimento dos textos. Esse é o caso de uma variável para guardar um nome.
+
+Variáveis mais "apertadas" se justificam quando a variabilidade de comprimento é muito pequena. Para exemplificar, o armazenamento de um CPF pode usar comprimento 15, pois o comprimento é sempre fixo com 14 caracteres (dígitos, pontos e hífen). Neste caso, não há necessidade de folga.
+:::

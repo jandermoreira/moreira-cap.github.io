@@ -1,0 +1,476 @@
+# Endereçamento de memória e ponteiros nos programas {#sec-enderecamento-de-memoria-e-ponteiros}
+
+Este capítulo aborda alguns detalhes sobre como os diversos elementos se relacionam à memória do dispositivo onde um programa é executado. Esse tema pode parecer desconexo do conteúdo de todos os capítulos anteriores, mas os conceitos descritos aqui são muito importantes para capítulos seguintes. Para capítulos anteriores este material complementa informações já apresentadas de forma mais superficial. Nos capítulos seguintes este conteúdo será relevante, pois são tratados mecanismos para modificar, dentro de funções, variáveis declaradas em outros escopos (@sec-procedimentos, @sec-passagem-por-referencia) e também meios para requerer dinamicamente espaços para armazenamento de dados (@sec-alocacao-dinamica-de-memoria).
+
+Nesta parte do texto apenas os conceitos de armazenamento e uso da memória são abordados. As aplicações desses recursos para resolver problemas práticos da linguagem são abordados em outros lugares.
+
+
+
+
+## Endereçamento de memória 
+
+Quando uma variável é declarada, um espaço na memória é reservado para guardar seu valor. Por exemplo, ao se criar uma variável `i` do tipo `int`, alguns bytes da memória precisam ser reservados para guardar o valor da variável.
+
+```c
+int i;  // criação de uma variável inteira
+```
+
+Ao se fazer uma atribuição, como `i = 10`, os bytes da variável `i` são modificados para representar o valor inteiro 10. Se uma chamada `printf("%d", i)` é feita, os bytes da memória reservados para `i` são consultados e convertidos para um texto (valor decimal, `%d`) e apresentado na tela.
+
+```c
+i = 10;  // os bytes de i são modificados para representar o valor inteiro 10
+printf("%d", i);  // os bytes de i são consultados e convertidos para "10"
+```
+
+Até este momento, os bytes reservados para a variável `i` foram irrelevantes. O compilador, apenas tendo o nome da variável (identificador `i`), sabe onde e quantos são os bytes usados e como os valores devem ser representados. Para usar a memória para os dados, basta usar seu identificador e todo o resto é gerenciado automaticamente. E isso é ótimo para o programador, tanto que essa necessidade pelos detalhes nunca apareceu.
+
+Para ilustrar esses detalhes ocultos, segue um programa que apresenta mais informações sobre as variáveis do programa.
+
+```{c}
+/*
+ * Apresentação simples de endereços de memória
+ * Assegura: apresentação do valor de variáveis e suas localizações na
+ *  memória de execução do programa
+ */
+#include <stdio.h>
+
+int main(void) {
+    int i = 100;
+    //IGNORE printf("i = %d e está no endereço %p e tem %zu bytes.\n", i, (void *)&i,
+    //IGNORE        sizeof i);
+    //HIDE printf("i = %d e está no endereço %p e tem %zu bytes.\n", i, (void *)0x7ffe51267d3c, 4);
+
+    double d = -17.2;
+    //IGNORE printf("d = %g e está no endereço %p e tem %zu bytes.\n", d, (void *)&d,
+    //IGNORE        sizeof d);
+    //HIDE printf("d = %g e está no endereço %p e tem %zu bytes.\n", d, (void *)0x7ffe51267d30, 8);
+
+    return 0;
+}
+```
+
+Não há novidades na atribuição de valores tanto à variável `i` quanto `d`, nem na apresentação de seus valores com o `printf`. O que este programa introduz é o operador `&`, o qual significa "endereço de". Assim, `&i` é o endereço de memória da variável `i`, da mesma forma que `&d` corresponde ao endereço de `d`. O modificador de tipo (_cast_) `(void *)` serve apenas para indicar que o endereço é genérico e desprovido de tipo. Ao longo do texto esse assunto voltará a ser tratado. O operador `sizeof` também já foi utilizado e indica quantos bytes cada variável usa.
+
+Quando um programa é colocado em execução, o sistema operacional cria um processo e compartilha com o programa o uso do processador e também uma porção da memória principal. A memória do programa vista por ele como um bloco contínuo de bytes, cada com seu endereço. É usual que endereços de memória sejam apresentados em valores hexadecimais (formato `%p` do `printf`).
+
+Por exemplo, 7FFE51267D3C~16~ (endereço de `i` no programa) corresponde ao valor decimal 140.730.259.897.660, mas esse valor, por si só, não é relevante. Dado que a variável está no endereço 7FFE51267D3C~16~ e possui quatro bytes, os endereços 7FFE51267D3C~16~, 7FFE51267D3D~16~, 7FFE51267D3E~16~ e 7FFE51267D3F~16~ são usados pela variável. Um raciocínio similar se aplica aos oito bytes da variável `d`.
+
+Para os objetivos desta seção, é apenas relevante saber, que cada variável está em algum lugar e que o compilador sabe seu endereço. Desse modo, atribuições triviais como `d = -17.2` podem ser feitas, pois o compilador sabe o tipo (`double`), a quantidade de bytes que serão usados (`sizeof d`) e quais são esses bytes (os oito bytes começando em 7FFE51267D30~16~).
+
+
+
+
+## Armazenamento de endereços
+
+Endereços de memória podem ser guardados em variáveis, as quais recebem genericamente o nome de ponteiros. Quando um ponteiro guarda um endereço, diz-se que ele guarda uma referência àquele endereço e, portanto, ao seu conteúdo.
+
+```{c}
+/*
+ * Armazenamento de endereços de memória
+ * Assegura: apresentação do endereço de uma variável
+ */
+#include <stdio.h>
+
+int main(void) {
+    double d = 1.125;
+    double *endereco_de_d = &d;
+    
+    printf("A variável d usa %zu bytes começando em %p.\n", sizeof d,
+           (void *)endereco_de_d);
+
+    return 0;
+}
+```
+
+Este programa cria uma variável chamada `endereco_de_d`, à qual é atribuído o valor `&d` (que é o endereço de `d`). O tipo de uma variável que guarda endereços deve ser sempre um ponteiro e sua declaração usa o `*` para indicar isso.
+
+```c
+double *endereco_de_d;  // variável que guarda um endereço
+```
+
+Entrando em mais detalhes, a variável é declarada com o tipo `double *` e isso significa que a variável guarda o endereço de algo que ela sabe que é um `double`. Na prática, uma declaração de ponteiro como a usada significa que o valor armazenado será o endereço primeiro dos oito bytes que estão guardando um valor do tipo `double`.
+
+Os ponteiros são criados com tipos associados à referência que vão armazenar e, assim, o compilador têm o controle do que é apontado. Seguem alguns exemplos adicionais de declarações.
+
+```c
+int *pi;  // endereço de um inteiro
+char *pc;  // endereço de um char
+unsigned long int *puli;  // endereço de um unsigned long int
+```
+
+
+
+## Ponteiros nulos
+
+Não custa lembrar que uma variável do tipo ponteiro é como qualquer outra variável e, para ser usada, precisa ter um valor válido atribuído a ela. O programa que segue mostra o conteúdo de um ponteiro para `double` que não foi iniciado e, portanto, contém lixo. 
+
+
+```{c}
+/*
+ * Uso de um ponteiro sem valor atribuído
+ * Assegura: apresentação do endereço de uma variável
+ */
+#include <stdio.h>
+
+int main(void) {
+    double *ponteiro_para_double;
+    printf("%p.\n", (void *)ponteiro_para_double);  // lixo
+
+    return 0;
+}
+```
+
+Porém, há uma diferença entre ter uma variável com valor inválido (nada foi atribuído a ela) e ter uma variável que "não aponta para nada". Em C, o valor `NULL` é usado para indicar explicitamente que uma variável não é referência para um endereço real.
+
+```{c}
+/*
+ * Uso de um ponteiro sem valor atribuído
+ * Assegura: apresentação do endereço de uma variável
+ */
+#include <stdio.h>
+
+int main(void) {
+    double *ponteiro_para_double = NULL;  // endereço explicitamente inválido
+    printf("%p.\n", (void *)ponteiro_para_double); 
+
+    return 0;
+}
+```
+
+Na computação em geral, termos como _null_, _nil_ ou _nulo_ são usados para se referir a um endereço sabidamente inválido. Em C esse valor é expresso por `NULL` e permite comparações, como `if (p != NULL)`, por exemplo.
+
+Para recordar essa situação é possível citar o acesso a arquivos. Uma variável para guardar um arquivo lógico é um ponteiro do tipo `FILE *`, ou seja, guarda uma referência (endereço) de um objeto do tipo `FILE`. Quando uma chamada à função `fopen` não consegue acessar o arquivo, ela retorna `NULL`, Em outras palavras, `fopen` retorna o endereço de algo válido em caso de sucesso ou o endereço especial `NULL` para indicar que o endereço não pode ser usado. Todas as demais funções (`fprint`, `fgets`, `fclose`) apenas usam o endereço válido quando são chamadas.
+
+
+
+
+## Manipulação da memória com uso de ponteiros
+
+Uma aplicação importante de ponteiros é a possibilidade de, tendo em mãos um endereço, modificar o que há naquele local. Assim, se um ponteiro contém o endereço de um inteiro, é viável ver e alterar o valor apontado.
+
+Um exemplo inicial simples é apresentado na sequência, ilustrando como o ponteiro pode ser usado para acessar uma posição de memória.
+
+```{c}
+/*
+ * Uso de ponteiro para ter acesso a um valor armazenado na memória
+ * Assegura: Apresentação do valor de duas variáveis usando um ponteiro
+ */
+#include <stdio.h>
+
+int main(void) {
+    int n1 = 75;
+    int n2 = -3;
+    int *ponteiro;
+
+    // Uso do ponteiro com n1
+    ponteiro = &n1;  // guarda em ponteiro a referência para n1
+    printf("Valor apontado: %d.\n", *ponteiro);
+
+    // Uso do ponteiro com n2
+    ponteiro = &n2;  // altera a referência para n2
+    printf("Valor apontado: %d.\n", *ponteiro);
+
+    return 0;
+}
+```
+
+Neste programa são criadas duas variáveis `int`: `n1` e `n2`. À primeira é atribuído o valor 75 e à segunda, -3. Uma variável `ponteiro` é criada para guardar o endereço de um valor `int` e o endereço de `n1` é armazenado, conforme destacado na sequência.
+
+```c
+int *ponteiro;  // criação de uma variável ponteiro
+ponteiro = &n1;  // armazenamento do endereço de n1
+```
+
+Nesse momento, com `ponteiro` contendo o endereço de `n1`, a expressão `*ponteiro` se refere ao valor inteiro guardado nesse endereço. Em outras palavras, `ponteiro` aponta para `n1` e, em consequência, `*ponteiro` dá o valor apontando, que é o valor de `n1`. Assim, o `printf` usa essa valor para "espiar" em `n1`.
+
+O programa então dá instruções para que `ponteiro` aponte para `n2` para, em seguida, usar `*ponteiro` para acessar seu valor, conforme destaque seguinte.
+
+```c
+ponteiro = &n2;  // altera a referência para n2
+printf("Valor apontado: %d.\n", *ponteiro);
+```
+
+É importante notar que, nesse programa, `ponteiro` é do tipo `int *` e guarda endereços de elementos inteiros e, por sua vez, `*ponteiro` é do tipo `int`, pois olha o conteúdo apontado naquele endereço. A @tbl-declaracoes-ponteiros mostra alguns casos e os tipos associados à notação sem e com o operador `*`.
+
++----------------------+--------------------------+----------------------+
+|  Declaração          | Tipos associados         | Exemplos             |
++:=====================+:=========================+:=====================+
+| `char *pc`           | `pc` é `char *`          | `pc = &c`            |
++                      +                          +                      +
+|                      | `*pc` é `char`           | `prinf("%c", *pc)`   |
++----------------------+--------------------------+----------------------+
+| `int *pi`            | `pi` é `int *`           | `pi = &i`            |
++                      +                          +                      +
+|                      | `*pi` é `int`            | `printf("%d", *pi)`  |
++----------------------+--------------------------+----------------------+
+| `double *pd`         | `pd` é `double *`        | `pd = &d`            |
++                      +                          +                      +
+|                      | `*pd` é `double`         | `printf("%g", *pd)`  |
++----------------------+--------------------------+----------------------+
+| `unsigned int *pui`  | `pui` é `unsigned int *` | `pui = &ui`          |
++                      +                          +                      +
+|                      | `*pd` é `unsigned int`   | `printf("%u", *pui)` |
++----------------------+--------------------------+----------------------+
+
+: Algumas declarações de ponteiros e os tipos associados ao identificador e ao uso do operador `*`. {#tbl-declaracoes-ponteiros}
+
+
+De forma similar ao se obter o conteúdo referenciado por um ponteiro, também é possível modificar o valor apontado. Segue um programa para exemplificar essa situação.
+
+
+```{c}
+/*
+ * Modificação de um valor inteiro com uso de um ponteiro
+ * Assegura: Apresentação do valor do inteiro antes e depois da modificação
+ */
+#include <stdio.h>
+
+int main(void) {
+    int valor_inteiro = 123;
+    printf("Valor da variável: %d.\n", valor_inteiro);
+
+    int *ponteiro = &valor_inteiro;
+    *ponteiro = 98765;
+    printf("Valor da variável: %d.\n", valor_inteiro);
+
+    return 0;
+}
+```
+
+A variável `valor_inteiro` é declarada, tem o valor 123 atribuído a ela e esse valor é apresentado. Então a variável `ponteiro` é criada e o endereço de `valor_inteiro` é armazenado nela. A modificação de valor é feita pelo comando destacado.
+
+```c
+*ponteiro = 98765;  // modifica o valor do endereço guardado em ponteiro
+```
+
+Essa instrução, basicamente, diz "coloque o valor 98765 no endereço armazenado em `ponteiro`". Nesse caso, como `ponteiro` aponta para `valor_inteiro`, os bytes dessa última variável serão alterados. O resultado é que, em última instância, `valor_inteiro` tem seu conteúdo atualizado.
+
+Desse modo, `*ponteiro` pode ser tanto usado para obter o valor apontado quanto para modificá-lo.
+
+```c
+int i, j, *pi;  // i e j inteiros, pi ponteiro para inteiro
+
+i = 10;
+pi = &i;
+
+j = *pi;  // copia o valor 10 (de i) para j
+*pi = 1;  // coloca o valor 1 em i
+```
+
+
+
+## Os ponteiros têm tipos
+
+Os ponteiros são sempre declarados usando um tipo (`char`, `int`, `double` etc.) e especificando um asterisco antes do identificador, conforme os exemplos que seguem.
+
+```c
+int *pi;  // ponteiro para int
+char *pc;  // ponteiro para char
+long double *pld;  // ponteiro para long double
+unsigned char *puc;  // ponteiro para um unsigned char
+```
+
+Os tipos são importantes para o compilador lidar com as diversas operações. Assim, atribuições usando `*pi` do lado esquerdo do operador de atribuição tratarão uma atribuição para inteiro; ao se escrever `*pi + *pld`, as promoções de tipo serão feitas segundo as regras; ou para usar o `printf` para mostrar `*puc` deve ser usado o formato `%u`, pois seu tipo é `unsigned char`.
+
+Segue um exemplo em que há mistura de tipos e, dada a mistura, os resultados divergem dos esperados.
+
+```{c}
+/*
+ * Uso do tipo incorreto para um ponteiro
+ * Assegura: Apresentação do valor do inteiro antes e depois da modificação
+ */
+#include <stdio.h>
+
+int main(void) {
+    float f = -1.1;
+
+    int *p = (int *)&f;  // usa int* para apontar para float
+    *p = 1000;  // altera o conteúdo de d
+
+    printf("d = %g.\n", f);
+
+    return 0;
+}
+```
+
+Como as representações de `float` e `int` são diferentes, a variável `f` tenta extrair um valor real a partir de um conjunto de bits que, na realidade, representa um inteiro. A conclusão é simples: não funciona.
+
+
+
+## Ponteiros para cadeias de caracteres {#sec-ponteiros-para-cadeias-de-caracteres}
+
+Em C, uma cadeia de caracteres é uma sequência de bytes contínuos na memória (os caracteres) seguida por um byte nulo `\0`. É dessa forma, por exemplo, que a função `printf`, quando usa o formato `%s`, interpreta a memória e decide o que apresentar na tela.
+
+Como está introduzido na @sec-dados-textuais, há cadeias de caracteres constantes e também em variáveis. Em particular, a @sec-ponteiros-para-strings-constantes mostra como usar ponteiros para referenciar as constantes literais existentes em um programa.
+
+Da mesma forma que é possível ter uma variável do tipo `char *` apontando para uma constante, também é comum que esse ponteiro seja usado para apontar para uma variável.
+
+Para os ponteiros lidarem com cadeias de caracteres há dois pontos principais: o ponteiro mantém o endereço do primeiro byte da cadeia e o fim da cadeia é indicado pelo terminador `\0`.
+
+O programa seguinte mostra o uso de ponteiros tanto para constantes quanto para variáveis.
+
+
+```{c}
+/*
+ * Ponteiros para cadeias de caracteres
+ * Assegura: apresentação de algumas cadeias de caracteres
+ */
+#include <stdio.h>
+
+int main(void) {
+    char *texto_ponteiro = "Texto constante";  // ponteiro para constante
+    printf("Constante: %s.\n", texto_ponteiro);
+
+    char texto_variavel[100] = "Texto de iniciação da variável";  // variável
+    printf("Variável: %s.\n", texto_variavel);
+
+    char *outro_ponteiro;
+    outro_ponteiro = texto_ponteiro;  // também aponta para a constante
+    printf("Constante de novo: %s.\n", outro_ponteiro);
+
+    outro_ponteiro = texto_variavel;  // aponta para a variável
+    printf("Variável via ponteiro: %s.\n", outro_ponteiro);
+    
+    return 0;
+}
+```
+
+A variável `texto_ponteiro` é um ponteiro e contém o endereço do primeiro byte da constante `"Texto constante"`. Por sua vez, `texto_variavel` já é um espaço para uma cadeia de até 99\ bytes, ao qual também é copiado um valor inicial.
+
+Uma terceira variável `outro_ponteiro` é usada, em um primeiro momento, para apontar para a constante, o que é feito copiando-se o endereço armazenado em `texto_ponteiro`.
+
+```c
+outro_ponteiro = texto_ponteiro;  // copia a referência para outro_ponteiro
+```
+
+Essa mesma variável é usada para, em um segundo momento, apontar para o primeiro byte da variável `texto_variavel`. 
+
+```c
+outro_ponteiro = texto_variavel;  // aponta para a variável
+```
+
+Aqui, é importante observar que existe uma variável literal denominada `texto_variavel` e o uso deste identificador não se refere ao texto armazenado nela, mas ao seu endereço. Na prática, `texto_variavel` equivale a `&texto_variavel[0]`, ou seja, ao endereço do primeiro byte da variável. Esta é uma das razões pelas quais a atribuição direta a variáveis textuais em C não funciona, como exemplificado na sequência.
+
+```c
+char nome[100] = "Cervantes"  // variável 
+char outro_nome[100];
+
+outro_nome = nome;  // não funciona, pois 'nome' é um endereço e não
+                    // o texto "Cervantes"
+```
+
+
+
+## Exemplos
+
+Nesta seção são apresentados alguns programas relativamente simples e genéricos que usam ponteiros, tendo como objetivo reforçar os conceitos e indicar alguns de seus usos.
+
+### Selecionando o menor valor
+
+O exemplo seguinte usa um ponteiro para modificar o valor de uma entre duas variáveis. A variável a ser modificada é sempre a de valor mínimo.
+
+```{c}
+/*
+ * Duplicando o valor mínimo com uso de ponteiro
+ * Requer: dois valores reais quaisquer
+ * Assegura: apresentação do dobro do valor mínimo e do valor máximo original
+ */
+#include <stdio.h>
+
+int main(void) {
+    // Entrada
+    printf("Digite dois valores reais: ");
+    char entrada[160];
+    fgets(entrada, sizeof entrada, stdin);
+    double valor1, valor2;
+    sscanf(entrada, "%lf%lf", &valor1, &valor2);
+    //TYPE(0, "10.7 18.2");
+
+    // Duplicação do valor mínimo usando um ponteiro
+    double *ponteiro_minimo;
+    if (valor1 < valor2)
+        ponteiro_minimo = &valor1;
+    else
+        ponteiro_minimo = &valor2;
+    *ponteiro_minimo = *ponteiro_minimo * 2;  // dobra o valor mínimo
+
+    // Apresentação do resultado
+    printf("valor1 = %g e valor2 = %g.\n", valor1, valor2);
+
+    return 0;
+}
+```
+
+Com `valor1` e `valor2` lidos, a variável `ponteiro_minimo` pode apontar tanto para a primeira quanto para a segunda, a depender de seus valores. 
+
+A estrutura `if` usada poderia ser substituída por uma atribuição com o condicional ternário:
+
+```c
+ponteiro_minimo = (valor1 < valor2) ? &valor1 : &valor2;
+```
+
+### Vários ponteiros para um mesmo local {#sec-exemplo-varios-ponteiros-para-mesmo-local}
+
+Assim como nada impede que duas ou mais variáveis `double` tenham um mesmo valor, também é possível que vários ponteiros armazenem o mesmo endereço. Nesse caso, diz-se que vários ponteiros apontam para o mesmo local.
+
+O programa seguinte define uma variável `c` do tipo `char` e usa três ponteiros para referenciá-la.
+
+```{c}
+/*
+ * Uso de vários ponteiros para um mesmo local
+ * Assegura: apresentação dos valores apontados dadas algumas modificações
+ */
+#include <stdio.h>
+
+int main(void) {
+    char c = 'A';
+
+    char *p1, *p2, *p3;
+    p1 = p2 = p3 = &c;  // todos os ponteiros apontam para c
+    printf("c = %c; *p1 = %c; *p2 = %c; *p3 = %c.\n", c, *p1, *p2, *p3);
+
+    c = 'B';
+    printf("c = %c; *p1 = %c; *p2 = %c; *p3 = %c.\n", c, *p1, *p2, *p3);
+
+    *p1 = 'C';
+    printf("c = %c; *p1 = %c; *p2 = %c; *p3 = %c.\n", c, *p1, *p2, *p3);
+
+    *p2 = 'D';
+    printf("c = %c; *p1 = %c; *p2 = %c; *p3 = %c.\n", c, *p1, *p2, *p3);
+
+    *p3 = 'E';
+    printf("c = %c; *p1 = %c; *p2 = %c; *p3 = %c.\n", c, *p1, *p2, *p3);
+
+    return 0;
+}
+```
+
+Como todas as variáveis (`c`, `*p1`, `*p2` e `*p3`) estão se referenciando ao mesmo `char` na memória, esse caractere pode ser modificado por qualquer uma delas.
+
+### Copiando referências
+
+Ao se atribuir o endereço de uma variável a um ponteiro, o valor armazenado é o endereço de memória do primeiro byte dessa variável. Se houver outra variável do tipo ponteiro, esse endereço pode ser copiado para ela com uma atribuição simples. Dessa forma, como no exemplo da @sec-exemplo-varios-ponteiros-para-mesmo-local, o resultado é que se tem mais de um ponteiro referenciando uma mesma posição.
+
+```{c}
+/*
+ * Cópia de referência entre ponteiros
+ * Assegura: apresentação dos valores apontados dadas algumas modificações
+ */
+#include <stdio.h>
+
+int main(void) {
+    char c = 'A';
+
+    char *p1 = &c;
+    char *p2 = p1;
+    printf("c = %c; *p1 = %c; *p2 = %c.\n", c, *p1, *p2);
+
+    c = 'X';
+    printf("c = %c; *p1 = %c; *p2 = %c.\n", c, *p1, *p2);
+
+    return 0;
+}
+```
+
+Neste programa, `p1` aponta para `c` ao receber `&c`. Para `p2` é atribuído o valor de `p1`, o qual, nesse momento, é igual ao `&c`.
+

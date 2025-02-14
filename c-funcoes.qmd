@@ -1,0 +1,732 @@
+# Funções em C {#sec-funcoes}
+
+As funções são parte essencial do desenvolvimento de qualquer código. Não somente evitam que trabalho extra tenha que ser feito mas também melhoram a qualidade geral do código como um todo. As estruturas e estratégias das funções serão abordadas ao longo deste capítulo.
+
+## O que é uma função
+
+O conceito de função nas linguagens de programação é bastante similar ao das funções matemáticas, estas últimas mapeando um conjunto domínio em um conjunto chamado contradomínio. A função ${y = \cos x}$, por exemplo, é usualmente definida para mapear valores ${x \in \mathbb{R}}$ para ${y \in \mathbb{R}}$, sendo domínio e contradomínio iguais; a função ${y = \lfloor x \rfloor}$ (função piso), por sua vez, tem domínio real e contradomínio inteiro.
+
+Basicamente, uma função é aplicada em um argumento[^ressalva-mais-variáveis] do domínio e tem como resultado um valor do contradomínio.
+
+[^ressalva-mais-variáveis]: As funções, tanto matemáticas quanto computacionais, podem ter mais que um argumento (funções de múltiplas variáveis).
+
+Um exemplo de programa que inclui uma função matemática é apresentado a seguir.
+
+```{c}
+/*
+Apresentação de valores de raiz quadrada
+Assegura: apresentação do valor e sua raiz, de 0 a 1, de 0,1 em 0,1
+*/
+#include <stdio.h>
+#include <math.h>
+
+int main(void) {
+    for (double valor = 0; valor <= 1.0; valor += 0.1)
+        printf("A raiz quadrada de %g é %g.\n", valor, sqrt(valor));
+
+    return 0;
+}
+```
+
+Em C, a função `sqrt` retorna a raiz quadrada de um valor, sendo seu domínio e contradomínio `double`. 
+
+Como domínio e contradomínios não precisam ser iguais, segue exemplo em C que ilustra uma função nessa condição.
+
+
+```{c}
+/*
+Apresentação de uma cadeia de caracteres e seu tamanho em bytes
+Assegura: apresentação de um texto e o número de bytes que ele ocupa
+*/
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    char *texto = "Modularização";
+
+    printf("\"%s\" usa %zu bytes.\n", texto, strlen(texto));
+    return 0;
+}
+```
+
+A função `strlen` faz o mapeamento de cadeias de caracteres (seu domínio) para valores inteiros (contradomínio).
+
+As funções em C podem mapear os mais diferentes tipos de dados para outros tantos tipos, como de `double` para `int`, `int` para `double` ou cadeias de caracteres para `double`, por exemplo.
+
+
+
+## Declaração e implementação das funções
+
+Todo programa em C contém pelo menos uma função. Desde o primeiro código apresentado nesse livro (o programa que não faz nada, na @sec-programa-minimo), fica patente que todo executável gerado a partir de um código em C precisa de `main`, e `main` é uma função. Como usado em todos os programas até o momento, a função principal tem domínio vazio (indicado por `void`) e seu contradomínio é o tipo `int`.
+
+```c
+int main(void) {
+    ...
+    return 0;
+}
+```
+
+Toda função tem um nome. Neste caso, o nome é `main`, assim como seriam logaritmo ($\log$) ou cosseno ($\cos$) para citar algumas funções matemáticas. Entre os parênteses estão especificados seus parâmetros e, para `main`, não há efetivamente nenhum parâmetro. O contradomínio é indicado antes do nome da função: `int`.
+
+Para citar um exemplo já conhecido, a função `sqrt` tem a seguinte declaração em `math.h`.
+
+```c
+double sqrt(double x);
+```
+
+Colocando-se isso mais explicitamente, `sqrt` aceita um `double` como parâmetro e, como resultado, devolve um valor também `double`.
+
+
+
+
+### Declaração e implementação de funções próprias
+
+O programador tem como uma grande vantagem poder escrever suas próprias funções e, para isso, precisa fazer sua declaração.
+
+::: {.callout}
+# Declaração de função
+_tipo\_de\_retorno_ _nome\_da\_função_ `(` _lista\_de\_parâmetros_`)` `;`
+:::
+
+As funções precisam ter um _nome\_da\_função_ (identificador válido), especificar seu _tipo\_de\_retorno_ e seus parâmetros (_lista\_de\_parâmetros_). Declarações de função nesse formato são conhecidos como protótipos da função.
+
+Os conceitos envolvidos na escrita de funções podem ser ilustrados por uma sequência de tentativas de escrever um programa que usa uma função. Esse programa tem o objetivo de ler um texto qualquer e apresentar o número de vogais presentes (ignorando acentuações).
+
+Segue a versão do programa sem nenhuma função.
+
+
+```{c}
+/*
+Determinação da quantidade de vogais em um texto digitado pelo usuário
+Requer: um texto qualquer
+Assegura: apresentação do número de vogais contidas no texto
+*/
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    printf("Digite um texto: ");
+    char texto[160];
+    fgets(texto, sizeof texto, stdin);
+    //TYPE(0, "Comece pelo começo, disse a Rainha a Alice");
+    texto[strlen(texto) - 1] = '\0';
+
+    int numero_vogais = 0;
+    for (int i = 0; i < (int)strlen(texto); i++)
+        if (texto[i] == 'a' || texto[i] == 'e' || texto[i] == 'i' ||
+             texto[i] == 'o' || texto[i] == 'u' || texto[i] == 'A' ||
+             texto[i] == 'E' || texto[i] == 'I' || texto[i] == 'O' ||
+             texto[i] == 'U')
+            numero_vogais++;
+
+    printf("\"%s\" possui %d %s.\n", texto, numero_vogais,
+           numero_vogais > 1 ? "vogais" : "vogal");
+
+    return 0;
+}
+```
+
+A linguagem provê funções de verificação do tipo dos caracteres, como `isdigit` ou `isspace` (@tbl-funcoes-para-caractere), entre outras. Porém, entre elas não se inclui uma que verifica as vogais.
+
+Assim, o objetivo do programa é ter uma função para verificar se um dado caractere é ou não uma vogal. Essa função será nomeada `eh_vogal`. O código seguinte tenta usar essa função, que até o momento não existe.
+
+```{c} {intentional-problems="true"}
+/*
+Determinação da quantidade de vogais em um texto digitado pelo usuário
+Requer: um texto qualquer
+Assegura: apresentação do número de vogais contidas no texto
+*/
+#include <stdio.h>
+#include <string.h>
+
+int main(void) {
+    printf("Digite um texto: ");
+    char texto[160];
+    fgets(texto, sizeof texto, stdin);
+    //TYPE(0, "Comece pelo começo, disse a Rainha a Alice");
+    texto[strlen(texto) - 1] = '\0';
+
+    int numero_vogais = 0;
+    for (int i = 0; i < (int)strlen(texto); i++)
+        if (eh_vogal(texto[i]))
+            numero_vogais++;
+
+    printf("\"%s\" possui %d %s.\n", texto, numero_vogais,
+           numero_vogais > 1 ? "vogais" : "vogal");
+
+    return 0;
+}
+```
+
+Há dois problemas dignos de destaque no resultado da compilação. O primeiro se refere ao uso de `eh_vogal`, dando um alerta (_warning_) de declaração implícita, o que significa que a função não possui declaração e o compilador assumiu um formato padrão. O segundo ponto é o que diz "referência não definida para `eh_vogal`", que significa que a função não foi implementada e não existe nenhum código para ela.
+
+O primeiro ponto a se resolver, portanto, é declarar a função antes de ela ser usada, o que é feito antes da função `main`. Essa nova versão do programa é a que segue.
+
+
+```{c} {intentional-problems="true"}
+/*
+Determinação da quantidade de vogais em um texto digitado pelo usuário
+Requer: um texto qualquer
+Assegura: apresentação do número de vogais contidas no texto
+*/
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+bool eh_vogal(char caractere);
+
+int main(void) {
+    printf("Digite um texto: ");
+    char texto[160];
+    fgets(texto, sizeof texto, stdin);
+    //TYPE(0, "Comece pelo começo, disse a Rainha a Alice");
+    texto[strlen(texto) - 1] = '\0';
+
+    int numero_vogais = 0;
+    for (int i = 0; i < (int)strlen(texto); i++)
+        if (eh_vogal(texto[i]))
+            numero_vogais++;
+
+    printf("\"%s\" possui %d %s.\n", texto, numero_vogais,
+           numero_vogais > 1 ? "vogais" : "vogal");
+
+    return 0;
+}
+```
+
+A declaração é feita por meio de seu protótipo, que indica o tipo, o nome e os parâmetros que a função possui. A prototipagem da função requereu também incluir `stdbool.h` para poder especificar o tipo de retorno `bool`.
+
+```c
+bool eh_vogal(char caractere);  // protótipo da função
+```
+
+Vale observar que a compilação do programa foi bem sucedida e todo o código objeto para ele foi criado com êxito. O problema que persiste é que, ao criar o executável, notou-se a ausência da implementação.
+
+Esse é o problema que a versão final do programa resolve.
+
+```{c}
+/*
+Determinação da quantidade de vogais em um texto digitado pelo usuário
+Requer: um texto qualquer
+Assegura: apresentação do número de vogais contidas no texto
+*/
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+bool eh_vogal(char caractere);
+
+int main(void) {
+    printf("Digite um texto: ");
+    char texto[160];
+    fgets(texto, sizeof texto, stdin);
+    //TYPE(0, "Comece pelo começo, disse a Rainha a Alice");
+    texto[strlen(texto) - 1] = '\0';
+
+    int numero_vogais = 0;
+    for (int i = 0; i < (int)strlen(texto); i++)
+        if (eh_vogal(texto[i]))
+            numero_vogais++;
+
+    printf("\"%s\" possui %d %s.\n", texto, numero_vogais,
+           numero_vogais > 1 ? "vogais" : "vogal");
+
+    return 0;
+}
+
+/*!
+ * Verificação se um caractere é uma vogal (maiúscula ou minúscula).
+ * @param caractere: caractere simples a ser verificado
+ * @return true se for vogal, false caso contrário
+ */
+bool eh_vogal(char caractere) {
+    bool se_eh_vogal =
+            (caractere == 'a' || caractere == 'e' || caractere == 'i' ||
+             caractere == 'o' || caractere == 'u' || caractere == 'A' ||
+             caractere == 'E' || caractere == 'I' || caractere == 'O' ||
+             caractere == 'U');
+
+    return se_eh_vogal;
+}
+```
+
+A função declarada é lógica, retornando um valor `bool`, o nome escolhido para ela é `eh_vogal` e ela tem um único parâmetro que é um `char` denominado `caractere`.
+
+Para sua implementação, a função define uma variável booliana local `se_eh_vogal` que recebe `true` ou `false` conforme o resultado da comparação. O valor resultante da função é determinado pela instrução `return` que, nesse caso, volta o valor booliano. Sempre que `return` é executado, a função é encerrada e comandos escritos depois dele nunca serão executados.
+
+O uso da variável local `se_eh_vogal` é meramente didático pois estabelece dois passos: o cálculo do resultado da função e o retorno desse resultado. Na prática, é mais interessante escrever essa função conforme se segue, sem o uso da variável local e já retornando o valor da expressão.
+
+```c
+/*!
+ * Verificação se um caractere é uma vogal (maiúscula ou minúscula).
+ * @param caractere: (char) caractere a ser verificado
+ * @return true se for vogal, false caso contrário
+ */
+bool eh_vogal(char caractere) {
+    return (caractere == 'a' || caractere == 'e' || caractere == 'i' ||
+            caractere == 'o' || caractere == 'u' || caractere == 'A' ||
+            caractere == 'E' || caractere == 'I' || caractere == 'O' ||
+            caractere == 'U');
+}
+```
+
+Para concluir esta seção é preciso rever dois pontos importantes:
+
+* Toda função tem que ser declarada antes de ser usada;
+* A implementação da função (seu código) tem que ter sido escrito para que executável possa ser criado.
+
+Assim, para o exemplo do contador de vogais, a declaração foi feita na forma de um protótipo, o qual indica para o compilador o tipo de retorno e os parâmetros e respectivos tipos. Com essas informações, as devidas verificações de consistência podem ser realizadas durante a compilação, como verificar se o tipo do parâmetro passado é compatível com o tipo indicado na declaração. A implementação, por sua vez, foi inserida no código fonte logo abaixo de `main`, fornecendo condições para que `eh_vogal` possuísse sua implementação e viabilizasse o que se deseja: o executável completo.
+
+
+
+### Onde declarar a função?
+
+Há duas estratégias usuais para declarar funções em C. A primeira é usando protótipos para a declaração e ter a implementação feita posterioriormente. Outra forma é pela inserção direta da implementação, a qual tanto implementa quanto declara a função ao mesmo tempo.
+
+A segunda forma é apresentada na sequência, como uma versão alternativa do mesmo programa de contagem de vogais.
+
+```{c}
+/*
+Determinação da quantidade de vogais em um texto digitado pelo usuário
+Requer: um texto qualquer
+Assegura: apresentação do número de vogais contidas no texto
+*/
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+/*!
+ * Verificação se um caractere é uma vogal (maiúscula ou minúscula).
+ * @param caractere: (char) caractere a ser verificado
+ * @return true se for vogal, false caso contrário
+ */
+bool eh_vogal(char caractere) {
+    return (caractere == 'a' || caractere == 'e' || caractere == 'i' ||
+            caractere == 'o' || caractere == 'u' || caractere == 'A' ||
+            caractere == 'E' || caractere == 'I' || caractere == 'O' ||
+            caractere == 'U');
+}
+
+int main(void) {
+    printf("Digite um texto: ");
+    char texto[160];
+    fgets(texto, sizeof texto, stdin);
+    //TYPE(0, "Comece pelo começo, disse a Rainha a Alice");
+    texto[strlen(texto) - 1] = '\0';
+
+    int numero_vogais = 0;
+    for (int i = 0; i < (int)strlen(texto); i++)
+        if (eh_vogal(texto[i]))
+            numero_vogais++;
+
+    printf("\"%s\" possui %d %s.\n", texto, numero_vogais,
+           numero_vogais > 1 ? "vogais" : "vogal");
+
+    return 0;
+}
+```
+
+Não há uma regra para usar uma forma ou outra, sendo assim uma opção pessoal (exceto quando a empresa ou o cliente possuírem regras específicas).
+
+<!-- Para a declaração com protótipo e implementação depois do `main` podem ser elencadas as seguintes vantagens:
+
+* a
+* b
+
+Em contraposição, essa estratégia também tem desvantagens: 
+
+* a
+* b
+
+No caso da declaração juntamente com a implementação antes do `main`, há vantagens quem podem ser citadas:
+
+* a
+* b
+
+Entre as desvantagens para essa modalidade, pode-se listar:
+
+* a
+* b -->
+
+
+Como regra geral, este livro adota o uso das declarações de função com protótipos e cuja implementação fica posterior à função `main` quando estiverem no mesmo arquivo.
+
+::: {.callout-note title="Curiosidade"}
+É interessante notar que, embora a implementação da função `eh_vogal` tenha sido feita no mesmo arquivo em que estava a função `main`, ela poderia estar em outro arquivo.
+
+Quando programas se tornam maiores, é uma prática comum e muito positiva separar as implementações de funções em arquivos separados. Assim, se um programa deve lidar com o processamento de um texto, pode haver um arquivo para as funções que manipulam arquivos, outro para as que manipulam as cadeias de caracteres e assim por diante. Tudo se reflete em organização.
+
+Esse assunto é abordado no @sec-organizacao-do-codigo-separado.
+:::
+
+
+
+
+### Escopo da declaração das funções {#sec-escopo-da-declaracao-de-funcoes}
+
+Uma discussão prévia sobre declarações e escopo está apresentada na @sec-declaracoes-e-validade, tratando da validade de cada variável em um programa. Com a introdução do assunto da modularização, o conceito de escopo se amplia. Qualquer variável usada nos diversos programas possuem sua validade definida internamente a `main`, ou seja, são locais à função principal e não existem fora dela.
+
+Ao se criar uma nova função, ela é declarada fora da função `main` e não  é, portanto, local. As declarações das funções são sempre globais. A consequência para esse tipo de declaração é que ela é válida da linha do protótipo (ou do cabeçalho de uma função implementada) até o fim do arquivo do código fonte.
+
+
+
+O programa seguinte é apenas um exemplo para o qual comentários pertinentes sobre escopo serão apresentados. Nenhuma função é comentada, visto que são apenas exemplos simples (documentação de funções está na @sec-documentacao-funcoes).
+
+
+```{c} {code-line-numbers="true"}
+/*
+Programa exemplo com funções simples
+*/
+#include <stdio.h>
+
+double dobro(double valor);
+
+double maximo(double valor1, double valor2);
+
+int somatorio(int n);
+
+double um_double(void);
+
+int um_int(void);
+
+int main(void) {
+    printf("Quádruplo de 1.77 = %.2lf.\n", dobro(dobro(1.77)));
+    printf("max(1.2, 7.8) = %.1lf.\n", maximo(1.2, 7.8));
+    printf("Somatório de 1 até 100 = %d.\n", somatorio(100));
+    printf("Um: %d e %.1f.\n", um_int(), um_double());
+
+    return 0;
+}
+
+double dobro(double valor) {
+    double valor_dobrado = 2 * valor;
+
+    return valor_dobrado;
+}
+
+double maximo(double valor1, double valor2) {
+    return (valor1 > valor2) ? valor1 : valor2;
+}
+
+int somatorio(int n) {
+    int soma = 0;
+    for (int i = 1; i <= n; i++)
+        soma += i;
+
+    return soma;
+}
+
+double um_double(void) {
+    return (double)um_int();
+}
+
+int um_int(void) {
+    return 1;
+}
+```
+
+No programa exemplificado há cinco funções definidas pelo programador: `dobro`, `maximo`, `somatorio`, `um_int` e `um_double`. Cada uma delas é declarada por seu respectivo protótipo e, em consequência, possuem validade da linha em que houve a declaração até o final do arquivo do código fonte. Como exemplos, a função `dobro` é conhecida e pode ser usada da linha\ 6 até a\ 49, enquanto `somatorio` tem validade a partir da linha\ 10 e também encerrando na linha\ 49.
+
+Assim, toda função pode ser usada a partir da linha de sua declaração. Quando se chega à função `main`, todas as funções já são conhecidas e seu uso é perfeitamente possível.
+
+Um destaque relevante vai para as funções `um_double` e `um_int`, que apenas retornam o valor unitário, um do tipo `double`, outro do tipo `int`. No exemplo, a função `um_double` retorna uma chamada para `um_int`, a qual já foi declarada por seu protótipo.
+
+Segue um exemplo para o caso em que as funções têm suas declarações sem prototipagem, ou seja, são declaradas e implementadas antes da função `main`. A regra de escopo aqui é a mesma e, a título de exemplo, `maximo` é declarado na linha\ 12 e pode ser usado desta linha até a\ 39. 
+
+
+```{c} {code-line-numbers="true"}
+/*
+Programa exemplo com funções simples
+*/
+#include <stdio.h>
+
+double dobro(double valor) {
+    double valor_dobrado = 2 * valor;
+
+    return valor_dobrado;
+}
+
+double maximo(double valor1, double valor2) {
+    return (valor1 > valor2) ? valor1 : valor2;
+}
+
+int somatorio(int n) {
+    int soma = 0;
+    for (int i = 1; i <= n; i++)
+        soma += i;
+
+    return soma;
+}
+
+int um_int(void) {
+    return 1;
+}
+
+double um_double(void) {
+    return (double)um_int();
+}
+
+int main(void) {
+    printf("Quádruplo de 1.77 = %.2lf.\n", dobro(dobro(1.77)));
+    printf("max(1.2, 7.8) = %.1lf.\n", maximo(1.2, 7.8));
+    printf("Somatório de 1 até 100 = %d.\n", somatorio(100));
+    printf("Um: %d e %.1f.\n", um_int(), um_double());
+
+    return 0;
+}
+```
+
+Uma ressalva importante é feita à função `um_double`, a qual necessariamente tem que ser declarada depois de `um_int`, pois essa inversão implicaria no problema de uma função ser desconhecida antes de ser usada. Nesses casos ou a correta ordenação ou a inclusão de um protótipo são soluções válidas.
+
+
+::: {.callout-caution}
+A especificação da linguagem C não admite que funções sejam declaradas dentro de outras funções, o chamado aninhamento de declarações. Uma vantagem dessa estratégia é ter uma função que é reconhecida e usada apenas dentro de outra função.
+
+Muitos compiladores dão, porém, suporte a esse recurso e, assim, torna-se importante ressaltar que o código fonte pode não ser compatível com outros compiladores, outros sistemas ou mesmo com versões futuras.
+
+Aderir aos recursos padronizados oficiais da linguagem é sempre uma boa opção de conduta.
+:::
+
+
+### Funções com vários parâmetros
+
+Não é incomum que uma função precise de mais que um único parâmetro. Por exemplo, pode-se ter uma função que calcule o peso (massa) ideal de uma pessoa conforme seu sexo biológico e sua altura. Essa função poderia ser escrita com a declaração seguinte.
+
+```c
+/*!
+ * Determina a massa ideal a partir do sexo biológico e da altura de um
+ * indivíduo.
+ * @param sexo: o sexo biológio ('F' para feminino, 'M' para masculino) 
+ * @param altura: a altura da pessoa em metros
+ * @return a massa ideal em quilogramas
+ */
+double massa_ideal(char sexo, double altura);
+```
+
+Quando há mais que um parâmetro, eles são separados por vírgulas. Na sequência, são apresentadas declarações genéricas e suas interpretações.
+
+
+```c
+double funcao(int a, double b);  // a é int, b é double; retorna double
+```
+
+```c
+double funcao(int a, int b);  // a e b são int; retorna double
+```
+
+```c
+bool funcao(bool a, bool b, bool c);  // a, b e c são bool; retorna bool
+```
+
+```c
+int funcao(char *a, char *b, int c, int d);  // a e b são strings; c e d são
+                                             // int; retorna int
+```
+
+::: {.callout-caution}
+
+Cada um dos parâmetros devem ter seu tipo especificado. Um exemplo interessante é uma função declarada como na sequência.
+
+```c
+double funcao(double a, b, c);
+```
+
+Nessa função, o parâmetro `a` é do tipo `double`. Porém `b` e `c` não possuem tipo e, em consequência, haverá um erro de compilação.
+:::
+
+
+
+
+### Documentação {#sec-documentacao-funcoes}
+
+Neste livro as funções são documentadas usando um padrão de formato aceito pelo Doxygen[^site-doxygen], que é uma ferramenta para gerar documentação para grandes projetos. No caso dos programas e funções apresentados como exemplos ao longo do texto, o termo "grande projeto", entretanto, não se aplica, nem tampouco é necessária uma ferramenta para gerar a documentação. Apesar disso, o formato escolhido para a documentação é simples e atende às necessidades.
+
+[^site-doxygen]: Doxygen: <https://www.doxygen.nl>.
+
+
+A documentação de uma função envolve:
+
+* A descrição do que ela faz;
+* A apresentação contextualizada dos parâmetros;
+* O que a função retorna como resultado.
+
+Como exemplo, segue a declaração da função para o cálculo do fatorial de um valor inteiro.
+
+```c
+/*!
+ * Retorna, para um dado n, o valor de n!
+ * @param n: valor para o qual seu fatorial é calculado, n >= 0
+ * @return n!
+ */
+unsigned long int fatorial(unsigned int n);
+```
+
+Nessa declaração, a descrição cobre o que a função faz: retorna o fatorial de um valor $n$ indicado. na lista de parâmetros há um só, denominado `n`, além de indicar que a função atende corretamente apenas valores naturais. O retorno da função, por sua vez, é o que a função promete devolver, ou seja, $n!$. Os tipos envolvidos tanto no parâmetro quanto para o retorno estão indicados no cabeçalho da função.
+
+Quando se escreve a documentação, é importante que esteja indicado o que função faz e não como ela o faz. Por exemplo, a descrição não deve conter algo como "por meio de multiplicações sucessivas", pois isso já se refere ao como. A descrição pode ser curta ou longa, dependendo da necessidade, sempre com foco de indicar como outro programador poderá usar essa função corretamente. Para os parâmetros formais, ou seja, os que ficam entre os parênteses, todos devem ser elencados dentro do contexto da função (indicados com `@param`). Assim, para o fatorial de um ${n \in \mathbb{N}}$, o único parâmetro é o $n$ a ser usado, sendo que `n >= 0` deixa claro para quais valores a função funciona corretamente[^ressalva-dominio-incorreto]. Para o retorno da função (`@return`), é indicado tão claramente quanto possível o que é resultado da função.
+
+A documentação de uma uma função é sempre um elemento importante. Entretanto, documentar absolutamente todas as funções pode ter um efeito inverso ao de proporcionar clareza a um dado código. Funções extremamente simples, que sejam praticamente autoexplicativas, podem ficar sem uma documentação explícita. O mesmo ocorre para funções que são apenas auxiliares para outras funções e não são destinadas para que outros programadores as usem. Nessa última categoria, é interessante ver que `sscanf` é uma função importante e, portanto, deva ter sua documentação bem estabelecida (o que é verdade, pois possui sua página de manual), mas é possível supor que ela chame outras funções menores para cada conversão de texto para um determinado tipo; essas funções não requerem, necessariamente, uma documentação, já que não foram feitas para serem usadas abertamente.
+
+Nos exemplos dados ao longo deste texto, é possível que funções simples ou auxiliares deixem de ter documentação explícita.
+
+Os IDEs em geral reconhecem a documentação das funções e auxiliam o programador durante a codificação. Na @fig-ide-popup-funcao há um exemplo de como a documentação é mostrada quando se posiciona o mouse sobre o nome da função `eh_vogal`. Outros auxílios, como verificações dos tipos dos parâmetros também são recursos comuns.
+
+![Auxílio ao programador em IDEs quando as funções são devidamente documentadas. IDE: CLion.](figuras/ide-popup.png){#fig-ide-popup-funcao width="60%"}
+
+
+
+## Criação de funções
+
+Quando uma função é escrita em um programa, é importante que se tenha clareza do seu objetivo. A função deve, em consequência, ater-se somente a ele e não realizar outra tarefa qualquer. Por exemplo, se uma função é escrita para converter graus Celsius para Fahrenheit, é somente a conversão que deve ser feita; a função não deve ler nada nem escrever nada.
+
+Segue um exemplo dessa função.
+
+```c
+/*!
+ * Retorna a temperatura em Fahenheit dado seu valor em graus Celsius
+ * @param celsius: a temperatura Celsius
+ * @return a temperatura em Fahrenheit
+ */
+double celsius_para_fahrenheit(double celsius) {
+    return 1.8 * celsius + 32;
+}
+```
+
+Todos os dados necessários devem ser passados como parâmetros e o resultado retornado pela função.
+
+Não se está dizendo aqui que função não podem nem ler nem escrever. Se uma função tenha como objetivo ler um valor digitado pelo usuário, é isso que ela tem que fazer. O programa exemplo seguinte inclui uma função de interface para ler um valor inteiro digitado pelo usuário, verificando erros e garantindo que um valor válido seja entrado.
+
+
+```{c}
+/*
+Leitura da idade de uma pessoa e escrita desse valor na tela
+Requer: digitação de uma idade
+Assegura: apresentação da idade na tela
+*/
+#include <stdio.h>
+
+int leia_inteiro(char *mensagem);
+
+int main(void) {
+    int idade = leia_inteiro("Digite sua idade: ");
+    printf("Você tem %d anos de idade.\n", idade);
+
+    return 0;
+}
+
+/*!
+ * Retorna um valor inteiro válido digitado pelo usuário.
+ * A leitura é repetida caso o valor digitado não corresponda a
+ * um inteiro válido, sendo uma mensagem de aviso apresentada. Qualquer
+ * texto depois do inteiro é descartado.
+ * @param mensagem: mensagem solicitando a leitura
+ * @return um valor inteiro lido
+ */
+int leia_inteiro(char *mensagem) {
+    printf("%s", mensagem);
+    int valor_lido, quantidade_itens_lidos;
+    do {
+        char entrada[160];
+        fgets(entrada, sizeof entrada, stdin);
+        quantidade_itens_lidos = sscanf(entrada, "%d", &valor_lido);
+        //TYPE(0, "abc");
+        //TYPE(1, "*");
+        //TYPE(2, "#10");
+        //TYPE(3, "25");
+        //STEP
+        if (quantidade_itens_lidos != 1)
+            printf("> Valor inválido. Esperado um inteiro.\n"
+                   "%s", mensagem);
+    } while (quantidade_itens_lidos != 1);
+
+    return valor_lido;
+}
+```
+
+Há que se notar que a função deve ler e retornar um valor inteiro e digitações erradas são detectadas e contornadas. Para ser uma função genérica, ela lê inteiros e não idades (tanto que valores negativos seriam aceitos nesse caso). Essa função pode ser usada em qualquer outro programa para a leitura de um inteiro e ela não atende exclusivamente o problema do programa em questão.
+
+Caso fosse interessante garantir que o valor fosse maior que zero, outra função poderia ser escrita para ler valores apenas em $\mathbb{N}$. Segue um exemplo de implementação de uma função que atende a esses requisitos, a qual aproveita a já escrita `leia_inteiro`, apenas repassando a mensagem para o usuário. No programa anterior, bastaria `main` executar `leia_natural` no lugar de `leia_inteiro`.
+
+```c
+/*!
+ * Retorna um valor inteiro natural digitado pelo usuário.
+ * A leitura é repetida para valores inválidos e o restante da linha
+ * depois do inteiro é ignorado
+ * @param mensagem: mensagem solicitando a leitura
+ * @return valor inteiro lido, maior ou igual a zero
+ */
+int leia_natural(char *mensagem) {
+    int valor_lido;
+    do {
+        valor_lido = leia_inteiro(mensagem);
+        if (valor_lido < 0)
+            printf("Valor inválido. Esperado maior ou igual a zero.\n");
+    } while (valor_lido < 0);
+    return valor_lido;
+}
+```
+
+
+## Escolha dos tipos de retorno e dos parâmetros
+
+Os tipos dos parâmetros devem satisfazer as necessidades das funções. Por exemplo, na conversão de graus Celsius para Fahrenheit é esperado que a temperatura em Celsius seja `double`, assim como o valor retornado em Fahrenheit.
+
+```c
+double celsius_para_fahrenheit(double celsius);
+```
+
+Para uma função do cálculo do fatorial de um número, entretanto, as escolhas podem não ser tão elementares. Uma primeira tentativa seria, por exemplo, ter a função com o seguinte protótipo.
+
+```c
+int fatorial(int n);
+```
+
+Um primeiro ponto é que, nos sistemas atuais, um `int` ocupa geralmente quatro bytes e permite valores de -2.147.483.648 a 2.147.483.647. Metade dos valores representados são negativos e o resultado do fatorial nunca será negativo. Assim, pode-se optar pela prototipagem seguinte.
+
+```c
+unsigned int fatorial(int n);
+```
+
+Nessa nova versão, ainda considerando os tamanhos típicos para inteiros, os valores de retorno podem ser de zero a 4.294.967.295. Esse intervalo comportaria valores até 12$!$ (479.001.600), pois 13$!$ (6.227.020.800) já extrapolaria.
+
+A versão seguinte expande o tipo de retorno para `unsigned long int`, o qual usa oito bytes na versão do `gcc` usada nos programas. Desse modo, a gama de possíveis resultados vai para 18.446.744.073.709.551.615, o que comportaria até 20$!$[^20-fatorial].
+
+[^20-fatorial]: Embora 20$!$ não pareça muito, vale lembrar seu valor é 2.432.902.008.176.640.000, ou seja, aproximadamente 2,4\ $\times$\ 10^18^.
+
+```c
+unsigned long int fatorial(int n);
+```
+
+O mesmo raciocínio se aplicaria ao parâmetro `n`. Para $n!$, sempre se tem $n \geq 0$, e, assim, a função poderia ter como protótipo final o formato que segue.
+
+```c
+unsigned long int fatorial(unsigned int n);
+```
+
+Sua implementação seria como se segue.
+
+```c
+/*!
+ * Retorna, para um dado n, o valor de n!
+ * @param n: valor para o qual seu fatorial é calculado, n >= 0
+ * @return n!
+ */
+unsigned long int fatorial(unsigned int n) {
+    unsigned long int multiplicador = 1;
+    for (unsigned int i = 2; i <= n; i++)
+        multiplicador *= i;
+
+    return multiplicador;
+}
+```
+
+A vantagem na escolha dos tipos é que, até certo limite, o compilador consegue verificar consistência nos valores passados para a função. Por exemplo, se houver uma variável `i` do tipo `int` (que possui valores negativos), o compilador pode avisar (não é erro) que pode haver algum problema. A mensagem de compilação seguinte mostra que pode haver um problema de conversão caso os valores sejam negativos e o resultado, portanto, pode não ser confiável.
+
+```terminal
+main.c:18:31: warning: conversion to ‘unsigned int’ from ‘int’ may change
+the sign of the result [-Wsign-conversion]
+   18 |     printf("%lu.\n", fatorial(i));
+      |                               ^
+```
+
+A boa escolha dos tipos sempre proporciona uma camada adicional de controle na escrita de programas.

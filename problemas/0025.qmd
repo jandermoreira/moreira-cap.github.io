@@ -1,0 +1,56 @@
+<!-- Mínimo e máximo simultâneos e excludentes -->
+::: {#exr-0025}
+Considere o seguinte problema:
+
+> É preciso determinar os valores mínimo e máximo em uma sequência de 100 valores reais quaisquer.
+
+Para esse problema, foram apresentadas duas soluções apresentadas a seguir.
+
+Solução 1:
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Determinação dos valores mínimo e máximo em uma sequência de 100 valores reais
+    \Require 100 valores reais em uma sequência
+    \Ensure a apresentação do mínimo e do máximo
+    \Statex
+    \Statep{Defina \Id{mínimo} com $+\infty$}
+    \Statep{Defina \Id{máximo} com $-\infty$}
+    \For{$i \gets 1$ \To $100$}
+        \Statep{Obtenha \Id{valor}}
+        \If{$\Id{valor} < \Id{mínimo}$}
+            \Statep{Defina \Id{mínimo} com \Id{valor}}
+        \ElsIf{$\Id{valor} > \Id{máximo}$}
+            \Statep{Defina \Id{máximo} com \Id{valor}}
+        \EndIf
+    \EndFor
+    \Statep{Apresente \Id{mínimo} e \Id{máximo}}
+\end{algorithmic}
+```
+Solução 2:
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Determinação dos valores mínimo e máximo em uma sequência de 100 valores reais
+    \Require 100 valores reais em uma sequência
+    \Ensure a apresentação do mínimo e do máximo
+    \Statex
+    \Statep{Obtenha \Id{valor}}[o primeiro valor]
+    \Statep{Defina \Id{mínimo} com \Id{valor}}
+    \Statep{Defina \Id{máximo} com \Id{valor}}
+    \For{$i \gets 2$ \To $100$}[para os 99 valores restantes]
+        \Statep{Obtenha \Id{valor}}
+        \If{$\Id{valor} < \Id{mínimo}$}
+            \Statep{Defina \Id{mínimo} com \Id{valor}}
+        \ElsIf{$\Id{valor} > \Id{máximo}$}
+            \Statep{Defina \Id{máximo} com \Id{valor}}
+        \EndIf
+    \EndFor
+    \Statep{Apresente \Id{mínimo} e \Id{máximo}}
+\end{algorithmic}
+```
+
+Uma das soluções não funciona para todos os casos. Identifique o problema.
+
+**Dica:** o problema surge em um caso bastante específico.
+:::

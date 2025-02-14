@@ -1,0 +1,410 @@
+# Execução condicional com `if`
+
+A maioria dos programas requer que alguns comandos apenas sejam executados em algumas condições e isso é chamado, naturalmente, de execução condicional.
+
+A principal estrutura na linguagem\ C para determinar se determinados comandos são ou não executados é o `if`. Esta estrutura é o assunto deste capítulo.
+
+## A estrutura condicional `if`
+
+Para introduzir a estrutura condicional é apresentado um programa que implementa o @alg-escrita-nao-decrescente.
+
+
+```pseudocode
+%| title: Apresentação de dois valores reais em ordem não decrescente.
+%| label: #alg-escrita-nao-decrescente
+
+\begin{algorithmic}
+    \Description Apresentação de dois valores reais quaisquer em ordem não decrescente.
+    \Require $v_1, v_2 \in \mathbb{R}$
+    \Ensure $v_1 \leq v_2$
+    \Statex{}
+    \Statep{Obtenha $v_1$ e $v_2$}
+    \If{$v_2 < v_1$}
+        \Statep{Troque o valor $v_1$ com o de $v_2$}
+    \EndIf
+    \Statep{Apresente $v_1$ e $v_2$}
+\end{algorithmic}
+```
+
+A codificação em C deste algoritmo pode ser feita como se segue.
+
+```{c}
+/*
+Apresentação de dois valores em ordem não decrescente
+Requer: dois valores reais v1 e v2
+Assegura: v1 <= v2
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite dois valores reais: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double v1, v2;
+    sscanf(entrada, "%lf%lf", &v1, &v2);
+    //TYPE(0, "4.5 1.3");
+
+    if(v2 < v1) {
+        double temporario = v1;
+        v1 = v2;
+        v2 = temporario;
+    }
+
+    printf("Valores em ordem não decrescente: %g e %g.\n", v1, v2);
+    
+    return 0;
+}
+```
+
+A estratégia da implementação é a mesma do algoritmo, que opta por fazer a troca dos valores (e isso requer o uso de uma variável temporária auxiliar). As três instruções que realizam a troca somente são executadas quando `v2` for menor que `v1` e ignoradas se isso não for verdade
+
+É importante ressaltar que as chaves agrupam as três atribuições do `if`, de forma que todos os comandos ficam condicionados. O uso das chaves para agrupar comandos cria um comando composto, o qual pode ser usado no lugar de qualquer comando simples.
+
+Em C, a estrutura básica do `if` se estabelece conforme destacado na sequência.
+
+::: {.callout title="Estrutura `if` básica"}
+`if (` _condição_ `)` _comando_
+:::
+
+A _condição_ é uma expressão que deve resultar em verdadeiro ou falso. Somente se a condição for verdadeira _comando_ é executado. O _comando_, por sua vez, pode ser tanto um comando simples (terminado com ponto e vírgula) ou um comando composto (usando chaves).
+
+Seguem dois exemplos válidos de estruturas `if`: a primeira usa um comando simples e, na segunda, um comando composto contendo apenas um comando simples. É interessante observar que o ponto e vírgula ocorre apenas no final do comando simples, enquanto comandos compostos não usam esse terminador depois do fecha chaves.
+
+```c
+if(valor < 0)
+    valor = -valor; // torna positivo
+```
+
+```c
+if(valor < 0) {
+    valor = -valor; // torna positivo
+}
+```
+
+## `if` + `else`
+
+A cláusula `else` pode ser adicionada ao `if` para indicar uma ação a ser feita caso a condição de teste seja avaliada como falsa.
+
+::: {.callout title="Estrutura `if` completa"}
+`if (` _condição_ `)` _comando\_verdade_ `else` _comando\_falso_
+:::
+
+Como exemplo, considere o problema de determinar o peso (massa) ideal de uma pessoa baseada em seu sexo biológico. Para o sexo feminino, o peso em quilogramas é dado pela expressão 62,1$h$\  -\  44,7, sendo $h$  a altura da pessoa em metros; para o masculino, o cálculo é 72,7$h$\ -\ 58. Seguem a solução algorítmica e uma implementação em C para esse problema.
+
+```pseudocode
+%| title: Estimativa do peso ideal conforme sexo biológico e altura.
+%| label: #alg-estimativa-peso-ideal
+\begin{algorithmic}
+    \Description Cálculo estimado da massa ideal de uma pessoa baseada em seu sexo biológico e sua altura
+    \Require o sexo biológico (masculino ou feminino) e a altura em metros
+    \Ensure a massa ideal da pessoa
+    \Statex{}
+    \Statep{Obtenha o sexo biológico e a altura}
+    \If{sexo for feminino}
+        \Statep{Calcule \Id{massa\_ideal} como $62,1h -44,7$}[feminino]
+    \Else
+        \Statep{Calcule \Id{massa\_ideal} como $72,7h - 58$}[masculino]
+    \EndIf
+    \Statep{Apresente \Id{massa\_ideal}}
+\end{algorithmic}
+```
+
+```{c}
+/*
+Cálculo estimado da massa ideal de uma pessoa baseada em seu sexo biológico
+    e sua altura
+Requer: o sexo biológico (masculino ou feminino) e a altura em metros
+Assegura: a massa ideal da pessoa apresentada (kg)
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite o sexo (M ou F) e a altura em quilogramas: ");
+    fgets(entrada, sizeof entrada, stdin);
+    char sexo;
+    double altura;
+    sscanf(entrada, "%c%lf", &sexo, &altura);
+    //TYPE(0, "F 1.68");
+
+    double massa_ideal;
+    if(sexo == 'F')
+        massa_ideal = 62.1 * altura - 44.7;  // feminino
+    else
+        massa_ideal = 72.7 * altura - 58;  // masculino
+
+    printf("Massa ideal: %.1fkg.", massa_ideal);
+
+    return 0;
+}
+```
+
+Neste há dois caminhos possíveis: o cálculo como sexo biológico feminino ou masculino. Pela especificação do problema, apenas `M` ou `F` são entradas válidas, o que permitiu associar ao `else`, inequivocamente, o valor `M`. Em C, vale o destaque que `=` é usado para a atribuição, sendo que a comparação de igualdade é feita com\ `==`.
+
+Em relação ao `if`, tanto no caso verdadeiro quanto no falso foram inseridos comandos simples.
+
+Como exemplo adicional, um algoritmo para classificar um triângulo como equilátero, escaleno ou isósceles a partir do comprimento de seus lados é apresentado no @alg-classificacao-triangulo-lados.
+
+```pseudocode
+%| title: Classificação de um triângulo em relação aos comprimentos de seus lados
+%| label: #alg-classificacao-triangulo-lados
+
+\begin{algorithmic}
+    \Description Classificação de um triângulo em relação aos comprimentos de seus lados
+    \Require Os comprimentos $l_1$, $l_2$ e $l_3$ dos lados de um triângulo válido
+    \Ensure uma classificação em equilátero, escaleno ou isósceles
+    \Statex{}
+    \Statep{Obtenha os valores dos lados $l_1$, $l_2$ e $l_3$}
+    \If{$l_1 = l_2 = l3$}
+        \Statep{Faça \Id{classificação} igual a equilátero}
+    \ElsIf{$l_1 = l_2$ ou $l_2 = l_3$ ou $l_1 = l_3$}
+        \Statep{Faça \Id{classificação} igual a isósceles}
+    \Else
+        \Statep{Faça \Id{classificação} igual a escaleno}
+    \EndIf
+    \Statep{Apresente \Id{classificação}}
+\end{algorithmic}
+```
+
+Em C, a codificação pode ser expressa na forma seguinte.
+
+```{c}
+#include <stdio.h>
+/*
+Classificação de um triângulo em relação aos comprimentos de seus lados
+Requer: Os comprimentos dos lados de um triângulo válido
+Assegura: uma classificação em equilátero, escaleno ou isósceles
+*/
+int main(void) {
+    char entrada[160];
+
+    printf("Digites os comprimentos dos lados de um triângulo: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double lado1, lado2, lado3;
+    sscanf(entrada, "%lf%lf%lf", &lado1, &lado2, &lado3);
+    //TYPE(0, "9.1 4.3 9.1");
+
+    char *classificacao;
+    if(lado1 == lado2 && lado2 == lado3)
+        classificacao = "equilátero";
+    else if(lado1 == lado2 || lado2 == lado3 || lado1 == lado3)
+        classificacao = "escaleno";
+    else
+        classificacao = "isósceles";
+
+    printf("O triângulo é %s.\n", classificacao);
+
+    return 0;
+}
+```
+
+O programa usa comandos simples para as atribuições, o que dispensa os comandos compostos com as chaves.  Na lógica da solução inicialmente verificada a hipótese dos três lados iguais (equilátero). Caso essa verificação dê falso, então há pelo menos um lado diferente e isso leva ao segundo `if`, que verifica a hipótese de haver algum par de lados de mesmo comprimento.
+
+Este programa, além do `if` e algumas operações lógicas com **e** e **ou**, também usa uma variável `classificacao` declarada como do tipo `char *`. Quando são feitas atribuições como as usadas no exemplo a esse tipo de variável, é feita apenas uma referência à constante e não uma atribuição convencional, na qual uma cópia do texto é guardada na variável. A manipulação de cadeias de caracteres em C é, para se bem dizer, chata e difícil. Como ela não é tão natural, acaba exigindo conhecimento de outros elementos da linguagem. O @sec-dados-textuais aborda esse tema com mais detalhes.
+
+::: {.callout-tip}
+Nas comparações com valores `double` resultantes de expressões aritméticas, nunca se deve verificar pela igualdade. Os valores reais são armazenados com precisão limitada. É conveniente o uso uma tolerância nessas comparações.
+
+```{c}
+/* 
+Ilustração do problema de precisão nas operações com double
+*/
+#include <stdio.h>
+#include <math.h>
+
+int main(void) {
+    double a = 40.96;
+    double b = 6.4 * 6.4;  // 40.96
+
+    // Opção ruim
+    if(a == b)
+        printf("%g == %g.\n", a, b);
+    else {
+        printf("%g != %g.  :-(\n", a, b);
+        printf("Diferença: %g.\n\n", a - b);
+    }
+
+    // Opção melhor, contornando o problema
+    if(fabs(a - b) < 1e-5)  // cinco casas decimais...
+        printf("%g == %g. (o suficiente!)\n", a, b);
+    else {
+        printf("%g != %g.  :-(\n", a, b);
+        printf("Diferença: %g.\n\n", a - b);
+    }
+
+    return 0;
+}
+```
+
+Neste programa, se a diferença for menor que 0,00001 (segundo `if`), então os valores são considerados iguais. A tolerância, é claro, depende do contexto do problema.
+:::
+
+Como um último exemplo, segue o algoritmo para o cálculo das raízes reais de uma equação de segundo grau ${ax^2 + bx + c = 0}$ dados seus coeficientes (@alg-pseudocodigo-raizes-equacao, apresentado no @sec-nocoes-de-algoritmos).
+
+<!-- ::: {.content-visible when-profile="programacao"}
+{{< include algoritmos/equacao-segundo-grau.qmd  >}}
+::: -->
+
+Sua codificação em C pode ser apresentada conforme se segue.
+
+```{c}
+/*
+Cálculo e apresentação das raízes reais de uma equação de segundo grau na
+    forma ax^2 + bx + c = 0
+Requer: Os coeficientes a, b e c da equação
+Assegura: as raízes reais da equação; ou mensagem que a equação é
+    inválida; ou mensagem que não há raízes reais
+*/
+#include <stdio.h>
+#include <math.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite os valores de a, b e c da equação: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "1 -5.9 7.14");
+    double a, b, c;
+    sscanf(entrada, "%lf%lf%lf", &a, &b, &c);
+
+    if(a == 0)
+        printf("Não é equação do segundo grau (a = 0).\n");
+    else {
+        double discriminante = pow(b, 2) - 4 * a * c;
+        if(discriminante < 0)
+            printf("A equação não possui raízes reais.\n");
+        else if(discriminante < 1.0e-10) {  // tolerância: < 1.0e-10 é "zero"
+            // Uma raiz real
+            double x = -b / (2 * a);
+            printf("Uma raiz: %g.\n", x);
+        }
+        else {
+            // Duas raízes reais
+            double x1 = (-b - sqrt(discriminante)) / (2 * a);
+            double x2 = (-b + sqrt(discriminante)) / (2 * a);
+            printf("Raízes reais: %g e %g.\n", x1, x2);
+        }
+    }
+
+    return 0;
+}
+```
+
+## De quem é esse `else`?
+
+Um ponto relevante quando se usa `if` dentro de `if` é a quem pertence um determinado `else`. Para considerar esse problema é apresentado um código em C.
+
+
+```{c} {.hide-compiler-output}
+/*
+Ilustração do problema do else pendente
+*/
+#include <stdio.h>
+
+int main(void) {
+    int i = 0;
+    int j = 0;
+
+    int k = 5;
+
+    if(k > 10)
+        if (k > 20)
+            i = 10;
+    else 
+        j = 10;
+
+    printf("i = %d e j = %d.\n", i, j);
+    
+    return 0;
+}
+```
+
+A intenção do código seria fazer `j = 10` para valores de `k` menores ou iguais a 10. Porém, apesar da organização visual sugerir que o else pertence ao `if(k > 10)`, ele se liga ao `if(k > 20)`. Assim, independentemente da disposição dos comandos no codigo fonte, o programa será sempre interpretado como se segue. E, neste caso, o primeiro `if` não possui `else`.
+
+```c
+/*
+Ilustração do problema do else pendente
+*/
+#include <stdio.h>
+
+int main(void) {
+    int i = 0;
+    int j = 0;
+
+    int k = 5;
+
+    if(k > 10)
+        if (k > 20)
+            i = 10;
+        else 
+            j = 10;
+
+    printf("i = %d e j = %d.\n", i, j);
+    
+    return 0;
+}
+```
+
+O `else` sempre se ligará ao `if` mais próximo da sequência das instruções. Para resolver esse problema do exemplo, é preciso isolar o `if` mais interno, colocando-o em um bloco, formando um comando composto.
+
+O resultado é apresentado na sequência.
+
+```{c}
+/*
+Ilustração do problema do else pendente
+*/
+#include <stdio.h>
+
+int main(void) {
+    int i = 0;
+    int j = 0;
+
+    int k = 5;
+
+    if(k > 10) {
+        if (k > 20)
+            i = 10;
+    }
+    else 
+        j = 10;
+
+    printf("i = %d e j = %d.\n", i, j);
+    
+    return 0;
+}
+```
+
+É ainda interessante notar que, caso o `if(k > 20)` tivesse seu próprio `else`, a ambiguidade desapareceria e o comando composto seria desnecessário.
+
+```{c}
+/*
+Ilustração do problema do else pendente
+*/
+#include <stdio.h>
+
+int main(void) {
+    int i = 0;
+    int j = 0;
+
+    int k = 15;
+
+    if(k > 10) 
+        if (k > 20)
+            i = 10;
+        else
+            i = 20;
+    else 
+        j = 10;
+
+    printf("i = %d e j = %d.\n", i, j);
+    
+    return 0;
+}
+```
+
+
+::: {.callout-tip}
+A manutenção da organização visual do código com as indentações corretas ajuda na identificação dos erros.
+:::

@@ -1,0 +1,524 @@
+# Expressões aritméticas de C
+
+Uma coisa que um computador consegue fazer com eficiência são contas e faz isso muito rapidamente. Nesta parte são tratados os principais aspectos dos cálculos feitos por programas escritos em\ C. 
+
+Uma expressão aritmética é aquela que envolve valores numéricos e, pelo uso operadores, produzem um resultado também numérico. Um exemplo de uma expressão aritmética é o cálculo do discriminante ${b^2 - 4ac}$, referente a uma equação de segundo grau ${ax^2 + bx + c = 0}$ ($a\neq 0$).
+
+## Operadores aritméticos
+
+A linguagem C dispõe dos operadores aritméticos tradicionais para soma, subtração, multiplicação e divisão. Como na matemática, os operadores possuem prioridades entre si, sendo que multiplicações e divisões tem precedência sobre somas e subtrações. Os operadores aritméticos são apresentados na @tbl-operadores-aritmeticos.
+
+
+|   Operador    | Descrição                                 | Precedência | Sintaxe | Associatividade |
+| :-----------: | :---------------------------------------- | :---------: | :-----: | :-------------: |
+| `+` (unário)  | Mantém o sinal do operando seguinte       |      1      |  `+a`   |  $\leftarrow$   |
+| `-` (unário)  | Alteração do sinal do operando seguinte   |      1      |  `-a`   |  $\leftarrow$   |
+|      `*`      | Multiplicação de dois operandos           |      2      | `a * b` |  $\rightarrow$  |
+|      `/`      | Divisão do operando esquerdo pelo direito |      2      | `a / b` |  $\rightarrow$  |
+|      `%`      | Módulo do operando direito pelo esquerdo  |      2      | `a % b` |  $\rightarrow$  |
+| `+` (binário) | Soma de dois operandos                    |      3      | `a + b` |  $\rightarrow$  |
+| `-` (binário) | Subtração do operando direito do esquerdo |      3      | `a - b` |  $\rightarrow$  |
+
+: Operadores aritméticos. A ordem precedência vai de 1 (maior precedência) a 3 (menor precedência). A associatividade pode ser da esquerda para a direita ($\rightarrow$) ou da direita para a esquerda ($\leftarrow$). {#tbl-operadores-aritmeticos}
+
+O programa seguinte exemplifica o uso dos operadores para valores inteiros.
+
+```{c}
+/*
+Operadores aritméticos com argumentos inteiros
+*/
+#include <stdio.h>
+
+int main(void) {
+    int operando1 = 15;
+    int operando2 = 6;
+
+    printf("Operandos em uso: op1 = %d e op2 = %d.\n", operando1, operando2);
+    printf("+op1 = %d\n", +operando1);
+    printf("-op1 = %d\n", -operando1);
+    printf("op1 * op2 = %d\n", operando1 * operando2);
+    printf("op1 / op2 = %d\n", operando1 / operando2);
+    printf("op1 + op2 = %d\n", operando1 + operando2);
+    printf("op1 - op2 = %d\n", operando1 - operando2);
+    printf("op1 %% op2 = %d\n", operando1 % operando2);
+
+    return 0;
+}
+```
+
+O resultado da execução é, em grande parte, o esperado. Há, porém, um detalhe importante relativo à divisão. Seria esperado que a expressão `15 / 6` resultasse em aproximadamente 2,14286, porém o resultado foi 2. Em C, a divisão de um inteiro por outro resulta em outro inteiro; a parte decimal resultante da divisão é ignorada. Desta forma, `3 / 2` é igual a 1, `20 / 6`, `32 / 6` é calculado como 5 e `999 / 1000` resulta em zero. Não são feitos arredondamentos; a parte inteira é truncada.
+
+O operador `%` é o não tão conhecido operador modular, escrito $k$\ mod\ $n$, e que corresponde ao resto da divisão de $k$ por $n$. No exemplo, `15 % 6` é o resto da divisão de 15 por 6, ou seja, 3.
+
+A multiplicação é indicada pelo `*`, que deve sempre ser explícito. Nas equações matemáticas, a ausência do operador é imediatamente associada à multiplicação ($xy$ significa $x$ multiplicado por $y$). Em\ C, deve-se sempre escrever `x * y`.
+
+:::::: {.content-visible when-profile="programacao"}
+::: {.callout-note title="Aritmética modular" icon="false"}
+A aritmética modular, que é um sistema para inteiros, corresponde números cíclicos. Para módulo 3, por exemplo, os números são sequencialmente 0,\ 1,\ 2,\ 0,\ 1,\ 2,\ 0,..., ciclicamente. Assim, para se chegar ao 7, a sequência seria 1,\ 2,\ 0,\ 1,\ 2,\ 0,\ 1. Nesta contagem, 3\ $\equiv$\ 0\ (mod\ 3), pois ambos chegam ao zero no final. Ainda tem-se 1\ $\equiv$\ 4\ (mod\ 3), 2\ $\equiv$\ 5\ (mod\ 3) e 2\ $\equiv$\ 8\ (mod\ 3), por exemplo.
+
+Um exemplo prático de contagem modular é o relógio de 12 horas, que inicia às 0h e, quando chegaria às 12h, volta a contar do zero novamente. Se o relógio marca, por exemplo, 9h, depois de cinco horas ele marcará 2h, pois opera mod\ 12. Ou seja, (9\ +\ 5)\ $\equiv$\ 2\ (mod\ 12).
+
+O operador módulo, denotado por $k$\ mod\ $n$, corresponde a um inteiro único $r$ tal que 0\ ${\leq r \leq n}$ e $r \equiv n$\ (mod\ $n$).
+
+A consequência prática e útil da operação modular na computação é que, para valores inteiros positivos, `a % b` corresponde ao resto da divisão inteira de `a` por `b`. Assim, `8546 % 43` resulta em 32, ou seja, 8546 dividido por 43 é 198 com resto\ 32.
+:::
+::::::
+
+Na sequência é apresentado um programa usando os operadores aritméticos com dados do tipo `double`.
+
+```{c}
+/*
+Operadores aritméticos com argumentos inteiros
+*/
+#include <stdio.h>
+
+int main(void) {
+    double operando1 = 12.5;
+    double operando2 = 3.8;
+
+    printf("Operandos em uso: op1 = %g e op2 = %g.\n", operando1, operando2);
+    printf("+op1 = %g\n", +operando1);
+    printf("-op1 = %g\n", -operando1);
+    printf("op1 * op2 = %g\n", operando1 * operando2);
+    printf("op1 / op2 = %g\n", operando1 / operando2);
+    printf("op1 + op2 = %g\n", operando1 + operando2);
+    printf("op1 - op2 = %g\n", operando1 - operando2);
+
+    return 0;
+}
+```
+
+Quando os operadores são usados em valores reais (`double`), os resultados são os esperados da matemática. Como a aritmética modular é aplicada exclusivamente a valores inteiros, o operador `%` é inválido quando os operandos são `double`.
+
+
+### Ordem de avaliação
+
+A ordem de avaliação de uma expressão aritmética em C pode ser traiçoeira. Embora, em grande parte das vezes, o valor de uma expressão seja direto, há um não tão pequeno número de situações em que o programador pode se equivocar.
+
+Para avaliar uma expressão, o compilador usa os seguintes passos de decisão:
+
+#. Para operadores com precedências diferentes, a ordem da precedência é seguida;
+#. Para operadores de mesma precedência, a associatividade é seguida.
+
+Por exemplo, na expressão `a + b * c`, `b * c` é avaliado primeiro, sendo a soma realizada em um segundo momento.
+
+Para a expressão `a * b * c + d * e`, a ordem de avaliação é:
+
+#. Primeiro ocorre a multiplicação de `a` por `b`, gerando um resultado intermediário $r_1$;
+#. Depois, $r_1$ é multiplicado por `c` ($r_2$);
+#. Como a multiplicação tem precedência sobre a soma, `d` e `e` são multiplicados ($r_3$);
+#. Por fim, $r_2$ e $r_3$ são somados.
+
+A ordem de avaliação, portanto, é `(((a * b) * c) + (d * e))`, embora se saiba que a ordem de multiplicação dos três primeiros termos não interfira no resultado.
+
+Felizmente, para os operadores de soma, subtração e multiplicação, a ordem seguida pelo compilador é normalmente a esperada.
+
+Quando há uma divisão, uma margem para erros acaba se apresentando. Como exemplo, pode-se considerar a expressão `a * b / c * d`, na qual todos os operadores possuem a mesma ordem de precedência, mas diferentes ordens de avaliação levam a resultados distintos. Para este caso, a ordem de avaliação é:
+
+#. É feita inicialmente a multiplicação de `a` por `b` ($r_1$); 
+#. Em seguida, $r_1$ é dividido por `c`, resultando $r_2$;
+#. Por último, é feita a multiplicação de $r_2$ por `d`, gerando o resultado final.
+
+A ordem de avaliação segue a associatividade dos operadores de mesma precedência, que neste caso é da esquerda para a direita. Assim, `a * b / c * d` é avaliado como `(((a * b) / c) * d)`.
+
+### Quebra da ordem de precedência e da associatividade
+
+Conhecido o procedimento usado pelo compilador para avaliar uma expressão aritmética, fica expressa a necessidade de, por vezes, escolher uma ordem diferente. A linguagem C usa os parênteses para definir a ordem de avaliação. Um exemplo importante e simples é o cálculo media: `(v1 + v2)/2`. Sem os parênteses, apenas `v2` seria dividido por 2.
+
+Apenas parênteses são usados nas expressões, pois colchetes e chaves servem a outros propósitos na linguagem. 
+
+Considerando a, título de exemplo, que uma variável real `discriminante` contenha o valor $b^2 - 4ac$ correspondente a uma equação de segundo grau ${ax^2 + bx + c = {}}$\ 0 ($a \neq$\ 0), a @tbl-tentativas-raiz-equacao mostra tentativas de escrever o cálculo de uma das raízes da equação, considerando que o discriminante seja não negativo.
+
+
+
+| Expressão do código                    |       Expressão equivalente       | Resultado |
+| :------------------------------------: | :-------------------------------: | :-------: |
+| `-b - sqrt(discriminante) / 2 * a`     | $-b - \dfrac{\sqrt{\Delta}}{2} a$ | Incorreto |
+| `-b - sqrt(discriminante) / (2 * a)`   | $-b - \dfrac{\sqrt{\Delta}}{2a}$  | Incorreto |
+| `(-b - sqrt(discriminante)) / 2 * a`   | $\dfrac{-b - \sqrt{\Delta}}{2} a$ | Incorreto |
+| `(-b - sqrt(discriminante))  /  2*a`   | $\dfrac{-b - \sqrt{\Delta}}{2} a$ | Incorreto |
+| `(-b - sqrt(discriminante)) / (2 * a)` | $\dfrac{-b - \sqrt{\Delta}}{2a}$  |  Correto  |
+| `(-b - sqrt(discriminante)) / 2 / a`   | $\dfrac{-b - \sqrt{\Delta}}{2a}$  |  Correto  |
+
+: Exemplos de tentativas de código para calcular uma raiz de uma equação de segundo grau com discriminante $\Delta \geq 0$. {#tbl-tentativas-raiz-equacao}
+
+
+
+::: {.callout-tip}
+Em C, o compilador ignora os espaços entre os operadores. A ordem que vale é a da precedência, em primeiro lugar, e da associatividade, para precedências iguais. Dessa forma, é indiferente para o compilador escrever `a/b*c`, `a / b * c` ou `a / b*c`, pois todas serão avaliadas `((a / b) * c)`.
+
+Mesmo que desnecessário, muitas vezes o uso dos parênteses para deixar clara a ordem de avaliação que o programador deseja ajuda na legibilidade e entendimento do código fonte.
+
+Por exemplo, é comum, no lugar de elevar um valor ao quadrado, usar a multiplicação dele por ele mesmo. Uma expressão que usa esse recurso, por exemplo, seria $a^2(b+c)^2$, que poderia ser escrita `(a * a) * ((b + c) * (b + c))`, mesmo que `a * a * (b + c) * (b + c)` seja exatamente equivalente. Os parênteses servem apenas para ênfase.
+:::
+
+## Expressões inteiras vs. reais (promoção de tipo)
+
+As expressões aritméticas envolvem valores numéricos, mas C pode tratar de forma diferente valores numéricos inteiros (`int`) e reais (`double`). Um exemplo é a divisão, que resulta em valores diferentes para `18/7` e `18.0/7.0`, por exemplo, ou o operador modular `%`, que não pode ser usado para valores reais.
+
+Para iniciar o entendimento de como expressões com tipos diferentes são tratadas, o exemplo da conversão de temperaturas do @alg-pseudocodigo-conversao-celsius-fahrenheit é revisitado.
+
+
+```{c}
+/* 
+Conversão de escalas termométricas, de graus Celsius para Fahrenheit
+Requer: valor da temperatura em graus Celsius
+Assegura: valor da temperatura em Fahrenheit
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Temperatura em Celsius: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "23.5");
+    double temperatura_celsius;
+    sscanf(entrada, "%lf", &temperatura_celsius);
+
+    double temperatura_fahrenheit = 1.8 * temperatura_celsius + 32;
+    printf("%g graus Celsius = %g Fahrenheit.\n", temperatura_celsius,
+        temperatura_fahrenheit);
+
+    return 0;
+}
+```
+
+O interesse neste programa está na expressão que faz a conversão de escalas termométricas. 
+
+```c
+double temperatura_fahrenheit = 1.8 * temperatura_celsius + 32;
+```
+
+A expressão multiplica um valor `double`, o 1,8 por outro também `double`, resultando em um valor intermediário que mantém o tipo dos operandos. Em seguida, o valor 32 é somado, mas esse valor é do tipo `int`. 
+
+A questão é que claramente `int` somado com `int` resulta em `int` e, de modo análogo, a soma de `double` resulta em `double`. Como o compilador pode, então, lidar com a soma de um `double` com um `int`?
+
+Quando uma expressão envolve tipos diferentes, um mecanismo conhecido como promoção de tipo é empregado. A promoção segue o princípio de que, se os tipos são diferentes, o "menor" deve ser promovido ao tipo do "maior". Neste caso, "menor" e "maior" se referem à capacidade de armazenamento dos tipos envolvidos. Assim, um `double` é considerado "maior" (mais abrangente) que um `int` (mais restrito). Essa análise é feita a cada operação.
+
+Retornando ao caso da soma de um `double` com um `int`, primeiramente o `int` é convertido para `double` e, então, a soma é feita, resultando evidentemente em `double`. 
+
+Muitas vezes a expressão usada para a conversão de Celsius para Fahrenheit é dada na forma ${t_f = \frac{9}{5}t_c + 32}$. Usando-se essa configuração, talvez fosse possível substituir a linha do cálculo no programa pela versão seguinte.
+
+```c
+double temperatura_fahrenheit = 9 / 5 * temperatura_celsius + 32;  // incorreta!
+```
+
+
+Essa expressão apresenta um erro no cálculo. Considerando-se que a divisão e a multiplicação possuem a mesma precedência, a expressão é avaliada da esquerda para a direita, de forma que `9 / 5` é calculada primeiro, para então multiplicar por `temperatura_celsius`. O problema é que `9 / 5` é igual a 1, pois ambos os operadores são inteiros. Da forma que está escrita, o valor efetivamente atribuído é `1 * temperatura_celsius + 32`.
+
+É nítida a consequência da ordem das operações no resultado final, o que leva a uma nova versão para a expressão.
+
+```c
+double temperatura_fahrenheit = temperatura_celsius * 9 / 5 + 32;  // correta!
+```
+
+Seguindo a ordem de avaliação, a primeira operação realizada é a multiplicação de `temperatura_celsius` por 9, sendo o primeiro operando `double` e o segundo, `int`. Aplicada a promoção do 9 para 9.0, a multiplicação é feita, com um resultado do tipo `double`. Quando é feita a divisão por 5, novamente o segundo operando é promovido (de 5 para 5.0) e novamente se obtém um resultado `double`. Finalmente a soma é feita, havendo uma nova promoção (do 32), obtendo-se o resultado final. É importante notar que o problema da divisão inteira foi evitado, uma vez que, em nenhum momento, a divisão teve que lidar com dois valores `int`.
+
+Um novo exemplo segue, o qual tem que lidar com conversões de tipo. O programa implementa o @alg-porcentagem-pesquisa-simples.
+
+```latex {.pseudocode}
+%| title: Cálculo de porcentagens considerando o montante de votos.
+%| label: #alg-porcentagem-pesquisa-simples
+
+\begin{algorithmic}
+    \Description Cálculo simples de porcentagens em uma pesquisa com as seguintes possibilidades de resposta: sim, não e não sei. A pergunta feita é irrelevante.
+    \Require a quantidade de votos \textit{sim}, \textit{não} e \textit{não sei}
+    \Ensure as porcentagens, exibidas no intervalo [0, 1], de cada opção de voto
+
+    \Statep{Obtenha $\Id{quantidade}_\Id{sim}$, $\Id{quantidade}_\Id{não}$ e $\Id{quantidade}_\Id{não sei}$}
+    \Statep{Calcule a porcentagem de cada categoria dividindo o número de votos da categoria pelo total de votos}
+    \Statep{Apresente as quantidade e porcentagens para cada categoria}
+\end{algorithmic}
+```
+
+```{c}
+/*
+Cálculo simples de porcentagens em uma pesquisa com as seguintes 
+    possibilidades de resposta: sim, não e não sei. A pergunta feita é
+    irrelevante.
+Requer: a quantidade de votos sim, não e não sei.
+Assegura: as quantidades de votos e respectivas as porcentagens,
+    exibidas no intervalo [0, 1], de cada opção de voto
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    // Obtenção das quantidades
+    printf("Número de respostas SIM: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "852");
+    int quant_votos_sim;
+    sscanf(entrada, "%d", &quant_votos_sim);
+
+    printf("Número de respostas NÃO: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "432");
+    int quant_votos_nao;
+    sscanf(entrada, "%d", &quant_votos_nao);
+
+    printf("Número de respostas NÃO SEI: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "73");
+    int quant_votos_nao_sei;
+    sscanf(entrada, "%d", &quant_votos_nao_sei);
+
+    // Cálculo das porcentagens (COM ERROS)
+    int quant_total = quant_votos_sim + quant_votos_nao + quant_votos_nao_sei;
+
+    double porcentagem_sim = quant_votos_sim / quant_total;
+    double porcentagem_nao = quant_votos_nao / quant_total;
+    double porcentagem_nao_sei = quant_votos_nao_sei / quant_total;
+
+    // Resultados
+    printf("Sim: %d votos (%.2f).\n", quant_votos_sim, porcentagem_sim);
+    printf("Não: %d votos (%.2f).\n", quant_votos_nao, porcentagem_nao);
+    printf("Não sei: %d votos (%.2f).\n", quant_votos_nao_sei,
+           porcentagem_nao_sei);
+
+    return 0;
+}
+```
+
+O exemplo mostra que todas as porcentagens foram calculadas como zero e o problema é a divisão de dois inteiros. A divisão inteira ocorre antes da atribuição, pois toda a expressão já foi calculada. Mesmo com um resultado inteiro, há uma promoção para `double` ao se fazer a atribuição, dado o tipo da variável. 
+
+Agora o problema é fazer com que a divisão de dois inteiros resulte em um valor real. Para isso pode ser empregada uma promoção de tipo explícita, usando o que é chamado _type cast_ em C. Um _cast_ de tipo é indicado pelo tipo desejado colocado entre parênteses antes do valor. Por exemplo, ao se escrever `(double)10`, o valor 10 é convertido para `double`; a expressão `(int)valor` converte o conteúdo armazenado na variável para `int`. O _cast_ é sempre aplicado ao item imediamente seguinte na expressão, sendo que em `(double)valor_inteiro1 + valor_inteiro2`, apenas `valor_inteiro1` é afetado pelo modificador de tipo.
+
+Usando-se essa modificação de tipo, segue uma versão corrigida do programa.
+
+```{c}
+/*
+Cálculo simples de porcentagens em uma pesquisa com as seguintes 
+    possibilidades de resposta: sim, não e não sei. A pergunta feita é
+    irrelevante.
+Requer: a quantidade de votos sim, não e não sei.
+Assegura: as quantidades de votos e respectivas as porcentagens,
+    exibidas no intervalo [0, 1], de cada opção de voto
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    // Obtenção das quantidades
+    printf("Número de respostas SIM: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "852");
+    int quant_votos_sim;
+    sscanf(entrada, "%d", &quant_votos_sim);
+
+    printf("Número de respostas NÃO: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "432");
+    int quant_votos_nao;
+    sscanf(entrada, "%d", &quant_votos_nao);
+
+    printf("Número de respostas NÃO SEI: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "73");
+    int quant_votos_nao_sei;
+    sscanf(entrada, "%d", &quant_votos_nao_sei);
+
+    // Cálculo das porcentagens
+    int quant_total = quant_votos_sim + quant_votos_nao + quant_votos_nao_sei;
+
+    double porcentagem_sim = (double)quant_votos_sim / quant_total;
+    double porcentagem_nao = (double)quant_votos_nao / quant_total;
+    double porcentagem_nao_sei = (double)quant_votos_nao_sei / quant_total;
+
+    // Resultados
+    printf("Sim: %d votos (%.2f).\n", quant_votos_sim, porcentagem_sim);
+    printf("Não: %d votos (%.2f).\n", quant_votos_nao, porcentagem_nao);
+    printf("Não sei: %d votos (%.2f).\n", quant_votos_nao_sei,
+           porcentagem_nao_sei);
+
+    return 0;
+}
+```
+
+Neste caso, vale o comentário de que em `(double)quant_votos_sim / quant_total` somente a primeira variável é explicitamente promovida a `double`, sendo que a segunda é promovida em função da realização da divisão.
+
+Uma estratégia comum é o uso do elemento neutro para forçar o resultado desejado. Essa alternativa permitiria escrever, por exemplo `1.0 * quant_votos_sim / quant_total`. O autor tem como opinião que o uso do _cast_ de tipo explícito é mais elegante, embora o resultado seja equivalente.
+
+
+::: {.callout-tip}
+Em uma expressão aritmética que tenha uma divisão, sempre é preciso atenção quanto ao tipo dos operandos para que se tenha certeza que o resultado seja corretamente calculado.
+:::
+
+
+Algumas conversões são comuns nas atribuições e, em geral, passam despercebidas. Considerando-se as atribuições abaixo, as conversões implícitas fazem sentido.
+
+```c
+double d1 = 0;
+double d2 = 10;
+```
+
+As constantes `0` e `10` são intrinsecamente inteiras, mas devido à variável ser real, ambas são promovidas antes da atribuição. Não há necessidade, por exemplo, de se escrever `d1 = 0.0`.
+
+Como mencionado, também é possível converter um valor mais abrangente, como um `double` para um menos abrangente, como o `int`. Segue um exemplo.
+
+```{c}
+/*
+Exemplo de conversão de double para inteiro
+*/
+#include <stdio.h>
+
+int main(void) {
+    double d = 3.75;
+
+    int i1 = 2 * (int)d;
+    int i2 = 2 * d;
+
+    printf("i1 = %d e i2 = %d.\n", i1, i2);
+
+    return 0;
+}
+```
+
+Para a variável `i1`, primeiro a parte decimal de `d` é eliminada e o resultado é multiplicado por 2. Já para `i2`, primeiro é feita a multiplicação de 2 por `d` e somente então o resultado é truncado.
+
+A noção de promoção de tipo é valida não somente de `int` para `double`, mas entre quaisquer outros tipos específicos. 
+
+```{c}
+/*
+Exemplo de conversão entre double e float
+*/
+#include <stdio.h>
+
+int main(void) {
+    float f = 3.75;
+    double d = 2 * f;
+
+    printf("f = %g e d = %g.\n", f, d);
+
+    return 0;
+}
+```
+
+Neste programa, `d` é `double`e `f` possui de precisão simples `float`. Na atribuição para `f` deve-se notar que `3.74` é `double`, o qual é "reduzido" para `float` antes da atribuição. Já na atribuição para `d`, `f` é promovida para `double` ao ser multiplicada por 2 (que é `double`).
+
+Um programa que ilustra promoções entre inteiros é apresentada na sequência.
+
+```{c}
+/*
+Exemplo de conversão entre variações de inteiros
+*/
+#include <stdio.h>
+
+int main(void) {
+    int i = 2000000000;
+    long int li;
+
+    li = 4 * i;
+    printf("%ld.\n", li);
+
+    li = 4L * i;
+    printf("%ld.\n", li);
+
+    return 0;
+}
+```
+
+`\index{transbordo}`{=latex}
+`\index{overflow@\textit{overflow}}`{=latex}
+Nesse programa, o valor 2.000.000.000 é intencionalmente grande, pois chega quase ao limite de representação para valores do tipo `int` e, quando multiplicado por 4 certamente causará um transbordo de bits (_overflow_)[^transbordo]. A operação `4 * i` multiplica dois valores `int` e o resultado transborda, produzindo um valor incorreto. Quando a operação feita é `4L * i`, o valor `4L` é uma constante `long int` e a multiplicação primeiro promove `i` para `long int` e o resultado agora tem seus bits comportados pela representação. 
+
+[^transbordo]: Há um transbordo quando o resultado de uma operação precisa de mais bits que o tipo tem disponível, corrompendo a representação por causa dos bits perdidos.
+
+## funções matemáticas
+
+Existe um arquivo de cabeçalho chamado `math.h`, o qual define a interface a uma série de funções matemáticas, como radiciação, potenciação e logaritmos, entre outras. O uso das funções requer a inclusão do cabeçalho no código fonte.
+
+```c
+#include <math.h>
+```
+
+Na @tbl-funcoes-math-h são apresentadas algumas das principais funções matemáticas disponíveis. Os argumentos da função são sempre especificados usando-se parênteses e, caso haja mais que um parâmetro, eles são separados por vírgulas. Quando uma função é usada, o tipo de dado usado na expressão é o indicado por seu tipo de retorno.
+
+Como um exemplo específico, a função `pow` aceita dois argumentos, ambos do tipo `double`: `pow(1.5, 2.3)` indica o cálculo de 1,5^2,3^. Se essa função for usada em uma expressão como `pow(1.5, 2.3) - 10`, a subtração vê o operando à esquerda como `double` (tipo de retorno da função) e o à esquerda como `int`, fazendo a promoção devida antes de gerar o resultado.
+
+
+| Função                    | Tipo de retorno | Descrição                                   |
+| :------------------------ | :-------------: | :------------------------------------------ |
+| `sin(double x)`           |    `double`     | Retorna o seno de $x$ (em radianos).        |
+| `cos(double x)`           |    `double`     | Retorna o cosseno de $x$ (em radianos).     |
+| `tan(double x)`           |    `double`     | Retorna tangente de $x$ (em radianos).      |
+| `exp(double x)`           |    `double`     | Retorna $e^x$.                              |
+| `log(double x)`           |    `double`     | Retorna $\log_e x$.                         |
+| `log10(double x)`         |    `double`     | Retorna $\log_{10} x$.                      |
+| `sqrt(double x)`          |    `double`     | Retorna $\sqrt{x}$.                         |
+| `fabs(double x)`          |    `double`     | Retorna $\lvert x \rvert$ (valor absoluto). |
+| `pow(double x, double y)` |    `double`     | Retorna $x^y$.                              |
+
+: Algumas funções matemáticas importantes disponibilizadas por meio de `math.h`. {#tbl-funcoes-math-h}
+
+Os parâmetros e valor de retorno da função são, em geral, do tipo `double`. Há versões para outros tipos, como o valor absoluto dado por `fabsf`, que aceita e retorna `float`, e a raiz quadrada calculada com `sqrtl`, que aceita e retorna `long double`.
+
+Para uso das funções matemáticas, a biblioteca matemática tem que ser conectada ao código executável, de forma que a opção `-lm` ("_link to the math library_") tem que ser acrescentada às opções de compilação.
+
+```bash
+gcc main.c -lm
+```
+
+```{c}
+/* 
+Distância entre dois pontos no plano
+*/
+#include <stdio.h>
+#include <math.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("X e Y para P1: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "1.5 4.7");
+    double x1, y1;
+    sscanf(entrada, "%lf%lf", &x1, &y1);
+    
+    printf("X e Y para P2: ");
+    fgets(entrada, sizeof entrada, stdin);
+    //TYPE(0, "-3.2 0.5");
+    double x2, y2;
+    sscanf(entrada, "%lf%lf", &x2, &y2);
+    
+    double distancia = sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
+    printf("D[(%g, %g), (%g, %g)] = %g.\n", x1, y1, x2, y2, distancia);
+
+    return 0;
+}
+```
+
+Como as conversões de tipo são um tópico importante nesta seção do texto, é interessante identificar que, ao elevar ao quadrado com a função `pow`, para o segundo argumento foi usado `2` (que é `int`) e a função espera um `double`; neste caso o `int` é automaticamente promovido para `double` ao ser chamada a função.
+
+::: {.content-visible when-profile="programacao"}
+## Atribuições são operadores
+
+Da mesma forma que `+` ou `/` são operadores, também é a atribuição com `=`. Ao se escrever `valor = 10`, por exemplo, o sinal de igual funciona como um operador com dois efeitos:
+
+* O valor da expressão à direita do sinal é atribuído à variável indicada à esquerda;
+* Essa operação resulta no valor atribuído.
+
+Embora possa parecer estranho em um primeiro momento, C admite que um operador de atribuição possa ser usado em qualquer lugar onde caiba uma expressão. O programa seguinte ilustra o uso desse recurso.
+
+```{c}
+#include <stdio.h>
+
+int main(void) {
+    int valor1, valor2;
+
+    valor2 = 10 * (valor1 = 5);
+    printf("valor1 = %d e valor2 = %d.\n", valor1, valor2);
+
+    return 0;
+}
+```
+
+::: {.callout-tip}
+O uso de atribuições em locais inusitados deve ser evitado. Não é só porque um determinado recurso funciona é que ele deva ser usado indiscriminadamente. A clareza do código deve sempre ser uma prioridade.
+:::
+
+
+:::

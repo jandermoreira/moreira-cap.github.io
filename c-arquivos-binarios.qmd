@@ -1,0 +1,12 @@
+# C: Arquivos binários {#sec-arquivos-binarios}
+
+{{< include oops.qmd >}}
+
+
+## Arquivos binários
+
+## Acesso direto (`fseek`)
+
+## `stdint.h`
+
+## Arquivos de registros

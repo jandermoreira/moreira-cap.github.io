@@ -1,0 +1,28 @@
+%! Autor = Jander Moreira
+%! Data = 20/02/2024
+\documentclass[12pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[brazilian]{babel}
+\usepackage[T1]{fontenc}
+
+\usepackage{tikz}
+\usepackage{amssymb}
+\usepackage{wasysym}
+\usetikzlibrary{shapes.callouts}
+
+\begin{document}
+\sffamily
+\begin{tikzpicture}
+    \node {\lightning};
+    \node[
+        ellipse callout,
+        callout relative pointer={(-0.1cm,-0.1cm)},%
+        % aspect=4,
+        draw, ultra thick,
+        inner sep = 0pt,
+        minimum height = 0.7cm,
+        minimum width = 0.7cm,
+    ] {\null\hspace{0.6cm}\null};
+\end{tikzpicture}
+
+\end{document}

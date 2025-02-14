@@ -1,0 +1,33 @@
+# Problemas para identificação do tipo de repetição {#sec-problemas-com-repeticoes-identificacao}
+
+
+<!-- Qual usar? Repetição indefinida com sentinela (Processo seletivo) -->
+{{< include problemas/0011.qmd >}}
+
+<!-- Qual usar? Repetição definida (Pressão em caldeira) -->
+{{< include problemas/0012.qmd >}}
+
+<!-- Qual usar? Repetição indefinida com sentinela (Pesagem de gado) -->
+{{< include problemas/0013.qmd >}}
+
+<!-- Qual usar? Repetição indefinida até fim dos dados (Pesquisa de opinião) -->
+{{< include problemas/0014.qmd >}}
+
+<!-- Qual usar? Repetição indefinida com sentinela (Atendimento chat) -->
+{{< include problemas/0015.qmd >}}
+
+<!-- Qual usar? Repetição definida prefixada (Relatório) -->
+{{< include problemas/0016.qmd >}}
+
+<!-- Qual usar? Repetição definida conhecida (Média de temperaturas) -->
+{{< include problemas/0017.qmd >}}
+
+<!-- Qual usar? Repetição definida prefixada (Área de polígono) -->
+{{< include problemas/0018.qmd >}}
+
+<!-- Qual usar? Repetição definida conhecida (Estudo clínico) -->
+{{< include problemas/0019.qmd >}}
+
+<!-- Qual usar? Repetição indefinida com sentinela (Transmissão em rede) -->
+{{< include problemas/0020.qmd >}}
+

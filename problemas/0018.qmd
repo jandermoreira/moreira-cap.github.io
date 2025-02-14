@@ -1,0 +1,9 @@
+<!-- Qual usar? Repetição definida prefixada (Área de polígono) -->
+::: {#exr-0018}
+Considere o problema:
+
+> Um polígono é representado por uma sequência contendo as coordenadas de seus vértices, não precisando ser polígonos regulares. Assim, três pontos definem um triângulo, oito pontos definem um polígono de oito lados e assim por diante. Existe uma fórmula que, percorrendo os vértices em ordem, permitem calcular a área desse polígono. Escreva um algoritmo que, a partir do número de vértices e das coordenadas de cada um deles, calcule e apresente a área do polígono.
+
+A solução algorítmica para esse problema requer, em princípio, uma repetição.
+Qual a melhor escolha de estrutura de repetição?
+:::

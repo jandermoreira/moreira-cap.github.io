@@ -1,0 +1,10 @@
+<!-- Equação ax^2 + bx + c = 0, incluindo solução para primeiro grau -->
+::: {#exr-0010}
+Considere uma equação na seguinte forma: $ax^2 + bx + c = 0$, sendo que tanto $a$ quanto $b$ podem ser iguais a zero, porém nunca simultaneamente. Assim, sempre haverá um termo com $x$.
+
+Dessa forma a equação pode tanto ser uma equação do segundo grau ($a \neq 0$) ou do primeiro grau ($a = 0$).
+
+Escreva um algoritmo completo para apresentar as raízes reais de uma equação dados os valores de $a$, $b$ e $c$, assumindo que $a$ e $b$ nunca serão nulos ao mesmo tempo. Caso não haja raízes reais, nada deve ser apresentado como resultado.
+
+@sol-0010
+:::

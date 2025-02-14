@@ -1,0 +1,10 @@
+# Problemas gerais envolvendo modularização {#sec-problemas-modularizacao}
+
+<!-- Conversões notas x conceitos -->
+{{< include problemas/0053.qmd >}}
+
+<!-- Função potência x^k -->
+{{< include problemas/0057.qmd >}}
+
+<!-- Função número de raízes reais distintas -->
+{{< include problemas/0071.qmd >}}

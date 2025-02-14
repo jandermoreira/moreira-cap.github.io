@@ -1,0 +1,8 @@
+<!-- Igualdade de números racionais em representação fracionária -->
+::: {#exr-0007}
+Um número racional $q \in \mathbb{Q}$ é um valor que pode ser escrito na forma $a/b$, sendo $a \in \mathbb{Z}$ e $b \in \mathbb{Z}^*$.
+
+Escreva um algoritmo completo para dados o numerador e denominador de dois valores racionais válidos, determinar e apresentar se eles são ou não iguais. Lembre-se que $\frac{-3}{5} = \frac{6}{-10}$, por exemplo.
+
+@sol-0007
+:::

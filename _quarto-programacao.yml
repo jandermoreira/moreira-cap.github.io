@@ -1,0 +1,89 @@
+project: 
+  output-dir: /home/jander/pessoal/jandermoreira.github.io/cap-linguagem-c
+
+book:
+  subtitle: "Programação em\ C"
+  output-file: "moreira_j-construcao_algoritmos_programacao-programacao"
+  cover-image: capa-programacao.png
+  edition: Versão 0.1-alfa
+
+  sidebar:
+    pinned: true
+    tools:
+      - icon: save
+        menu:
+          - text: "Versão PDF"
+            url: "moreira_j-construcao_algoritmos_programacao-programacao.pdf"
+          # - text: "Versão EPUB (experimental)"
+          #   url: "moreira_j-construcao_algoritmos_programacao-programacao.epub"
+
+  chapters:
+    - index.qmd
+    - preambulo_prefacio.qmd
+    - algoritmos-nocoes.qmd
+
+    - part: "Programação básica"
+      chapters:
+      - c-introducao-a-linguagem-c.qmd
+      - c-tipos-de-dados.qmd
+      - c-variaveis-identificadores-e-leitura.qmd
+      - c-expressoes-aritmeticas.qmd
+      - c-expressoes-relacionais-e-logicas.qmd
+
+    - part: "Controle de fluxo simples"
+      chapters:
+      - c-execucao-condicional-com-if.qmd
+      - c-execucao-condicional-com-switch.qmd
+
+    - part: "Organização geral do código"
+      chapters:
+      - c-escopo-basico-de-declaracoes.qmd
+      - c-organizacao-do-codigo-fonte.qmd
+      # - c-define.qmd
+
+    - part: "Controle de repetição do fluxo"
+      chapters:
+      - c-repeticoes-com-while.qmd
+      - c-repeticoes-com-for.qmd
+      - c-repeticoes-com-do-while.qmd
+      - c-arquivos-texto.qmd
+      - c-desvirtuacao-das-repeticoes.qmd
+
+    - part: "Cadeias de caracteres"
+      chapters:
+      - c-dados-textuais.qmd
+      - c-manipulacao-de-dados-textuais.qmd
+
+    - part: "Modularização e memória"
+      chapters:
+      - c-funcoes.qmd
+      - c-regras-de-escopo-com-modularizacao.qmd
+      - c-enderecamento-de-memoria-e-ponteiros.qmd
+      - c-procedimentos.qmd
+      - c-parametros-de-funcoes.qmd
+
+    - part: "Estruturação de dados"
+      chapters:
+      - c-dados-com-struct.qmd
+      - c-dados-em-vetores.qmd
+      # - c-modularizacao-com-vetores.qmd
+      # - c-dados-em-matrizes.qmd
+      # - c-modularizacao-com-matrizes.qmd
+      # - c-alocacao-dinamica-de-memoria.qmd
+
+  #   - part: "Manipulação de arquivos binários"
+  #     chapters:
+  #     - c-arquivos-binarios.qmd
+
+  #   - part: "Recursividade"
+  #     chapters:
+  #       - c-recursividade.qmd
+
+  #   - part: "Organização avançada do código"
+  #     chapters:
+  #     - c-organizacao-do-codigo-separado.qmd
+    
+  # appendices: 
+  #   - c-guia-de-estilo.qmd
+  
+  #   - referencias.qmd

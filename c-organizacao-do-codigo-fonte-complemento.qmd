@@ -1,0 +1,398 @@
+::: {.content-visible unless-profile="programacao"}
+# Organização do código fonte: complemento
+
+A organização essencial dos programas é apresentada no @sec-organizacao-do-codigo-fonte e, neste capítulo, outras recomendações importantes são tratadas.
+:::
+
+
+## Padronização de identificadores
+
+Os identificadores usados para as variáveis e demais elementos da linguagem devem ser significativos. Além disso, também devem seguir um mesmo padrão ao longo do código.
+
+O entendimento de um programa pode ser prejudicado se houver uma variável chamada `salario_inicial` e o salário final for indicado por outra com nome `s_final`. O uso de `salario_final` é, sem dúvidas, mais consistente.
+
+Da mesma forma, em um mesmo programa há variáveis como `taxa_juros`, `montante_final` e `saldo_atual` juntamente com outras como `tx_br`, `tx_liq`, `sf` e `p`, por exemplo. As abreviações excessivas não estabelecem um padrão minimamente compatível em contraposição aos nomes mais explícitos.
+
+Nada disso implica em que não possa haver abreviações, desde que atendem à legibilidade. Se em um aplicação há variáveis para diversas taxas diferentes, o uso de `tx_inicial` e `tx_inercial` são razoáveis para o contexto. Porém todas devem prefixadas com `tx_`, sem misturas o prefixo `taxas_`.
+
+
+## Localização da declaração de variáveis
+
+Embora uma variável possa ser declarada em inúmeras localizações dentro de um código fonte e ainda mantê-lo correto e coerente, é preciso reforçar que o local em que as declarações ocorrem favorecem o entendimento do propósito do programa e de sua lógica. Este tema é abordado de maneira rápida na @sec-declaracoes-e-validade.
+
+Por hábitos "ancestrais", de quando a linguagem C não admitia a mistura entre declarações e código, ainda persiste a prática de declarar todas as variáveis juntas no início do bloco. Assim, nas versões iniciais da linguagem os programas deveriam necessariamente declarar todas suas variáveis antes da primeira linha que tivesse um comando ou chamada de função. Segue um exemplo.
+
+```{c} 
+/*
+Conversões de distância de metros para centímetros, pés, jardas e polegadas
+Requer: uma distância em metros
+Assegura: O valor equivalente em centímetros, pés, jardas e polegadas
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+    double em_metros, em_centimetros, em_pes, em_jardas, em_polegadas;
+
+    printf("Digite uma distância em metros: ");
+    fgets(entrada, sizeof entrada, stdin);
+    sscanf(entrada, "%lf", &em_metros);
+    //TYPE(0, "1.0");
+
+    em_centimetros = em_metros * 100;
+    em_pes = em_metros * 3.281;
+    em_jardas = em_metros * 1.094;
+    em_polegadas = em_metros * 39.37;
+
+ 
+    printf("> %.1lfm = %.1fcm\n", em_metros, em_centimetros);
+    printf("> %.1lfm = %.1f pés\n", em_metros, em_pes);
+    printf("> %.1lfm = %.1f jardas\n", em_metros, em_jardas);
+    printf("> %.1lfm = %.1f polegadas\n", em_metros, em_polegadas);
+
+    return 0;
+}
+```
+
+O impacto para programas simples não é, em geral, grande. À medida que o número de linhas cresce, juntamente à complexidade da solução implementada, o "amontoado" de declarações no começo do programa prejudica a legibilidade. Muitas vezes, por exemplo, é preciso verificar se uma variável tem o tipo necessário e fazer as adequações pode trazer impactos não previstos. Por exemplo, ao alterar uma declaração de `int` para `long int` pode afetar não somente a variável de interesse, mas outras declaradas juntas.
+
+
+
+## Alinhamento dos finais de bloco
+
+As chaves da função `main` estabelecem o bloco da função principal e inclui as declarações e os comandos que formam o programa. Um bloco de comandos, na forma de um comando composto, é muitas vezes necessário para incluir mais que um comando dentro de um condicional, por exemplo. 
+
+Não é incomum que, em programas em C, venha uma sequência de vários fechamentos de bloco, ou seja, vários `}`. Segue um programa que calcula as raízes de uma equação ${ax^2 + bx + c = 0}$ (${\forall a, b, c}$), mesmo que a equação se reduza a forma linear.
+
+
+```{c}
+/*
+Determinação das raízes reais de uma equação ax^2 + bx + c = 0, sem restrições
+    aos coeficientes a, b, ou c
+Pré-condições: Os valores dos coeficientes a, b e C
+Pós-condições: uma ou duas raízes reais ou mensagem indicando que não há
+    raízes reais
+
+Quando a é zero, a equação é tratada como linear; caso contrário, é
+quadrática. Divisões por zero são tratadas pela divisão de double, ou
+seja, podendo resultar em 'not a number' ou +-inf.
+*/
+#include <stdio.h>
+#include <math.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Considere uma equação ax^2 + bx + c = 0.\n"
+           "Digite os valores a, b e c da equação: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double a, b, c;
+    sscanf(entrada, "%lf%lf%lf", &a, &b, &c);
+    //TYPE(0, "-6 5 28");
+
+    if (a == 0) {
+        // Equação do primeiro grau
+        double x = -c / b;  
+        printf("Raiz: %g.\n", x);
+    }
+    else {
+        // Equação do segundo grau
+        double discriminante = pow(b, 2) - 4 * a * c;
+
+        // Determina o número de raízes reais
+        if (discriminante < 0)
+            printf("Não há raízes reais.\n");
+        else if (discriminante < 1e-5) {  // quase zero
+            // Raíz única
+            double x = -b / (2 * a);
+            printf("Raíz: %g.\n", x);
+        }
+        else {
+            // Duas raízes distintas
+            double x1 = (-b - sqrt(discriminante)) / (2 * a);
+            double x2 = (-b + sqrt(discriminante)) / (2 * a);
+            if (x2 < x1) { // ordem não decrescente
+                double temporario = x1;
+                x1 = x2;
+                x2 = temporario;
+            }
+            printf("Raízes: %g e %g.\n", x1, x2);
+        }
+    }
+
+    return 0;
+}
+```
+
+É necessário que todos os fechamentos de bloco sejam, de alguma forma, alinhados a sua abertura. Esse alinhamento é essencial para localizar, por exemplo, um `}` que foi esquecido.
+
+Nos programas apresentados neste livro, os blocos de comandos compostos são sempre iniciados na linha da estrutura que o utiliza, como um `if`, por exemplo.
+
+```c
+if(a > 0) {
+    // Instruções...
+}
+else {
+    // Outras instruções...
+}
+```
+
+Desta forma, o fim do bloco fica com a mesma indentação da estrutura que o iniciou.
+
+Por questões de estilo (@sec-guia-de-estilo), há programadores que preferem que as chaves sejam abertas na linha consecutiva. Isso naturalmente não é um problema, desde que o padrão seja mantido para todo o código. Na sequência são apresentadas variações do posicionamento das chaves, porém em todas o alinhamento de indentação é mantido.
+
+```c
+if(a > 0)
+{
+    // Instruções...
+}
+else
+{
+    // Outras instruções...
+}
+```
+
+```c
+if(a > 0) {
+    // Instruções...
+} else {
+    // Outras instruções...
+}
+```
+
+Como contra exemplo, na sequência é apresentado o programa anterior usando uma "indentação alternativa", que alinha o `}` com seu respectivo `}`, qualquer que seja sua posição. É preciso observer que o resultado quebra a visualização do código e dificulta exatamente saber onde termina cada bloco.
+
+```{c}
+/*
+Determinação das raízes reais de uma equação ax^2 + bx + c = 0, sem restrições
+    aos coeficientes a, b, ou c
+Pré-condições: Os valores dos coeficientes a, b e C
+Pós-condições: uma ou duas raízes reais ou mensagem indicando que não há
+    raízes reais
+
+Quando a é zero, a equação é tratada como linear; caso contrário, é
+quadrática. Divisões por zero são tratadas pela divisão de double, ou
+seja, podendo resultar em 'not a number' ou +-inf.
+*/
+#include <stdio.h>
+#include <math.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Considere uma equação ax^2 + bx + c = 0.\n"
+           "Digite os valores a, b e c da equação: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double a, b, c;
+    sscanf(entrada, "%lf%lf%lf", &a, &b, &c);
+    //TYPE(0, "-6 5 28");
+
+    if (a == 0) {
+        // Equação do primeiro grau
+        double x = -c / b;  
+        printf("Raiz: %g.\n", x);
+                }
+    else {
+        // Equação do segundo grau
+        double discriminante = pow(b, 2) - 4 * a * c;
+
+        // Determina o número de raízes reais
+        if (discriminante < 0) 
+            printf("Não há raízes reais.\n");
+        else if (discriminante < 1e-5) {  // quase zero
+            // Raíz única
+            double x = -b / (2 * a);
+            printf("Raíz: %g.\n", x);
+                                       }
+        else {
+            // Duas raízes distintas
+            double x1 = (-b - sqrt(discriminante)) / (2 * a);
+            double x2 = (-b + sqrt(discriminante)) / (2 * a);
+            if (x2 < x1) { // ordem não decrescente
+                double temporario = x1;
+                x1 = x2;
+                x2 = temporario;
+                         }
+            printf("Raízes: %g e %g.\n", x1, x2);
+             }
+         }
+
+    return 0;
+               }
+```
+
+::: {.callout-tip}
+A maioria dos editores de programas atualmente já provê, ao digitar, uma alinhamento adequado das chaves, o que facilita a digitação. É preciso cuidar para que a própria edição do código não acabe com o alinhamento inadvertidamente.
+:::
+
+::: {.callout-tip}
+O auto-formatador é um recurso muito comum aos IDEs de programação. O uso desse recurso pode ser amplamente empregado!
+:::
+
+## Comentários
+
+Comentários devem ser esparsos e minimalistas no programa. Um programa que precisa de muitos comentário é porque o código não está bem escrito. A versão seguinte do programa do peso ideal inclui apenas dois comentários considerados pertinentes. Eles apenas guiam o humano que lê o código para que localize facilmente o significado dos dois cálculos.
+
+
+```c 
+/*
+Cálculo estimado da massa ideal de uma pessoa baseada em seu sexo biológico
+e sua altura
+Requer: o sexo biológico (masculino ou feminino) e a altura em metros
+Assegura: a massa ideal da pessoa apresentada (kg)
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    printf("Digite o sexo (M ou F) e a altura em quilogramas: ");
+    fgets(entrada, sizeof entrada, stdin);
+    char sexo;
+    double altura;
+    sscanf(entrada, "%c%lf", &sexo, &altura);
+
+    double massa_ideal;
+    if(sexo == 'F')
+        massa_ideal = 62.1 * altura - 44.7;  // feminino
+    else
+        massa_ideal = 72.7 * altura - 58;  // masculino
+
+    printf("Massa ideal: %.1fkg.", massa_ideal);
+
+    return 0;
+}
+```
+
+Embora a comparação `sexo == 'F'` seja suficiente, não custa nem atrapalha indicar a diferença entre as duas fórmulas.
+
+Em nível próximo ao exagero, considerando-se um programa curto como esse, ainda é possível ter comentários indicando a razão dos agrupamentos de comandos.
+
+```c 
+/*
+Cálculo estimado da massa ideal de uma pessoa baseada em seu sexo biológico
+e sua altura
+Requer: o sexo biológico (masculino ou feminino) e a altura em metros
+Assegura: a massa ideal da pessoa apresentada (kg)
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    // Obtenção de sexo biológico e altura
+    printf("Digite o sexo (M ou F) e a altura em quilogramas: ");
+    fgets(entrada, sizeof entrada, stdin);
+    char sexo;
+    double altura;
+    sscanf(entrada, "%c%lf", &sexo, &altura);
+
+    // Cálculo da massa ideal
+    double massa_ideal;
+    if(sexo == 'F')
+        massa_ideal = 62.1 * altura - 44.7;  // feminino
+    else
+        massa_ideal = 72.7 * altura - 58;  // masculino
+
+    // Apresentação do resultado
+    printf("Massa ideal: %.1fkg.", massa_ideal);
+
+    return 0;
+}
+```
+
+::: {.callout-caution}
+É importante não "supercomentar" um programa. O excesso de comentários tende a tornar o código ilegível.
+
+O exemplo seguinte pertence à classe "não faça assim".
+
+```c 
+/*
+Cálculo estimado da massa ideal de uma pessoa baseada em seu sexo biológico
+e sua altura
+Requer: o sexo biológico (masculino ou feminino) e a altura em metros
+Assegura: a massa ideal da pessoa apresentada (kg)
+*/
+
+// Inclusão dos arquivos de cabeçalho
+#include <stdio.h>  // funções de entrada e saída
+
+// Programa principal
+int main(void) {
+    // Variável para a leitura da linha
+    char entrada[160];
+
+    // Obtenção de sexo biológico e altura
+    printf("Digite o sexo (M ou F) e a altura em quilogramas: ");
+    fgets(entrada, sizeof entrada, stdin);  // leitura da linha digitada
+    // Declaração das variáveis de entrada
+    char sexo;  // para o sexo biológico
+    double altura;  // para a altura da pessoa
+    // Conversão da linha para obtenção dos valores
+    sscanf(entrada, "%c%lf", &sexo, &altura);
+
+    // Declaração da massa ideal
+    double massa_ideal;
+
+    // Verificação do cálculo conforme feminino ou masculino
+    // (se o sexo for diferente de 'F', assume que seja 'M')
+    if(sexo == 'F')
+        // Realização do cálculo para o sexo feminino
+        massa_ideal = 62.1 * altura - 44.7;
+    else
+        // Realização do cálculo para o sexto masculino
+        massa_ideal = 72.7 * altura - 58;
+
+    // Apresentação do resultado
+    printf("Massa ideal: %.1fkg.", massa_ideal);  // massa ideal em kg
+
+    // Indicação de término do programa com sucesso
+    return 0;
+}
+```
+
+Nesta versão, há comentários óbvios (como em `double altura;  // para a altura da pessoa`) e até a visualização da estrutura do `if`, que é simples, fica um tanto comprometida com o excesso de informações.
+:::
+
+
+
+
+## Organização consistente do código
+
+A organização do código deve ser consistente. As conversões de distância podem usar um programa correto, porém inconsistente quanto a sua organização. Essa é uma situação que deve ser firmemente evitada.
+
+```{c} 
+/*
+Conversões de distância de metros para centímetros, pés, jardas e polegadas
+Requer: uma distância em metros
+Assegura: O valor equivalente em centímetros, pés, jardas e polegadas
+*/
+#include <stdio.h>
+
+int main(void) {
+    char entrada[160];
+
+    double em_centimetros;
+    printf("Digite uma distância em metros: ");
+    fgets(entrada, sizeof entrada, stdin);
+    double em_metros;
+    sscanf(entrada, "%lf", &em_metros);
+    //TYPE(0, "10");
+
+    em_centimetros = em_metros * 100;
+    double em_pes = em_metros * 3.281;
+ 
+    printf("> %.1lfm = %.1fcm\n", em_metros, em_centimetros);
+    printf("> %.1lfm = %.1f pés\n", em_metros, em_pes);
+
+    double em_jardas = em_metros * 1.094, em_polegadas;
+    printf("> %.1lfm = %.1f jardas\n", em_metros, em_jardas);
+
+    em_polegadas = em_metros * 39.37;
+    printf("> %.1lfm = %.1f polegadas\n", em_metros, em_polegadas);
+
+    return 0;
+}
+```
+
+Neste programa pode ser até complicado localizar em que momento houve a declaração da variável `em_polegadas`, por exemplo.

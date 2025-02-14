@@ -1,0 +1,6 @@
+<!-- Conversão de conceito para nota -->
+::: {#exr-0054}
+{{< include problemas/comum-notas-e-conceitos.qmd >}}
+
+Escreva um algoritmo para, neste contexto, apresentar o valor numérico de um conceito dado como entrada.
+:::

@@ -1,0 +1,33 @@
+# Problemas complementares: condicionais {#sec:problemas-complementares-condicionais}
+
+Aqui se apresentam, em volume, problemas variados que podem ser usados para praticar o desenvolvimento dos algoritmos.
+
+<!-- Triângulo retângulo? -->
+{{< include problemas/0058.qmd >}}
+
+<!-- Triângulo escaleno? -->
+{{< include problemas/0058.qmd >}}
+
+<!-- Existência de triângulo dados os lados -->
+{{< include problemas/0060.qmd >}}
+
+<!-- Área de possível triângulo a partir dos lados -->
+{{< include problemas/0061.qmd >}}
+
+<!-- Tempo entre dois horários, podendo passar a meia noite -->
+{{< include problemas/0062.qmd >}}
+
+<!-- Seleção de mais velho e mais novo -->
+{{< include problemas/0063.qmd >}}
+
+<!-- Diferença porcentual entre salários de 4 -->
+{{< include problemas/0064.qmd >}}
+
+<!-- Média ponderada -->
+{{< include problemas/0066.qmd >}}
+
+<!-- Classificação do consumo de um veículo -->
+{{< include problemas/0065.qmd >}}
+
+<!-- Solução de pares de equações lineares simultâneas (2 variáveis) -->
+{{< include problemas/0067.qmd >}}

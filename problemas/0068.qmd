@@ -1,0 +1,10 @@
+<!-- Função potência e^x -->
+::: {#exr-0068}
+Considere a seguinte soma:
+
+$$s = x^0 + \frac{x^1}{1!} + \frac{x^2}{2!} + \frac{x^3}{3!} + \ldots$$
+
+Escreva um algoritmo que, dados os valores de $x$ e o número de termos que serão somados, apresente o valor de\ $s$.
+
+@rem-0068
+:::

@@ -1,0 +1,20 @@
+% input: hash
+
+\ifdefined\utilidadeshash\else
+\def\utilidadeshash{}
+
+% função hash extensível
+
+\def\hashbits{14}
+\newcommand{\hashextd}[2]{%
+	\pgfmathsetmacro\shortnumber{int(#1/pow(2, \hashbits - #2)))}%
+	\ensuremath{\shortnumber}%
+}
+\newcommand{\hashextb}[2]{%
+	\pgfmathsetmacro\shortnumber{int(#1/pow(2, \hashbits - #2)))}%
+	\ensuremath{\nbinary{#2}{\shortnumber}_2}%
+}
+\newcommand{\hashext}[2]{\ensuremath{h(#1, #2) = \hashextb{#1}{#2}}}
+
+
+\fi% #define

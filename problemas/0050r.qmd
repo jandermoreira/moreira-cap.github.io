@@ -1,0 +1,32 @@
+<!-- Projeto função: combinação de n, p a p -->
+::: {#sol-0050}
+@exr-0050
+
+A combinação em si é o primeiro item que pode ser escrito na forma de função. Dessa forma, é possível escrever uma função com o seguinte cabeçalho:
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Cálculo da combinação de $n$ elementos, $p$ a $p$
+    \Require o número $n$ de elementos
+    \Ensure o retorno do número de combinações
+    \Statex
+    \Function{Combinação}{$n$, $p$}<noend>
+    \EndFunction
+\end{algorithmic}
+```
+
+Os cálculos internos requerem o uso do fatorial e, dado que apenas somas e subtrações estão disponíveis, a implementação de uma função para o fatorial também é interessante.
+
+Assim, a segunda função possível é a fatorial calculada pelas multiplicações sucessivas dos valores.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Cálculo do fatorial de $n$
+    \Require $n \in \mathbb{Z}+$
+    \Ensure o retorne de $n!$
+    \Statex
+    \Function{Fatorial}{$n$}<noend>
+    \EndFunction
+\end{algorithmic}
+```
+:::

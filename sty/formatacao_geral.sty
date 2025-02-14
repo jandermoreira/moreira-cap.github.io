@@ -1,0 +1,87 @@
+%! Package = FORMATACAO_GERAL
+%! Author = Jander
+%! Date = 23/04/2022
+
+%! suppress = MightBreakTexify
+%! suppress = FileNotFound
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{formatacao_geral}[2022/04/23 Preâmbulo para o livro]
+
+\RequirePackage{pgfopts}
+
+\def\formato{livro}
+\pgfkeys{
+    livro/.cd,
+    ebook/.code = {\def\formato{ebook}},
+    a4/.code = {\def\formato{a4}},
+    mobile/.code = {\def\formato{mobile}},
+    livro/.code = {\def\formato{livro}},
+    landscape/.code = {\def\formato{landscape}},
+}
+\ProcessPgfOptions{livro}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% LIMPEZA DE MENSAGENS DE AVISO (WARNINGS)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{silence}
+\WarningFilter{latex}{Writing or overwriting file}
+\WarningFilter{biblatex}{File 'brazilian-abnt-abnt.lbx' not found!}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% PACOTES DE USO GERAL E CONFIGURAÇÕES GLOBAIS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{amsmath}
+\RequirePackage{amsfonts}
+\RequirePackage{amssymb}
+\RequirePackage{graphicx}
+\RequirePackage{tikz}
+\RequirePackage{xcolor}
+\RequirePackage{adjustbox}
+% \RequirePackage[section]{placeins}
+\RequirePackage{placeins}
+
+\RequirePackage[brazilian]{algxpar}
+
+\RequirePackage[
+    pdftex,
+    pdfusetitle,
+    unicode,
+%	hyperindex = false,
+]{hyperref}
+\RequirePackage[brazilian]{cleveref}
+
+\RequirePackage{pagina_e_mancha}
+\RequirePackage{estetica_geral}
+\RequirePackage{tipografia}
+\RequirePackage{caixas_e_floats}
+\RequirePackage{matematica}
+\RequirePackage{desenho}
+\RequirePackage{suporte_escrita}
+
+
+% seções de exercícios e notas do capítulo
+%\newcommand{\secao}[1]{\addsec{#1}}
+\newcommand{\programas}{\addsec{Programas}}
+\newcommand{\exercicios}{\addsec{Exercícios}}
+\newcommand{\notasdocapitulo}{\addsec{Notas do capítulo}}
+
+\RequirePackage{chapternotes}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% OUTROS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % minipages com largura variável
+% \RequirePackage{varwidth}
+
+% conversões binário, hexa...
+\input{binhex}
+
+% Código e nome de ORI...
+\RequirePackage{disciplinas}
+

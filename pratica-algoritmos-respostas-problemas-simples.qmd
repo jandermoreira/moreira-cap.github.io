@@ -1,0 +1,41 @@
+# Respostas e comentários para problemas selecionados {#sec-respostas-problemas-simples}
+
+Neste capítulo são apresentadas soluções para problemas selecionados.
+
+É importante lembrar que não existe uma única solução correta para um dado problema e, assim, cada indivíduo pode aparecer com uma solução alternativa à que é apresentada aqui estando, entretanto, também correta e atendendo aos padrões utilizados neste texto.
+
+As soluções apresentadas poderão ser apenas o pseudocódigo ou também acrescentar comentários e orientações em maior ou menor grau de detalhamento.
+
+::: {#sol-metros-para-pes}
+&pergunta& @exr-metros-para-pes.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Conversão de distância de metros para pés
+    \Require distância em metros
+    \Ensure apresentação da mesma distância em metros
+    \Statex
+    \Statep{Obtenha $d_{metros}$}
+    \Statep{Calcule $d_{pés}$ como $3{,}28 \times d_{metros}$}[Conversão]
+    \Statep{Apresente $d_{pés}$}
+\end{algorithmic}
+```
+:::
+
+::: {#sol-metros-para-pes-v2}
+&pergunta& @exr-metros-para-pes.
+
+Esta é uma versão mais "programática" e sintética que a apresentada @sol-metros-para-pes. São, entretanto, equivalentes.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Conversão de distância de metros para pés
+    \Require distância em metros
+    \Ensure apresentação da mesma distância em metros
+    \Statex
+    \Statep{\Read $d_{metros}$}
+    \Statep{$d_{pés} \gets 3{,}28 \times d_{metros}$}[Conversão]
+    \Statep{\Write $d_{pés}$}
+\end{algorithmic}
+```
+:::

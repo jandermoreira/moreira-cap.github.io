@@ -1,0 +1,4 @@
+<!-- Função h min s para horas -->
+::: {#exr-0049}
+Escreva uma função que receba três parâmetros, todos inteiros: a quantidade de horas, de minutos e de segundos. A função deve retornar o valor equivalente em horas, com a devida parte decimal.
+:::

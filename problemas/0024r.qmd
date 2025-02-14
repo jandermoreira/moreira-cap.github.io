@@ -1,0 +1,27 @@
+<!-- Contagem de notas nulas e >= 6 -->
+::: {#sol-0024}
+@exr-0024
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Contagem do número de total de notas e as ocorrências notas maiores ou iguais a 6,0 e de notas 0,0
+    \Require uma sequência de medidas de notas (0 a 10)
+    \Ensure a quantidade de notas maiores ou iguais a 6,0, de zeros e a quantidade total
+    \Statex
+    \Statep{Inicie \Id{contador\_na\_média} com zero}
+    \Statep{Inicie \Id{contador\_zeros} com zero}
+    \Statep{Inicie \Id{contador\_total} com zero}
+    \While{existem notas na sequência de entrada}
+        \Statep{Obtenha uma \Id{nota}}
+        \If{$\Id{nota} \geq 6{,}0$}
+            \Statep{Acrescente 1 a \Id{contador\_na\_média}}
+        \ElsIf{$\Id{nota} = 0{,}0$}
+            \Statep{Acrescente 1 a \Id{contador\_zeros}}
+        \EndIf
+        \Statep{Acrescente 1 a \Id{contador\_total}}
+    \EndWhile
+    \Statep{Apresente \Id{contador\_na\_média}, \Id{contador\_zeros} e \Id{contador\_total}}
+\end{algorithmic}
+```
+:::
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language [
+    <!ENTITY HEX "[0-9A-Fa-f]">
+]>
+<!--
+    terminal
+-->
+<language name="terminal" version="18" indenter="terminal" kateversion="5.79" section="Scripts"
+    extensions="*.terminal" mimetype="text/x-terminal">
+    <highlighting>
+        <contexts>
+            <context name="Normal" attribute="Normal Text" lineEndContext="#stay">
+                <DetectChar attribute="User Input" context="String_within_null" char="\0" />
+            </context>
+
+            <context name="String_within_null" attribute="User Input" lineEndContext="Error">
+                <DetectChar attribute="User Input" context="#pop" char="\0" />
+            </context>
+
+        </contexts>
+
+        <itemDatas>
+            <itemData name="Normal Text" defStyleNum="dsNormal" spellChecking="false" />
+            <itemData name="User Input" defStyleNum="dsKeyword" />
+        </itemDatas>
+    </highlighting>
+    <general>
+    </general>
+</language>
+<!-- kate: space-indent on; indent-width 2; replace-tabs on; -->

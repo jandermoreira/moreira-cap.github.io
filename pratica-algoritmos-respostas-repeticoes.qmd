@@ -1,0 +1,87 @@
+# Respostas e comentários para problemas selecionados {sec-respostas-repeticoes.qmd}
+
+
+<!-- IDENTIFICAÇÃO DE TIPO DE REPETIÇÃO -->
+<!-- Qual usar? Repetição indefinida com sentinela (Processo seletivo) -->
+{{< include problemas/0011r.qmd >}}
+
+<!-- Qual usar? Repetição definida (Pressão em caldeira) -->
+{{< include problemas/0012r.qmd >}}
+
+<!-- Qual usar? Repetição indefinida com sentinela (Pesagem de gado) -->
+{{< include problemas/0013r.qmd >}}
+
+<!-- Qual usar? Repetição indefinida até fim dos dados (Pesquisa de opinião) -->
+{{< include problemas/0014r.qmd >}}
+
+<!-- Qual usar? Repetição definida conhecida (Média de temperaturas) -->
+{{< include problemas/0017r.qmd >}}
+
+
+
+<!-- MÍNIMOS E MÁXIMOS -->
+<!-- Maior altura em um grupo fixo -->
+{{< include problemas/0021r.qmd >}}
+
+<!-- Mínimo em uma sequência de reais -->
+{{< include problemas/0022r.qmd >}} 
+
+<!-- Valor máximo de multa e identificação do motorista -->
+{{< include problemas/0030r.qmd >}}
+
+
+
+<!-- CONTAGENS -->
+<!-- Contagem de temperaturas negativas -->
+{{< include problemas/0023r.qmd >}}
+
+<!-- Contagem de notas nulas e >= 6 -->
+{{< include problemas/0024r.qmd >}}
+
+<!-- Erro em contagem de notas nulas e < 6 -->
+{{< include problemas/0004r.qmd >}}
+
+
+
+<!-- SOMAS -->
+<!-- Soma de pontos em quantidade fixa -->
+{{< include problemas/0026r.qmd >}}
+
+<!-- Soma de temperaturas (quantidade conhecida) -->
+{{< include problemas/0029c.qmd >}}
+
+
+
+
+
+
+<!-- PROBLEMAS VARIADOS -->
+<!-- Porcentagens e médias na população  -->
+{{< include problemas/0035c.qmd >}}
+
+<!-- Soma dos divisores -->
+{{< include problemas/0036r.qmd >}}
+{{< include problemas/0036c.qmd >}}
+
+<!-- Erro em determinação do maior (inteiros positivos)  -->
+{{< include problemas/0037c.qmd >}}
+
+<!-- Máximo e contagem simultâneas (idades) -->
+{{< include problemas/0042r.qmd >}}
+
+
+
+
+<!-- PROGRESSÕES NUMÉRICAS -->
+<!-- Soma de 1 + 2 + 3 ... + n -->
+{{< include problemas/0040r.qmd >}}
+{{< include problemas/0040c.qmd >}}
+
+<!-- n! -->
+{{< include problemas/0041r.qmd >}}
+
+<!-- Função potência e^x -->
+{{< include problemas/0068c.qmd >}}
+
+
+

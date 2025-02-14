@@ -1,0 +1,8 @@
+<!-- Área de possível triângulo a partir dos lados -->
+::: {#exr-0062}
+Em um torneio de jogos, cada partida têm a duração máxima de 2h (o que indica empate se não houver ganhador até este período). É preciso saber a duração de um jogo, dados seu horário de início e término, ambos especificados separadamente em horas e minutos.
+
+Escreva um algoritmo que, dados os horários de início e de término de um jogo, apresente sua duração, também em horas e minutos. Note que uma partida pode começar em um dia e terminar no dia seguinte.
+
+Cada horário é dado de 0h00min a 23h59min.
+:::

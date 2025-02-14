@@ -1,0 +1,26 @@
+<!-- Preenchimento de vetor com divisores -->
+::: {#sol-0080}
+@exr-0080
+
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Preenchimento de um vetor com os divisores de um dado valor
+    \Require um vetor \Id{vetor} e um valor $n > 0$
+    \Ensure modificação de \Id{vetor} para que contenha, em ordem, os divisores de $n$
+    \Statex    
+    \Procedure{PreenchaDivisores}{\Id{vetor}:\ByRef, $n$}
+        \Statep{Faça $\Id{vetor}.\Id{comprimento}$ igual a 1}
+        \Statep{$\Id{vetor}[0] \gets 1$}[1 é sempre divisor]
+        \For{$\Id{candidato} \gets 2$ \To $\lfloor n/2 \rfloor$}
+            \If{$n \bmod \Id{candidato} = 0$}[é divisor?]
+                \Statep{Aumente $\Id{vetor}.\Id{comprimento}$ em 1}
+                \Statep{$\Id{vetor}[\Id{vetor}.\Id{comprimento} - 1] \gets \Id{candidato}$}
+            \EndIf
+        \EndFor
+        \Statep{Aumente $\Id{vetor}.\Id{comprimento}$ em 1}
+        \Statep{$\Id{vetor}[\Id{vetor}.\Id{comprimento} - 1] \gets n$}[$n$ é sempre divisor]
+    \EndProcedure
+\end{algorithmic}
+```
+:::

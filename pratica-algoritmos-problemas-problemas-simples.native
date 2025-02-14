@@ -1,0 +1,43 @@
+Pandoc
+  Meta { unMeta = fromList [] }
+  [ Header
+      1
+      ( "proposta-de-problemas-simples-sec-proposta-problemas-simples"
+      , []
+      , []
+      )
+      [ Str "Proposta"
+      , Space
+      , Str "de"
+      , Space
+      , Str "problemas"
+      , Space
+      , Str "simples"
+      , Space
+      , Str "{sec-proposta-problemas-simples}"
+      ]
+  , Div
+      ( "exr-x" , [ "theorem" , "exercise" ] , [] )
+      [ Para
+          [ Span
+              ( "" , [ "theorem-title" ] , [] )
+              [ Strong [ Str "Exercise" , Space , Str "1" ] ]
+          , Space
+          , Str "In\237cio"
+          ]
+      ]
+  , Div
+      ( "exr-metros-para-pes"
+      , [ "callout" , "theorem" , "exercise" ]
+      , []
+      )
+      [ Para
+          [ Span
+              ( "" , [ "theorem-title" ] , [] )
+              [ Strong [ Str "Exercise" , Space , Str "2" ] ]
+          , Space
+          , Str "\160"
+          ]
+      , Plain [ Str "Teste" ]
+      ]
+  ]

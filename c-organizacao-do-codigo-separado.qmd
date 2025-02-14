@@ -1,0 +1,14 @@
+# Organização do código fonte em arquivos separados {#sec-organizacao-do-codigo-separado}
+
+
+{{< include oops.qmd >}}
+
+
+
+## Código fonte `.c`e `.h`
+
+## Compilação em separado
+
+## `Makefile`
+
+## Reuso de código

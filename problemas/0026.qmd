@@ -1,0 +1,8 @@
+<!-- Soma de pontos em quantidade fixa -->
+::: {#exr-0026}
+Em uma competição, cada equipe de atletas é composta sempre por 20\ participantes. Uma das premiações da competição considera o total de pontos obtido pela equipe, somando-se a pontuação de cada um de seus membro.
+
+Escreva um algoritmo para, a partir de uma sequência contendo as pontuações totais de cada membro de uma equipe, apresentar o total de pontos que a equipe acumulou.
+
+@sol-0026
+:::

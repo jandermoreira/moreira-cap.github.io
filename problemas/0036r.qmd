@@ -1,0 +1,26 @@
+<!-- Soma dos divisores -->
+::: {#sol-0036}
+@exr-0036
+
+Em algoritmos computacionais é comum o uso do operador $\bmod$ para indicar o o resto da divisão. Dessa forma, ${a \bmod b}$ ($a$  e $b$ inteiros) é o resto da divisão inteira $a/b$. Como exemplos, ${10 \bmod 3 = 1}$, ${20 \bmod 3 = 2}$ e ${3291 \bmod 3 = 0}$.
+
+Quando $a \bmod b = 0$, $b$ é um divisor de $a$.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Apresentação dos divisores de um valor inteiro e a soma deles
+    \Require um valor inteiro positivo
+    \Ensure a apresentação dos divisores e da soma destes
+    \Statex
+    \Statep{Obtenha \Id{valor}}
+    \Statep{Inicie \Id{soma\_divisores} com zero}
+    \For{$\Id{divisor} \gets 1$ \To $\lfloor\Id{valor}/2\rfloor$}
+        \If{$\Id{valor} \bmod \Id{divisor} = 0$}
+            \Statep{Apresente \Id{divisor}}
+            \Statep{Acumule \Id{divisor} em \Id{soma\_divisores}}
+        \EndIf
+    \EndFor
+    \Statep{Apresente \Id{soma\_divisores}}
+\end{algorithmic}
+```
+:::

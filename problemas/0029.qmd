@@ -1,0 +1,14 @@
+<!-- Soma de precipitações (quantidade conhecida) -->
+::: {#exr-0029}
+Um sistema automático de uma estação meteorológica coleta uma medida de precipitação, ou volume de chuva, (em mm) a cada cinco minutos, iniciando às 0h e finalizando às 23h55min. Esses valores são armazenados na ordem de coleta.
+
+Para os analistas, são importantes os volumes de água acumulados nos seguintes períodos:
+
+* das 0 às 5h55min; 
+* das 6 às 19h55min;
+* das 20 às 23h55min.
+
+Escreva um algoritmo para, a partir da sequência de medidas, apresentar os volumes acumulados nos três períodos especificados.
+
+@rem-0029
+:::

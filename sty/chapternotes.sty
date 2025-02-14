@@ -1,0 +1,31 @@
+%! Package = chapternotes
+%! Author = jander
+%! Date = 2022
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{chapternotes}[2022/09/02 Chapter notes]
+
+\RequirePackage{etoolbox}
+
+\newwrite\cnnotes
+\newcounter{chapternotes}
+
+\newcommand{\CNstart}{%
+    \immediate\openout\cnnotes=cnnotes.tmp%
+    \setcounter{chapternotes}{0}
+}
+
+\newcommand{\CNprint}{%
+    \immediate\closeout\cnnotes%
+    \ifnum\thechapternotes>0%
+        \section*{Notas do \MakeLowercase{\chaptername}}
+        \input{cnnotes.tmp}
+    \fi%
+}
+
+\newcommand{\CNadd}[1]{%
+    \immediate\write\cnnotes{\detokenize{#1}}%
+    \stepcounter{chapternotes}
+}
+
+\pretocmd{\chapter}{\CNstart}{}{}

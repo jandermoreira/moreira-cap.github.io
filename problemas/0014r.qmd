@@ -1,0 +1,19 @@
+<!-- Qual usar? Repetição indefinida até fim dos dados (Pesquisa de opinião) -->
+::: {#sol-0014}
+@exr-0014
+
+Neste caso, a pesquisa de opinião já ocorreu e os dados estão disponíveis. Não é trabalho do algoritmo lidar como foi a coleta das respostas.
+
+O problema não indica a disponibilidade da quantidade de respostas que precisam ser processadas, de forma que a sequência deve ser avaliada item a item, até que se encerre.
+
+Não há também um valor sentinela explicitado.
+
+Neste caso, a repetição com -enquanto- ou -repita- se mostra como adequada ao processamento:
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \While{houver respostas a serem processadas}<noend>
+    \EndWhile
+\end{algorithmic}
+```
+:::

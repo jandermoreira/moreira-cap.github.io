@@ -1,0 +1,38 @@
+%! Package = livro
+%! Author = Jander Moreira
+%! Date = 2023/08
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{livro}[2023/08/03 formatação para livro pequeno]
+
+\KOMAoptions{
+    chapterprefix,
+    paper = 23cm:16cm,
+    headings = openright,
+    twoside,
+    }
+\areaset{12cm}{17cm}
+
+%%% abertura de partes/capítulos em páginas ímpares
+\RequirePackage{etoolbox}
+\preto{\part}{\KOMAoptions{open = right}}
+\preto{\chapter}{\KOMAoptions{open = right}}
+
+% leiaute do capítulo
+\renewcommand{\chapterformat}{%
+    \LARGE%
+    \hrulefill
+    \hspace{0.25cm}%
+    \raisebox{-0.6ex}{\chaptername}
+    \raisebox{-0.3cm}{\scalebox{2}{\thechapter}}%
+    \hspace{0.25cm}%
+    \rule{1cm}{0.5pt}%
+}
+\renewcommand\chapterlinesformat[3]{%
+    #2\par
+    \raggedright%
+    \vspace*{0.4ex}\hspace{0.1cm}{\Huge #3}\strut\hfill
+    \rule[1ex]{\linewidth}{0.5pt}\par
+}
+\renewcommand*\chapterheadstartvskip{\vspace{2cm}}
+\renewcommand*\chapterheadendvskip{\vspace{3cm}}

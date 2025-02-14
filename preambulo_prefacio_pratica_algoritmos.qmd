@@ -1,0 +1,12 @@
+# Prefácio {.unnumbered}
+
+Este é um material de proposta de problemas com apresentação de alguns comentários e soluções.
+
+Bom exercício!
+
+
+<!-- Hack para o documento PDF -->
+\renewcommand*\contentsname{Conteúdo}
+\setcounter{tocdepth}{0}
+\tableofcontents
+\mainmatterreal

@@ -1,0 +1,25 @@
+<!-- Mínimo em uma sequência de reais -->
+::: {#sol-0022}
+@exr-0022
+
+São propostas duas soluções para o problema.
+
+A especificação deixa em aberto quais valores existem na sequência, os quais podem ser tão pequenos ou tão grandes quanto possível. Desta forma, a versão seguinte opta por iniciar a variável $\Id{valor\_mínimo}$ com $+\infty$, forçando a primeira substituição logo no primeiro valor da sequência.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Determinação do mínimo em uma sequência de valores reais
+    \Require uma sequência não vazia de valores reais
+    \Ensure o valor mínimo encontrado
+    \Statex
+    \Statep{$\Id{valor\_mínimo} \gets +\infty$}
+    \While{ainda há valores na sequência de entrada}
+        \Statep{Obtenha um valor $v$}
+        \If{$v$ menor que \Id{valor\_mínimo}}
+            \Statep{Atualize \Id{valor\_mínimo} com o valor de $v$}
+        \EndIf
+    \EndWhile
+    \Statep{Apresente \Id{valor\_mínimo}}
+\end{algorithmic}
+```
+:::

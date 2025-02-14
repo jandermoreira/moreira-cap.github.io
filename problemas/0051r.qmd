@@ -1,0 +1,15 @@
+<!-- Função lógica 'é par' -->
+::: {#sol-0051}
+@exr-0051
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Determina se um valor é ou não par
+    \Require um inteiro $n$
+    \Ensure o retorno de \True\ se $n$ for par ou \False, caso contrário
+    \Function{ÉPar}{$n$}
+        \Statep{\Return $n \bmod 2 = 0$}
+    \EndFunction
+\end{algorithmic}
+```
+:::

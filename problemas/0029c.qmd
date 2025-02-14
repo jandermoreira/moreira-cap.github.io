@@ -1,0 +1,4 @@
+<!-- Soma de precipitações (quantidade conhecida) -->
+::: {#rem-0029}
+Pense a respeito: sua solução, para que seja entendida por outra pessoa, requer comentários específicos? Seria bom incluí-los ou não?
+:::

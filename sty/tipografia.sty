@@ -1,0 +1,67 @@
+%! Package = tipografia
+%! Author = Jander Moreira
+%! Date = 2023/02
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tipografia}[2023/02/17 Tipografia do documento]
+
+
+% \usepackage{CJKutf8}% japanese
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% TIPOGRAFIA
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{listingsutf8}
+\RequirePackage{lstautogobble}
+\lstset{
+    autogobble = true,
+    % language = Python,
+    basicstyle = \ttfamily\small,
+    numberstyle = \scriptsize\color{black!60},
+    % numbers = left,
+    stepnumber = 1,
+    showstringspaces = false,
+    tabsize = 2,
+    breakatwhitespace = false,
+    upquote = true,
+    % framesep = 0pt,
+    % rulesep = 0pt,
+    % frame = single,
+}
+
+% % strings
+% \newcommand{\txtmono}[1]{\scalebox{0.95}{\fontfamily{pcr}\selectfont#1}}
+% % arquivos e caminhos
+% \newcommand{\txtcaminho}[1]{%
+%     \scalebox{0.95}{\fontfamily{pcr}\selectfont\bfseries#1}%
+% }
+% % comando de programa (inline)
+% \newcommand{\txtcomando}[1]{\scalebox{0.95}{\lstinline[language = {}]{#1}}}
+% % números e bases
+% \newcommand{\txtnumero}[2][]{\scalebox{0.95}{\texttt{#2}}\textsubscript{#1}}
+% \newcommand{\txtbinario}[1]{\txtnumero[2]{#1}} %  binário: 011110011
+% \newcommand{\txthexa}[1]{\txtnumero[16]{#1}} %  hexa: ABC9
+% \newcommand{\txtbyte}[1]{\txtnumero{#1}}
+% % ícones
+% \newcommand{\txticone}[1]{%
+%     \begin{tikzpicture}
+%         [baseline = {(0, -0.4em)}]
+%         \draw[fill = black] (0, 0) circle (0.8em);
+%         \node[text = white, font = \ttfamily] {\scalebox{1.2}{#1}};
+%     \end{tikzpicture}%
+% }
+
+\RequirePackage{relsize}
+\NewCommandCopy{\TextTTOriginal}{\texttt}
+\RenewDocumentCommand{\texttt}{ +m }{\TextTTOriginal{\mbox{\smaller#1}}}
+
+
+% % Unicode
+% \RequirePackage{tikz}
+% \usetikzlibrary {shapes.geometric}
+% \newcommand*\invalidchar[1]{\tikz[baseline=(char.base)]{
+%             \node[fill=black,shape=diamond,draw,inner sep=0pt] (char) {\scriptsize\color{white} #1};}
+% }
+% \usepackage{newunicodechar}
+% \newunicodechar{�}{\invalidchar{?}}

@@ -1,0 +1,6 @@
+<!-- Porcentagens e médias na população  -->
+::: {#rem-0035}
+@exr-0035
+
+Neste exercício é importante notar que, não havendo nenhuma pessoa em uma das classes, a média não existe, não podendo nem ser calculada.
+:::

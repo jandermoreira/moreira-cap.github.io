@@ -1,0 +1,328 @@
+%! Package = caixas_e_floats
+%! Author = Jander Moreira
+%! Date = 2023/02
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{caixas_e_floats}[2023/02/17 Provẽ caixas, floats e outros comandos de apoio]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% CAIXAS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\DeclareNewTOC[
+    type = caixaflutuante,
+    float
+]{lcaixas}
+
+\RequirePackage{tcolorbox}
+\tcbset{
+    toda caixa/.style = {
+        title = {#1},
+        fonttitle = \sffamily\bfseries,
+        coltitle = black,
+        % fontupper = \small,
+        colbacktitle = black!30,
+        colframe = black!30,
+        colback = black!5,
+        bottomrule = 0.2em,
+        leftrule = 0.5em,
+        arc = 0.5mm,
+        size = small,
+    },
+}
+
+%%% caixa info: informação adicional, curiosidade etc.
+\newtcolorbox{tcbinfo}[1]{
+    toda caixa,
+    title = {\txticone{i}\hspace{0.5em}#1},
+}
+\NewDocumentEnvironment{caixainfo}{ o m +b }{
+    \IfValueT{#1}{\label{#1}}
+    \begin{caixaflutuante}
+        \begin{tcbinfo}{#2}
+            #3
+        \end{tcbinfo}
+    \end{caixaflutuante}
+    }{}
+
+\newtcolorbox{tcbpython}[1]{
+    toda caixa,
+    title = {%
+        \txticone{\includegraphics[height = 1.2em]{python_logo}}%
+        \hspace{0.5em}#1%
+    },
+}
+\NewDocumentEnvironment{caixapython}{ o m +b }{
+    \IfValueT{#1}{\label{#1}}
+    \begin{caixaflutuante}
+        \begin{tcbpython}{#2}
+            #3
+        \end{tcbpython}
+    \end{caixaflutuante}
+    }{}
+
+\tcbuselibrary{poster}
+\newtcolorbox{suportebox}[1]{
+    title = {#1},
+    fonttitle = \sffamily\bfseries,
+    coltitle = black,
+%	fontupper = \small,
+    colbacktitle = black!30,
+    colframe = black!30,
+    colback = black!5,
+    bottomrule = 0.2em,
+    leftrule = 0.5em,
+    arc = 0.5mm,
+    size = small,
+}
+\newcommand{\continua}{\hfill$\triangleright\triangleright\triangleright$}
+% \RequirePackage{newfloat}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% FLOATS, QUADROS...
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% algoritmos (float)
+\algnewcommand{\Empty}{\mbox{\textsc{Vazio}}}
+\algnewcommand{\Error}{\mbox{\textsc{Erro}}}
+\algnewcommand{\Available}{\mbox{\textsc{Disponível}}}
+\DeclareNewTOC[
+    type = algorithm,
+    name = Algoritmo,
+    counterwithin = chapter,
+    listname = {Lista de algoritmos},
+    float,
+]{alg}
+% todo: remover esta definição!
+% \DeclareFloatingEnvironment[
+%     fileext = alg,
+%     listname = {Lista de algoritmos},
+%     name = Alxgoritmo,
+%     placement = tbp,
+%     within = chapter,
+%     chapterlistsgaps = off,
+% ]{algorithm}
+
+%%% fragmentos de código (float)
+\DeclareNewTOC[
+    type = codigo,
+    name = Código,
+    counterwithin = chapter,
+    listname = {Lista de códigos},
+    float,
+]{code}
+
+% preservação da ordem de 'algorithm' e 'codigo'
+% Fonte: https://tex.stackexchange.com/a/469390/64821
+% (diferentes 'floats' na mesma classe e na mesma ordem no texto)
+\edef\ftype@codigo{\ftype@algorithm}
+
+%%% código Python
+% \DeclareFloatingEnvironment[
+%     fileext = python,
+%     listname = {Lista de quadros Python},
+%     name = Quadro Python,
+%     placement = tb,
+%     within = chapter,
+%     chapterlistsgaps = off,
+% ]{suportepython}
+% \newenvironment{python}[1]{
+% %	\begin{suportepython}
+% %	\begin{suportebox}{\raisebox{-0.1em}{\includegraphics[height =
+% %    1em]{imagens/python_logo_pb.png}}~Python --- #1}
+%         }{
+% %	\end{suportebox}
+% %	\end{suportepython}
+% }
+
+%%% exemplos
+%\usepackage{etoolbox}
+\newcounter{exemplo}[chapter]
+%\let\oldchapter\chapter
+%\renewcommand{\chapter}{\setcounter{exemplo}{0}\oldchapter}
+%\listadd{\chapter}{\setcounter{exemplo}{0}}
+\NewDocumentEnvironment{exemplo}{ m }{%
+    \leftskip=0.5cm%
+    \stepcounter{exemplo}%
+    \vspace{2ex}%
+    \noindent\textbf{Exemplo~\thechapter.\theexemplo:}~#1\nopagebreak\par
+    %	\itshape%
+    %	\rightskip=0.5cm%
+    }{
+    \nopagebreak\hfill$\diamond$\nopagebreak%
+    \par%
+    \leftskip=0pt%
+    \rightskip=0pt%
+}
+
+%%% terminal
+\newsavebox\terminalbox
+\newlength{\terminallength}
+\lstnewenvironment{terminal}{%
+%! parser = off
+    \settowidth{\terminallength}{\lstinline[linewidth=200cm, language = {}, columns = fixed] {12345678901234567890123456789012345678901234567890123456789012345678901234567890}}
+    %! parser = on
+    \pgfmathsetmacro\escalaterminal{min(\linewidth/\terminallength, 1.0)}%
+    \lstset{
+        language = {},
+        numbers = none,
+        linewidth = \terminallength,
+        framesep = 0pt,
+        rulesep = 0pt,
+    % frame = single,
+    }%
+    \global\setbox\terminalbox\vbox\bgroup%
+}{%
+    \egroup%
+    \vspace{\baselineskip}
+    \noindent\scalebox{\escalaterminal}{\usebox\terminalbox}%
+}
+
+% criação de um arquivo temporário para listagem: um novo arquivo contendo o ambiente (\begin{lstlisting}\end...) com o arquivo de código no meio é gerado e, posteriormente, carragado por \input.
+\ExplSyntaxOn
+\iow_new:N \g_file_listing_iow
+\ior_new:N \g_source_listing_ior
+\cs_new:Npn \create_temporary_listing_file:n #1 {
+    \iow_open:Nn \g_file_listing_iow { \jobname-listing.tmp }
+    \str_clear_new:N \l_file_line_str
+
+    \str_set:Nn \l_file_line_str { \begin{lstlisting} }
+    \tl_remove_once:Nn \l_file_line_str { ~ }
+    \exp_args:NNe \iow_now:Nn \g_file_listing_iow { \l_file_line_str }
+
+    \ior_open:Nn \g_source_listing_ior {#1}
+    \bool_do_while:nn { ! \ior_if_eof_p:N \g_source_listing_ior } {
+        \ior_str_get:NN \g_source_listing_ior \l_file_line_str
+        \exp_args:NNe \iow_now:Nn \g_file_listing_iow { \l_file_line_str }
+    }
+    \ior_close:N \g_source_listing_ior
+
+    \str_set:Nn \l_file_line_str { \end{lstlisting} }
+    \tl_remove_once:Nn \l_file_line_str { ~ }
+    \exp_args:NNe \iow_now:Nn \g_file_listing_iow { \l_file_line_str }
+
+    \iow_close:N \g_file_listing_iow
+}
+\NewDocumentCommand { \criaarquivotemporario } { m } {
+    \file_if_exist:nTF { #1 } {
+    % \PackageWarning{formatacao_geral}{Criando temporário para '#1'.}
+        \create_temporary_listing_file:n { #1 }
+    } {
+        \PackageError { formatacao_geral }{
+            criaarquivotemporario:~#1~não~existe.
+        }{}
+    }
+}
+\ExplSyntaxOff
+% \newlength{\margemesquerda}
+% \setlength{\margemesquerda}{3em}
+\NewDocumentCommand{\carregacodigo} { s O{} m } {%
+    \begingroup
+    \IfBooleanT{#1}{
+        \tcbset{
+            enhanced,
+            breakable,
+            overlay first and middle = {
+                \coordinate (A1) at ($(interior.south east) + (-10pt, 5pt)$);
+                \coordinate (C1) at ($(interior.south east) + (-6pt, 7.5pt)$);
+                \draw (A1) -- +(0,5pt) -- (C1) -- cycle;
+            }
+        }
+    }
+    \begin{prog}
+        %! parser = off
+
+
+
+        \settowidth{\terminallength}{\lstinline[linewidth = 200cm, language = {}, columns = fixed] {12345678901234567890123456789012345678901234567890123456789012345678901234567890}}
+        %! parser = on
+    \pgfmathsetmacro\escalaterminal{min(\linewidth/\terminallength, 1.0)}%
+    \lstset{
+        linewidth = \terminallength,
+        #2
+    }%
+    \tcbfontsize{\escalaterminal}
+    \IfBooleanTF{#1}{%
+        \criaarquivotemporario{\lstinputdir/#3}
+    }{%
+        \criaarquivotemporario{../../codigo/segmentos_de_codigo/#3}
+    % \noindent\scalebox{\escalaterminal}{\input{\jobname-listing.tmp}}
+    }%
+    \input{\jobname-listing.tmp}
+    \end{prog}
+    \endgroup
+}
+
+% % #1: opções
+% % #2: nome do programa
+% \NewDocumentCommand{\carregaprograma} { O{} m } {
+%     \begingroup
+% %! parser = off
+%     \settowidth{\terminallength}{\lstinline[linewidth = 200cm, language = {}, columns = fixed] {12345678901234567890123456789012345678901234567890123456789012345678901234567890}}
+%     %! parser = on
+%     \pgfmathsetmacro\escalaterminal{min(\linewidth/\terminallength, 1.0)}%
+%     \begin{prog}
+%         \tcbfontsize{\escalaterminal}
+%         \lstinputlisting{\lstinputdir/#2}
+%     \end{prog}
+%     \endgroup
+% }
+
+%%% programas
+% para salvar UTF-8
+% from: https://tex.stackexchange.com/a/145361/64821
+\newcommand{\deactivateeightbit}{%
+    \count@=127
+    \loop
+    \catcode\count@=12
+    \ifnum\count@<255
+    \advance\count@\@ne
+    \fi
+    \repeat
+}
+\newenvironment{pythonlisting}{%
+    \deactivateeightbit%
+    \VerbatimOut{\jobname.py}%
+    }
+    {%
+    \endVerbatimOut%
+    \carregacodigo[%
+        numbers = none,
+    % xleftmargin = 0pt,
+    ]{\jobname.py}%
+}
+
+
+%\newcommand{\programaautorefname}{Programa}
+\newtcolorbox{prog}{
+% left* = 0pt,
+% right* = 0pt,
+    top = 0pt,
+    bottom = 0pt,
+    left = 0pt,
+    right = 0pt,
+    enhanced,
+    colback = black,
+    opacityback = 0.1,
+    opacityframe = 0,
+}
+\RequirePackage{needspace}
+\newcounter{programa}
+\renewcommand{\theprograma}{\thechapter.\arabic{programa}}
+\newcommand{\lstinputdir}{.}
+\newlength{\cabecalhoprograma}
+\newenvironment{programa}[1]{%
+    \FloatBarrier%
+    \FloatBarrier%
+    \vspace*{1em}\par%
+    \refstepcounter{programa}%
+    \settowidth{\cabecalhoprograma}{Programa~\theprograma:~}%
+    \needspace{4\baselineskip}%
+    \noindent%
+    Programa~\theprograma:~%
+    \parbox[t]{\dimexpr\textwidth-\cabecalhoprograma}{#1}\nopagebreak%
+    \par
+    }{
+    \vspace{4ex}%
+}

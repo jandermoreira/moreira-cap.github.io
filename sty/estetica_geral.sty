@@ -1,0 +1,148 @@
+%! Package = estetica_geral
+%! Author = Jander Moreira
+%! Date = 2023/02
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{estetica_geral}[2023/02/17 Estética geral: fontes, links, tabelas etc.]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ESTÉTICA GERAL DO DOCUMENTO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% fonte geral
+\RequirePackage{lmodern}
+\RequirePackage{courier}
+% fonte monoespaçada
+\RequirePackage{sourcecodepro}
+% parágrafos
+\parindent = 0.75cm
+%% sumário
+%\RequirePackage{minitoc}
+%\dominitoc
+%\nomtcrule
+%\nomtcpagenumbers
+% ajuste do espaçamento depois do ':' em \ttfamily
+\RequirePackage{xpatch}
+\xapptocmd{\ttfamily}{\frenchspacing}{}{}
+% notas de rodapé
+%\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\renewcommand{\thempfootnote}{\fnsymbol{mpfootnote}}
+% Linhas sozinhas
+\RequirePackage[all]{nowidow}
+% Linhas do itemize
+\RequirePackage{enumitem}
+\setitemize{
+    after = \vspace{1.5ex},
+    nosep,
+}
+% recursos para ajuste fino da largura
+% \newlength{\comprimentoobjeto}
+
+% tabelas
+\RequirePackage{booktabs, array}
+%\RequirePackage{rotating}  % para 'sidewaystable'
+\newcommand{\tabularcenter}[1]{\hfill#1\hfill\null}
+%\setlength{\tabcolsep}{2pt}
+% medidas e números
+\RequirePackage[binary-units]{siunitx}
+\sisetup{
+    output-decimal-marker = {,},
+    detect-weight = true,
+    list-units = single,
+    range-phrase = { a~},
+    list-final-separator = { e~},
+    list-pair-separator = { e~},
+}
+
+% vírgula no mathmode
+\RequirePackage{icomma}
+
+% flexibilização do posicionamento dos 'floats'
+% fonte: https://aty.sdsu.edu/bibliog/latex/floats.html
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+\setcounter{dbltopnumber}{2}
+\renewcommand{\dbltopfraction}{0.9}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.7}
+\renewcommand{\dblfloatpagefraction}{0.7}
+
+% subfiguras e continuações
+\RequirePackage{subcaption}
+
+% espaçamentos dos cabeçalhos
+\setlength{\abovecaptionskip}{2ex plus 2pt minus 2pt}
+\setlength{\belowcaptionskip}{1ex plus 2pt minus 2pt}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% ÍNDICES, BIBLIOGRAFIA, GLOSSÁRIO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% índice remissivo
+\RequirePackage{makeidx}
+\RequirePackage[
+    font = footnotesize,
+    columns = 3,
+    unbalanced,
+    columnsep = 1.2em,
+    indentunit = 0.25cm,
+    justific = raggedright,
+    totoc,
+]{idxlayout}
+\renewcommand*{\seename}{veja}
+\renewcommand*{\alsoname}{veja também}
+%% acentuação no hypertarget (https://tex.stackexchange.com/a/288686/64821)
+%\makeatletter
+%\long\def\hyper@@anchor#1#2{%
+%	\pdfstringdef\@temp@anchorpdfstring{#1}%
+%	\@hyper@@anchor\@temp@anchorpdfstring\relax#2\relax%
+%}
+%\def\hyperlink#1#2{%
+%	\pdfstringdef\@temp@anchorpdfstring{#1}%
+%	\hyper@@link{}{\@temp@anchorpdfstring}{#2}%
+%}
+%\makeatother
+%% fim de https://tex.stackexchange.com/a/288686/64821
+\makeindex
+
+%%% tabela de símbolos
+\RequirePackage[
+    symbols,
+    nogroupskip,
+%	sort = none,
+]{glossaries-extra}
+\makeglossaries
+
+%%% referências bibliográficas
+\RequirePackage{csquotes}
+\RequirePackage[
+    backend = biber,
+    style = abnt,
+    ittitles, justify, indent, sccite,
+    giveninits,
+    noslsn,
+    repeatfields,
+    doi = false,
+    uniquename = init, % todo: verificar se funciona... (https://tex.stackexchange.com/a/505656/64821)
+]{biblatex}
+\addbibresource{references.bib}
+\DeclareFieldFormat{url}{\url{#1}}
+
+% % referências cruzadas
+% \newcommand{\crefrangeconjunction}{ a~}
+% \newcommand{\creflastconjunction}{ e~}
+% \crefname{codigo}{código}{códigos}
+% \Crefname{codigo}{Código}{Códigos}
+% % \crefname{source}{programa}{programas}
+% % \Crefname{source}{Programa}{Programas}
+% \crefname{programa}{programa}{programas}
+% \Crefname{programa}{Programa}{Programas}
+
+\sloppy
+\RequirePackage{silence}
+\WarningFilter{latex}{Writing or overwriting file}
+\WarningFilter{biblatex}{File 'brazilian-abnt-abnt.lbx' not found!}

@@ -1,0 +1,13 @@
+# Alocação dinâmica de memória {#sec-alocacao-dinamica-de-memoria}
+
+{{< include oops.qmd >}}
+
+## `malloc` e `free`
+
+## `calloc` e `realloc`
+
+## Alocação em conjunto com modularização
+
+## Outras alocações
+
+`getline` aloca automaticamente e precisa de `free`.

@@ -1,0 +1,37 @@
+<!-- Função potência x^k -->
+::: {#exr-0057}
+Considere a função abaixo, na qual $v$ é um número real e $k$ é um inteiro:
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description
+    \Require $v \in \mathbb{R}$ e $k \in \mathbb{Z}$
+    \Ensure
+    \Function{P}{$v$, $k$}
+        \Statep{$f \gets 1$}
+        \Statep{$p \gets \mid k \mid$}
+        \While{$p > 0$}
+            \Statep{$r \gets v$}
+            \Statep{$e \gets 1$}
+            \While{$e \leq p/2$}
+                \Statep{$r \gets r \times r$}
+                \Statep{$e \gets 2e$}
+            \EndWhile
+            \Statep{$p \gets p - e$}
+            \Statep{$f \gets f \times r$}
+        \EndWhile
+        \If{$k \geq 0$}
+            \Statep{\Return $f$}
+        \Else
+            \Statep{\Return $1/f$}
+        \EndIf
+    \EndFunction
+\end{algorithmic}
+```
+
+Faça:
+
+* Entenda o código e especifique o que a função retorna;
+* Escreva a documentação faltante;
+* Identifique o que mais dificultou para descobrir o que a função faz.
+:::

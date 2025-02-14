@@ -1,0 +1,16 @@
+<!-- Função volume de esfera dado o raio -->
+::: {#sol-0046}
+@exr-0046
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Função para retornar o volume de uma esfera dado seu raio
+    \Require o comprimento do raio
+    \Ensure o volume da esfera
+    \Statex
+    \Function{VolumeEsferaRaio}{$r$}
+        \Statep{\Return $\dfrac{4}{3}\pi r^3$}
+    \EndFunction
+\end{algorithmic}
+```
+:::

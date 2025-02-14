@@ -1,0 +1,89 @@
+# Guia de estilo {#sec-guia-de-estilo}
+
+
+{{< include oops.qmd >}}
+
+
+::: {.callout-tip}
+Ver : <http://lua-users.org/cgi-bin/wiki.pl?action=search&string=LuaStyleGuide&body=1>!!!
+:::
+
+::: {.callout-tip}
+I like to follow the Google C++ [Style Guide.][1]
+
+
+  [1]: https://google.github.io/styleguide/cppguide.html
+
+Which says:
+
+> **Function Declarations** 
+>
+>  - Every function declaration should
+   have comments immediately preceding
+   it that describe what the function
+   does and how to use it. These
+   comments should be descriptive
+   ("Opens the file") rather than
+   imperative ("Open the file"); the
+   comment describes the function, it
+   does not tell the function what to
+   do. In general, these comments do not
+   describe how the function performs
+   its task. Instead, that should be
+   left to comments in the function
+   definition.
+> 
+> **Function Definitions** 
+> 
+>  - Each function definition should have
+   a comment describing what the
+   function does and anything tricky
+   about how it does its job. For
+   example, in the definition comment
+   you might describe any coding tricks
+   you use, give an overview of the
+   steps you go through, or explain why
+   you chose to implement the function
+   in the way you did rather than using
+   a viable alternative. For instance,
+   you might mention why it must acquire
+   a lock for the first half of the
+   function but why it is not needed for
+   the second half. 
+>    
+>    Note you should not just repeat the
+   comments given with the function
+   declaration, in the .h file or
+   wherever. It's okay to recapitulate
+   briefly what the function does, but
+   the focus of the comments should be
+   on how it does it.
+:::
+
+## O que são os guias de estilo
+
+## Guia de estilo adotado neste texto
+
+### Identificadores
+
+Não há uma regra específica para como escrever identificadores. Há algumas estilos conhecidos e populares que estão apresentados na @tbl-estilos-de-caso.
+
+No chamado _flat case_ (achatado), todas as letras são escritas em minúsculas. O mesmo recurso é usado do _camel case_ (camelo), mas quando o identificador é composto por mais de uma palavra, cada palavra seguinte é iniciada com maiúscula, dando visibilidade a cada palavra individual. Uma variação do _camel case_ é o _upper camel case_ (maiúsculo), quando todas as palavras individuais 
+
+| Estilo             | Exemplo nome simples | Exemplo nome composto |
+| :----------------- | :------------------: | :-------------------: |
+| _flat case_        |    `temperatura`     | `temperaturacelsius`  |
+| _camel case_       |    `temperatura`     | `temperaturaCelsius`  |
+| _upper camel case_ |    `Temperatura`     | `TemperaturaCelsius`  |
+| _snake case_       |    `temperatura`     | `temperatura_celsius` |
+| _screaming case_   |    `TEMPERATURA`     | `TEMPERATURACELSIUS`  |
+
+: Estilos de caso para escrita de identificadores. {#tbl-estilos-de-caso}
+
+### Indentação
+
+A disposição dos elementos que formam um código fonte em C é, em grande parte, irrelevante. Isso quer dizer que a organização visual do código fonte é voltada para o programador, não para o compilador. Quando o programa está bem estruturado visualmente, 
+
+### Espaçamentos
+
+### Documentação

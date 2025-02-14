@@ -1,0 +1,5 @@
+# C: Modularização com `struct`
+
+## Registros como parâmetros
+
+## Registros como tipo de retorno

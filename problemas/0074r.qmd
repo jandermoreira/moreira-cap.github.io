@@ -1,0 +1,20 @@
+<!-- Procedimento troca de valores -->
+::: {#sol-0074}
+@exr-0074
+
+Assumindo @sol-0073:
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Realiza a troca de valores entre duas variáveis mantendo-as em ordem não decrescente
+    \Require duas variáveis por referência
+    \Ensure que primeira variável tenha o valor mínimo e a segunda, o máximo
+    \Statex
+    \Procedure{OrdeneValores}{$v_1$:\ByRef, $v_2$:\ByRef}
+        \If{$v_2 > v_1$}
+            \Statep{\Call{TroqueValores}{$v_1$, $v_2$}}
+        \EndIf
+    \EndProcedure
+\end{algorithmic}
+```
+:::

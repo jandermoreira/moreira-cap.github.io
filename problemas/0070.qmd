@@ -1,0 +1,10 @@
+<!-- Geração de palíndromo numérico  -->
+::: {#exr-0070}
+O palíndromo de um número é aquele que possui o mesmo valor, mesmo invertendo a ordem de seus dígitos. Assim, 373 é um palíndromo. Também são exemplos: 1001, 395593 e 1230321.
+
+Escreva um algoritmo que, a partir de um valor inteiro positivo qualquer, gere um palíndromo por espelhamento, o qual deve ser armazenado em uma variável também numérica. Indique claramente os cálculos feitos.
+
+Por exemplo, para 15, gerar 1551; para 773, gerar 773377, para 2, gerar 22.
+
+Embora 15 possa também gerar o palíndromo 151 (sem a repetição da unidade), essa possibilidade não deve ser tratada.
+:::

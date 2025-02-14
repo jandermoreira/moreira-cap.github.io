@@ -1,0 +1,6 @@
+<!-- Mínimo em uma sequência de reais -->
+::: {#exr-0022}
+Escreva um algoritmo que determine o valor mínimo em uma sequência (não vazia) de valores reais qualquer.
+
+@sol-0022
+:::

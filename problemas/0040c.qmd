@@ -1,0 +1,18 @@
+<!-- Soma de 1 + 2 + 3 ... + n -->
+::: {#rem-0040}
+@exr-0040
+
+Naturalmente, a opção seguinte seria muito mais eficiente, porém não atenderia o enunciado do problema.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Cálculo de apresentação de ${\sum_{i=1}^n i}$
+    \Require $n \in \mathbb{Z}^*$
+    \Ensure apresentação da soma ${1 + 2 + \ldots + n}$
+    \Statex
+    \Statep{Obtenha o valor de $n$}
+    \Statep{$\Id{soma} \gets n(n + 1)/2$}
+    \Statep{Apresente \Id{soma}}
+\end{algorithmic}
+```
+:::

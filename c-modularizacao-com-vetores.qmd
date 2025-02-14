@@ -1,0 +1,6 @@
+# C: Modularização com vetores
+
+{{< include oops.qmd >}}
+
+
+## Vetores como parâmetros

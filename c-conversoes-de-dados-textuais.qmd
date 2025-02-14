@@ -1,0 +1,6 @@
+# Conversões de dados textuais {#sec-conversoes-de-dados-textuais}
+
+
+## sscanf e sprintf
+
+## Outras funções de conversão

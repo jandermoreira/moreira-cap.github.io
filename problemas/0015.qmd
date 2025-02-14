@@ -1,0 +1,9 @@
+<!-- Qual usar? Repetição indefinida com sentinela (Atendimento chat) -->
+::: {#exr-0015}
+Considere o problema: 
+
+> Um sistema de atendimento automático por chat apresenta ao usuário um menu com opções com os possíveis assuntos de interesse  e aceita valores numéricos para a escolha. Para cada escolha, o sistema retorna as informações pertinentes. Quando o usuário quiser encerrar o atendimento, ele deve digitar 99, conforme devidamente informado. Escreva um algoritmo para processar uma sequência de solicitações do usuário até que ele encerre o atendimento. Desconsidere a possibilidade do usuário abandonar o chat sem terminar o atendimento.
+
+A solução algorítmica para esse problema requer, em princípio, uma repetição.
+Qual a melhor escolha de estrutura de repetição?
+:::

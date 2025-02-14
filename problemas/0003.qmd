@@ -1,0 +1,15 @@
+<!-- Ou exclusivo -->
+::: {#exr-0003}
+Existe na computação uma operação lógica chamada **ou exclusivo**. Ela é uma operação que, dados dois operadores, retorna verdadeiro se apenas um deles for verdadeiro.
+
+| operando 1 | operando 2 | ou exclusivo |
+| :--------: | :--------: | :----------: |
+|   falso    |   falso    |    falso     |
+|   falso    | verdadeiro |  verdadeiro  |
+| verdadeiro |   falso    |  verdadeiro  |
+| verdadeiro | verdadeiro |    falso     |
+
+: Tabela verdade para o operador **ou exclusivo**.
+
+Com base nessa lógica, escreva um algoritmo para, dados dois valores reais quaisquer, apresentar uma mensagem de "Ok" se somente um deles for positivo, ou "Falha" caso contrário.
+:::

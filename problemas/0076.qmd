@@ -1,0 +1,6 @@
+<!-- Valor mínimo em vetor -->
+::: {#exr-0076}
+Escreva uma função para retornar o valor mínimo um vetor de números reais. Considere que o comprimento mínimo do vetor seja 1.
+
+@sol-0076
+:::

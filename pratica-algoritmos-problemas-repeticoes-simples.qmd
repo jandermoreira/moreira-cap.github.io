@@ -1,0 +1,47 @@
+# Problemas com repetições simples {#sec-problemas-com-repeticoes-simples}
+
+
+
+## Mínimos e máximos
+
+<!-- Maior altura em um grupo fixo -->
+{{< include problemas/0021.qmd >}} 
+
+<!-- Mínimo em uma sequência de reais -->
+{{< include problemas/0022.qmd >}} 
+
+<!-- Mínimo e máximo simultâneos e excludentes -->
+{{< include problemas/0025.qmd >}} 
+
+<!-- Valor máximo de multa e identificação do motorista -->
+{{< include problemas/0030.qmd >}}
+
+
+
+## Contagens
+
+<!-- Contagem de temperaturas negativas -->
+{{< include problemas/0023.qmd >}}
+
+<!-- Contagem de notas nulas e >= 6 -->
+{{< include problemas/0024.qmd >}}
+
+<!-- Erro em contagem de notas nulas e < 6 -->
+{{< include problemas/0004.qmd >}}
+
+<!-- Contagem do número de vendas (com sentinela) -->
+{{< include problemas/0028.qmd >}}
+
+
+
+## Somas
+
+<!-- Soma de pontos em quantidade fixa -->
+{{< include problemas/0026.qmd >}}
+
+<!-- Soma de vendas com sentinela -->
+{{< include problemas/0027.qmd >}}
+
+<!-- Soma de precipitações (quantidade conhecida) -->
+{{< include problemas/0029.qmd >}}
+

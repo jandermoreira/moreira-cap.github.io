@@ -1,0 +1,7 @@
+# Problemas com procedimentos simples {#sec-problemas-procedimentos-simples}
+
+<!-- Troca de valores -->
+{{< include problemas/0073.qmd >}}
+
+<!-- Troca de valores para ordenar -->
+{{< include problemas/0074.qmd >}}

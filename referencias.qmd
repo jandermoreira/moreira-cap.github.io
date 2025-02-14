@@ -1,0 +1,4 @@
+# Bibliografia {.unnumbered .content-visible unless-format="pdf"}
+
+::: {#refs}
+:::

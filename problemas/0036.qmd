@@ -1,0 +1,8 @@
+<!-- Soma dos divisores -->
+::: {#exr-0036}
+Escreva um algoritmo para, a partir de um valor em $\mathbb{Z}^*$, apresentar todos seus divisores e a soma destes divisores.
+
+@sol-0036
+
+@rem-0036
+:::

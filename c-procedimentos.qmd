@@ -1,0 +1,135 @@
+# Procedimentos em C {#sec-procedimentos}
+
+A modularização envolve as funções, como apresentado no @sec-funcoes. Há casos, porém, em que há necessidades de um módulo para realizar uma ação, mas ele não precisa retornar um valor. Módulos que não retornam valores são chamados procedimentos e, em C, são funções que não voltam valor.
+
+Este capítulo trata das funções sem retorno de valor.
+
+
+
+
+## Funções sem retorno
+
+Um exemplo simples de função que não retorna nada é a função (procedimento) `perror`, cuja função é apresentar uma mensagem de erro, como o programa seguinte que mostra as mensagens referentes aos códigos de erro de zero até nove.
+
+```{c}
+/*
+ * Mensagens de erro padrão da biblioteca C
+ * Assegura: apresentação das 10 primeiras mensagens de erro
+ */
+#include <stdio.h>
+#include <errno.h>
+
+int main(void) {
+    for (int i = 0; i < 10; i++) {
+        errno = i;  // ajusta o erro para o valor de i
+        perror(NULL);  // mensagem referente ao erro i
+    }
+
+    return 0;
+}
+```
+
+O objetivo de `perror` é apresentar uma mensagem na tela de acordo com o valor de `errno`, artificialmente ajustado com o valor de `i` a cada repetição. Essa função não retorna nenhum valor. Essa função tem a declaração seguinte.
+
+```c
+void perror(const char *s);
+```
+
+O tipo de retorno é especificado como `void`, que poderia ser entendido como "nada", o que indica que essa função somente pode ser usada como um comando e nunca em uma expressão.
+
+Outro exemplo de procedimento da biblioteca padrão é `bzero`[^ressalva-bzero], que preenche todos os bytes de uma cadeia de caracteres com o byte nulo e não retorna qualquer valor.
+
+[^ressalva-bzero]: A função `bzero`, embora seja um bom exemplo para este texto, é obsoleta e não deve ser usada.
+
+```c
+void bzero(void s[.n], size_t n);
+```
+
+::: {.callout-note}
+Embora o nome procedimento se refira claramente a um conjunto de instruções que não retornam valor, é comum na linguagem C o uso do nome função. Assim, de forma geral, algumas vezes uma rotina será chamada de procedimento, mas no geral, retornando ou não valores, os módulos com rotinas serão chamados genericamente de funções.
+
+O leitor, portanto, não deve assumir que o nome função se refere necessariamente à rotina que retorna um valor.
+:::
+
+
+## Criação de procedimentos
+
+Para escrever um procedimento, basta que seu tipo de retorno seja `void`. Os parâmetros podem ser quantos e de quais tipos forem necessários.
+
+Segue um exemplo de um procedimento que apresenta uma mensagem (bom dia, boa tarde ou boa noite) dependendo da hora do dia.
+
+```c
+/*!
+ * Apresenta na tela uma saudação dependente da hora do dia
+ * @param hora: hora do dia, de 0 a 23
+ */
+void faca_uma_saudacao(int hora);
+```
+
+A implementação dessa função pode ser observada no programa exemplo que segue.
+
+
+```{c}
+/*
+ * Saudação cordial
+ * Assegura: apresentação de uma mensagem de acordo com o horário (bom dia,
+ *  boa tarde ou boa noite)
+ */
+#include <stdio.h>
+#include <time.h>
+
+/*!
+ * Retorna a hora atual
+ * @return hora segundo o sistema operacional, de 0 a 24
+ */
+int obtenha_hora_atual();
+
+/*!
+ * Apresenta na tela uma saudação dependente da hora do dia (bom dia,
+ *  boa tarde ou boa noite)
+ */
+void faca_uma_saudacao(int hora);
+
+/*
+ * Main
+ */
+int main(void) {
+    printf("Às 8 horas: ");
+    faca_uma_saudacao(8);
+
+    printf("Às 17 horas: ");
+    faca_uma_saudacao(17);
+
+    printf("Às 22 horas: ");
+    faca_uma_saudacao(22);
+
+    int hora_atual = obtenha_hora_atual();
+    printf("Agora, %d hora(s): ", hora_atual);
+    faca_uma_saudacao(hora_atual);
+
+    return 0;
+}
+
+// Apresenta saudação dependente da hora
+void faca_uma_saudacao(int hora) {
+    if (hora <= 11)
+        printf("Bom dia!\n");
+    else if (hora <= 18)
+        printf("Boa tarde!\n");
+    else
+        printf("Boa noite!\n");
+}
+
+// Retorna a hora atual do sistema
+int obtenha_hora_atual() {
+    time_t tempo = time(NULL);
+    struct tm horario = *localtime(&tempo);
+    return horario.tm_hour;
+}
+```
+
+O procedimento `faca_uma_saudacao` escolhe qual saudação apresentar, havendo em `main` três exemplos fixos e um dependente da hora real. É relevante notar que os procedimentos dispensam o `return`, apenas terminando naturalmente depois de executar a última instrução interna. 
+
+A função `obtenha_hora_atual` retorna um valor de zero a 23 dependendo da hora atual do sistema operacional. Os detalhes das funções envolvidas não são relevantes e não são discutidos.
+
+Como talvez tenha já sido constado pelo leitor, o uso de procedimentos costuma ser menor que o de funções (que voltam valores).

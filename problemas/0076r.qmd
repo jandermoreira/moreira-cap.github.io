@@ -1,0 +1,23 @@
+<!-- Valor mínimo em vetor -->
+::: {#sol-0076}
+@exr-0076
+
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Description Retorna o valor mínimo presente em um vetor
+    \Require um vetor \Id{vetor} de comprimento mínimo 1
+    \Ensure retorno do valor mínimo
+    \Statex    
+    \Function{ValorMínimo}{\Id{vetor}}
+        \Statep{Inicie \Id{mínimo} com $\Id{vetor}[0]$}
+        \For{$i \gets 1$ \To $\Id{vetor}.\Id{comprimento} - 1$}[do 2º ao último]
+            \If{$\Id{vetor}[i] < \Id{mínimo}$}
+                \Statep{Armazene em \Id{mínimo} o valor $\Id{vetor}[i]$}
+            \EndIf
+        \EndFor
+        \Statep{\Return \Id{mínimo}}
+    \EndFunction
+\end{algorithmic}
+```
+:::

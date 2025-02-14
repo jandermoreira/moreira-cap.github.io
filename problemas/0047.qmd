@@ -1,0 +1,8 @@
+<!-- Função volume de esfera dado o diâmetro -->
+::: {#exr-0047}
+Escreva uma função para, dado diâmetro de uma esfera, retornar seu volume.
+
+O volume é dado por $V = \dfrac{1}{6}\pi d^3$
+
+@rem-0047
+:::

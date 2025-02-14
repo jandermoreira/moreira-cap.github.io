@@ -1,0 +1,80 @@
+project: 
+  output-dir: /home/jander/pessoal/jandermoreira.github.io/cap-pratica-algoritmos
+  # pre-render:
+  #   - ./crie_lista_de_problemas.sh
+
+
+filters: 
+  - order: pre-ast
+    path: exercicios.lua
+  - exercicios-post.lua
+
+crossref: 
+  exr-title: Problema
+  exr-prefix: Problema
+crossrefs-hover: false
+
+book:
+  subtitle: "Prática com algoritmos"
+  output-file: "moreira_j-construcao_algoritmos_programacao-pratica-algoritmos"
+  cover-image: capa.png
+  edition: Versão 0.1-alfa
+
+  sidebar:
+    pinned: true
+    tools:
+      - icon: save
+        menu:
+          - text: "Versão PDF"
+            url: "moreira_j-construcao_algoritmos_programacao-pratica-algoritmos.pdf"
+          # - text: "Versão EPUB"
+          #   url: "moreira_j-construcao_algoritmos_programacao-algoritmos.epub"
+
+  chapters:
+    - index.qmd
+    - preambulo_prefacio_pratica_algoritmos.qmd
+
+    ### LISTAGEM: INICIO
+
+    # - part: "Algoritmos"
+    #   chapters:
+    #   - algoritmos-nocoes.qmd
+    #   - pratica-algoritmos-entendimento-problema.qmd
+    # - part: pratica-algoritmos-problemas-simples-introducao.qmd
+    #   chapters:
+    #   - pratica-algoritmos-problemas-simples.qmd
+    #   - pratica-algoritmos-problemas-resultado-logico.qmd
+    #   - pratica-algoritmos-respostas-problemas-simples.qmd
+    - part: "Condicionais"
+      chapters: 
+        - pratica-algoritmos-problemas-condicionais-simples.qmd
+        - pratica-algoritmos-respostas-condicionais.qmd
+    - part: "Repetições"
+      chapters:
+      - pratica-algoritmos-problemas-repeticoes-identificacao.qmd
+      - pratica-algoritmos-problemas-repeticoes-simples.qmd
+      - pratica-algoritmos-problemas-repeticoes-variados.qmd
+      - pratica-algoritmos-problemas-repeticoes-progressoes.qmd
+      - pratica-algoritmos-respostas-repeticoes.qmd
+    - part: "Modularização"
+      chapters:
+      - pratica-algoritmos-problemas-funcoes-simples.qmd
+      - pratica-algoritmos-problemas-funcoes-projeto.qmd
+      - pratica-algoritmos-problemas-gerais-modularizacao.qmd
+      - pratica-algoritmos-problemas-procedimentos-simples.qmd
+      - pratica-algoritmos-respostas-modularizacao.qmd
+    # - part: "Vetores e matrizes"
+    #   chapters:
+    #   - pratica-algoritmos-problemas-vetores.qmd
+    #   - pratica-algoritmos-respostas-vetores-e-matrizes.qmd
+    ### LISTAGEM: FIM
+    
+  appendices: 
+    - pratica-algoritmos-listagem-geral.qmd
+
+    ### LISTAGEM: INICIO
+
+    - pratica-algoritmos-problemas-complementares-condicionais.qmd
+    - exercicios.qmd
+
+    ### LISTAGEM: FIM

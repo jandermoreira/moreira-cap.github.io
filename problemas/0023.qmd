@@ -1,0 +1,8 @@
+<!-- Contagem de temperaturas negativas -->
+::: {#exr-0023}
+Existe um relatório que contém, no topo da página, a quantidade de medidas de temperatura que foram feitas em um período arbitrário de tempo. Logo em seguida vêm as medidas individuais de temperatura, expressas em graus Celsius.
+
+Escreva um algoritmo para processar os dados conforme descritos no relatório e apesentar, ao final, a quantidade de medidas negativas.
+
+@sol-0023
+:::

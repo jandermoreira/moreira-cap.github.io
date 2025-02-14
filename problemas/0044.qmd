@@ -1,0 +1,6 @@
+<!-- Função máximo de 3 -->
+::: {#exr-0044}
+Escreva uma função para, dados três valores numéricos, retornar o valor máximo entre eles.
+
+@sol-0044
+:::

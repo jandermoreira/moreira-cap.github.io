@@ -1,0 +1,11 @@
+<!-- Qual usar? Repetição indefinida com sentinela (Pesagem de gado) -->
+::: {#exr-0013}
+Considere o problema: 
+
+> Um pecuarista faz um controle rígido de seu rebanho bovino. Cada animal tem preso a si um cartão com seu número de identificação particular. Uma vez por semana, uma amostra aleatória dos bois é separada pelo agrônomo responsável, os quais passarão por uma pesagem. Os bois são colocados em fila em um corredor, tendo seu peso medido por uma balança à medida em que passam, sendo que um funcionário fala ao rádio o número de identificação e o peso de cada animal. Na sede da fazenda, outro funcionário, que escuta cada informação passada, tem a função de obter, ao final, a identificação e peso tanto do boi mais gordo quanto do mais magro da amostra. Depois que todos os animais da amostra foram pesados, o funcionário diz ao rádio "acabou!" e encerra a comunicação. Escreva um algoritmo que detalhe as ações que o funcionário da sede deve seguir para obter os dados requeridos.
+
+A solução algorítmica para esse problema requer, em princípio, uma repetição.
+Qual a melhor escolha de estrutura de repetição?
+
+@sol-0013
+:::

@@ -1,0 +1,4 @@
+<!-- Área de possível triângulo a partir dos lados -->
+::: {#exr-0061}
+Escreva um algoritmo para, a partir dos comprimentos de três segmentos de reta, apresentar a área do triângulo formado, se ele existir, ou uma mensagem de inexistência caso contrário.
+:::

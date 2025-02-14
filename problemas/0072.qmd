@@ -1,0 +1,6 @@
+<!-- Função lógica 'é divisível' -->
+::: {#exr-0072}
+Escreva uma função que, dados dois valores inteiros $n$ e $k$, retorne +Verdadeiro+ ou +Falso+ conforme $n$ seja divisível por $k$.
+
+Use a divisão modular ($\bmod$) para indicar o cálculo.
+:::

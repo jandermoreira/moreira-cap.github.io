@@ -1,0 +1,374 @@
+# Desenvolvimento de algoritmos para processamento de sequências de dados {#seq-desenvolvimento-de-algoritmos-para-processamento-de-sequencias}
+
+Este capítulo estende a discussão do @sec-estruturas-algoritmicas-para-processamento-de-sequencias quanto ao uso das estruturas de controle execução repetitiva, apresentando problemas práticos e indicando ações de uso frequente, como contagens e somas, por exemplo.
+
+O contexto principal abordado é o do processamento de sequências de dados, como as caracterizadas na seção @sec-caracterizacao-das-sequencias-de-dados, abordando coleções de dados disponíveis como entrada para algoritmo.
+
+## Ações simples: contagens e somas
+
+O levantamento de informações a partir de coleções de dados é sempre relevante para análises em nível mais alto. Por exemplo, a determinação do número de estudantes que obtiveram nota zero em um exame do ENEM é um indicador relevante, assim como saber a média das provas de matemática por estado da federação. Da forma similar, a identificação de transações acima de um limite em operações bancárias pode ser um indicador relevante para o mercado e para o governo.
+
+A obtenção dessas informações recai, em última (e simplificada) instância, em ações básicas como contar e somar.
+
+### Contagem {#sec-contagem-em-sequencias}
+
+A contagem nada mais é que a identificação do número de ocorrências. Para exemplificar, um problema bastante trivial é apresentado: determinar, para uma sequência de idades, a quantidade de crianças, o seja, com até 12 anos incompletos[^eca]. A quantidade de idades disponíveis é considerada desconhecida, podendo também ser nula.  O @alg-quantidade-criancas-sequencia-pura-impreciso apresenta uma solução para processar essa coleção de dados como uma sequência.
+
+[^eca]: Faixa etária definida pelo @eca.
+
+
+```latex {.pseudocode}
+%| title: Determinação do número de crianças em uma coleção de idades zero ou mais itens (versão com imprecisão).
+%| label: #alg-quantidade-criancas-sequencia-pura-impreciso
+\begin{algorithmic}
+    \Description Determinação do número de crianças (até 12 anos) a partir de uma sequência de idades
+    \Require uma sequência de zero ou mais idades
+    \Ensure apresentação da quantidade de idades menores de 12 anos nessa sequência
+    \Statex{}
+    \While{existem idades para serem processadas}
+        \Statep{Obtenha \Id{idade}}
+        \If{$\Id{idade} < 12$}
+            \Statep{Conte essa idade como uma criança}
+        \EndIf
+    \EndWhile
+    \Statep{Apresente a contagem de crianças}
+\end{algorithmic}
+```
+
+O uso da estrutura -enquanto- é relevante, pois controla uma quantidade indeterminada de idades como entrada e trata, também, o caso dessa quantidade ser nula.
+
+Esse algoritmo contém um elemento de imprecisão. No caso, por exemplo, de não haver nenhuma idade abaixo dos 12\ anos, a condição do -se- nunca será verdadeira e nenhuma contagem é feita. Porém, a última instrução explicita que que uma contagem que nunca foi feita deva ser apresentada.
+
+É interessante que, nos algoritmos, essa ambiguidade seja explicitamente resolvida e, para isso, a forma com que a contagem é feita pode ser detalhada, indicando claramente o resultado esperado. O resultado da modificação é o @alg-quantidade-criancas-sequencia-pura
+
+```latex {.pseudocode}
+%| title: Determinação do número de crianças em uma coleção de idades zero ou mais itens (versão com imprecisão).
+%| label: #alg-quantidade-criancas-sequencia-pura
+\begin{algorithmic}
+    \Description Determinação do número de crianças (até 12 anos) a partir de uma sequência de idades
+    \Require uma sequência de zero ou mais idades
+    \Ensure apresentação da quantidade de idades menores de 12 anos nessa sequência
+    \Statex{}
+    \Statep{Inicie \Id{contador} com zero}[contador para número de crianças]
+    \While{existem idades para serem processadas}
+        \Statep{Obtenha \Id{idade}}
+        \If{$\Id{idade} < 12$}
+            \Statep{Adicione 1 a \Id{contador}}
+        \EndIf
+    \EndWhile
+    \Statep{Apresente o valor de \Id{contador}}
+\end{algorithmic}
+```
+
+Nesta versão, $\Id{contador}$ é uma variável usada para fazer a contagem, começando explicitamente com zero, o que deixa claro o valor que será apresentado caso não haja nenhuma repetição.
+
+O princípio da contagem é a atualização do valor de uma variável com seu sucessor, de forma que "adicione 1 a $\Id{contador}$" significa ${\Id{contador} \gets \Id{contador} + 1}$.
+
+
+Contadores podem ser aplicados em diferentes cenários de entrada, como sequências com sentinela ou com comprimento conhecido ou previamente informado.
+
+O mesmo problema base (contagem de idades inferiores a 12) pode ter especificação e solução novas se a sequência possuir um valor especial de término (sentinela). O problema passa a ser determinar o número de crianças em uma sequência de idades que possui um valor sentinela igual a -1. 
+
+Para esse novo problema, uma solução é apresentada no @alg-quantidade-criancas-sequencia-sentinela-enquanto.
+
+```latex {.pseudocode}
+%| title: Determinação do número de crianças em uma coleção de idades zero ou mais itens com sentinela (versão 1).
+%| label: #alg-quantidade-criancas-sequencia-sentinela-enquanto
+\begin{algorithmic}
+    \Description Determinação do número de crianças (até 12 anos) a partir de uma sequência de idades
+    \Require uma sequência de zero ou mais idades seguida por um valor sentinela ($-1$)
+    \Ensure apresentação da quantidade de idades menores de 12 anos nessa sequência
+    \Statex{}
+    \Statep{Defina \Id{sentinela} como valor $-1$}
+    \Statep{Inicie \Id{contador} com zero}
+    \Statep{Obtenha \Id{idade}}[primeira idade ou sentinela]
+    \While{\Id{idade} é diferente de \Id{sentinela}}
+        \If{$\Id{idade} < 12$}
+            \Statep{Adicione 1 a \Id{contador}}
+        \EndIf
+        \Statex
+        \Statep{Obtenha \Id{idade}}[próxima idade ou sentinela]
+    \EndWhile
+    \Statep{Apresente o valor de \Id{contador}}
+\end{algorithmic}
+```
+
+Essa solução usa o -enquanto- para controlar a aparição do valor sentinela. Há uma primeira leitura antes da repetição e, caso já apareça o valor sentinela, não é feita nenhuma repetição e o valor da contagem é zero. Se o primeiro valor for uma idade, ela é verificada para a contagem. Antes de nova verificação no -enquanto-, o próximo valor da sequência é obtido e, logo em seguida, verificado na condição do -enquanto-.
+
+O @alg-quantidade-criancas-sequencia-sentinela-repita é outra solução para a sequência com sentinela usando -repita-.
+
+
+```latex {.pseudocode}
+%| title: Determinação do número de crianças em uma coleção de idades zero ou mais itens com sentinela (versão 2).
+%| label: #alg-quantidade-criancas-sequencia-sentinela-repita
+\begin{algorithmic}
+    \Description Determinação do número de crianças (até 12 anos) a partir de uma sequência de idades
+    \Require uma sequência de zero ou mais idades seguida por um valor sentinela ($-1$)
+    \Ensure apresentação da quantidade de idades menores de 12 anos nessa sequência
+    \Statex{}
+    \Statep{Defina \Id{sentinela} como valor $-1$}
+    \Statep{Inicie \Id{contador} com zero}
+    \Repeat
+        \Statep{Obtenha \Id{idade}}[idade ou sentinela]
+        \If{\Id{idade} não é \Id{sentinela} e $\Id{idade} < 12$}
+            \Statep{Adicione 1 a \Id{contador}}
+        \EndIf
+    \Until{\Id{idade} seja igual a \Id{sentinela}}
+    \Statep{Apresente o valor de \Id{contador}}
+\end{algorithmic}
+```
+
+Com o uso da estrutura -repita-, obrigatoriamente os comandos internos serão executados pelo menos uma vez. Caso a sequência de idades esteja vazia, o valor obtido será o sentinela, o qual é desconsiderado no -se- e a repetição já se encerra no -até-que-, o que resulta em $\Id{contador}$ igual a zero. Caso o valor não seja o sentinela, a idade é analisada e o contador incrementado se necessário, implicando em novo ciclo de repetição.
+
+
+A questão de contagem de idades pode, por exemplo, também ser aplicada a um problema para o qual a quantidade de idades a ser analisada seja predefinido. Supondo agora a contagem de crianças para uma coleção com quantidade fixa de 100 idades, a solução pode ser dada pelo @alg-quantidade-criancas-sequencia-conhecida. Como o valor é fixo, a estrutura -para- é empregada para a repetição.
+
+
+```latex {.pseudocode}
+%| title: Determinação do número de crianças em uma coleção de 100 idades.
+%| label: #alg-quantidade-criancas-sequencia-conhecida
+\begin{algorithmic}
+    \Description Determinação do número de crianças (até 12 anos) a partir de uma sequência de 100 idades
+    \Require uma sequência de 100 idades
+    \Ensure apresentação da quantidade de idades menores de 12 anos nessa sequência
+    \Statex{}
+    \Statep{Inicie \Id{contador} com zero}
+    \For{$i \gets 1$ \To $100$}
+        \Statep{Obtenha \Id{idade}}
+        \If{$\Id{idade} < 12$}
+            \Statep{Adicione 1 a \Id{contador}}
+        \EndIf
+    \EndFor
+    \Statep{Apresente o valor de \Id{contador}}
+\end{algorithmic}
+```
+
+
+Como outra possibilidade, o problema pode considerar uma sequência para a qual seja informada sua quantidade. Por exemplo, para uma sequência de 10\ idades, a quantidade 10 é conhecida antes da repetição. O@alg-quantidade-criancas-sequencia-informada considera que o comprimento da sequência esteja disponível antes de cada idade.
+
+
+```latex {.pseudocode}
+%| title: Determinação do número de crianças em uma coleção de idades com zero ou mais itens precedida pela quantidade de itens.
+%| label: #alg-quantidade-criancas-sequencia-informada
+\begin{algorithmic}
+    \Description Determinação do número de crianças (até 12 anos) a partir de uma sequência de idades precedida por sua quantidade de itens
+    \Require a quantidade de idades e a sequência de idades com a quantidade indicada
+    \Ensure apresentação da quantidade de idades menores de 12 anos nessa sequência
+    \Statex{}
+    \Statep{Inicie \Id{contador} com zero}
+    \Statep{Obtenha \Id{quantidade}}
+    \For{$i \gets 1$ \To \Id{quantidade}}
+        \Statep{Obtenha \Id{idade}}
+        \If{$\Id{idade} < 12$}
+            \Statep{Adicione 1 a \Id{contador}}
+        \EndIf
+    \EndFor
+    \Statep{Apresente o valor de \Id{contador}}
+\end{algorithmic}
+```
+
+Nesse algoritmo, os requisitos são a quantidade e os valores das idades. Antes da repetição, o número de itens deve ser obtido (variável $\Id{quantidade}$) e a repetição, usando um -para-, executa a obtenção e a análise de cada idade na quantidade de vezes informada.
+
+Nas duas soluções que usam o -para-, a variável de controle da repetição ($i$) é irrelevante para a solução do problema, sendo usada exclusivamente como indicador para o número de execuções.
+
+
+
+
+### Somas
+
+No processamento de volumes de dados, os totais também são uma informação de interesse comumente usada. Por exemplo, nas transações de venda de um estabelecimento, saber o valor total de vendas em um dia pode ser relevante. Também são importantes os volumes de chuva ao longo de um dado período, obtido pela soma das precipitações diárias. Assim, somas são o tema desta seção.
+
+Para explorar somas em sequências, o princípio é similares ao das contagens da @sec-contagem-em-sequencias, com o reuso de uma variável com a função de acumular valores. Por exemplo, as instruções seguintes ilustram uma forma de reuso para uma soma.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Statep{$\Id{soma} \gets 12$}[valor inicial]
+    \Statep{$\Id{soma} \gets \Id{soma} + 6$}[armazena $12 + 6 = 18$]
+    \Statep{$\Id{soma} \gets \Id{soma} + 13$}[armazena $18 + 13 = 31$]
+\end{algorithmic}
+```
+
+Esta sequência de ações gradativamente calculam $12 + 18 + 31$.
+
+O problema exemplo a ser resolvido agora envolve a apresentação das entradas e saídas de um caixa ao longo do dia. Cada transação feita é registrada por um valor em reais, sendo valores positivos indicativos de entrada de dinheiro no caixa e, em consequência, valores negativos, as saídas. Como transações com valor nulo não fazem sentido neste contexto, o valor R$0,00 é usado como sentinela para indicar o fim da sequência de valores de transações. O objetivo é apresentar o total de entradas e de saídas, além da diferença entre eles.
+
+Uma solução para esse problema está descrita no @alg-fluxo-caixa.
+
+```latex {.pseudocode}
+%| title: Cálculo do montante de entrada e de saída a partir de uma sequência de valores de transações (com sentinela).
+%| label: #alg-fluxo-caixa
+\begin{algorithmic}
+    \Description Cálculo, a partir de uma sequência de transações (valores positivos como entrada, negativos como saída), do montante total de entradas e de saída, mais a diferença entre eles
+    \Require uma sequência possivelmente vazia de valores de transações seguida por um sentinela (valor 0,00)
+    \Ensure apresentação do total de entradas, do total de saídas e da diferença entre eles
+    \Statex{}
+    \Statep{Defina \Id{sentinela} com o valor zero}
+    \Statep{Inicie os acumuladores \Id{soma\_entradas} e \Id{soma\_saídas} com zero}
+    \Statex
+    \Statep{Obtenha \Id{valor\_transação}}
+    \While{$\Id{valor\_transação} \neq \Id{sentinela}$}
+        \If{\Id{valor\_transação} for positivo}
+            \Statep{Atualize \Id{soma\_entradas} com ${\Id{soma\_entradas} + \Id{valor\_transação}}$}
+        \Else
+            \Statep{Atualize \Id{soma\_saídas} com ${\Id{soma\_saídas} + \lvert \Id{valor\_transação} \rvert}$}[acumula valor absoluto]<comment width = 3.2cm>
+        \EndIf
+        \Statex
+        \Statep{Obtenha \Id{valor\_transação}}[próxima]
+    \EndWhile
+    \Statex
+    \Statep{Apresente \Id{soma\_entradas} e \Id{soma\_saídas}}[totais]
+    \Statep{Apresente ${\Id{soma\_entradas} - \Id{soma\_saídas}}$}[diferença]
+\end{algorithmic}
+```
+
+A estratégia de varredura dos valores das transações é o mesmo do @alg-quantidade-criancas-sequencia-sentinela-enquanto, com a obtenção do primeiro valor antes do -enquanto- e a obtenção de cada sucessor no final, antes de nova verificação da condição. 
+
+A iniciação dos somadores $\Id{soma\_entradas}$ e $\Id{soma\_saídas}$ é feita com zero. A cada transação, um ou outro tem seu valor aumentado pelo montante da transação atual.
+
+
+### Mínimos e máximos
+
+Valores extremos são itens usualmente buscados em coleções de dados, como, por exemplo, a transação de maior valor no mercado imobiliário ou a idade mínima para um conjunto de pessoas. 
+
+A estratégia por trás da determinação dos valores mínimo e máximo é simples. Na procura pelo valor mínimo, cada novo valor é comparado ao mínimo atual e, sendo menor, o mínimo atual é atualizado. Situação análoga ocorre com o valor máximo, substituído apenas quando encontrar um valor maior. Algoritmicamente, essa verificação para o valor mínimo pode ser escrita como indicado na sequência.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+\If{$\Id{novo\_valor} < \Id{valor\_mínimo}$}
+    \Statep{$\Id{valor\_mínimo} \gets \Id{novo\_valor}$}
+\EndIf
+\end{algorithmic}
+```
+
+
+Uma questão que surge é sobre qual deve ser o valor inicial da variável quem mantém o mínimo ou o máximo. A resposta, naturalmente, é que a variável deve ser iniciada com um valor que garanta que as substituições ocorram corretamente.
+
+<!-- Há dois cenários comuns para busca por mínimos e máximos. Em um deles, há uma faixa de valores possíveis para os dados, como a idade de pessoas, por exemplo, em que os valores são sempre maiores ou iguais a zero e menores que 150 anos (para trabalhar com folga). O outro cenário é aquele em que não há limitações diretas, como valores reais genéricos. -->
+
+Uma estratégia segura é sempre adotar o primeiro valor como o valor extremo, seja ele o mínimo ou o máximo, e depois verificar os demais itens.
+
+O problema para exemplificar a localização dos extremos é a determinação, para um coleção de idades, qual o mínimo e o máximo. As idades estão disponíveis em uma sequência precedida por sua quantidade e há pelo menos um valor na sequência. 
+
+
+
+```latex {.pseudocode}
+%| title: Determinação da idade mínima e máxima em uma coleção de idades precedida pelo número de itens.
+%| label: #alg-idade-minima-maxima
+\begin{algorithmic}
+    \Description Determinação da idade mínima e máxima em uma coleção de idades
+    \Require a quantidade de idades (maior que zero) seguida dos valores das idades
+    \Ensure apresentação das idades mínima e máxima
+    \Statex{}
+    \Statep{Obtenha \Id{quantidade}}
+
+    \Statep{Obtenha \Id{idade}}[primeira idade]
+    \Statep{Inicie $\Id{idade}_{min}$ com \Id{idade}}[mínima até o momento]
+    \Statep{Inicie $\Id{idade}_{max}$ com \Id{idade}}[máxima até o momento]
+    \Statex
+    \For{$i \gets 2$ \To \Id{quantidade}}[para as idades restantes]
+        \Statep{Obtenha \Id{idade}}
+        \If{$\Id{idade} < \Id{idade}_{min}$}
+            \Statep{Atualize $\Id{idade}_{min}$ com o valor de \Id{idade}}[atualiza]
+        \EndIf
+        \If{$\Id{idade} > \Id{idade}_{max}$}
+            \Statep{Atualize $\Id{idade}_{max}$ com o valor de \Id{idade}}[atualiza]
+        \EndIf
+    \EndFor
+    \Statex
+    \Statep{Apresente $\Id{idade}_{min}$ e $\Id{idade}_{max}$}
+\end{algorithmic}
+```
+
+Uma alternativa comum é iniciar com valores que certamente serão substituídos, como apresentado no @alg-idade-minima-maxima-infinito.
+
+```latex {.pseudocode}
+%| title: Determinação da idade mínima e máxima em uma coleção de idades precedida pelo número de itens.
+%| label: #alg-idade-minima-maxima-infinito
+\begin{algorithmic}
+    \Description Determinação da idade mínima e máxima em uma coleção de idades
+    \Require a quantidade de idades (maior que zero) seguida dos valores das idades
+    \Ensure apresentação das idades mínima e máxima
+    \Statex{}
+    \Statep{Obtenha \Id{quantidade}}
+    \Statep{Inicie $\Id{idade}_{min}$ com $+\infty$}
+    \Statep{Inicie $\Id{idade}_{max}$ com $-\infty$}
+    \For{$i \gets 1$ \To \Id{quantidade}}[para todas as idades]
+        \Statep{Obtenha \Id{idade}}
+        \If{$\Id{idade} < \Id{idade}_{min}$}
+            \Statep{Atualize $\Id{idade}_{min}$ com o valor de \Id{idade}}[atualiza]
+        \EndIf
+        \If{$\Id{idade} > \Id{idade}_{max}$}
+            \Statep{Atualize $\Id{idade}_{max}$ com o valor de \Id{idade}}[atualiza]
+        \EndIf
+    \EndFor
+    \Statex
+    \Statep{Apresente $\Id{idade}_{min}$ e $\Id{idade}_{max}$}
+\end{algorithmic}
+```
+
+Nesta solução, qualquer que seja a primeira idade, ela certamente será menor que $+\infty$ e maior que $-\infty$, forçando as substituições de $\Id{idade}_{min}$ e $\Id{idade}_{max}$. No caso de idades, as iniciações poderiam ser, respectivamente, com 200 anos (com uma boa folga) e -1, ambos valores fora do intervalo de idades aceitável.
+
+
+
+### Derivações
+
+Em decorrência de contagens e somatórios, outros cálculos seguem diretamente, com médias e porcentagens.
+
+
+
+#### Médias
+
+O cálculo de uma média consiste na soma dos valores seguida da divisão pela quantidade. Na prática, é um somatório e uma contagem seguida do cálculo da razão entre eles.
+
+Supondo que o problema seja o processamento de uma sequência simples de pontuações, todas de 0 a 100, e se deseja a pontuação média. O @alg-media-pontuacoes apresenta uma solução para o problema, considerando que a sequência de entrada contém pelo menos uma pontuação.
+
+
+```latex {.pseudocode}
+%| title: Determinação da pontuação média para uma coleção de pontuações.
+%| label: #alg-media-pontuacoes
+\begin{algorithmic}
+    \Description Determinação da média de uma sequência de pontuações
+    \Require a sequência não vazia das pontuações
+    \Ensure apresentação da pontuação média
+    \Statex{}
+    \Statep{Inicie \Id{contador} e \Id{soma} com zero}
+    \While{há pontuações a serem processadas}
+        \Statep{Obtenha \Id{pontuação}}
+        \Statep{Adicione \Id{pontuação} a \Id{soma}}[acumula]
+        \Statep{Adicione 1 a \Id{contador}}[conta]
+    \EndWhile
+    \Statep{Calcule \Id{média} como $\dfrac{\Id{soma}}{\Id{contador}}$}
+    \Statep{Apresente \Id{média}}
+\end{algorithmic}
+```
+
+
+#### Porcentagens
+
+Para porcentagens é preciso ter uma quantidade de ocorrências específicas e dividir esse valor pelo número total de ocorrências. Basicamente, contam-se as ocorrências específicas o e o total, realizando a divisão de um pelo outro na sequência.
+
+Supondo uma sequência de pontuações (de 0 a 100) e desejando-se saber a porcentagem das pontuações no intervalo [90, 100], uma solução algorítmica pode ser dada pelo pseudocódigo do @alg-porcentagem-pontuacoes.
+
+```latex {.pseudocode}
+%| title: Determinação, para uma coleção de pontuações, a porcentagem de pontuações de 90 a 100.
+%| label: #alg-porcentagem-pontuacoes
+\begin{algorithmic}
+    \Description Determinação da porcentagem de pontuações no intervalo [90, 100] para uma sequência de pontuações
+    \Require a sequência não vazia das pontuações
+    \Ensure apresentação da porcentagem (de 0 a 1) de ocorrências de pontuações de 90 a 100
+    \Statex{}
+    \Statep{Inicie \Id{contador\_total} e \Id{contador\_90\_100} com zero}
+    \While{há pontuações a serem processadas}
+        \Statep{Obtenha \Id{pontuação}}
+        \Statep{Adicione 1 a \Id{contador\_total}}
+        \If{$\Id{pontuação}$ está no intervalo [90, 100]}
+                    \Statep{Adicione 1 a \Id{contador\_90\_100}}
+        \EndIf
+    \EndWhile
+    \Statep{Calcule \Id{porcentagem} como $\dfrac{\Id{contador\_90\_100}}{\Id{contador\_total}}$}
+    \Statep{Apresente \Id{porcentagem}}
+\end{algorithmic}
+```
+
+<!-- ## Determinação de ocorrência -->
+

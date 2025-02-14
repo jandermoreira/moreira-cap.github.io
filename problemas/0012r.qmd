@@ -1,0 +1,8 @@
+<!-- Qual usar? Repetição definida (Pressão em caldeira) -->
+::: {#sol-0012}
+@exr-0012
+
+A quantidade de valores na sequência de entrada é fixo. Uma repetição com -para- é a alternativa mais apropriada.
+
+A opção por -enquanto- ou -repita- sempre é possível, porém o uso do -para- torna a repetição mais clara na solução elaborada.
+:::

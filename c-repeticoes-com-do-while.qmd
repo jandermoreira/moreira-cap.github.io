@@ -1,0 +1,194 @@
+# Repetições com `do while` {#sec-repeticoes-com-do-while}
+
+Este capítulo contempla a estrutura e aspectos lógicos do `do while`, cuja função é executar comandos repetitivamente.
+
+
+## A estrutura de repetição `do while`
+
+O `do while` é uma estrutura de repetição condicional e, assim, depende de uma dada condição para determinar se haverá ou não outra repetição. Em oposição ao `while` (@sec-repeticoes-com-while) e ao `for` (@sec-repeticoes-com-for), o teste de continuidade é feito depois da execução do comando.
+
+`\index{do while@\texttt{do while}}`{=latex}
+
+::: {.callout}
+`do` _comando_ `while` `(` _condição\_de\_continuidade_ `)` `;`
+:::
+
+Nessa estrutura de repetição, o primeiro passo é a execução de _comando_ que, como nas demais estruturas, pode ser um comando simples ou um bloco de comandos. Terminada a execução, a _condição\_de\_continuidade_ é avaliada, seguindo para nova repetição se for verdadeira ou encerrando `do while` se não for.
+
+Assim, esta estrutura executa _comando_ pelo menos uma vez.
+
+Para exemplificar, o trecho de código seguinte ilustra uma leitura de um valor real garantindo que esteja no intervalo de 0 a 10 (inclusive).
+
+```{c}
+/*
+Leitura de valor com garantia de estar no intervalo [0, 10], com releitura
+    se necessário
+Requer: uma sequência de valores terminada por um no intervalo [0, 10]
+Assegura: apresentação do último valores
+*/
+#include <stdio.h>
+
+int main(void) {
+    double valor;
+    do {
+        char entrada[160];
+        printf("Digite um valor: ");
+        fgets(entrada, sizeof entrada, stdin);
+        sscanf(entrada, "%lf", &valor);
+        //TYPE(0, "12.2");
+        //TYPE(1, "-3.05");
+        //TYPE(2, "7.4");
+        //STEP
+    } while (valor < 0 || valor > 10);
+
+    printf("\nValor aceito: %g.\n", valor);
+
+    return 0;
+}
+```
+
+
+A lógica da leitura é direta: faz a leitura e, caso não esteja no intervalo especificado, faz a leitura novamente. Neste caso, a primeira leitura é necessária e seu valor sempre é relevante. 
+
+Um detalhe relevante é o escopo das declaraçoes de variáveis: como `entrada` é usada apenas localmente, é declarada dentro do bloco de comandos do `do while`; `valor`, por sua vez, tem que ser declarada fora (antes) do bloco, caso contrário não existiria para ser escrita depois da repetição.
+
+
+::: {.callout-warning title="Curiosidade"}
+Em um laço `do while`, as variáveis declaradas dentro do bloco de comandos ficam tão restritas ao próprio bloco que não podem nem ser acessadas na condição da repetição.
+
+```c
+do {
+    bool eh_valido;  // declaração interna
+
+    ...
+} while (eh_valido);  // `eh_valido` não existe aqui...
+```
+:::
+
+
+
+## Exemplos
+Nesta seção há alguns exemplos de programas que utilizam a estrutura de repetição `do while`.
+
+
+
+### Leitura de senha
+Este exemplo é de um programa que solicita uma senha para autorizar ou não a execução. A senha é _hardcoded_ (i.e., fixa no código e nada versátil) e há um limite de três tentativas.
+
+```{c}
+/*
+Processamento somente mediante senha
+Requer: uma sequência de tentativas de senha terminada com a senha correta
+    ou com comprimento máximo de três tentativas
+Assegura: apresentação de mensagem autorizando ou negando acesso conforme a
+    a senha esteja ou não correta
+*/
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+
+int main(void) {
+    bool validou_senha = false;
+    int numero_tentativas = 0;
+    do {
+        numero_tentativas++;
+        printf("Digite a senha: ");
+        char senha[160];
+        fgets(senha, sizeof senha, stdin);
+        //TYPE(0, "senha");
+        //TYPE(1, "senha123");
+        //TYPE(2, "123456");
+        //STEP
+
+        validou_senha = strcmp(senha, "12345678\n") == 0; // é igual?
+    } while (!validou_senha && numero_tentativas < 3);
+
+    if (validou_senha)
+        printf("\nAcesso autorizado.\n");
+    else
+        printf("\nAcesso negado.\n*** Este problema será reportado.\n");
+
+    return 0;
+}
+```
+
+Neste código há o uso da função `strcmp`, declarada no arquivo de cabeçalho `string.h`. Ela retorna zero se as duas cadeias de caracteres passadas como parâmetro forem iguais[^capitulo-strings]. Uma observação interessante é que `senha` é declarada dentro do bloco do `do while`, uma vez que ela não é necessária fora dele; o mesmo comentário não é válido para `validou_senha`.
+
+[^capitulo-strings]: Manipulações de cadeias de caracteres são tratadas em detalhes no @sec-dados-textuais.
+
+
+### Pense em um número de 1 a 15.000!
+
+O programa deste exemplo se propõe a adivinhar um número pensado pelo usuário em no máximo 13\ tentativas.
+
+```{c}
+/*
+Pense em um número de 1 até 15.000 para eu adivinhar qual é!
+Requer: respostas do usuário dizendo se o valor é maior (+) ou menor (-)
+    que o número pensado
+Assegura: a apresentação do número pensado pelo usuário em até 14 tentativas
+*/
+#include <stdio.h>
+#include <stdbool.h>
+#include <unistd.h>
+
+int main(void) {
+    printf("Pense em um número de 1 a 15000 e responda...\n");
+    sleep(8);  // 8s para pensar!
+
+    int inicio_intervalo = 1;
+    int fim_intervalo = 15000;
+    int numero_tentativas = 0;
+    int tentativa;
+    bool acertei = false;
+    do {
+        numero_tentativas++;
+        tentativa = (inicio_intervalo + fim_intervalo) / 2;
+
+        printf("É o %d?\n", tentativa);
+        printf("Responda + se o número for maior, - se for menor "
+               "ou = se eu acertei: ");
+        char resposta[160];
+        fgets(resposta, sizeof resposta, stdin);
+        //TYPE(0, "+");
+        //TYPE(1, "+");
+        //TYPE(2, "+");
+        //TYPE(3, "-");
+        //TYPE(4, "-");
+        //TYPE(5, "+");
+        //TYPE(6, "=");
+        //STEP
+        switch (resposta[0]) {
+            case '+':
+                inicio_intervalo = tentativa + 1;  // tentarei número maior
+                break;
+            case '-':
+                fim_intervalo = tentativa - 1;  // tentarei número menor
+                break;
+            case '=':
+                acertei = true;  // UFA!
+                break;
+            default:
+                printf("Não entendi a resposta... tente de novo.\n");
+                numero_tentativas--;  // essa tentativa não conta!
+        }
+
+        if (!acertei) {
+            if (numero_tentativas == 13)
+                printf("Minha ÚLTIMA CHANCE!!!\n");
+            else if (numero_tentativas > 10)
+                printf("Só tenho mais %d chances.. :-(\n",
+                       14 - numero_tentativas);
+            sleep(0.7);  // pausa leve de dramaticidade
+        }
+    } while (!acertei && fim_intervalo >= inicio_intervalo);
+
+    if (acertei)
+        printf("\n\nBeleza! Acertei em %d tentativas!\n", numero_tentativas);
+    else
+        printf("\n\nHummmm! Algo de errado não está certo aqui...\n"
+               "Suas respostas foram corretas?\n");
+
+    return 0;
+}
+```

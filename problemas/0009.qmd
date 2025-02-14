@@ -1,0 +1,6 @@
+<!-- Mediana entre 3  -->
+::: {#exr-0009}
+Em alguns processos químicos determinadas medidas são colhidas três vezes, pois podem variar consideravelmente em um curto espaço de tempo. Para cada coleta, é escolhida como medida para registro a de valor intermediário, sendo descartadas a mais baixa e a mais alta. Quando há medidas iguais, é irrelevante qual é escolhida.
+
+Escreva um algoritmo completo para, a partir de três valores reais, apresentar o valor intermediário.
+:::

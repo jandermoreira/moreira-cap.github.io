@@ -1,0 +1,6 @@
+<!-- Vetor contém elemento -->
+::: {#exr-0081}
+Escreva uma função que verifique se um dado valor está ou não em um vetor. O comprimento do vetor pode ser nulo
+
+@sol-0081
+:::

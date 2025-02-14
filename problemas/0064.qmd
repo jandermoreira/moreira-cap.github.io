@@ -1,0 +1,6 @@
+<!-- Diferença porcentual entre salários de 4 -->
+::: {#exr-0064}
+Deseja-se saber, dados os salários de quatro pessoas, a diferença porcentual entre os salários mínimo e máximo.
+
+Escreva um algoritmo para apresentar a informação solicitada.
+:::

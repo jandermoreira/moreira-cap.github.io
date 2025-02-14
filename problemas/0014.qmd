@@ -1,0 +1,11 @@
+<!-- Qual usar? Repetição indefinida até fim dos dados (Pesquisa de opinião) -->
+::: {#exr-0014}
+Considere o problema: 
+
+> É preciso processar o resultado de uma pesquisa de opinião para a qual era possível escolher entre sim, não e não sei. Escreva um algoritmo para processar uma sequência de respostas (com mínimo de uma resposta) e determinar as porcentagens de cada categoria. 
+
+A solução algorítmica para esse problema requer, em princípio, uma repetição.
+Qual a melhor escolha de estrutura de repetição?
+
+@sol-0014
+:::

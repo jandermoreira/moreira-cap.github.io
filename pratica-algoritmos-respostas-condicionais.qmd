@@ -1,0 +1,17 @@
+# Respostas e comentários para problemas selecionados {#sec-respostas-condicionais}
+
+<!-- Validade de data sem bissexto -->
+{{< include problemas/0005r.qmd >}}
+
+<!-- Classificação de triângulo quanto aos ângulos internos -->
+{{< include problemas/0006r.qmd >}}
+
+<!-- Igualdade de números racionais em representação fracionária -->
+{{< include problemas/0007r.qmd >}}
+
+<!-- Equação ax^2 + bx + c = 0, incluindo solução para primeiro grau -->
+{{< include problemas/0010r.qmd >}}
+
+<!-- Determinação da categoria de natação segundo idade -->
+{{< include problemas/0008r.qmd >}}
+

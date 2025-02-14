@@ -1,0 +1,24 @@
+``` {.pseudocode label="#alg-pseudocodigo-raizes-equacao" title="Pseudocódigo para o cálculo e apresentação das raízes reais de uma equação de segundo grau."}
+\begin{algorithmic}
+    \Description Cálculo e apresentação das raízes reais de uma equação de segundo grau na forma ${ax^2 + bx + c = 0}$
+    \Require Os coeficientes $a$, $b$ e $c$ da equação
+    \Ensure as raízes reais da equação; ou mensagem que a equação é inválida; ou mensagem que não há raízes reais
+    \Statex{}
+    \Statep{Obtenha os valores de $a$, $b$ e $c$}[Coeficientes da equação]
+    \If{$a$ for igual a zero}
+        \Statep{Apresente que a equação não é do segundo grau}
+    \Else
+        \Statep{Calcule o discriminante $\Delta$ como $b^2 - 4ac$}
+        \If{$\Delta$ for negativo}[Não há raízes reais]
+            \Statep{Apresente que não há raízes reais}
+        \ElsIf{$\Delta$ for igual a zero}[Apenas uma raiz]
+            \Statep{Calcule $x$ como $-\dfrac{b}{2a}$}
+            \Statep{Apresente o valor de $x$}
+        \Else[Duas raízes]
+            \Statep{Calcule $x_1$ como $\dfrac{-b - \sqrt{\Delta}}{2a}$}
+            \Statep{Calcule $x_2$ como $\dfrac{-b + \sqrt{\Delta}}{2a}$}
+            \Statep{Apresente $x_1$ e $x_2$}
+        \EndIf
+    \EndIf 
+\end{algorithmic}
+```

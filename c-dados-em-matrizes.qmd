@@ -1,0 +1,6 @@
+# C: Dados em matrizes
+
+{{< include oops.qmd >}}
+
+
+## Estruturação da matriz em C

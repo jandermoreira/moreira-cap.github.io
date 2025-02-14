@@ -1,0 +1,17 @@
+<!-- Contagens de vários intervalos (categorias natação) -->
+::: {#exr-0031}
+Em uma competição de natação, as categorias são determinadas segundo a idade dos competidores.
+
+Categorias:
+
+* Infantil A: até 4 anos;
+* Infantil B: 5 e 6 anos;
+* Infantil C: 7 a 10 anos;
+* Juvenil A: 11 a 13 anos;
+* Juvenil B: 14 a 17 anos;
+* Sênior: 18 ou mais anos.
+
+O número de vagas total para a competição é 200, sem separação entre as categorias. Embora tenha tenham sido preenchidas todas as vagas, houve uma preocupação grande quanto às categorias Infantil A e Sênior, temendo que não houvesse atletas suficientes para elas.
+
+Escreva um algoritmo completo para processar a idade de todos os participantes e determinar a quantidade de nadadores pertencentes ao Infantil A e Sênior.
+:::

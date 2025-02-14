@@ -1,0 +1,10 @@
+# Algoritmos: desenvolvimento por refinamentos sucessivos
+
+## Níveis de abstração
+
+## Correção da solução em qualquer nível de abstração
+
+## Refinamentos sucessivos (_top-down_)
+
+## Exemplos
+

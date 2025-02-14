@@ -1,0 +1,9 @@
+<!-- Qual usar? Repetição definida conhecida (Estudo clínico) -->
+::: {#exr-0019}
+Considere o problema:
+
+> Um estudo clínico para uma pesquisa contou com 100 voluntários, que foram monitorados após receberem, parte deles, a vacina e outra, um placebo. Ao final, determinou-se por exames de sangue a resposta imunológica de cada paciente. A partir de uma lista contendo, para cada paciente, o seu grupo (vacina ou placebo) e a classificação da resposta imunológica (definida como baixa, média ou alta), é preciso determinar quantos voluntários obtiveram resposta alta em cada um dos grupos.
+
+A solução algorítmica para esse problema requer, em princípio, uma repetição.
+Qual a melhor escolha de estrutura de repetição?:::
+:::

@@ -1,0 +1,7 @@
+# Algoritmos: testes de mesa
+
+jander
+
+## Testes de mesa com nível alto de abstração 
+
+## Testes de mesa com nível baixo de abstração

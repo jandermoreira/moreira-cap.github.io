@@ -1,0 +1,6 @@
+<!-- Função número de raízes reais distintas -->
+::: {#exr-0071}
+Considere uma equação do segundo grau na forma ${ax^2 + bx + c = 0}$.
+
+Escreva uma função que, dados os valores de $a$, $b$ e $c$, retorne o número de raízes reais distintas que a equação possui.
+:::

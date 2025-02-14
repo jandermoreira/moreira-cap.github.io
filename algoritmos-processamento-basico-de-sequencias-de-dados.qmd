@@ -1,0 +1,527 @@
+# Estruturas algorítmicas básicas para processamento de sequências de dados {#sec-estruturas-algoritmicas-para-processamento-de-sequencias}
+
+Este capítulo considera o processamento de sequências de dados, o que significa repetir ações sobre cada dado individualmente. Em decorrência, também aborda outras ações que sejam repetitivas.
+
+## Sequências de dados
+
+Uma sequência de dados ocorre quando, por exemplo, quando há uma coleção relativamente grande de dados a serem considerados por um algoritmo.
+
+Para exemplificar, inicialmente é considerado um problema simples: determinar o valor máximo entre três valores reais. Uma solução é dada no @alg-maximo-de-tres.
+
+```latex {.pseudocode}
+%| title: Determinação do máximo entre três valores reais.
+%| label: #alg-maximo-de-tres
+\begin{algorithmic}
+    \Description Determinação do máximo entre três reais
+    \Require três valores reais
+    \Ensure apresentação do valor máximo
+    \Statex{}
+    \Statep{Obtenha os valores de $v_1$, $v_2$ e $v_3$}
+    \If{$v_1 > v_2$ e $v_1 > v_3$}
+        \Statep{Defina \Id{máximo} como $v_1$}
+    \ElsIf{$v_2$ > $v_3$}
+        \Statep{Defina \Id{máximo} como $v_2$}
+    \Else
+        \Statep{Defina \Id{máximo} como $v_3$}
+    \EndIf
+    \Statep{Apresente \Id{máximo}}
+\end{algorithmic}
+```
+
+Há um volume de dados pequeno para esse problema, com apenas três valores. Supondo agora que o problema abordasse não apenas uma trinca de valores, mas uma dezena deles. O @alg-maximo-de-dez apresenta uma solução para esse novo problema, seguindo a mesma linha de raciocínio da solução anterior.
+
+```latex {.pseudocode}
+%| title: Determinação do máximo entre dez valores reais.
+%| label: #alg-maximo-de-dez
+\begin{algorithmic}
+    \Description Determinação do máximo entre três reais
+    \Require dez valores reais
+    \Ensure apresentação do valor máximo
+    \Statex
+    \Statep{Obtenha os valores de $v_1$, $v_2$, $v_3$, $v_4$, $v_5$, $v_6$, $v_7$, $v_8$, $v_9$ e $v_{10}$}
+    \If{$v_1 > v_2$ e $v_1 > v_3$ e $v_1 > v_4$ e $v_1 > v_5$ e $v_1 > v_6$ e $v_1 > v_7$ e $v_1 > v_8$ e $v_1 > v_9$ e $v_1 > v_{10}$}
+        \Statep{Defina \Id{máximo} como $v_1$}
+    \ElsIf{$v_2 > v_3$ e $v_2 > v_4$ e $v_2 > v_5$ e $v_2 > v_6$ e $v_2 > v_7$ e $v_2 > v_8$ e $v_2 > v_9$ e $v_2 > v_{10}$}
+        \Statep{Defina \Id{máximo} como $v_2$}
+    \ElsIf{$v_3 > v_4$ e $v_3 > v_5$ e $v_3 > v_6$ e $v_3 > v_7$ e $v_3 > v_8$ e $v_3 > v_9$ e $v_3 > v_{10}$}
+        \Statep{Defina \Id{máximo} como $v_3$}
+    \ElsIf{$v_4 > v_5$ e $v_4 > v_6$ e $v_4 > v_7$ e $v_4 > v_8$ e $v_4 > v_9$ e $v_4 > v_{10}$}
+        \Statep{Defina \Id{máximo} como $v_4$}
+    \ElsIf{$v_5 > v_6$ e $v_5 > v_7$ e $v_5 > v_8$ e $v_5 > v_9$ e $v_5 > v_{10}$}
+        \Statep{Defina \Id{máximo} como $v_5$}
+    \ElsIf{$v_6 > v_7$ e $v_6 > v_8$ e $v_6 > v_9$ e $v_6 > v_{10}$}
+        \Statep{Defina \Id{máximo} como $v_6$}
+    \ElsIf{$v_7 > v_8$ e $v_7 > v_9$ e $v_7 > v_{10}$}
+        \Statep{Defina \Id{máximo} como $v_7$}
+    \ElsIf{$v_8 > v_9$ e $v_8 > v_{10}$}
+        \Statep{Defina \Id{máximo} como $v_8$}
+    \ElsIf{$v_9$ > $v_{10}$}
+        \Statep{Defina \Id{máximo} como $v_9$}
+    \Else
+        \Statep{Defina \Id{máximo} como $v_{10}$}
+    \EndIf
+    \Statep{Apresente \Id{máximo}}
+\end{algorithmic}
+```
+
+Visivelmente é uma solução longa, embora não seja complexa. Entretanto, escrever uma solução similar para 20, 30 ou 100 valores usando essa estratégia é até factível, porém nada prática.
+
+Uma estrutura de organização alternativa para esse problema poderia ser como a apresentada no @alg-maximo-de-dez-sequencial.
+
+```latex {.pseudocode}
+%| title: Determinação do máximo entre dez valores reais (versão 2).
+%| label: #alg-maximo-de-dez-sequencial
+\begin{algorithmic}
+    \Description Determinação do máximo entre três reais
+    \Require dez valores reais
+    \Ensure apresentação do valor máximo
+    \Statex{}
+    \Statep{Obtenha o valor de $v_1$}
+    \Statep{Defina \Id{máximo} como $v_1$}[o primeiro é o máximo para iniciar]
+    \Statex{}
+    \Statep{Obtenha o valor de $v_2$}
+    \If{$v_2 > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v_2$}[troca \Id{máximo} somente se for maior]
+    \EndIf
+    \Statex{}
+    \Statep{Obtenha o valor de $v_3$}
+    \If{$v_3 > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v_3$}
+    \EndIf
+    \Statex{}
+    \Statep{Obtenha o valor de $v_4$}
+    \If{$v_4 > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v_4$}
+    \EndIf
+    \Statex{}
+    \Statep{Obtenha o valor de $v_5$}
+    \If{$v_5 > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v_5$}
+    \EndIf
+    \Statex{}
+    \Statep{Obtenha o valor de $v_6$}
+    \If{$v_6 > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v_6$}
+    \EndIf
+    \Statex{}
+    \Statep{Obtenha o valor de $v_7$}
+    \If{$v_7 > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v_7$}
+    \EndIf
+    \Statex{}
+    \Statep{Obtenha o valor de $v_8$}
+    \If{$v_8 > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v_8$}
+    \EndIf
+    \Statex{}
+    \Statep{Obtenha o valor de $v_9$}
+    \If{$v_9 > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v_9$}
+    \EndIf
+    \Statex{}
+    \Statep{Obtenha o valor de $v_{10}$}
+    \If{$v_{10} > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v_{10}$}
+    \EndIf
+    \Statex{}
+    \Statep{Apresente \Id{máximo}}
+\end{algorithmic}
+```
+
+Para uma quantidade grande de valores, a solução pode ser ampliada apenas pelo acréscimo de novas variáveis $v_i$ e novas verificações. Não é elegante, mas certamente mais prática, e talvez mais clara, que no @alg-maximo-de-dez.
+
+Um ponto interessante do @alg-maximo-de-dez-sequencial é que, feita a entrada de uma variável e confrontado seu valor com o máximo, ela não é mais usada. Isso leva a uma nova versão: o @alg-maximo-de-dez-sequencial-reuso-variavel, na qual cada nova obtenção de valor reusa a mesma variável, substituindo seu valor por um novo da sequência de entrada.
+
+
+```latex {.pseudocode}
+%| title: Determinação do máximo entre dez valores reais (versão 3).
+%| label: #alg-maximo-de-dez-sequencial-reuso-variavel
+\begin{algorithmic}
+    \Description Determinação do máximo entre três reais
+    \Require dez valores reais
+    \Ensure apresentação do valor máximo
+    \Statex{}
+    \Statep{Obtenha o valor de $v$}
+    \Statep{Defina \Id{máximo} como $v$}[o primeiro é o máximo para iniciar]
+    \Statex{}
+    \Statep{Obtenha o valor de $v$}
+    \If{$v > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v$}[troca \Id{máximo} somente se for maior]
+    \EndIf
+    \Statex{}
+    \Statep{Obtenha o valor de $v$}
+    \If{$v > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v$}
+    \EndIf
+    \Statex{}
+    \Statep{Obtenha o valor de $v$}
+    \If{$v > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v$}
+    \EndIf
+    \Statex{}
+    \Statep{Obtenha o valor de $v$}
+    \If{$v > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v$}
+    \EndIf
+    \Statex{}
+    \Statep{Obtenha o valor de $v$}
+    \If{$v > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v$}
+    \EndIf
+    \Statex{}
+    \Statep{Obtenha o valor de $v$}
+    \If{$v > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v$}
+    \EndIf
+    \Statex{}
+    \Statep{Obtenha o valor de $v$}
+    \If{$v > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v$}
+    \EndIf
+    \Statex{}
+    \Statep{Obtenha o valor de $v$}
+    \If{$v > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v$}
+    \EndIf
+    \Statex{}
+    \Statep{Obtenha o valor de $v$}
+    \If{$v > \Id{máximo}$}
+        \Statep{Defina \Id{máximo} como $v$}
+    \EndIf
+    \Statex{}
+    \Statep{Apresente \Id{máximo}}
+\end{algorithmic}
+```
+
+Para essa versão, aumentar a quantidade de itens a serem processados pode ser feita apenas acrescentando-se novas leituras e novas comparações, algo como um "copia-e-colar". Entretanto, ainda a solução não é minimamente elegante, mesmo sendo mais prática que as anteriores.
+
+Uma estrutura de repetição é uma ferramenta usada no pseudocódigo para indicar que algumas ações serão executadas várias vezes. Assim, A versão algorítmica final para o problema do máximo entre 10 valores pode ser dada pelo @alg-maximo-de-dez-sequencial-repeticao.
+
+
+```latex {.pseudocode}
+%| title: Determinação do máximo entre dez valores reais (versão 4).
+%| label: #alg-maximo-de-dez-sequencial-repeticao
+\begin{algorithmic}
+    \Description Determinação do máximo entre três reais
+    \Require dez valores reais
+    \Ensure apresentação do valor máximo
+    \Statex{}
+    \Statep{Obtenha o valor de $v$}
+    \Statep{Defina \Id{máximo} como $v$}[o primeiro é o máximo para iniciar]
+    \Statex{}
+    \For{cada item da sequência, do segundo até a décimo,}
+        \Statep{Obtenha o valor do item em $v$}
+        \If{$v > \Id{máximo}$}
+            \Statep{Defina \Id{máximo} como $v$}[troca \Id{máximo} somente se for maior]
+        \EndIf
+    \EndFor
+    \Statex{}
+    \Statep{Apresente \Id{máximo}}
+\end{algorithmic}
+```
+
+A alteração desse algoritmo para processar, por exemplo, uma sequência de 1000 valores, requer apenas que a linha que indica "do segundo até o décimo" seja reescrita "do segundo até do milésimo", contemplando uma solução para um novo problema, que é bem maior que os anteriores.
+
+
+
+
+## Caracterização das sequências {#sec-caracterizacao-das-sequencias-de-dados}
+
+Nos problemas computacionais, as sequências se apresentam de algumas formas bem características. Conquanto não sendo as únicas apresentações com que sequências podem assumir, estas são as mais comuns:
+
+* as que simplesmente acabam;
+* as com indicação de término com um valor especial (sentinela);
+* as de comprimento previamente conhecido;
+* as prefixadas com a quantidade de itens.
+
+Supondo que haja dados armazenados em um arquivo, a serem processados um a um, eles se caracterizam como uma sequência que, processado o último dado, a repetição sobre eles se encerra. Assim, os dados são processados até que não haja mais nada a processar. Naturalmente, essa perspectiva vale não somente para arquivos, mas também para dados digitados diretamente em um terminal.
+
+`\index{sentinela}`{=latex}
+Uma alternativa para a organização dos dados é ter um dado especial que indique que a sequência terminou. Isso ocorre, por exemplo, na representação de cadeias de caracteres na linguagem C, sendo usado um caractere nulo (`\0`) para indicar que os bytes da cadeia terminaram. Essa alternativa pode ser empregada para entrada de dados via terminal, quando valores são digitados e um valor especial (como zero, por exemplo), significa que a entrada terminou. Esta forma de representação de sequências requer a escolha de um valor especial, conhecido geralmente como sentinela, o qual não pode fazer parte da sequência.
+
+Algumas sequências possuem comprimento conhecido. Se dados são colhidos diariamente, haverá uma sequência de 365 (ou 366) dados em um ano. Para o processamento, sabe-se previamente quantos dados existem e controlar uma repetição para processá-los pode ser feita mais facilmente.
+
+Sendo uma forma bastante comum, uma sequência pode ser precedida da quantidade de itens que ela contém. Na linguagem Pascal, uma cadeia de caracteres é precedida por um byte que indica seu comprimento. No processamento deste tipo de sequência, o controle da repetição para o processamento é conhecido logo no início. A título de exemplo, este seria o caso de um polígono qualquer, descrito pelas coordenadas de seus vértices, ser precedido da quantidade de vértices, com triângulos precedidos por um 3 e pentágonos, por um 5.
+
+`\index{repetições!definidas}`{=latex}
+`\index{repetições!indefinidas}`{=latex}
+As duas primeiras caracterizações de sequências, as que acabam e as que possuem sentinela, são chamadas repetições indefinidas ou abertas. Nelas, não é conhecido previamente quantas vezes as ações de processamento serão repetidas. Em contraposição, quando o comprimento da sequência é fixo ou precedido de um valor indicando quantos itens são, a repetição se caracteriza como definida, sabendo-se quantas vezes as ações serão executadas.
+
+Dado o universo de dados existentes, estas possibilidades não contemplam, é claro, todas as sequências, mas restringem nichos de grande relevância neste contexto.
+
+
+
+
+## Fluxo de execução com repetições
+
+Nos algoritmos escritos com pseudocódigo há três estruturas clássicas para indicar a repetição, embora não sejam as únicas. Elas são representadas por -enquanto-, -repita- e -para-.
+
+Quando as repetições são indefinidas quanto ao número de vezes, as estruturas -enquanto- e -repita- são empregadas. Repetições sobre sequências de dados para as quais se sabe antecipadamente o número de iterações, ou seja, para as repetições definidas, a estrutura -para- é utilizada.
+
+
+
+### Fluxo com -enquanto-
+
+O -enquanto- é uma estrutura que indica uma repetição. Ela se apresenta como apresentado na sequência.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \While{\textit{condição}}
+        \Statep{\Commentl{Instruções condicionadas}}
+    \EndWhile
+\end{algorithmic}
+```
+
+A lógica que define o fluxo de execução com a estrutura -enquanto- é baseada em uma _condição_, a qual pode ser avaliada como verdadeira ou falsa. Se a condição for verdadeira, todas as _instruções condicionadas_ da estrutura são executadas uma vez. Ao final da execução, a condição é avaliada novamente e nova execução das ações internas pode ou não ser feita, a depender do resultado.
+
+Como consequência, a estrutura indica que as _instruções condicionadas_ podem ser executadas uma quantidade indefinida de vezes, que pode ser zero ou mais. É, assim, importante destacar que, sendo a _condição_ falsa já na primeira verificação, nenhuma instrução interna é executada.
+
+Para que a estrutura tenha sentido prático, é esperado que as instruções alterem de alguma forma dos dados para que, eventualmente, a condição se torne falsa e a repetição se encerre.
+
+O processamento de sequências de dados cuja quantidade de itens não seja previamente conhecida é bastante comum e, assim, uma repetição de obtenção de valores com -enquanto- é bastante apropriada. O @alg-contador-maior-18 é um exemplo dessa necessidade. Ele apresenta uma solução para, dadas várias idades de pessoas (podendo não haver nenhuma), determinar quantas delas são maiores ou iguais a 18.
+
+```latex {.pseudocode}
+%| title: Determinação da quantidade de pessoas com maioridade legal.
+%| label: #alg-contador-maior-18
+\begin{algorithmic}
+    \Description Determinação da quantidade de pessoas com maioridade legal
+    \Require uma sequência de zero ou mais idades
+    \Ensure a quantidade de idades maiores ou iguais a 18
+    \Statex{}
+    \Statep{Inicie um contador com valor igual a zero}
+    \While{há idades na sequência de entrada}
+        \Statep{Obtenha uma \Id{idade}}
+        \If{$\Id{idade} \geq 18$}
+            \Statep{Acrescente mais um ao contador}[conta maiores de idade]
+        \EndIf
+    \EndWhile
+    \Statep{Apresenta quantidade de idades contadas}
+\end{algorithmic}
+```
+
+O -enquanto- verifica se há dados disponíveis como entrada e, havendo, obtém o dado (uma idade) e, sendo maior ou igual a 18 anos, conta essa ocorrência. Quando não houver mais dados na entrada, a repetição se encerra e a contagem é apresentada. Para o caso da entrada ser vazia, a condição do -enquanto- já é falsa logo no início e, assim, nenhuma leitura é feita, situação em que o contador permanece com valor zero.
+
+O uso do sentinela de dados também é viável de ter sua lógica organizada como -enquanto-. Um exemplo simples é a soma de uma série de números reais, todos maiores que zero. O sentinela será o número zero, que não faz parte dos dados válidos. Uma solução para esse problema é apresentada no @alg-contador-com-sentinela-enquanto.
+
+```latex {.pseudocode}
+%| title: Soma de uma sequência de números reais com sentinela.
+%| label: #alg-contador-com-sentinela-enquanto
+\begin{algorithmic}
+    \Description Soma de uma sequência de valores reais
+    \Require uma sequência de zero ou mais valores maiores que zero seguida por um valor nulo (sentinela)
+    \Ensure apresentação da soma dos valores ou zero se a sequência for vazia
+    \Statex{}
+    \Statep{Defina \Id{sentinela} com valor zero}
+    \Statep{Obtenha um \Id{valor}}[pode ser o primeiro ou o sentinela]
+    \Statep{Inicie uma soma com zero}
+    \While{$\Id{valor} \neq \Id{sentinela}$}
+        \Statep{Acrescente \Id{valor} à soma}
+        \Statep{Obtenha um \Id{valor}}[próximo valor]
+    \EndWhile
+    \Statep{Apresenta o valor da soma}
+\end{algorithmic}
+```
+
+A estratégia é fazer, antes da repetição, uma primeira leitura, que pode ser um valor válido ou o próprio sentinela (quando sequência de números está vazia). Antes de somar esse valor, é feita a comparação com o sentinela. Sendo o valor zero, nenhuma repetição é efetuada e a soma zero é o resultado apresentado. Caso seja um valor válido, ele é somado e, antes de nova verificação, o próximo valor da sequência de entrada é obtido, fechando um ciclo.
+
+
+### Fluxo com -repita-
+
+A estrutura -repita- também se aplica a repetições indefinidas. Sua estrutura é como se apresenta a seguir.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Repeat
+        \Statep{\Commentl{Instruções condicionadas}}
+    \Until{\textit{condição}}
+\end{algorithmic}
+```
+
+O -repita- é uma estrutura que possui uma _condição_ a ser verifica e sua avaliação é feita depois da execução dos _comandos condicionados_. Dessa forma, todos os comandos internos são executados e, então, a _condição_ é verificada; resultando em falso, uma nova repetição é feita, sendo verdadeira, repetição se encerra.
+
+Por sua estrutura, os comandos internos do -repita- são executados pelo menos uma vez.
+
+Para exemplificar, pode ser considerado o problema da verificação da senha digitada por um usuário para acesso ao sistema, cujas regras são: se a senha digitada for correta, o acesso é dado; caso haja dez erros consecutivos, uma penalização de tempo ("aguarde cinco minutos para tentar novamente") é aplicada. A quantidade de senhas que serão verificadas é desconhecido: se houver a inserção correta da senha logo no início há apenas uma verificação; se houver senhas inválidas, outras verificações serão necessárias.
+
+O @alg-senha-acesso ilustra como essa questão pode ser abordada.
+
+```latex {.pseudocode}
+%| title: Verificação de senha para acesso a um sistema.
+%| label: #alg-senha-acesso
+\begin{algorithmic}
+    \Description Verificação da senha para garantir acesso a um sistema
+    \Require uma sequência indefinida de tentativas de senha
+    \Ensure acesso ao sistema apenas quando a senha estiver correta
+    \Statex{}
+    \Statep{Defina \Id{número\_de\_erros} com valor zero}
+    \Repeat
+        \Statep{Obtenha \Id{senha}}[tentativa de acesso]
+        \If{\Id{senha} está incorreta}
+            \Statep{Some 1 a \Id{número\_de\_erros}}
+            \If{\Id{número\_de\_erros} for igual a 10}[10 erros?]
+                \Statep{Apresente mensagem sobre o número de tentativas erradas}
+                \Statep{Aguarde cinco minutos de penalidade antes de prosseguir}[penalidade]
+                \Statep{Zere \Id{número\_de\_erros}}[reinicia a contagem]
+            \EndIf
+        \EndIf
+    \Until{\Id{senha} esteja correta}
+    \Statep{Libere o acesso ao sistema}
+\end{algorithmic}
+```
+
+Nessa solução, a repetição somente se encerra com a digitação da senha correta, o que pode levar uma eternidade. O algoritmo não detalha como a senha é efetivamente verificada, o que não é, porém, relevante no momento.
+
+
+Sequências de dados com valor sentinela também podem ser processadas usando-se a estrutura -repita-. O problema resolvido pelo @alg-contador-com-sentinela-enquanto, que usa -enquanto, tem sua versão com -repita- apresentada no @alg-contador-com-sentinela-repita.
+
+```latex {.pseudocode}
+%| title: Soma de uma sequência de números reais com sentinela (versão 2).
+%| label: #alg-contador-com-sentinela-repita
+\begin{algorithmic}
+    \Description Soma de uma sequência de valores reais
+    \Require uma sequência de zero ou mais valores maiores que zero seguida por um valor nulo (sentinela)
+    \Ensure apresentação da soma dos valores ou zero se a sequência for vazia
+    \Statex{}
+    \Statep{Defina \Id{sentinela} com valor zero}
+    \Statep{Inicie uma soma com zero}
+    \Repeat
+        \Statep{Obtenha um \Id{valor}}
+        \If{$\Id{valor} \neq sentinela$}[não soma o sentinela]
+            \Statep{Acrescente \Id{valor} à soma}
+        \EndIf
+    \Until{$\Id{valor} = \Id{sentinela}$}[encerra com o sentinela]
+    \Statep{Apresenta o valor da soma}
+\end{algorithmic}
+```
+
+Nessa solução, a cada repetição é obtido um valor da entrada e a soma é feita apenas para os valores que não sejam iguais ao sentinela. Quando o valor sentinela é obtido da entrada, ele é ignorado e, em seguida, a repetição se encerra e o resultado final é apresentado. Caso não haja valores para serem somados, o resultado zero é apresentado.
+
+
+
+### Fluxo com -para-
+
+O -para- é indicado para repetições definidas, ou seja, para aquelas em que a quantidade de repetições é conhecida de antemão. A seguir é apresenta a estrutura do -para-.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \For{\textit{especificação\_da\_repetição}}
+        \Statep{\Commentl{Instruções condicionadas}}
+    \EndFor
+\end{algorithmic}
+```
+
+Há muitas variações comuns para a repetição com -para-. Elas são apresentadas a seguir.
+
+
+A versão mais comum para um -para- é com o uso de um iterador (normalmente uma variável genérica [i]{id}), estabelecendo o valor inicial e o final. Seguem exemplos.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Statep{\Commentl{Repetição de 10 vezes}}
+    \For{$i \gets 1$ \To 10}
+        \Statep{Execute uma ação}
+    \EndFor
+\end{algorithmic}
+```
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Statep{\Commentl{Repetição de 10 vezes}}
+    \For{$i \gets 0$ \To 9}
+        \Statep{Execute uma ação}
+    \EndFor
+\end{algorithmic}
+```
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Statep{\Commentl{Repetição de $n$ vezes}}
+    \Statep{Obtenha o valor de $n$}
+    \For{$i \gets 0$ \To $n - 1$}
+        \Statep{Execute uma ação}
+    \EndFor
+\end{algorithmic}
+```
+
+O uso do -for- é considerado sempre crescente[^ressalva-sempre]. Assim, uma repetição de 1 até 1 é feita apenas uma vez e para de 0 até -10 não há nenhuma repetição. Neste livro, portanto, essa é a interpretação consistentemente seguida.
+
+[^ressalva-sempre]: Na realidade, nem sempre, mas é a forma de interpretação mais segura, a não ser que haja uma ressalva junto com o algoritmo.
+
+Como exemplo, a repetição seguinte pode ser considerada.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Statep{Obtenha o valor de \Id{inicial} e \Id{final}}
+    \For{$i \gets \Id{inicial}$ \To \Id{final}}
+        \Statep{Execute uma ação}
+    \EndFor
+\end{algorithmic}
+```
+
+
+Nela, se ${\Id{final} > \Id{inicial}}$, a repetição vai de [inicial]{id} até [final]{id}, de 1 em 1, em um total de ${\Id{final} - \Id{inicial} + 1}$ vezes. Caso [inicial]{id}$\,=\,$[final]{id}, as instruções internas são executadas uma única vez. Finalmente, se ${\Id{inicial} > \Id{final}}$, não há nenhuma execução.
+
+
+#### Repetições regressivas
+
+As repetições com -para- são, em princípio, crescentes. Para especificar uma repetição decrescente é necessário que ela se torne evidente e não requeira interpretações que podem variar entre diferentes pessoas.
+
+Neste livro há duas formas de indicar "contagens regressivas": explicitamente na instrução ou alterando o passo com que a variável de controle da repetição é atualizado.
+
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Statep{\Commentl{Repetição 10 vezes, de 10 até 1}}
+    \For{$i \gets 10$ \DownTo 1}
+        \Statep{Execute uma ação}
+    \EndFor
+\end{algorithmic}
+```
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Statep{\Commentl{Repetição 10 vezes, de 10 até 1}}
+    \For{$i \gets 10$ \To $1$ \Step $-1$}
+        \Statep{Execute uma ação}
+    \EndFor
+\end{algorithmic}
+```
+
+
+#### Repetições com passo diferente de 1
+
+Conforme apresentado nos demais exemplos deste capítulo, assume-se por padrão que os incrementos (ou decrementos com -regressivo-até-) seja sempre unitários. Ainda assim é possível indicar iterações com passos diferentes.
+
+Seguem alguns exemplos.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Statep{\Commentl{Repetição para 0, 2, 4, 6, 8 e 10}}
+    \For{$i \gets 0$ \To $10$ \Step $2$}
+        \Statep{Execute uma ação}
+    \EndFor
+\end{algorithmic}
+```
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Statep{\Commentl{Repetição para 10, 8, 6, 4, 2 e 0}}
+    \For{$i \gets 10$ \To $0$ \Step $-2$}
+        \Statep{Execute uma ação}
+    \EndFor
+\end{algorithmic}
+```
+
+Embora incomuns[^para-com-reais], repetições com -para- que usem valores reais também podem ser usadas
+
+[^para-com-reais]: Há uma preferência geral de que repetições que não usem iteradores inteiros sejam escritas com -enquanto- ou -repita-.
+
+```latex {.pseudocode}
+\begin{algorithmic}
+    \Statep{\Commentl{Repetição para 0, 0.25, 0.5, 0.75, 1}}
+    \For{$i \gets 0,0$ \To $1,0$ \Step $0,25$}
+        \Statep{Execute uma ação}
+    \EndFor
+\end{algorithmic}
+```
+

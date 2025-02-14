@@ -1,0 +1,8 @@
+<!-- Maior altura em um grupo fixo -->
+::: {#exr-0021}
+Em uma competição os participantes são organizados equipes, cada uma sempre com 20\ indivíduos.
+
+Escreva um algoritmo para, dadas as alturas de cada indivíduo de uma equipe, apresentar o valor máximo entre elas.
+
+@sol-0021
+:::

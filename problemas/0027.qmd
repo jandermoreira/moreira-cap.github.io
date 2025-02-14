@@ -1,0 +1,6 @@
+<!-- Soma de vendas com sentinela -->
+::: {#exr-0027}
+Uma empresa possui os dados de venda de um mês inteiro em uma lista contendo os valores de cada venda. Como a lista pode ser longa e o final difícil de identificar, convencionou-se que sempre o último valor da lista é uma venda fictícia com valor R$\ 0,00. Isso funciona para a empresa, visto que toda venda real possui valor maior que zero.
+
+Escreva um algoritmo para, a partir da sequência de valores de venda terminada com zero, apresentar o valor total das vendas do mês.
+:::

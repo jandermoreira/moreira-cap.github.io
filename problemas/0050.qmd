@@ -1,0 +1,10 @@
+<!-- Projeto função: combinação de n, p a p -->
+::: {#exr-0050}
+O número de combinações de $n$ elementos em grupos contendo $p$ elementos cada um é expresso
+
+$$ C_p^n = \dfrac{n!}{p!(n-p)!}. $$
+
+Considerando um algoritmo capaz apenas de realizar as operações básicas (somas e multiplicações), identifique quais módulos, na forma de funções, poderiam ser empregados para a realização dos cálculos da combinação.
+
+@sol-0050
+:::

@@ -1,0 +1,41 @@
+%! Package = pagina_e_mancha
+%! Author = Jander Moreira
+%! Date = 2023/02
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{pagina_e_mancha}[2023/02/17 Definições de formatação de páginas, mancha, papel]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% PÁGINAS E MANCHAS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%% ajuste fino da 'mancha de texto' (pontuações etc.)
+% \RequirePackage{microtype}
+
+%%% formatação das páginas
+\KOMAoptions{
+    numbers = noenddot,
+    egregdoesnotlikesansseriftitles,
+    captions = figureheading, % subcaption/subfigures
+    % DIV = 10,
+    twoside = false,
+    % fontsize = 10pt,
+}
+% \areaset{17cm}{24cm}
+
+\RequirePackage{geometry}
+\geometry{top = 2.2cm, bottom = 2.2cm, left = 2.5cm, right = 1.5cm}
+
+
+% Hack para "mover" o \mainmatter para depois do material inicial
+\def\mainmatterreal{} % define, pois é chamado no markdown
+
+% sem número de página em \part{...}
+\renewcommand*{\partpagestyle}{empty}
+
+\let\mainmatterreal\mainmatter% \mainmatterreal é usado no index.qmd
+\def\mainmatter{\frontmatter}% mantém \fontmatter no código gerado pelo Quarto
+
+\endinput
