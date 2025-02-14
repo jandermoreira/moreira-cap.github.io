@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>10&nbsp; Organização do código fonte – Construção de Algoritmos e Programação</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./c-repeticoes-com-while.html" rel="next">
+<link href="./c-escopo-basico-de-declaracoes.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-9e1f2a4632985dffc2c80318c992baf5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-7cf8a0149bf791b42ada95f7f6344cc2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="book.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./c-escopo-basico-de-declaracoes.html">Organização geral do código</a></li><li class="breadcrumb-item"><a href="./c-organizacao-do-codigo-fonte.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Organização do código fonte</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Construção de Algoritmos e Programação</a> 
+        <div class="sidebar-tools-main">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-save"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./moreira_j-construcao_algoritmos_programacao-programacao.pdf">
+            Versão PDF
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Procurar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Apresentação</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preambulo_prefacio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Programação em C</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./algoritmos-nocoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Noções de algoritmos</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Programação básica</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-introducao-a-linguagem-c.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introdução à linguagem C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-tipos-de-dados.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tipos de dados da linguagem C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-variaveis-identificadores-e-leitura.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Variáveis e leituras em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-expressoes-aritmeticas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Expressões aritméticas de C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-expressoes-relacionais-e-logicas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">C: expressões relacionais e lógicas</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Controle de fluxo simples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-execucao-condicional-com-if.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Execução condicional com <code>if</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-execucao-condicional-com-switch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Execução condicional com <code>switch</code></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Organização geral do código</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-escopo-basico-de-declaracoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Escopo básico de declarações</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-organizacao-do-codigo-fonte.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Organização do código fonte</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Controle de repetição do fluxo</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-while.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Repetições com <code>while</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-for.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Repetições com <code>for</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-do-while.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Repetições com <code>do while</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-arquivos-texto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Arquivos texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-desvirtuacao-das-repeticoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Desvirtuação das repetições</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Cadeias de caracteres</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-textuais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Dados textuais em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-manipulacao-de-dados-textuais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Manipulação de dados textuais em C</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Modularização e memória</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-funcoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Funções em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-regras-de-escopo-com-modularizacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Regras de escopo com a modularização</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-enderecamento-de-memoria-e-ponteiros.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Endereçamento de memória e ponteiros nos programas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-procedimentos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Procedimentos em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-parametros-de-funcoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Parâmetros das funções na linguagem C</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Estruturação de dados</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-com-struct.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">C: Dados com <code>struct</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-em-vetores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">C: Dados em vetores</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página:</h2>
+   
+  <ul>
+  <li><a href="#documentação" id="toc-documentação" class="nav-link active" data-scroll-target="#documentação"><span class="header-section-number">10.1</span> Documentação</a></li>
+  <li><a href="#organização-visual" id="toc-organização-visual" class="nav-link" data-scroll-target="#organização-visual"><span class="header-section-number">10.2</span> Organização visual</a></li>
+  <li><a href="#indentação" id="toc-indentação" class="nav-link" data-scroll-target="#indentação"><span class="header-section-number">10.3</span> Indentação</a></li>
+  <li><a href="#linhas-de-espaçamento" id="toc-linhas-de-espaçamento" class="nav-link" data-scroll-target="#linhas-de-espaçamento"><span class="header-section-number">10.4</span> Linhas de espaçamento</a></li>
+  <li><a href="#um-comando-por-linha" id="toc-um-comando-por-linha" class="nav-link" data-scroll-target="#um-comando-por-linha"><span class="header-section-number">10.5</span> Um comando por linha</a></li>
+  <li><a href="#padronização-de-identificadores" id="toc-padronização-de-identificadores" class="nav-link" data-scroll-target="#padronização-de-identificadores"><span class="header-section-number">10.6</span> Padronização de identificadores</a></li>
+  <li><a href="#localização-da-declaração-de-variáveis" id="toc-localização-da-declaração-de-variáveis" class="nav-link" data-scroll-target="#localização-da-declaração-de-variáveis"><span class="header-section-number">10.7</span> Localização da declaração de variáveis</a></li>
+  <li><a href="#alinhamento-dos-finais-de-bloco" id="toc-alinhamento-dos-finais-de-bloco" class="nav-link" data-scroll-target="#alinhamento-dos-finais-de-bloco"><span class="header-section-number">10.8</span> Alinhamento dos finais de bloco</a></li>
+  <li><a href="#comentários" id="toc-comentários" class="nav-link" data-scroll-target="#comentários"><span class="header-section-number">10.9</span> Comentários</a></li>
+  <li><a href="#organização-consistente-do-código" id="toc-organização-consistente-do-código" class="nav-link" data-scroll-target="#organização-consistente-do-código"><span class="header-section-number">10.10</span> Organização consistente do código</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./c-escopo-basico-de-declaracoes.html">Organização geral do código</a></li><li class="breadcrumb-item"><a href="./c-organizacao-do-codigo-fonte.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Organização do código fonte</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-organizacao-do-codigo-fonte" class="quarto-section-identifier"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Organização do código fonte</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<span class="math inline">\(\newcommand\Id[1]{\mbox{\textit{#1}}}\)</span>
+<p><span class="citation" data-cites="abelson1996">Abelson e Sussman (<a href="#ref-abelson1996" role="doc-biblioref">1996</a>)</span> escreveram uma vez que “programas devem ser escritos para que humanos os leiam e para que, somente como consequência, máquinas os executem”<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Em outras palavras, compiladores não ligam para como os programas são escritos, para os nomes das variáveis nem para o bom ou mau gosto do programador. Programas apenas são compilados e executados.</p>
+<section id="documentação" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="documentação"><span class="header-section-number">10.1</span> Documentação</h2>
+<p>A primeira etapa para se ter um bom código fonte passa longe do código&nbsp;C em si. Ela consiste em ter, no início do código, um comentário com a descrição do conteúdo do arquivo.</p>
+<p> Esse comentário estabelece a documentação do código e deve conter uma descrição de seu propósito e de seu contexto, bem como as condições necessárias para sua utilização e execução. Seguem, a título de exemplo, documentações encontradas no Github<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>Arquivo <code>sysctl.c</code><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * sysctl wrapper for library version of Linux kernel</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * Copyright (c) 2015 INRIA, Hajime Tazaki</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"> * Author: Mathieu Lacage &lt;mathieu.lacage@gmail.com&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"> *         Hajime Tazaki &lt;tazaki@sfc.wide.ad.jp&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Arquivo <code>ubsan.c</code><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// </span><span class="an">SPDX-License-Identifier:</span><span class="co"> GPL-2.0-only</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * UBSAN error reporting functions</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"> * Copyright (c) 2014 Samsung Electronics Co., Ltd.</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"> * Author: Andrey Ryabinin &lt;ryabinin.a.a@gmail.com&gt;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Arquivo <code>seg6.py</code><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"> *  SR-IPv6 implementation</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"> *  Author:</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"> *  David Lebrun &lt;david.lebrun@uclouvain.be&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"> *</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"> *  This program is free software; you can redistribute it and/or</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"> *    modify it under the terms of the GNU General Public License</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"> *    as published by the Free Software Foundation; either version</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"> *    2 of the License, or (at your option) any later version.</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Arquivo <code>writing_a_custom_training_loop_in_tensorflow.py</code><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> (em Python):</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">Title: Writing a training loop from scratch in TensorFlow</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">Author: [fchollet](https://twitter.com/fchollet)</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">Date created: 2019/03/01</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">Last modified: 2023/06/25</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">Description: Writing low-level training &amp; evaluation loops in TensorFlow.</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">Accelerator: None</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O conteúdo e o nível de detalhe de cada comentário depende do programador, das regras da empresa em que trabalha ou da equipe envolvida, entre outros muitos fatores.</p>
+<p>Neste livro, os programas são sempre precedidos por um comentário contendo:</p>
+<ul>
+<li>O propósito do programa;</li>
+<li>As pré e pós-condições a que o código atende.</li>
+</ul>
+<p>Segue um exemplo simples desta forma de documentação.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">Cálculo de juros compostos</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: o capital investido, a taxa de juros (a.m.) e o tempo</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">    de investimento em meses</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: o montante final da transação</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Com base nessa descrição, que é relativamente simples, não é necessário olhar os comandos do programa para se saber a que ele se propõe, o que ele requer para ser executado e qual o resultado que apresentará ao final.</p>
+</section>
+<section id="organização-visual" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="organização-visual"><span class="header-section-number">10.2</span> Organização visual</h2>
+<p>O código fonte de um programa é escrito para que outros programadores (ou seja, pessoas) leiam e entendam os comandos e a intenção do programador.</p>
+<p>Segue um programa em C válido. Sua qualidade, entretanto, é discutível e é apenas uma nova versão do código que implementa o <a href="algoritmos-nocoes.html#alg-pseudocodigo-raizes-equacao">Algoritmo 1.1</a>.</p>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">Cálculo e apresentação das raízes reais de uma equação de segundo grau na</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">    forma ax^2 + bx + c = 0</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: Os coeficientes a, b e c da equação</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: as raízes reais da equação; ou mensagem que a equação é</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">    inválida; ou mensagem que não há raízes reais</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;math.h&gt;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span> <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span>printf<span class="op">(</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="st">"Digite os valores de a, b e c da equação: "</span><span class="op">);</span> fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>entrada</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="op">,</span> stdin<span class="op">);</span> <span class="dt">double</span> a<span class="op">,</span> b<span class="op">,</span>           c<span class="op">;</span> sscanf<span class="op">(</span>entrada</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="op">,</span>    <span class="st">"</span><span class="sc">%lf%lf%lf</span><span class="st">"</span> <span class="op">,</span> <span class="op">&amp;</span>    a<span class="op">,</span> <span class="op">&amp;</span>b<span class="op">,</span> <span class="op">&amp;</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>c<span class="op">);</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span><span class="op">(</span>a <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> printf<span class="op">(</span>             <span class="st">"Não é equação do segundo grau (a = 0).</span><span class="sc">\n</span><span class="st">"</span>    <span class="op">)</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="op">;</span> <span class="cf">else</span> <span class="op">{</span> <span class="dt">double</span> discriminante <span class="op">=</span> pow</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="op">(</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>b</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>                                                                             <span class="op">,</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="op">)</span> <span class="op">-</span> <span class="dv">4</span> <span class="op">*</span> a <span class="op">*</span> c<span class="op">;</span> <span class="cf">if</span><span class="op">(</span>discriminante <span class="op">&lt;</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="dv">0</span><span class="op">)</span> printf<span class="op">(</span><span class="st">"A equação não possui raízes reais.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="op">(</span>discriminante <span class="op">&lt;</span> <span class="fl">1.0e-10</span><span class="op">)</span> <span class="op">{</span>  <span class="dt">double</span> x <span class="op">=</span> <span class="op">-</span>b <span class="op">/</span> <span class="op">(</span><span class="dv">2</span><span class="op">*</span>    a</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>            <span class="op">);</span> printf<span class="op">(</span><span class="st">"Uma raiz: </span><span class="sc">%g</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> x<span class="op">);</span> <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span> <span class="dt">double</span> x1 <span class="op">=</span> <span class="op">(-</span>b <span class="op">-</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>            sqrt<span class="op">(</span>discriminante<span class="op">))</span> <span class="op">/</span> <span class="op">(</span><span class="dv">2</span> <span class="op">*</span> a<span class="op">);</span> <span class="dt">double</span> x2 <span class="op">=</span> <span class="op">(-</span>b <span class="op">+</span> </span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>sqrt<span class="op">(</span>discriminante<span class="op">))</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>            <span class="op">/</span> <span class="op">(</span><span class="dv">2</span> <span class="op">*</span> a<span class="op">);</span> printf<span class="op">(</span><span class="st">"Raízes reais: </span><span class="sc">%g</span><span class="st"> e </span><span class="sc">%g</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> x1</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="op">,</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a> x2<span class="op">);}}</span><span class="cf">return</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a> <span class="dv">0</span><span class="op">;}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Digite os valores de a, b e c da equação: <span class="kw">-2 10 13</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>Raízes reais: 6.07071 e -1.07071.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Para ilustrar a dificuldade que o código, mesmo correto na sua lógica e sintaxe, proporciona quando é mal escrito, considere o problema de localizar a vírgula na expressão <code>pow(b, 2)</code> que calcula <span class="math inline">\(b^2\)</span> para o discriminante.</p>
+<p>Se a ordem dos comandos estiver correta, o compilador entende o que tem que ser feito e gera o código executável sem problemas ou dificuldades. Porém, caso o compilador aponte um erro como seguinte, qual seria a dificuldade de encontrar o problema?</p>
+<pre><code>main.c: In function ‘main’:
+main.c:28:62: warning: unused variable ‘x1’ [-Wunused-variable]
+   28 |             ); printf("Uma raiz: %g.\n", x); } else { double x1 = (-b -
+      |                                                              ^~
+main.c:31:59: error: ‘x1’ undeclared (first use in this function);
+      |              did you mean ‘x2’?
+   31 |             / (2 * a); printf("Raízes reais: %g e %g.\n", x1
+      |                                                           ^~
+      |                                                           x2
+main.c:31:59: note: each undeclared identifier is reported only once for each
+                    function it appears in
+main.c: At top level:
+main.c:35:8: error: expected identifier or ‘(’ before ‘return’
+   35 |  x2);}}return
+      |        ^~~~~~
+main.c:36:4: error: expected identifier or ‘(’ before ‘}’ token
+   36 |  0;}
+      |    ^</code></pre>
+<p>O erro acima foi causado apenas por um <code>}</code> inserido no lugar errado. Todas as outras mensagens são decorrentes desta falha na interpretação, a qual impede a sequência da análise e gera uma cascata de erros.</p>
+<p>Em suma, os programas são para as pessoas lerem.</p>
+<p>No <span class="quarto-unresolved-ref">?sec-guia-de-estilo</span> são apresentadas as orientações de escrita seguidas neste livro, mas as seções seguintes introduzem os pontos iniciais, justificando suas importâncias.</p>
+<p>A escrita de um bom programa em C recai, necessariamente, na organização visual do código, ou seja, pela disposição espacial dos comandos, instruções e pontuações ao longo do código.</p>
+</section>
+<section id="indentação" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="indentação"><span class="header-section-number">10.3</span> Indentação</h2>
+<p>A indentação é o espaço dado da margem esquerda até o comando e ela serve para indicar a hierarquia dos comandos. Esse recurso visual é essencial para um bom programa e tem sido consistentemente usado em todos os exemplos de programas dados.</p>
+<p>Segue o exemplo simples de um programa que faz conversões de unidades de distância.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">Conversões de distância de metros para centímetros, pés, jardas e polegadas</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: uma distância em metros</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: O valor equivalente em centímetros, pés, jardas e polegadas</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">"Digite uma distância em metros: "</span><span class="op">);</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> em_metros<span class="op">;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>em_metros<span class="op">);</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> em_centimetros <span class="op">=</span> em_metros <span class="op">*</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st">cm</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_centimetros<span class="op">);</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> em_pes <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">3.281</span><span class="op">;</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> pés</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_pes<span class="op">);</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> em_jardas <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">1.094</span><span class="op">;</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> jardas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_jardas<span class="op">);</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> em_polegadas <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">39.37</span><span class="op">;</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> polegadas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_polegadas<span class="op">);</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O código acima é apresentando sem indentações e isso dificulta enxergar os comandos e até a abrangência do <code>main</code>. O acréscimo da indentação indica um nível para os comandos contidos no bloco da função principal e isso leva à versão seguinte do programa.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">Conversões de distância de metros para centímetros, pés, jardas e polegadas</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: uma distância em metros</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: O valor equivalente em centímetros, pés, jardas e polegadas</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite uma distância em metros: "</span><span class="op">);</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_metros<span class="op">;</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>em_metros<span class="op">);</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_centimetros <span class="op">=</span> em_metros <span class="op">*</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st">cm</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_centimetros<span class="op">);</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_pes <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">3.281</span><span class="op">;</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> pés</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_pes<span class="op">);</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_jardas <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">1.094</span><span class="op">;</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> jardas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_jardas<span class="op">);</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_polegadas <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">39.37</span><span class="op">;</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> polegadas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_polegadas<span class="op">);</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A indentação tem que ser constante para um mesmo nível de comandos, o que leva a que comandos de mesmo nível sempre se iniciem na mesma coluna.</p>
+<p>No exemplo seguinte há problemas com a declaração da variável <code>entrada</code>, que deveria estar indentada, e também com o conjunto de comandos que realizam as conversões. Neste último caso, estes comandos parecem estar de alguma forma “subordinados” aos comandos anteriores, o que não o caso.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">Conversões de distância de metros para centímetros, pés, jardas e polegadas</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: uma distância em metros</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: O valor equivalente em centímetros, pés, jardas e polegadas</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite uma distância em metros: "</span><span class="op">);</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_metros<span class="op">;</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>em_metros<span class="op">);</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> em_centimetros <span class="op">=</span> em_metros <span class="op">*</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st">cm</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_centimetros<span class="op">);</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> em_pes <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">3.281</span><span class="op">;</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> pés</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_pes<span class="op">);</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> em_jardas <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">1.094</span><span class="op">;</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> jardas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_jardas<span class="op">);</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> em_polegadas <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">39.37</span><span class="op">;</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> polegadas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_polegadas<span class="op">);</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Segue, por fim, um último péssimo exemplo de indentação, no qual transparece o desleixo do programador.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">Conversões de distância de metros para centímetros, pés, jardas e polegadas</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: uma distância em metros</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: O valor equivalente em centímetros, pés, jardas e polegadas</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a> <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite uma distância em metros: "</span><span class="op">);</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>   fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">double</span> em_metros<span class="op">;</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>em_metros<span class="op">);</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> em_centimetros <span class="op">=</span> em_metros <span class="op">*</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>       printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st">cm</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_centimetros<span class="op">);</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>       <span class="dt">double</span> em_pes <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">3.281</span><span class="op">;</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>       printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> pés</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_pes<span class="op">);</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>          <span class="dt">double</span> em_jardas <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">1.094</span><span class="op">;</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> jardas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_jardas<span class="op">);</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>     <span class="dt">double</span> em_polegadas <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">39.37</span><span class="op">;</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> polegadas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_polegadas<span class="op">);</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="linhas-de-espaçamento" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="linhas-de-espaçamento"><span class="header-section-number">10.4</span> Linhas de espaçamento</h2>
+<p>Outro ponto que auxilia uma melhor visualização do código é o uso de linhas em branco, cuja função é separar as diferentes tarefas que o programa tem que cumprir.</p>
+<p>É apresentado na sequência o programa de conversão de unidades de distância com o acréscimo de linhas em branco.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">Conversões de distância de metros para centímetros, pés, jardas e polegadas</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: uma distância em metros</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: O valor equivalente em centímetros, pés, jardas e polegadas</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite uma distância em metros: "</span><span class="op">);</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_metros<span class="op">;</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>em_metros<span class="op">);</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_centimetros <span class="op">=</span> em_metros <span class="op">*</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st">cm</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_centimetros<span class="op">);</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_pes <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">3.281</span><span class="op">;</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> pés</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_pes<span class="op">);</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_jardas <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">1.094</span><span class="op">;</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> jardas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_jardas<span class="op">);</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_polegadas <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">39.37</span><span class="op">;</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> polegadas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_polegadas<span class="op">);</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Uma linha em branco deve ser incluída para separar as linhas com <code>#include</code> do início da função <code>main</code>, o que dá destaque a esta função.</p>
+<p>Foram introduzidas linhas em branco dentro do <code>main</code> para isolar, primeiramente, os comandos que fazem a leitura da distância em metros, incluindo mensagem, leitura, declaração da variável e conversão para <code>double</code>. Todos estes comandos são, em essência, “obtenha a distância em metros”.</p>
+<p>Outros blocos que são agrupados são os de cada uma das conversões, com declaração de variável e a escrita do resultado.</p>
+<p>Por último aparece o indicador de sucesso da execução: <code>return 0</code>, também destacado dos demais comandos.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dica
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>As linhas em branco devem ser, via de regra, apenas uma, devendo ser evitadas duas ou mais linhas separando os grupos de comandos.</p>
+</div>
+</div>
+<p>O agrupamento de comandos depende do programador, de forma que o mesmo código possa ter sua organização conforme o exemplo seguinte.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">Conversões de distância de metros para centímetros, pés, jardas e polegadas</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: uma distância em metros</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: O valor equivalente em centímetros, pés, jardas e polegadas</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite uma distância em metros: "</span><span class="op">);</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_metros<span class="op">;</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>em_metros<span class="op">);</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_centimetros <span class="op">=</span> em_metros <span class="op">*</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_pes <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">3.281</span><span class="op">;</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_jardas <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">1.094</span><span class="op">;</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_polegadas <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">39.37</span><span class="op">;</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st">cm</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_centimetros<span class="op">);</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> pés</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_pes<span class="op">);</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> jardas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_jardas<span class="op">);</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> polegadas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_polegadas<span class="op">);</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Neste caso, o agrupamento se refere à leitura, seguida pelos cálculos e finalizada pelas apresentações dos resultados.</p>
+</section>
+<section id="um-comando-por-linha" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="um-comando-por-linha"><span class="header-section-number">10.5</span> Um comando por linha</h2>
+<p>Uma regra básica de clareza é separar os comandos de forma que cada um fique em sua própria linha.</p>
+<p>Como exemplo, o programa de conversão de distâncias foi reescrito de forma a violar essa regra e é apresentado na sequência.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">Conversões de distância de metros para centímetros, pés, jardas e polegadas</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: uma distância em metros</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: O valor equivalente em centímetros, pés, jardas e polegadas</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite uma distância em metros: "</span><span class="op">);</span> fgets<span class="op">(</span>entrada<span class="op">,</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>          <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_metros<span class="op">;</span> sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>em_metros<span class="op">);</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_centimetros <span class="op">=</span> em_metros <span class="op">*</span> <span class="dv">100</span><span class="op">;</span> <span class="dt">double</span> em_pes <span class="op">=</span> em_metros <span class="op">*</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>        <span class="fl">3.281</span><span class="op">;</span> <span class="dt">double</span> em_jardas <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">1.094</span><span class="op">;</span> <span class="dt">double</span> em_polegadas</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>        <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">39.37</span><span class="op">;</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st">cm</span><span class="sc">\n</span><span class="st">&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> pés</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>           em_centimetros<span class="op">,</span> em_metros<span class="op">,</span> em_pes<span class="op">);</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> jardas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_jardas<span class="op">);</span> printf<span class="op">(</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> polegadas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_polegadas<span class="op">);</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Essa versão coloca alguns comandos e declarações individuas em uma mesma linha, o que está sintaticamente correto, mas dificulta a visão dos limites entre os diversos elementos.</p>
+<p>É importante lembrar que quando os problemas se tornam mais complexos, o código será mais longo e com mais nuances, assim como terá maior número de variáveis. Nesta situação, mais preciosa essa recomendação se torna.</p>
+</section>
+<section id="padronização-de-identificadores" class="level2" data-number="10.6">
+<h2 data-number="10.6" class="anchored" data-anchor-id="padronização-de-identificadores"><span class="header-section-number">10.6</span> Padronização de identificadores</h2>
+<p>Os identificadores usados para as variáveis e demais elementos da linguagem devem ser significativos. Além disso, também devem seguir um mesmo padrão ao longo do código.</p>
+<p>O entendimento de um programa pode ser prejudicado se houver uma variável chamada <code>salario_inicial</code> e o salário final for indicado por outra com nome <code>s_final</code>. O uso de <code>salario_final</code> é, sem dúvidas, mais consistente.</p>
+<p>Da mesma forma, em um mesmo programa há variáveis como <code>taxa_juros</code>, <code>montante_final</code> e <code>saldo_atual</code> juntamente com outras como <code>tx_br</code>, <code>tx_liq</code>, <code>sf</code> e <code>p</code>, por exemplo. As abreviações excessivas não estabelecem um padrão minimamente compatível em contraposição aos nomes mais explícitos.</p>
+<p>Nada disso implica em que não possa haver abreviações, desde que atendem à legibilidade. Se em um aplicação há variáveis para diversas taxas diferentes, o uso de <code>tx_inicial</code> e <code>tx_inercial</code> são razoáveis para o contexto. Porém todas devem prefixadas com <code>tx_</code>, sem misturas o prefixo <code>taxas_</code>.</p>
+</section>
+<section id="localização-da-declaração-de-variáveis" class="level2" data-number="10.7">
+<h2 data-number="10.7" class="anchored" data-anchor-id="localização-da-declaração-de-variáveis"><span class="header-section-number">10.7</span> Localização da declaração de variáveis</h2>
+<p>Embora uma variável possa ser declarada em inúmeras localizações dentro de um código fonte e ainda mantê-lo correto e coerente, é preciso reforçar que o local em que as declarações ocorrem favorecem o entendimento do propósito do programa e de sua lógica. Este tema é abordado de maneira rápida na <a href="c-escopo-basico-de-declaracoes.html#sec-declaracoes-e-validade" class="quarto-xref"><span>Seção 9.1</span></a>.</p>
+<p>Por hábitos “ancestrais”, de quando a linguagem C não admitia a mistura entre declarações e código, ainda persiste a prática de declarar todas as variáveis juntas no início do bloco. Assim, nas versões iniciais da linguagem os programas deveriam necessariamente declarar todas suas variáveis antes da primeira linha que tivesse um comando ou chamada de função. Segue um exemplo.</p>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">Conversões de distância de metros para centímetros, pés, jardas e polegadas</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: uma distância em metros</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: O valor equivalente em centímetros, pés, jardas e polegadas</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_metros<span class="op">,</span> em_centimetros<span class="op">,</span> em_pes<span class="op">,</span> em_jardas<span class="op">,</span> em_polegadas<span class="op">;</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite uma distância em metros: "</span><span class="op">);</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>em_metros<span class="op">);</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    em_centimetros <span class="op">=</span> em_metros <span class="op">*</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    em_pes <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">3.281</span><span class="op">;</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    em_jardas <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">1.094</span><span class="op">;</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    em_polegadas <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">39.37</span><span class="op">;</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st">cm</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_centimetros<span class="op">);</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> pés</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_pes<span class="op">);</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> jardas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_jardas<span class="op">);</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> polegadas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_polegadas<span class="op">);</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>Digite uma distância em metros: <span class="kw">1.0</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>&gt; 1.0m = 100.0cm</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>&gt; 1.0m = 3.3 pés</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>&gt; 1.0m = 1.1 jardas</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>&gt; 1.0m = 39.4 polegadas</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O impacto para programas simples não é, em geral, grande. À medida que o número de linhas cresce, juntamente à complexidade da solução implementada, o “amontoado” de declarações no começo do programa prejudica a legibilidade. Muitas vezes, por exemplo, é preciso verificar se uma variável tem o tipo necessário e fazer as adequações pode trazer impactos não previstos. Por exemplo, ao alterar uma declaração de <code>int</code> para <code>long int</code> pode afetar não somente a variável de interesse, mas outras declaradas juntas.</p>
+</section>
+<section id="alinhamento-dos-finais-de-bloco" class="level2" data-number="10.8">
+<h2 data-number="10.8" class="anchored" data-anchor-id="alinhamento-dos-finais-de-bloco"><span class="header-section-number">10.8</span> Alinhamento dos finais de bloco</h2>
+<p>As chaves da função <code>main</code> estabelecem o bloco da função principal e inclui as declarações e os comandos que formam o programa. Um bloco de comandos, na forma de um comando composto, é muitas vezes necessário para incluir mais que um comando dentro de um condicional, por exemplo.</p>
+<p>Não é incomum que, em programas em C, venha uma sequência de vários fechamentos de bloco, ou seja, vários <code>}</code>. Segue um programa que calcula as raízes de uma equação <span class="math inline">\({ax^2 + bx + c = 0}\)</span> (<span class="math inline">\({\forall a, b, c}\)</span>), mesmo que a equação se reduza a forma linear.</p>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">Determinação das raízes reais de uma equação ax^2 + bx + c = 0, sem restrições</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">    aos coeficientes a, b, ou c</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co">Pré-condições: Os valores dos coeficientes a, b e C</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">Pós-condições: uma ou duas raízes reais ou mensagem indicando que não há</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co">    raízes reais</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co">Quando a é zero, a equação é tratada como linear; caso contrário, é</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">quadrática. Divisões por zero são tratadas pela divisão de double, ou</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">seja, podendo resultar em 'not a number' ou +-inf.</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;math.h&gt;</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Considere uma equação ax^2 + bx + c = 0.</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Digite os valores a, b e c da equação: "</span><span class="op">);</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> a<span class="op">,</span> b<span class="op">,</span> c<span class="op">;</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf%lf%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>a<span class="op">,</span> <span class="op">&amp;</span>b<span class="op">,</span> <span class="op">&amp;</span>c<span class="op">);</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>a <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Equação do primeiro grau</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> x <span class="op">=</span> <span class="op">-</span>c <span class="op">/</span> b<span class="op">;</span>  </span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Raiz: </span><span class="sc">%g</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> x<span class="op">);</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Equação do segundo grau</span></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> discriminante <span class="op">=</span> pow<span class="op">(</span>b<span class="op">,</span> <span class="dv">2</span><span class="op">)</span> <span class="op">-</span> <span class="dv">4</span> <span class="op">*</span> a <span class="op">*</span> c<span class="op">;</span></span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Determina o número de raízes reais</span></span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>discriminante <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">"Não há raízes reais.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>discriminante <span class="op">&lt;</span> <span class="fl">1e-5</span><span class="op">)</span> <span class="op">{</span>  <span class="co">// quase zero</span></span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Raíz única</span></span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>            <span class="dt">double</span> x <span class="op">=</span> <span class="op">-</span>b <span class="op">/</span> <span class="op">(</span><span class="dv">2</span> <span class="op">*</span> a<span class="op">);</span></span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">"Raíz: </span><span class="sc">%g</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> x<span class="op">);</span></span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Duas raízes distintas</span></span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>            <span class="dt">double</span> x1 <span class="op">=</span> <span class="op">(-</span>b <span class="op">-</span> sqrt<span class="op">(</span>discriminante<span class="op">))</span> <span class="op">/</span> <span class="op">(</span><span class="dv">2</span> <span class="op">*</span> a<span class="op">);</span></span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a>            <span class="dt">double</span> x2 <span class="op">=</span> <span class="op">(-</span>b <span class="op">+</span> sqrt<span class="op">(</span>discriminante<span class="op">))</span> <span class="op">/</span> <span class="op">(</span><span class="dv">2</span> <span class="op">*</span> a<span class="op">);</span></span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>x2 <span class="op">&lt;</span> x1<span class="op">)</span> <span class="op">{</span> <span class="co">// ordem não decrescente</span></span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a>                <span class="dt">double</span> temporario <span class="op">=</span> x1<span class="op">;</span></span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a>                x1 <span class="op">=</span> x2<span class="op">;</span></span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a>                x2 <span class="op">=</span> temporario<span class="op">;</span></span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">"Raízes: </span><span class="sc">%g</span><span class="st"> e </span><span class="sc">%g</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> x1<span class="op">,</span> x2<span class="op">);</span></span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>Considere uma equação ax^2 + bx + c = 0.</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>Digite os valores a, b e c da equação: <span class="kw">-6 5 28</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>Raízes: -1.7834 e 2.61673.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>É necessário que todos os fechamentos de bloco sejam, de alguma forma, alinhados a sua abertura. Esse alinhamento é essencial para localizar, por exemplo, um <code>}</code> que foi esquecido.</p>
+<p>Nos programas apresentados neste livro, os blocos de comandos compostos são sempre iniciados na linha da estrutura que o utiliza, como um <code>if</code>, por exemplo.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span><span class="op">(</span>a <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Instruções...</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Outras instruções...</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Desta forma, o fim do bloco fica com a mesma indentação da estrutura que o iniciou.</p>
+<p>Por questões de estilo (<span class="quarto-unresolved-ref">?sec-guia-de-estilo</span>), há programadores que preferem que as chaves sejam abertas na linha consecutiva. Isso naturalmente não é um problema, desde que o padrão seja mantido para todo o código. Na sequência são apresentadas variações do posicionamento das chaves, porém em todas o alinhamento de indentação é mantido.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span><span class="op">(</span>a <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Instruções...</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Outras instruções...</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span><span class="op">(</span>a <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Instruções...</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Outras instruções...</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Como contra exemplo, na sequência é apresentado o programa anterior usando uma “indentação alternativa”, que alinha o <code>}</code> com seu respectivo <code>}</code>, qualquer que seja sua posição. É preciso observer que o resultado quebra a visualização do código e dificulta exatamente saber onde termina cada bloco.</p>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co">Determinação das raízes reais de uma equação ax^2 + bx + c = 0, sem restrições</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">    aos coeficientes a, b, ou c</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">Pré-condições: Os valores dos coeficientes a, b e C</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co">Pós-condições: uma ou duas raízes reais ou mensagem indicando que não há</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co">    raízes reais</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co">Quando a é zero, a equação é tratada como linear; caso contrário, é</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="co">quadrática. Divisões por zero são tratadas pela divisão de double, ou</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co">seja, podendo resultar em 'not a number' ou +-inf.</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;math.h&gt;</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Considere uma equação ax^2 + bx + c = 0.</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Digite os valores a, b e c da equação: "</span><span class="op">);</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> a<span class="op">,</span> b<span class="op">,</span> c<span class="op">;</span></span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf%lf%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>a<span class="op">,</span> <span class="op">&amp;</span>b<span class="op">,</span> <span class="op">&amp;</span>c<span class="op">);</span></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>a <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Equação do primeiro grau</span></span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> x <span class="op">=</span> <span class="op">-</span>c <span class="op">/</span> b<span class="op">;</span>  </span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Raiz: </span><span class="sc">%g</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> x<span class="op">);</span></span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span></span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Equação do segundo grau</span></span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> discriminante <span class="op">=</span> pow<span class="op">(</span>b<span class="op">,</span> <span class="dv">2</span><span class="op">)</span> <span class="op">-</span> <span class="dv">4</span> <span class="op">*</span> a <span class="op">*</span> c<span class="op">;</span></span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Determina o número de raízes reais</span></span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>discriminante <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span> </span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">"Não há raízes reais.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>discriminante <span class="op">&lt;</span> <span class="fl">1e-5</span><span class="op">)</span> <span class="op">{</span>  <span class="co">// quase zero</span></span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Raíz única</span></span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>            <span class="dt">double</span> x <span class="op">=</span> <span class="op">-</span>b <span class="op">/</span> <span class="op">(</span><span class="dv">2</span> <span class="op">*</span> a<span class="op">);</span></span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">"Raíz: </span><span class="sc">%g</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> x<span class="op">);</span></span>
+<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a>                                       <span class="op">}</span></span>
+<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Duas raízes distintas</span></span>
+<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a>            <span class="dt">double</span> x1 <span class="op">=</span> <span class="op">(-</span>b <span class="op">-</span> sqrt<span class="op">(</span>discriminante<span class="op">))</span> <span class="op">/</span> <span class="op">(</span><span class="dv">2</span> <span class="op">*</span> a<span class="op">);</span></span>
+<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a>            <span class="dt">double</span> x2 <span class="op">=</span> <span class="op">(-</span>b <span class="op">+</span> sqrt<span class="op">(</span>discriminante<span class="op">))</span> <span class="op">/</span> <span class="op">(</span><span class="dv">2</span> <span class="op">*</span> a<span class="op">);</span></span>
+<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>x2 <span class="op">&lt;</span> x1<span class="op">)</span> <span class="op">{</span> <span class="co">// ordem não decrescente</span></span>
+<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a>                <span class="dt">double</span> temporario <span class="op">=</span> x1<span class="op">;</span></span>
+<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a>                x1 <span class="op">=</span> x2<span class="op">;</span></span>
+<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a>                x2 <span class="op">=</span> temporario<span class="op">;</span></span>
+<span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a>                         <span class="op">}</span></span>
+<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">"Raízes: </span><span class="sc">%g</span><span class="st"> e </span><span class="sc">%g</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> x1<span class="op">,</span> x2<span class="op">);</span></span>
+<span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a>             <span class="op">}</span></span>
+<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a>         <span class="op">}</span></span>
+<span id="cb23-53"><a href="#cb23-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-54"><a href="#cb23-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb23-55"><a href="#cb23-55" aria-hidden="true" tabindex="-1"></a>               <span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>Considere uma equação ax^2 + bx + c = 0.</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>Digite os valores a, b e c da equação: <span class="kw">-6 5 28</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>Raízes: -1.7834 e 2.61673.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dica
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A maioria dos editores de programas atualmente já provê, ao digitar, uma alinhamento adequado das chaves, o que facilita a digitação. É preciso cuidar para que a própria edição do código não acabe com o alinhamento inadvertidamente.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dica
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>O auto-formatador é um recurso muito comum aos IDEs de programação. O uso desse recurso pode ser amplamente empregado!</p>
+</div>
+</div>
+</section>
+<section id="comentários" class="level2" data-number="10.9">
+<h2 data-number="10.9" class="anchored" data-anchor-id="comentários"><span class="header-section-number">10.9</span> Comentários</h2>
+<p>Comentários devem ser esparsos e minimalistas no programa. Um programa que precisa de muitos comentário é porque o código não está bem escrito. A versão seguinte do programa do peso ideal inclui apenas dois comentários considerados pertinentes. Eles apenas guiam o humano que lê o código para que localize facilmente o significado dos dois cálculos.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co">Cálculo estimado da massa ideal de uma pessoa baseada em seu sexo biológico</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">e sua altura</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: o sexo biológico (masculino ou feminino) e a altura em metros</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: a massa ideal da pessoa apresentada (kg)</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite o sexo (M ou F) e a altura em quilogramas: "</span><span class="op">);</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> sexo<span class="op">;</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> altura<span class="op">;</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%c%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>sexo<span class="op">,</span> <span class="op">&amp;</span>altura<span class="op">);</span></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> massa_ideal<span class="op">;</span></span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span><span class="op">(</span>sexo <span class="op">==</span> <span class="ch">'F'</span><span class="op">)</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>        massa_ideal <span class="op">=</span> <span class="fl">62.1</span> <span class="op">*</span> altura <span class="op">-</span> <span class="fl">44.7</span><span class="op">;</span>  <span class="co">// feminino</span></span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>        massa_ideal <span class="op">=</span> <span class="fl">72.7</span> <span class="op">*</span> altura <span class="op">-</span> <span class="dv">58</span><span class="op">;</span>  <span class="co">// masculino</span></span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Massa ideal: </span><span class="sc">%.1f</span><span class="st">kg."</span><span class="op">,</span> massa_ideal<span class="op">);</span></span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Embora a comparação <code>sexo == 'F'</code> seja suficiente, não custa nem atrapalha indicar a diferença entre as duas fórmulas.</p>
+<p>Em nível próximo ao exagero, considerando-se um programa curto como esse, ainda é possível ter comentários indicando a razão dos agrupamentos de comandos.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co">Cálculo estimado da massa ideal de uma pessoa baseada em seu sexo biológico</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">e sua altura</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: o sexo biológico (masculino ou feminino) e a altura em metros</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: a massa ideal da pessoa apresentada (kg)</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Obtenção de sexo biológico e altura</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite o sexo (M ou F) e a altura em quilogramas: "</span><span class="op">);</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> sexo<span class="op">;</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> altura<span class="op">;</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%c%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>sexo<span class="op">,</span> <span class="op">&amp;</span>altura<span class="op">);</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Cálculo da massa ideal</span></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> massa_ideal<span class="op">;</span></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span><span class="op">(</span>sexo <span class="op">==</span> <span class="ch">'F'</span><span class="op">)</span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>        massa_ideal <span class="op">=</span> <span class="fl">62.1</span> <span class="op">*</span> altura <span class="op">-</span> <span class="fl">44.7</span><span class="op">;</span>  <span class="co">// feminino</span></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>        massa_ideal <span class="op">=</span> <span class="fl">72.7</span> <span class="op">*</span> altura <span class="op">-</span> <span class="dv">58</span><span class="op">;</span>  <span class="co">// masculino</span></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Apresentação do resultado</span></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Massa ideal: </span><span class="sc">%.1f</span><span class="st">kg."</span><span class="op">,</span> massa_ideal<span class="op">);</span></span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Cuidado
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>É importante não “supercomentar” um programa. O excesso de comentários tende a tornar o código ilegível.</p>
+<p>O exemplo seguinte pertence à classe “não faça assim”.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">Cálculo estimado da massa ideal de uma pessoa baseada em seu sexo biológico</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">e sua altura</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: o sexo biológico (masculino ou feminino) e a altura em metros</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: a massa ideal da pessoa apresentada (kg)</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Inclusão dos arquivos de cabeçalho</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span><span class="pp">  </span><span class="co">// funções de entrada e saída</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="co">// Programa principal</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Variável para a leitura da linha</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Obtenção de sexo biológico e altura</span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite o sexo (M ou F) e a altura em quilogramas: "</span><span class="op">);</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span>  <span class="co">// leitura da linha digitada</span></span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Declaração das variáveis de entrada</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> sexo<span class="op">;</span>  <span class="co">// para o sexo biológico</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> altura<span class="op">;</span>  <span class="co">// para a altura da pessoa</span></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Conversão da linha para obtenção dos valores</span></span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%c%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>sexo<span class="op">,</span> <span class="op">&amp;</span>altura<span class="op">);</span></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Declaração da massa ideal</span></span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> massa_ideal<span class="op">;</span></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Verificação do cálculo conforme feminino ou masculino</span></span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">// (se o sexo for diferente de 'F', assume que seja 'M')</span></span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span><span class="op">(</span>sexo <span class="op">==</span> <span class="ch">'F'</span><span class="op">)</span></span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Realização do cálculo para o sexo feminino</span></span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>        massa_ideal <span class="op">=</span> <span class="fl">62.1</span> <span class="op">*</span> altura <span class="op">-</span> <span class="fl">44.7</span><span class="op">;</span></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Realização do cálculo para o sexto masculino</span></span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>        massa_ideal <span class="op">=</span> <span class="fl">72.7</span> <span class="op">*</span> altura <span class="op">-</span> <span class="dv">58</span><span class="op">;</span></span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Apresentação do resultado</span></span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Massa ideal: </span><span class="sc">%.1f</span><span class="st">kg."</span><span class="op">,</span> massa_ideal<span class="op">);</span>  <span class="co">// massa ideal em kg</span></span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Indicação de término do programa com sucesso</span></span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Nesta versão, há comentários óbvios (como em <code>double altura;  // para a altura da pessoa</code>) e até a visualização da estrutura do <code>if</code>, que é simples, fica um tanto comprometida com o excesso de informações.</p>
+</div>
+</div>
+</section>
+<section id="organização-consistente-do-código" class="level2" data-number="10.10">
+<h2 data-number="10.10" class="anchored" data-anchor-id="organização-consistente-do-código"><span class="header-section-number">10.10</span> Organização consistente do código</h2>
+<p>A organização do código deve ser consistente. As conversões de distância podem usar um programa correto, porém inconsistente quanto a sua organização. Essa é uma situação que deve ser firmemente evitada.</p>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co">Conversões de distância de metros para centímetros, pés, jardas e polegadas</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: uma distância em metros</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: O valor equivalente em centímetros, pés, jardas e polegadas</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_centimetros<span class="op">;</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite uma distância em metros: "</span><span class="op">);</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_metros<span class="op">;</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>em_metros<span class="op">);</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>    em_centimetros <span class="op">=</span> em_metros <span class="op">*</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_pes <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">3.281</span><span class="op">;</span></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st">cm</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_centimetros<span class="op">);</span></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> pés</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_pes<span class="op">);</span></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> em_jardas <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">1.094</span><span class="op">,</span> em_polegadas<span class="op">;</span></span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> jardas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_jardas<span class="op">);</span></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>    em_polegadas <span class="op">=</span> em_metros <span class="op">*</span> <span class="fl">39.37</span><span class="op">;</span></span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; </span><span class="sc">%.1lf</span><span class="st">m = </span><span class="sc">%.1f</span><span class="st"> polegadas</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> em_metros<span class="op">,</span> em_polegadas<span class="op">);</span></span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>Digite uma distância em metros: <span class="kw">10</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>&gt; 10.0m = 1000.0cm</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>&gt; 10.0m = 32.8 pés</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>&gt; 10.0m = 10.9 jardas</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>&gt; 10.0m = 393.7 polegadas</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Neste programa pode ser até complicado localizar em que momento houve a declaração da variável <code>em_polegadas</code>, por exemplo.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-abelson1996" class="csl-entry" role="listitem">
+Abelson, Harold, e Gerald Jay Sussman. 1996. <em>Structure and interpretation of computer programs</em>. The MIT Press.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Tradução livre de “<em>programs must be written for people to read, and only incidentally for machines to execute</em>”.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Github: <a href="https://github.com" class="uri" target="_blank">https://github.com</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://github.com/libos-nuse/net-next-nuse/blob/46e2206969943ba3fb87441dee0b433624daf35c/arch/lib/sysctl.c" class="uri" target="_blank">https://github.com/libos-nuse/net-next-nuse/blob/46e2206969943ba3fb87441dee0b433624daf35c/arch/lib/sysctl.c</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a href="https://github.com/KSPP/linux/blob/e0756cfc7d7cd08c98a53b6009c091a3f6a50be6/lib/ubsan.c" class="uri" target="_blank">https://github.com/KSPP/linux/blob/e0756cfc7d7cd08c98a53b6009c091a3f6a50be6/lib/ubsan.c</a>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><a href="https://github.com/linux-wpan/linux-wpan-next/blob/107bc0aa95ca572df42da43c30a2079266e992e4/net/ipv6/seg6.c" class="uri" target="_blank">https://github.com/linux-wpan/linux-wpan-next/blob/107bc0aa95ca572df42da43c30a2079266e992e4/net/ipv6/seg6.c</a>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p><a href="https://github.com/keras-team/keras/blob/419973ee15ecd0e2d085e077399ce3bd5437df15/guides/writing_a_custom_training_loop_in_tensorflow.py" class="uri" target="_blank">https://github.com/keras-team/keras/blob/419973ee15ecd0e2d085e077399ce3bd5437df15/guides/writing_a_custom_training_loop_in_tensorflow.py</a>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiada");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiada");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./c-escopo-basico-de-declaracoes.html" class="pagination-link" aria-label="Escopo básico de declarações">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Escopo básico de declarações</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./c-repeticoes-com-while.html" class="pagination-link" aria-label="Repetições com `while`">
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Repetições com <code>while</code></span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

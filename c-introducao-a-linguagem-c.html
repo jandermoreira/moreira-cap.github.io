@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; Introdução à linguagem C – Construção de Algoritmos e Programação</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./c-tipos-de-dados.html" rel="next">
+<link href="./algoritmos-nocoes.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-9e1f2a4632985dffc2c80318c992baf5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-7cf8a0149bf791b42ada95f7f6344cc2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="book.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./c-introducao-a-linguagem-c.html">Programação básica</a></li><li class="breadcrumb-item"><a href="./c-introducao-a-linguagem-c.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introdução à linguagem C</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Construção de Algoritmos e Programação</a> 
+        <div class="sidebar-tools-main">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-save"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./moreira_j-construcao_algoritmos_programacao-programacao.pdf">
+            Versão PDF
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Procurar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Apresentação</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preambulo_prefacio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Programação em C</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./algoritmos-nocoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Noções de algoritmos</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Programação básica</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-introducao-a-linguagem-c.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introdução à linguagem C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-tipos-de-dados.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tipos de dados da linguagem C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-variaveis-identificadores-e-leitura.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Variáveis e leituras em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-expressoes-aritmeticas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Expressões aritméticas de C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-expressoes-relacionais-e-logicas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">C: expressões relacionais e lógicas</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Controle de fluxo simples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-execucao-condicional-com-if.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Execução condicional com <code>if</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-execucao-condicional-com-switch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Execução condicional com <code>switch</code></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Organização geral do código</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-escopo-basico-de-declaracoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Escopo básico de declarações</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-organizacao-do-codigo-fonte.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Organização do código fonte</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Controle de repetição do fluxo</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-while.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Repetições com <code>while</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-for.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Repetições com <code>for</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-do-while.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Repetições com <code>do while</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-arquivos-texto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Arquivos texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-desvirtuacao-das-repeticoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Desvirtuação das repetições</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Cadeias de caracteres</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-textuais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Dados textuais em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-manipulacao-de-dados-textuais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Manipulação de dados textuais em C</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Modularização e memória</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-funcoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Funções em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-regras-de-escopo-com-modularizacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Regras de escopo com a modularização</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-enderecamento-de-memoria-e-ponteiros.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Endereçamento de memória e ponteiros nos programas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-procedimentos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Procedimentos em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-parametros-de-funcoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Parâmetros das funções na linguagem C</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Estruturação de dados</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-com-struct.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">C: Dados com <code>struct</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-em-vetores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">C: Dados em vetores</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página:</h2>
+   
+  <ul>
+  <li><a href="#origens-da-linguagem-c" id="toc-origens-da-linguagem-c" class="nav-link active" data-scroll-target="#origens-da-linguagem-c"><span class="header-section-number">2.1</span> Origens da linguagem C</a>
+  <ul class="collapse">
+  <li><a href="#sec-padronizacao-da-linguagem" id="toc-sec-padronizacao-da-linguagem" class="nav-link" data-scroll-target="#sec-padronizacao-da-linguagem"><span class="header-section-number">2.1.1</span> Padronização da linguagem</a></li>
+  </ul></li>
+  <li><a href="#programa-básico" id="toc-programa-básico" class="nav-link" data-scroll-target="#programa-básico"><span class="header-section-number">2.2</span> Programa básico</a>
+  <ul class="collapse">
+  <li><a href="#sec-programa-minimo" id="toc-sec-programa-minimo" class="nav-link" data-scroll-target="#sec-programa-minimo"><span class="header-section-number">2.2.1</span> Primeiro programa: um programa mínimo (e inútil)</a></li>
+  <li><a href="#segundo-programa-hello-world" id="toc-segundo-programa-hello-world" class="nav-link" data-scroll-target="#segundo-programa-hello-world"><span class="header-section-number">2.2.2</span> Segundo programa: <em>Hello, world!</em></a></li>
+  </ul></li>
+  <li><a href="#comandos-simples" id="toc-comandos-simples" class="nav-link" data-scroll-target="#comandos-simples"><span class="header-section-number">2.3</span> Comandos simples</a></li>
+  <li><a href="#código-fonte-objeto-e-executável" id="toc-código-fonte-objeto-e-executável" class="nav-link" data-scroll-target="#código-fonte-objeto-e-executável"><span class="header-section-number">2.4</span> Código fonte, objeto e executável</a>
+  <ul class="collapse">
+  <li><a href="#compilação-com-o-gcc" id="toc-compilação-com-o-gcc" class="nav-link" data-scroll-target="#compilação-com-o-gcc"><span class="header-section-number">2.4.1</span> Compilação com o <code>gcc</code></a></li>
+  <li><a href="#erros-de-sintaxe" id="toc-erros-de-sintaxe" class="nav-link" data-scroll-target="#erros-de-sintaxe"><span class="header-section-number">2.4.2</span> Erros de sintaxe</a></li>
+  <li><a href="#erros-de-lógica" id="toc-erros-de-lógica" class="nav-link" data-scroll-target="#erros-de-lógica"><span class="header-section-number">2.4.3</span> Erros de lógica</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./c-introducao-a-linguagem-c.html">Programação básica</a></li><li class="breadcrumb-item"><a href="./c-introducao-a-linguagem-c.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introdução à linguagem C</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introdução à linguagem C</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<span class="math inline">\(\newcommand\Id[1]{\mbox{\textit{#1}}}\)</span>
+<p>Neste capítulo é feita a apresentação da linguagem C, um pouco de suas origens e a evolução de sua especificação. Juntamente a essa introdução, a compilação e os conceitos de código fonte, objeto e executável também são tratados.</p>
+<section id="origens-da-linguagem-c" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="origens-da-linguagem-c"><span class="header-section-number">2.1</span> Origens da linguagem C</h2>
+<p>Conhecer um pouco do caminho de uma das mais importantes linguagens de programação deve trazer ao programador, de certa forma, uma sensação de pertencimento e autoridade no uso dessa linguagem.</p>
+<p>A inspiração da linguagem C veio das linguagens BCPL e B, ambas projetadas para a implementação de sistemas operacionais. Muitos elementos de C se originaram dessas linguagens.</p>
+<p>C surgiu como uma linguagem de propósito geral que incorporava os principais mecanismos de controle de fluxo, como condicionais e estruturas de repetição, juntamente com estruturas de dados como arranjos e registros. A linguagem não foi estruturada como tendo um alto nível de abstração e não foca em nenhuma área de aplicação em particular.</p>
+<p>Dennis Ritchie projetou e implementou a linguagem C em um DEC&nbsp;PDP-11, o qual usava o sistema operacional UNIX. Na realidade, tanto o compilador C quanto o próprio sistema operacional foram implementados em C. Esse desenvolvimento ocorreu de 1969 a 1973. Também à época, compiladores C já haviam sido implementados para executar em diversas outras máquinas, como equipamentos IBM, Honeywell e Interdata.</p>
+<p>Este histórico foi baseado em <span class="citation" data-cites="richards1969">Richards (<a href="#ref-richards1969" role="doc-biblioref">1969</a>)</span>, <span class="citation" data-cites="johnson1973">Johnson e Kernighan (<a href="#ref-johnson1973" role="doc-biblioref">1973</a>)</span>, <span class="citation" data-cites="ritchie1978">Ritchie et al. (<a href="#ref-ritchie1978" role="doc-biblioref">1978</a>)</span> e <span class="citation" data-cites="ritchie1993">Ritchie (<a href="#ref-ritchie1993" role="doc-biblioref">1993</a>)</span>.</p>
+<p>Segundo consulta ao índice de popularidade elaborado pela TIOBE<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, C permanece como uma das linguagens de programação mais populares mundialmente, disputando os primeiros lugares com Python, C++ e Java (dados de novembro de 2023).</p>
+<section id="sec-padronizacao-da-linguagem" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="sec-padronizacao-da-linguagem"><span class="header-section-number">2.1.1</span> Padronização da linguagem</h3>
+<p>Sem uma padronização <em>de facto</em> da linguagem C nos anos seguintes a sua criação, havia uma liberdade grande demais na implementação dos diversos compiladores que apareceram. A especificação conhecida por K&amp;R&nbsp;C era, na ocasião, a única disponível.</p>
+<p>De 1983 a 1989, o American National Standards Institute (ANSI) formou um grupo de trabalho para a padronização da linguagem, estabelecendo, ao final o padrão conhecido por C89 ou ANSI&nbsp;C. Esse mesmo padrão foi reeditado em 1990, com o rótulo C90, porém sem modificações relevantes na especificação.</p>
+<p>Uma extensão foi incorporada à especificação em 1995, com novas definições e adições à biblioteca padrão. Este padrão foi chamado de C95.</p>
+<p>Modificações significativas na linguagem foram introduzidas no padrão C99, finalizado em 1999 e adotado a partir do ano 2000. Merecem destaque novos tipos de dados, como <code>long long</code> e <code>_Bool</code>, a incorporação de arranjos de comprimento definido durante a execução, a inclusão de novos cabeçalhos de bibliotecas, a possibilidade de comentários com <code>//</code>, a mistura de declarações e código e funções <em>inline</em>.</p>
+<p>Em 2011 foi publicada a especificação C11, a qual provê suporte a caracteres Unicode, expressões com tipos genéricos (<code>_Generic</code>) e execução paralela multi-plataforma com <code>threads.h</code>.</p>
+<p>O padrão atual para a linguagem C, no momento da escrita deste texto, é o C17, publicado em 2018. O C17 não acrescenta novos recursos à linguagem, porém corrige falhas na versão C11. A especificação C17 também é referenciada como C18.</p>
+<p>Neste ano de 2023 é esperada a próxima edição do padrão da linguagem&nbsp;C, informalmente designado C23.</p>
+<p>A especificação K&amp;R&nbsp;C foi descrita em <span class="citation" data-cites="ritchie1978">Ritchie et al. (<a href="#ref-ritchie1978" role="doc-biblioref">1978</a>)</span>; as demais especificações estão apropriadamente descritas em <span class="citation" data-cites="cprogramminglanguage">Wikipedia (<a href="#ref-cprogramminglanguage" role="doc-biblioref">2023</a>)</span>.</p>
+</section>
+</section>
+<section id="programa-básico" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="programa-básico"><span class="header-section-number">2.2</span> Programa básico</h2>
+<p>Programar em C não é tão complexo, mas também não é tão natural. Muitos aspectos básicos da linguagem requereriam, em teoria, um conhecimento mais sólido sobre o que são variáveis, como estas existem na memória e como podem ser manipuladas.</p>
+<p>Em um primeiro momento, estes detalhes serão ignorados, visto que é possível começar a programar e apenas aceitar que algumas coisas são assim mesmo. Para estes detalhes, por enquanto, basta pensar “não sei, só sei que foi assim”<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<section id="sec-programa-minimo" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="sec-programa-minimo"><span class="header-section-number">2.2.1</span> Primeiro programa: um programa mínimo (e inútil)</h3>
+<p>Para começar diferente, o primeiro programa exemplo não será o <em>Hello, world!</em>, amplamente utilizado na literatura e em tutoriais. Ele será o código mínimo na linguagem que é válido e coerente. Por ser mínimo, porém, não faz nada útil.</p>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Mesmo sendo minimalista, este código contém vários elementos interessantes:</p>
+<ul>
+<li>A função <code>main</code> e seu bloco de comandos</li>
+<li>O comando <code>return</code></li>
+</ul>
+<p>Um bloco de comandos é uma coleção de comandos delimitados por chaves. O nome <code>main</code> é associado a esse bloco de comandos, que contém apenas um comando simples (o <code>return 0;</code>) neste caso. Os tipos <code>int</code> e <code>void</code> indicados não são relevantes neste momento. Chamar o bloco de comandos de <em>main</em> (principal) é obrigatório, pois indica onde a execução do programa começa.</p>
+<p>Neste exemplo, há um único comando dentro de <code>main</code>: <code>return 0;</code>. Este comando indica que, ao ser terminado, o programa devolve ao sistema operacional um valor inteiro, que é um indicador que indica em que condições o programa encerrou sua execução. Por convenção, o valor zero significa que a execução se encerrou sem erros.</p>
+<p>Ao ser compilado e executado, este programa apenas indica ao sistema operacional que terminou sem erros.</p>
+</section>
+<section id="segundo-programa-hello-world" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="segundo-programa-hello-world"><span class="header-section-number">2.2.2</span> Segundo programa: <em>Hello, world!</em></h3>
+<p>O segundo exemplo expande o código anterior, agora para apresentar uma mensagem na tela. Para isso, ele usa uma função chamada <code>printf</code>, responsável por apresentar uma saída formatada.</p>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Hello, world!</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Hello, world!</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Este programa, além do <code>printf</code>, também usa a linha <code>#include &lt;stdio.h&gt;</code>. O arquivo <code>stdio.h</code> é um arquivo de cabeçalho (<code>stdio</code> significa <em>standard input and output</em> e <code>.h</code> indica <em>header</em>) e contém informações sobre como o <code>printf</code> deve ser processado pelo compilador. Este arquivo de cabeçalho descreve uma série de funções para entradas e saídas feitas pelos programas.</p>
+<p>O argumento do <code>printf</code> é o texto <em>Hello, world!</em>. Em C, textos são sempre especificados entre aspas duplas. No exemplo, <code>\n</code> é um indicador para mudar para a linha seguinte.</p>
+<p>Um outro detalhe no código ainda pode ser destacado: cada comando simples é terminado com um ponto e vírgula, que é o caso tanto do <code>printf</code> quanto do <code>return</code>.</p>
+<p>Na sequência é apresentada a versão definitiva do código do <em>Hello, world!</em>.</p>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">Programa "Hello, world": código exemplo do clássico primeiro programa em C</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">    que apenas apresenta uma mensagem de saudação na tela</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: a apresentação da mensagem padrão "Hello, world"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Hello, world!</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Hello, world!</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Esta versão acrescenta a documentação do código. Qualquer texto colocado entre <code>/*</code> e <code>*/</code> é um comentário e é ignorado completamente pelo compilador ao analisar o código fonte. Os comentários não são para o compilador, mas para humanos que lerão o código do programa.</p>
+<p>Neste caso específico, o comentário tem a função de documentar o propósito do código. Ele fornece uma descrição do propósito do código e dá informações relevantes. O grau de detalhe depende sempre do contexto; códigos simples podem ter documentação mais simples, enquanto programas que fazem parte de um projeto compartilhado entre vários desenvolvedores deve conter as informações necessárias para que todos da equipe os compreendam.</p>
+</section>
+</section>
+<section id="comandos-simples" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="comandos-simples"><span class="header-section-number">2.3</span> Comandos simples</h2>
+<p> Um componente estrutural da linguagem é o chamado comando simples. Esse comando de caracteriza por uma instrução individual no código do programa.</p>
+<p>Os comandos simples seguem uma sintaxe também simples.</p>
+<div class="callout callout-style-simple callout-none no-icon callout-titled" title="Comando simples">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Comando simples
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>instrução</em> ;</p>
+</div>
+</div>
+<p>Nos exemplos dados, cada <code>printf</code> usado para apresentar uma informação e também o <code>return 0</code> são comandos simples e, desta forma, obrigatoriamente terminados com um ponto e vírgula. A execução do <code>printf</code> é uma <em>instrução</em>, assim como o término da execução indicado pelo <code>return</code>.</p>
+<p>Segue um exemplo simples de programa com alguns comandos simples.</p>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">Apresentação de uma série de mensagens na tela</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Bom dia! "</span><span class="op">);</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Este é um exemplo de "</span><span class="op">);</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"vários comandos simples.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Todos são execuções do printf e todos são finalizados com ';'.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"O 'return 0', naturalmente, também é um comando simples.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Bom dia! Este é um exemplo de vários comandos simples.</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>Todos são execuções do printf e todos são finalizados com ';'.</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>O 'return 0', naturalmente, também é um comando simples.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dica
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Embora a linguagem C não tenha objeções quando a escrever dois comandos simples em uma única linha do programa, sugere-se forntemente que cada comando tenha sua própria linha.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning no-icon callout-titled" title="Curiosidade">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Curiosidade
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Em C, existe a possibilidade de que o comando simples seja vazio. Para especificá-lo, bastar inserir o ponto e vírgula.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Um!"</span><span class="op">);</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">;</span>  <span class="co">// comando vazio que não faz nada...</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Dois!"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Resta pensar quando um comando que não faz nada pode ser útil.</p>
+</div>
+</div>
+</section>
+<section id="código-fonte-objeto-e-executável" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="código-fonte-objeto-e-executável"><span class="header-section-number">2.4</span> Código fonte, objeto e executável</h2>
+<p>Todos os programas em C são escritos em arquivos de texto simples, que são os que não dão suporte a negrito e itálico, tipos de fonte ou formatação de parágrafo, entre outros recursos. O código em C segue uma sintaxe bastante específica e os programas escritos são chamados de código fonte.</p>
+<p>Para um programa escrito em C ser executado, primeiramente é necessário que ele seja compilado. O compilador é um programa cuja atribuição principal é analisar o código fonte, interpretando as letras, símbolos e dígitos ali escritos e gerar o código objeto, que é o código compilado. O código objeto é guardado em um arquivo e já não é mais legível por humanos, já que contém as instruções que o processador é capaz de entender e executar.</p>
+<p>O código fonte, depois de compilado, leva a um código objeto que é dependente da máquina. Assim, são produzidos códigos objeto específicos para processadores x86, ARM ou outro. Para que um mesmo programa possa ser executado em plataformas diferentes, é preciso que ele seja compilado para cada plataforma alvo individualmente.</p>
+<p>Há inúmeros compiladores disponíveis para C, como o GNU e o CLang, por exemplo. Também há implementações de compiladores específicos para cada plataforma de sistema operacional e e de processador. Ou seja, há um compilador GNU para Windows executando em processadores x86 e outro para Linux em um processador ARM. Cada compilador um possui suas próprias regras internas, mas todos obedecem especificações rigorosas e padronizadas. Desta forma, independente do hardware e do sistema operacional, um mesmo código fonte, ao ser compilado e executado, produz um mesmo resultado. Isso é uma regra e, para ela, naturalmente há exceções.</p>
+<p>Neste texto, a especificação conhecida como C17 (da ISO) é a adotada para todas as implementações. Os programas são compilador usando o compilador GNU em um sistema operacional Linux, tudo sobre um hardware x86.</p>
+<p>Finalmente, ainda há uma última etapa, na qual o código compilado é colocado em um arquivo que o sistema operacional da vez consegue carregar para a memória e colocá-lo em execução. Este é chamado de código executável e também depende da plataforma.</p>
+<p>Usualmente a etapa do código objeto é escondida de quem usa o compilador e, aparentemente, do código fonte é gerado diretamente o executável. Na prática, esse é o efeito final.</p>
+<section id="compilação-com-o-gcc" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="compilação-com-o-gcc"><span class="header-section-number">2.4.1</span> Compilação com o <code>gcc</code></h3>
+<p>Há uma diversidade de compiladores para a linguagem C, além de diversos IDEs<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> com diferentes facilidades para escrever códigos fonte. Há IDEs que podem ser instalados, como Visual Studio Code<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, Code::Blocks<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, Visual Studio<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> ou Eclipse<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>, por exemplo, além das disponíveis <em>online</em>, como GDB<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>, Programiz<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> ou Replit<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>.</p>
+<!-- Notas de rodapé -->
+<p>Neste livro os programas foram compilados invocando no terminal o compilador GNU GCC<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> na versão mais recente disponível no repositório oficial do Debian.</p>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode terminal code-with-copy"><code class="sourceCode terminal"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>$ <span class="kw">gcc --version</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>gcc (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>Copyright (C) 2023 Free Software Foundation, Inc.</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>This is free software; see the source for copying conditions.  There is NO</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>As opções <code>-Wall</code> e <code>-pedantic</code> são incluídas automaticamente e ativam uma vasta gama de mensagens de erro e avisos importantes, dando maior controle sobre o código executável que está sendo gerado. A especificação C17 da linguagem C é adotada com a opção <code>-std=c17</code> (<a href="#sec-padronizacao-da-linguagem" class="quarto-xref"><span>Seção 2.1.1</span></a>).</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> gcc=<span class="st">'gcc -Wall -pedantic -std=c17'</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="runenv">
+<p>Para exemplificar, considere um arquivo com nome <code>bom_dia.c</code> com código fonte seguinte.</p>
+<div class="sourceCode" id="cb11" data-to="bom_dia.c"><pre class="sourceCode c textfile terminal cell-output code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">Apresentação um bom dia!</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: uma mensagem de bom dia apresentada na tela</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Bom dia! Que seu dia seja ótimo!</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Usando o comando <code>file</code> é possível ver (ou tentar ver) o tipo de informação guardada em um arquivo. Para o caso do código fonte, o arquivo é identificado como <em>C source code</em>, ou seja, código fonte em C.</p>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode terminal code-with-copy"><code class="sourceCode terminal"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>$ <span class="kw">file bom_dia.c</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>bom_dia.c: C source, Unicode text, UTF-8 text</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A compilação pode ser feita com o comando apresentado. A opção <code>-o</code> permite nomear o arquivo executável que é criado.</p>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode terminal code-with-copy"><code class="sourceCode terminal"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>$ <span class="kw">gcc -Wall -pedantic -std=c17 bom_dia.c -o bom_dia</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Esse comando compila <code>bom_dia.c</code> e gera o arquivo executável <code>bom_dia</code>. No caso de sucesso na compilação, o <code>gcc</code> não apresenta saídas; apenas eventuais problemas são apresentados na tela.</p>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode terminal code-with-copy"><code class="sourceCode terminal"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>$ <span class="kw">file bom_dia</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>bom_dia: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>linked, interpreter /lib64/ld-linux-x86-64.so.2, </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>BuildID[sha1]=87d67e99709397eb27df650972aaab8300baf796, for GNU/Linux 3.2.0, </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>not stripped</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A execução de <code>file</code>, nesse caso, apresenta muita informação. A relevante, neste momento, é que o arquivo contém um <em>ELF 64-bit LSB pie executable</em>, o que quer dizer que é um programa executável.</p>
+<p>Na sequência é apresentada a execução do programa <code>bom_dia</code>.</p>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode terminal code-with-copy"><code class="sourceCode terminal"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>$ <span class="kw">./bom_dia</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>Bom dia! Que seu dia seja ótimo!</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="erros-de-sintaxe" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="erros-de-sintaxe"><span class="header-section-number">2.4.2</span> Erros de sintaxe</h3>
+<p>Sendo uma linguagem de programação, os comandos são sempre analisados de forma rígida. A falta de um parêntese, um espaço no lugar errado ou uma grafia errada (como <code>prinft</code>, por exemplo) já dá margem para o compilador reclamar que algo está errado e se recusar a gerar o executável. Esses são os erros de sintaxe e é função do compilador encontrá-los.</p>
+<p>O programador deve aprender a ler as mensagens de erro produzidas pelo compilador e interpretá-las, permitindo a remoção dos erros sintáticos.</p>
+<p>Como exemplo, segue uma versão incorreta do programa exemplo. Nela, “acidentalmente” o ponto e vírgula foi esquecido.</p>
+<div class="sourceCode cell-code" id="cb16" data-intentional-problems="true"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">Programa "Hello, world": código exemplo do clássico primeiro programa em C</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">    que apenas apresenta uma mensagem de saudação na tela</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: a apresentação da mensagem padrão "Hello, world"</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Hello, world!</span><span class="sc">\n</span><span class="st">"</span><span class="op">)</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>main.c: In function ‘main’:</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>main.c:9:30: error: expected ‘;’ before ‘return’</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    9 |     printf("Hello, world!\n")</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>      |                              ^</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>      |                              ;</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>   10 |     return 0;</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>      |     ~~~~~~                    </span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A mensagem de erro aponta em que linha e coluna deveria haver um ponto e vírgula.</p>
+<p>Os erros são apresentados conforme o compilador consegue detectar, apresentando mensagens tão boas quanto possível. Além disso, uma única falha pode desencadear uma sequência de erros, como no exemplo seguinte, na qual apenas faltou fechar as aspas no argumento da função <code>printf</code>.</p>
+<div class="sourceCode cell-code" id="cb18" data-intentional-problems="true"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">Programa "Hello, world": código exemplo do clássico primeiro programa em C</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">    que apenas apresenta uma mensagem de saudação na tela</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: a apresentação da mensagem padrão "Hello, world"</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Hello, world!</span><span class="sc">\n</span><span class="st">);</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>main.c: In function ‘main’:</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>main.c:9:12: warning: missing terminating " character</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    9 |     printf("Hello, world!\n);</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>      |            ^</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>main.c:9:12: error: missing terminating " character</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    9 |     printf("Hello, world!\n);</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>      |            ^~~~~~~~~~~~~~~~~~</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>main.c:10:5: error: expected expression before ‘return’</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>   10 |     return 0;</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>      |     ^~~~~~</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>main.c:10:14: error: expected ‘;’ before ‘}’ token</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>   10 |     return 0;</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>      |              ^</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>      |              ;</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>   11 | }</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>      | ~             </span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="erros-de-lógica" class="level3" data-number="2.4.3">
+<h3 data-number="2.4.3" class="anchored" data-anchor-id="erros-de-lógica"><span class="header-section-number">2.4.3</span> Erros de lógica</h3>
+<p>Um programa pode ser compilado e gerar o executável sem erros ou qualquer tipo de aviso que o compilador esteja ajustado para dar. Mas apesar disso, a execução não produz o resultado desejado. Neste caso, mesmo com a sintaxe correta, as instruções contém um erro (uma falha de cálculo, uma comparação equivocada) que invalida o programa. Esse são os erros de lógica e, desta vez, cabe ao programador encontrá-los e corrigi-los.</p>
+<p>A evitação de erros de lógica é considerada ao longo de todo o livro.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-johnson1973" class="csl-entry" role="listitem">
+Johnson, Stephen C, e Brian W Kernighan. 1973. <em>The programming language B</em>. Bell Laboratories Murray Hill, New Jersey. <a href="https://minnie.tuhs.org/Mirrors/Dennis/btut.pdf">https://minnie.tuhs.org/Mirrors/Dennis/btut.pdf</a>.
+</div>
+<div id="ref-richards1969" class="csl-entry" role="listitem">
+Richards, Martin. 1969. <span>“BCPL: A tool for compiler writing and system programming”</span>. Em, 557566. <a href="https://dl.acm.org/doi/pdf/10.1145/1476793.1476880">https://dl.acm.org/doi/pdf/10.1145/1476793.1476880</a>.
+</div>
+<div id="ref-ritchie1993" class="csl-entry" role="listitem">
+Ritchie, Dennis M. 1993. <span>“The development of the C language”</span>. <em>ACM Sigplan Notices</em> 28 (3): 201208. <a href="https://www.bell-labs.com/usr/dmr/www/chist.pdf">https://www.bell-labs.com/usr/dmr/www/chist.pdf</a>.
+</div>
+<div id="ref-ritchie1978" class="csl-entry" role="listitem">
+Ritchie, Dennis M, Stephen C Johnson, ME Lesk, e BW Kernighan. 1978. <span>“The C programming language”</span>. <em>Bell Sys. Tech. J</em> 57 (6): 19912019. <a href="https://www.academia.edu/download/67840358/1978.07_Bell_System_Technical_Journal.pdf#page=85">https://www.academia.edu/download/67840358/1978.07_Bell_System_Technical_Journal.pdf#page=85</a>.
+</div>
+<div id="ref-cprogramminglanguage" class="csl-entry" role="listitem">
+Wikipedia. 2023. <span>“C (programming language)”</span>. <a href="https://en.wikipedia.org/w/index.php?title=C_(programming_language)&amp;oldid=1182945224">https://en.wikipedia.org/w/index.php?title=C_(programming_language)&amp;oldid=1182945224</a>.
+</div>
+</div>
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>TIOBE: <a href="http://www.tiobe.com" class="uri" target="_blank">http://www.tiobe.com</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Como diria Chicó, em <em>Auto da Compadecida</em>, peça de teatro de Ariano Suassuna também retratada em uma minissérie de televisão.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Um ambiente de desenvolvimento integrado, ou <em>integrated development environment</em> (IDE), é um programa que dá suporte para escrever programas, provendo um editor de texto dedicado, destaque de sintaxe (diferentes elementos do programa aparecem em cores diferenciadas), acesso ao compilador com o clique de um botão ou uma combinação simples no teclado.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Visual Studio Code: <a href="https://code.visualstudio.com" class="uri" target="_blank">https://code.visualstudio.com</a>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Code::Blocks: <a href="https://www.codeblocks.org" class="uri" target="_blank">https://www.codeblocks.org</a>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Visual Studio: <a href="https://visualstudio.microsoft.com" class="uri" target="_blank">https://visualstudio.microsoft.com</a>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Eclipse: <a href="https://www.eclipse.org" class="uri" target="_blank">https://www.eclipse.org</a>.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>GDB Online: <a href="https://www.onlinegdb.com" class="uri" target="_blank">https://www.onlinegdb.com</a>.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>Programiz: <a href="https://www.programiz.com" class="uri" target="_blank">https://www.programiz.com</a>.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>Replit: <a href="https://replit.com" class="uri" target="_blank">https://replit.com</a>. <!-- Notas de rodapé - fim --><a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>Gnu Compiler Collection: <a href="https://gcc.gnu.org" class="uri" target="_blank">https://gcc.gnu.org</a>.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiada");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiada");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./algoritmos-nocoes.html" class="pagination-link" aria-label="Noções de algoritmos">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Noções de algoritmos</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./c-tipos-de-dados.html" class="pagination-link" aria-label="Tipos de dados da linguagem C">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tipos de dados da linguagem C</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>19&nbsp; Regras de escopo com a modularização – Construção de Algoritmos e Programação</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./c-enderecamento-de-memoria-e-ponteiros.html" rel="next">
+<link href="./c-funcoes.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-9e1f2a4632985dffc2c80318c992baf5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-7cf8a0149bf791b42ada95f7f6344cc2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="book.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./c-funcoes.html">Modularização e memória</a></li><li class="breadcrumb-item"><a href="./c-regras-de-escopo-com-modularizacao.html"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Regras de escopo com a modularização</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Construção de Algoritmos e Programação</a> 
+        <div class="sidebar-tools-main">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-save"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./moreira_j-construcao_algoritmos_programacao-programacao.pdf">
+            Versão PDF
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Procurar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Apresentação</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preambulo_prefacio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Programação em C</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./algoritmos-nocoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Noções de algoritmos</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Programação básica</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-introducao-a-linguagem-c.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introdução à linguagem C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-tipos-de-dados.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tipos de dados da linguagem C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-variaveis-identificadores-e-leitura.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Variáveis e leituras em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-expressoes-aritmeticas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Expressões aritméticas de C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-expressoes-relacionais-e-logicas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">C: expressões relacionais e lógicas</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Controle de fluxo simples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-execucao-condicional-com-if.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Execução condicional com <code>if</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-execucao-condicional-com-switch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Execução condicional com <code>switch</code></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Organização geral do código</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-escopo-basico-de-declaracoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Escopo básico de declarações</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-organizacao-do-codigo-fonte.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Organização do código fonte</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Controle de repetição do fluxo</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-while.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Repetições com <code>while</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-for.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Repetições com <code>for</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-do-while.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Repetições com <code>do while</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-arquivos-texto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Arquivos texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-desvirtuacao-das-repeticoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Desvirtuação das repetições</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Cadeias de caracteres</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-textuais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Dados textuais em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-manipulacao-de-dados-textuais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Manipulação de dados textuais em C</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Modularização e memória</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-funcoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Funções em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-regras-de-escopo-com-modularizacao.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Regras de escopo com a modularização</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-enderecamento-de-memoria-e-ponteiros.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Endereçamento de memória e ponteiros nos programas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-procedimentos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Procedimentos em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-parametros-de-funcoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Parâmetros das funções na linguagem C</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Estruturação de dados</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-com-struct.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">C: Dados com <code>struct</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-em-vetores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">C: Dados em vetores</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página:</h2>
+   
+  <ul>
+  <li><a href="#local-times-global" id="toc-local-times-global" class="nav-link active" data-scroll-target="#local-times-global"><span class="header-section-number">19.1</span> Local <span class="math inline">\(\times\)</span> global</a>
+  <ul class="collapse">
+  <li><a href="#validade-das-declarações-globais-e-locais" id="toc-validade-das-declarações-globais-e-locais" class="nav-link" data-scroll-target="#validade-das-declarações-globais-e-locais"><span class="header-section-number">19.1.1</span> Validade das declarações globais e locais</a></li>
+  </ul></li>
+  <li><a href="#reuso-de-identificadores" id="toc-reuso-de-identificadores" class="nav-link" data-scroll-target="#reuso-de-identificadores"><span class="header-section-number">19.2</span> Reuso de identificadores</a></li>
+  <li><a href="#variáveis-globais" id="toc-variáveis-globais" class="nav-link" data-scroll-target="#variáveis-globais"><span class="header-section-number">19.3</span> Variáveis globais</a>
+  <ul class="collapse">
+  <li><a href="#declaração-de-variáveis-globais" id="toc-declaração-de-variáveis-globais" class="nav-link" data-scroll-target="#declaração-de-variáveis-globais"><span class="header-section-number">19.3.1</span> Declaração de variáveis globais</a></li>
+  <li><a href="#quando-usar-variáveis-globais" id="toc-quando-usar-variáveis-globais" class="nav-link" data-scroll-target="#quando-usar-variáveis-globais"><span class="header-section-number">19.3.2</span> Quando usar variáveis globais?</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./c-funcoes.html">Modularização e memória</a></li><li class="breadcrumb-item"><a href="./c-regras-de-escopo-com-modularizacao.html"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Regras de escopo com a modularização</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-regras-de-escopo-com-modularizacao" class="quarto-section-identifier"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Regras de escopo com a modularização</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<span class="math inline">\(\newcommand\Id[1]{\mbox{\textit{#1}}}\)</span>
+<p>Este capítulo estende os conceitos de escopo de validade das declarações na linguagem C. A <a href="c-escopo-basico-de-declaracoes.html#sec-declaracoes-e-validade" class="quarto-xref"><span>Seção 9.1</span></a> abordou as declarações de variáveis internas (locais) a <code>main</code>, enquanto na <a href="c-funcoes.html#sec-escopo-da-declaracao-de-funcoes" class="quarto-xref"><span>Seção 18.2.3</span></a>. Esses assuntos são revisitados e integrados.</p>
+<p>Além de variáveis e funções, há outros elementos em C que podem ser declarados. Esses não serão cobertos diretamente neste texto e, em grande parte, a discussão exposta aqui também se aplica a eles.</p>
+<section id="local-times-global" class="level2" data-number="19.1">
+<h2 data-number="19.1" class="anchored" data-anchor-id="local-times-global"><span class="header-section-number">19.1</span> Local <span class="math inline">\(\times\)</span> global</h2>
+<p>Um código fonte escrito em C contém declarações, sejam de funções ou de variáveis. Esse código fonte está contido em um arquivo texto, usualmente com extensão <code>.c</code>.</p>
+<p>Qualquer função declarada no arquivo tem escopo global, o que quer dizer que sua validade vai desde a linha em que ocorre a declaração até a última linha do arquivo. Em outras palavras, essa função é conhecida e pode ser usada dentro de seu escopo de declaração. Essa regra aplica-se tanto à declaração simples, na forma de protótipo de função, quanto às implementações sem o protótipo (<a href="c-funcoes.html#sec-escopo-da-declaracao-de-funcoes" class="quarto-xref"><span>Seção 18.2.3</span></a>).</p>
+<p>Outra forma de olhar para essa questão é considerar global qualquer declaração feita fora de uma função.</p>
+<p>Como existe o conceito de “fora de uma função”, também há o de “dentro de uma função”. Assim, variáveis declaradas no corpo da implementação de uma função estão dentro da função e são chamadas de declarações locais. O termo se aplica também aos parâmetros formais da função.</p>
+<section id="validade-das-declarações-globais-e-locais" class="level3" data-number="19.1.1">
+<h3 data-number="19.1.1" class="anchored" data-anchor-id="validade-das-declarações-globais-e-locais"><span class="header-section-number">19.1.1</span> Validade das declarações globais e locais</h3>
+<p>Para exemplificar tanto declarações globais quanto locais quanto suas validades, segue um programa para simplificação de números racionais, o qual emprega uma função para o cálculo do máximo divisor comum (MDC) entre dois números inteiros e outra para o cálculo do valor absoluto (módulo, <span class="math inline">\(\lvert n\rvert\)</span>) de um inteiro. O objetivo do programa é simplificar um número racional, lembrando que <span class="math inline">\(q \in \mathbb{Q}\)</span> é um valor expresso na forma <span class="math inline">\(a/b\)</span>, sendo <span class="math inline">\(a \in \mathbb{Z}\)</span> com <span class="math inline">\(b \in \mathbb{Z}^*\)</span>.</p>
+<p>A lógica de modificação do número racional é apresentada no <a href="c-regras-de-escopo-com-modularizacao.html#alg-simplificacao-padronizacao-racionais">Algoritmo 19.1</a>.</p>
+<div id="alg-simplificacao-padronizacao-racionais">
+<figcaption class="figure-caption">
+<p>Algoritmo 19.1: Leitura e apresentação de números racionais.</p>
+</figcaption>
+<p><img src="algxpar/pseudocode.2276a1e15447f05d17b7ecd3d3670ad6804b2ec6.svg" class="img-fluid" alt="Algoritmo 19.1: Leitura e apresentação de números racionais." width="648"></p>
+</div>
+<p>A codificação em C é apresentada na sequência.</p>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">/*</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co"> * Leitura e escrita de um número racional na forma de fração</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co"> * Requer: a digitação de um valor a/b, a,b inteiros, b != 0</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co"> * Assegura: apresentação do mesmo valor em forma simplificada e padronizada</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co"> */</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">/*!</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co"> * Retorna o MDC de dois inteiros quaisquer (máximo divisor comum).</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">n1:</span><span class="co"> primeiro valor</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">n2:</span><span class="co"> segundo valor</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> MDC(n1, n2)</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="co"> */</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="dt">unsigned</span> <span class="dt">int</span> mdc<span class="op">(</span><span class="dt">int</span> n1<span class="op">,</span> <span class="dt">int</span> n2<span class="op">);</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="co">/*!</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="co"> * Retorna o valor absoluto de um inteiro</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">n:</span><span class="co"> valor inteiro</span></span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> o valor absoluto do número, |n|</span></span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="co"> */</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="dt">int</span> valor_absoluto<span class="op">(</span><span class="dt">int</span> n<span class="op">);</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a></span>
+<span id="cb1-23"><a href="#cb1-23"></a><span class="co">/*</span></span>
+<span id="cb1-24"><a href="#cb1-24"></a><span class="co"> * Main</span></span>
+<span id="cb1-25"><a href="#cb1-25"></a><span class="co"> */</span></span>
+<span id="cb1-26"><a href="#cb1-26"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb1-27"><a href="#cb1-27"></a>    <span class="co">// Leitura</span></span>
+<span id="cb1-28"><a href="#cb1-28"></a>    printf<span class="op">(</span><span class="st">"Digite um número racional a/b (a e b inteiros e b não nulo): "</span><span class="op">);</span></span>
+<span id="cb1-29"><a href="#cb1-29"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb1-30"><a href="#cb1-30"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb1-31"><a href="#cb1-31"></a>    <span class="dt">int</span> numerador<span class="op">,</span> denominador<span class="op">;</span></span>
+<span id="cb1-32"><a href="#cb1-32"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%d</span><span class="st">/</span><span class="sc">%d</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>numerador<span class="op">,</span> <span class="op">&amp;</span>denominador<span class="op">);</span></span>
+<span id="cb1-33"><a href="#cb1-33"></a></span>
+<span id="cb1-34"><a href="#cb1-34"></a>    <span class="co">// Simplificação da fração e colocação do sinal no numerador</span></span>
+<span id="cb1-35"><a href="#cb1-35"></a>    <span class="cf">if</span> <span class="op">(</span>numerador <span class="op">==</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb1-36"><a href="#cb1-36"></a>        denominador <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>  <span class="co">// o valor zero é padronizado para 0/1</span></span>
+<span id="cb1-37"><a href="#cb1-37"></a>    <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb1-38"><a href="#cb1-38"></a>        <span class="dt">int</span> fator_divisao <span class="op">=</span> mdc<span class="op">(</span>numerador<span class="op">,</span> denominador<span class="op">);</span></span>
+<span id="cb1-39"><a href="#cb1-39"></a>        <span class="dt">int</span> sinal_da_fracao <span class="op">=</span> <span class="op">((</span><span class="dt">double</span><span class="op">)</span>numerador <span class="op">/</span> denominador <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb1-40"><a href="#cb1-40"></a>        numerador <span class="op">=</span> valor_absoluto<span class="op">(</span>numerador<span class="op">);</span></span>
+<span id="cb1-41"><a href="#cb1-41"></a>        denominador <span class="op">=</span> valor_absoluto<span class="op">(</span>denominador<span class="op">);</span></span>
+<span id="cb1-42"><a href="#cb1-42"></a>        numerador <span class="op">/=</span> sinal_da_fracao <span class="op">*</span> fator_divisao<span class="op">;</span></span>
+<span id="cb1-43"><a href="#cb1-43"></a>        denominador <span class="op">/=</span> fator_divisao<span class="op">;</span></span>
+<span id="cb1-44"><a href="#cb1-44"></a>    <span class="op">}</span></span>
+<span id="cb1-45"><a href="#cb1-45"></a></span>
+<span id="cb1-46"><a href="#cb1-46"></a>    <span class="co">// Resultado</span></span>
+<span id="cb1-47"><a href="#cb1-47"></a>    printf<span class="op">(</span><span class="st">"O racional digitado foi: </span><span class="sc">%d</span><span class="st">/</span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> numerador<span class="op">,</span> denominador<span class="op">);</span></span>
+<span id="cb1-48"><a href="#cb1-48"></a></span>
+<span id="cb1-49"><a href="#cb1-49"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-50"><a href="#cb1-50"></a><span class="op">}</span></span>
+<span id="cb1-51"><a href="#cb1-51"></a></span>
+<span id="cb1-52"><a href="#cb1-52"></a><span class="co">// Máximo divisor comum: MDC(n1, n2)</span></span>
+<span id="cb1-53"><a href="#cb1-53"></a><span class="dt">unsigned</span> <span class="dt">int</span> mdc<span class="op">(</span><span class="dt">int</span> n1<span class="op">,</span> <span class="dt">int</span> n2<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-54"><a href="#cb1-54"></a>    <span class="co">// Converte n1 e n2 para valores positivos</span></span>
+<span id="cb1-55"><a href="#cb1-55"></a>    n1 <span class="op">=</span> valor_absoluto<span class="op">(</span>n1<span class="op">);</span></span>
+<span id="cb1-56"><a href="#cb1-56"></a>    n2 <span class="op">=</span> valor_absoluto<span class="op">(</span>n2<span class="op">);</span></span>
+<span id="cb1-57"><a href="#cb1-57"></a></span>
+<span id="cb1-58"><a href="#cb1-58"></a>    <span class="co">// Resolução pelo método de Euclides</span></span>
+<span id="cb1-59"><a href="#cb1-59"></a>    <span class="dt">int</span> resto<span class="op">;</span></span>
+<span id="cb1-60"><a href="#cb1-60"></a>    <span class="cf">do</span> <span class="op">{</span></span>
+<span id="cb1-61"><a href="#cb1-61"></a>        resto <span class="op">=</span> n1 <span class="op">%</span> n2<span class="op">;</span></span>
+<span id="cb1-62"><a href="#cb1-62"></a>        n1 <span class="op">=</span> n2<span class="op">;</span></span>
+<span id="cb1-63"><a href="#cb1-63"></a>        n2 <span class="op">=</span> resto<span class="op">;</span></span>
+<span id="cb1-64"><a href="#cb1-64"></a>    <span class="op">}</span> <span class="cf">while</span> <span class="op">(</span>resto <span class="op">!=</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb1-65"><a href="#cb1-65"></a></span>
+<span id="cb1-66"><a href="#cb1-66"></a>    <span class="cf">return</span> n1<span class="op">;</span>  <span class="co">// Contém o MDC no final</span></span>
+<span id="cb1-67"><a href="#cb1-67"></a><span class="op">}</span></span>
+<span id="cb1-68"><a href="#cb1-68"></a></span>
+<span id="cb1-69"><a href="#cb1-69"></a><span class="co">// Valor absoluto de um inteiro</span></span>
+<span id="cb1-70"><a href="#cb1-70"></a><span class="dt">int</span> valor_absoluto<span class="op">(</span><span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-71"><a href="#cb1-71"></a>    <span class="cf">return</span> <span class="op">(</span>n <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">?</span> n <span class="op">:</span> <span class="op">-</span>n<span class="op">;</span></span>
+<span id="cb1-72"><a href="#cb1-72"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Digite um número racional a/b (a e b inteiros e b não nulo): <span class="kw">-3553/-627</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>O racional digitado foi: 17/3.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Para esse programa, há declarações tanto de variáveis quanto de funções. A <a href="#tbl-validade-declaracoes-racionais" class="quarto-xref">Tabela&nbsp;<span>19.1</span></a> apresenta as declarações de interesse no programa e destaca o escopo e validade (linhas do código) de cada uma.</p>
+<div id="tbl-validade-declaracoes-racionais" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-validade-declaracoes-racionais-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;19.1: Declarações relevantes feitas no programa de apresentação de números racionais, seu tipo, escopo e linhas em que são válidas.
+</figcaption>
+<div aria-describedby="tbl-validade-declaracoes-racionais-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 40%">
+<col style="width: 12%">
+<col style="width: 34%">
+<col style="width: 8%">
+<col style="width: 4%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Declaração</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Escopo</th>
+<th style="text-align: center;">Início</th>
+<th style="text-align: center;">Fim</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>mdc</code></td>
+<td style="text-align: center;">função</td>
+<td style="text-align: center;">global</td>
+<td style="text-align: center;">14</td>
+<td style="text-align: center;">68</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>valor_absoluto</code></td>
+<td style="text-align: center;">função</td>
+<td style="text-align: center;">global</td>
+<td style="text-align: center;">21</td>
+<td style="text-align: center;">68</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>entrada</code></td>
+<td style="text-align: center;">variável</td>
+<td style="text-align: center;">local (<code>main</code>)</td>
+<td style="text-align: center;">29</td>
+<td style="text-align: center;">46</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>numerador</code>, <code>denominador</code></td>
+<td style="text-align: center;">variável</td>
+<td style="text-align: center;">local (<code>main</code>)</td>
+<td style="text-align: center;">31</td>
+<td style="text-align: center;">46</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>fator_divisao</code></td>
+<td style="text-align: center;">variável</td>
+<td style="text-align: center;">local (<code>main</code>)</td>
+<td style="text-align: center;">35</td>
+<td style="text-align: center;">46</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>sinal_da_fracao</code></td>
+<td style="text-align: center;">variável</td>
+<td style="text-align: center;">local (<code>main</code>)</td>
+<td style="text-align: center;">36</td>
+<td style="text-align: center;">46</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>n1</code>, <code>n2</code></td>
+<td style="text-align: center;">parâmetro</td>
+<td style="text-align: center;">local (<code>mdc</code>)</td>
+<td style="text-align: center;">49</td>
+<td style="text-align: center;">63</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>resto</code></td>
+<td style="text-align: center;">variável</td>
+<td style="text-align: center;">local (<code>mdc</code>)</td>
+<td style="text-align: center;">55</td>
+<td style="text-align: center;">63</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>n</code></td>
+<td style="text-align: center;">parâmetro</td>
+<td style="text-align: center;">local (<code>valor_absoluto</code>)</td>
+<td style="text-align: center;">66</td>
+<td style="text-align: center;">68</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Curiosidade">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Curiosidade
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>É interessante apontar que <code>n1</code> e <code>n2</code> na linha 14, assim como <code>n</code> na linha 21 do programa apresentado não possuem validade, pois o protótipo de uma função é apenas sua declaração e, como tal, seus parâmetros não são realmente criados, mas apenas informados ao compilador.</p>
+<p>Na prática, a linha 14 do código do programa poderia ser escrita como segue, mas com o prejuízo de reduzir as informações de documentação do programa ao não informar semanticamente a que cada parâmetro se refere.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">int</span> mdc<span class="op">(</span><span class="dt">int</span><span class="op">,</span> <span class="dt">int</span><span class="op">);</span>  <span class="co">// o nome dos parâmetros é irrelevante, mas sua</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                             <span class="co">// omissão prejudica a documentação e legibilidade</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="reuso-de-identificadores" class="level2" data-number="19.2">
+<h2 data-number="19.2" class="anchored" data-anchor-id="reuso-de-identificadores"><span class="header-section-number">19.2</span> Reuso de identificadores</h2>
+<p>Nos programa em C é possível usar um mesmo identificador desde que eles suas declarações atendam escopos diferentes. Dessa forma, um identificador <code>p</code> pode ser parâmetro para diversas funções diferentes. Da mesma forma, uma variável local a uma função não conflita com qualquer outra declaração. O compilador reclamará, assim, apenas de duas declarações globais com mesmo identificador ou então o uso de um mesmo nome em duplicidade no mesmo contexto local.</p>
+<p>A seguir é apresentado um código fonte genérico, não realiza qualquer processamento útil, O objetivo é indicar como identificadores iguais são tratados.</p>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Programa exemplo de declarações</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> f1<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">);</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> f2<span class="op">(</span><span class="dt">double</span> a<span class="op">);</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> f3<span class="op">(</span><span class="dt">double</span> f1<span class="op">,</span> <span class="dt">double</span> f2<span class="op">);</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> a<span class="op">,</span> b<span class="op">,</span> c<span class="op">;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> d <span class="op">=</span> <span class="fl">1.25</span><span class="op">;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span>f2<span class="op">(</span>d<span class="op">);</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    b <span class="op">=</span> f3<span class="op">(</span>d<span class="op">,</span> <span class="fl">0.5</span> <span class="op">*</span> a<span class="op">);</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> f1<span class="op">(</span>a<span class="op">,</span> b<span class="op">);</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d</span><span class="st"> </span><span class="sc">%g\n</span><span class="st">"</span><span class="op">,</span> a<span class="op">,</span> b<span class="op">,</span> c<span class="op">,</span> d<span class="op">);</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> f1<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> n <span class="op">=</span> f3<span class="op">(</span>a<span class="op">,</span> b<span class="op">);</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">+</span> b <span class="op">+</span> n<span class="op">;</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> f2<span class="op">(</span><span class="dt">double</span> a<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> n <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> b <span class="op">=</span> f1<span class="op">(</span>a<span class="op">,</span> n<span class="op">);</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> b<span class="op">;</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> f3<span class="op">(</span><span class="dt">double</span> f1<span class="op">,</span> <span class="dt">double</span> f2<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> main <span class="op">=</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span>f1 <span class="op">+</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span>f2<span class="op">;</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> main<span class="op">;</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>4 3 14 1.25</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Os pontos que requerem atenção neste programa são os seguintes:</p>
+<ul>
+<li>As funções <code>f1</code>, <code>f2</code> e <code>f3</code> têm validade em praticamente todo o programa;</li>
+<li>Ambas as funções <code>f1</code> e <code>f2</code> possuem parâmetro com identificador <code>a</code>, mas eles são independentes pois estão em escopos diferentes;</li>
+<li>A função principal <code>main</code> também possui variáveis locais <code>a</code> e <code>b</code>, também disjuntas dos parâmetros e outras declarações locais;</li>
+<li>Tanto <code>f1</code> quanto <code>f2</code> possuem variáveis locais chamadas <code>n</code>, sendo elas completamente separadas dado seu escopo local diferente;</li>
+<li>A função <code>f1</code> chama <code>f3</code>, que é conhecida dado o escopo global, sendo que o mesmo ocorre com a chamada de <code>f1</code> em <code>f2</code>;</li>
+<li><code>f3</code> possui parâmetros <code>f1</code> e <code>f2</code>, cujos nomes se sobrepõem às funções globais <code>f1</code> e <code>f2</code>, significando que, dentro de <code>f3</code>, essas funções não estão acessíveis pois são obscurecidas pelas declarações locais;</li>
+<li><code>f3</code> possui uma variável local <code>main</code>, que não conflita com a função global com mesmo nome.</li>
+</ul>
+<p>Dessa forma, seguem algumas orientações gerais de escopo:</p>
+<ul>
+<li>Declarações globais valem em todo o código fonte a partir de sua declaração;</li>
+<li>Parâmetros e declarações em funções são locais, têm apenas validade no escopo da função e são independentes de qualquer outra declaração com mesmo nome em escopo maior;</li>
+<li>Declarações locais podem se sobrepor e ocultar declarações globais;</li>
+<li>Blocos de comandos podem ter declarações cujo escopo é o próprio bloco apenas (<a href="c-escopo-basico-de-declaracoes.html#sec-declaracoes-e-validade" class="quarto-xref"><span>Seção 9.1</span></a>).</li>
+</ul>
+</section>
+<section id="variáveis-globais" class="level2" data-number="19.3">
+<h2 data-number="19.3" class="anchored" data-anchor-id="variáveis-globais"><span class="header-section-number">19.3</span> Variáveis globais</h2>
+<p>Assim como funções, também variáveis podem ser globais. Uma variável declarada fora do escopo de qualquer função é uma variável global e, como tal, tem sua validade definida e conhecida desde a linha em que é declarada até o final do arquivo.</p>
+<p>Variáveis declaradas como globais possuem duas diferenças importantes em relação às locais, sejam variáveis ou parâmetros de funções:</p>
+<ul>
+<li>Local e momento de criação;</li>
+<li>Iniciação automática.</li>
+</ul>
+<p>A primeira diferença, portanto, é que as variáveis globais são criadas juntamente com a execução do programa e possuem um espaço de memória específico para elas. As variáveis locais e os parâmetros são criados apenas no momento em que a função é chamada e, dependendo de quando isso ocorre, podem ser criadas em diferentes locais da memória dependendo da chamada.</p>
+<p>Variáveis globais são consideradas estáticas enquanto as locais são criadas dinamicamente em função do momento em que as funções são chamadas</p>
+<p>O segundo ponto é que as variáveis locais nunca possuem lixo, ou seja, são sempre iniciadas com valores nulos. Assim, se uma variável global <code>int i</code> é criada sem atribuição, seu valor será necessariamente zero. Caso exista um <code>double d</code> global, o valor de <code>d</code> será 0,0, exceto se houver outro valor inicial. De forma similar, se uma cadeia de caracteres for criada em escopo global com <code>char s[100]</code>, ela terá comprimento zero, pois todas suas posições terão <code>\0</code>.</p>
+<section id="declaração-de-variáveis-globais" class="level3" data-number="19.3.1">
+<h3 data-number="19.3.1" class="anchored" data-anchor-id="declaração-de-variáveis-globais"><span class="header-section-number">19.3.1</span> Declaração de variáveis globais</h3>
+<p>Para que uma variável seja global, basta que sua declaração seja feita fora de uma função. Segue um exemplo simples em que foi criado um contador global para monitorar o número de vezes que uma</p>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Programa exemplo com variável global</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * O código cria duas funções, volta_igual e volta_negativo, mantendo</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"> *      controle sobre o número de vezes que elas são chamadas</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"> * Assegura: apresentações diversas do uso da função e do número de vezes</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"> *      em que foram chamadas</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">//! Contador para uso global</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> numero_chamadas<span class="op">;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna igual ao que foi passado</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">n</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> n</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> volta_igual<span class="op">(</span><span class="dt">int</span> n<span class="op">);</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna o oposto do que foi passado</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">n</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> -n</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> volta_negativo<span class="op">(</span><span class="dt">int</span> n<span class="op">);</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="co"> * Main</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">%d</span><span class="st"> = </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> <span class="dv">10</span><span class="op">,</span> volta_igual<span class="op">(</span><span class="dv">10</span><span class="op">));</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">%d</span><span class="st"> = -1 * </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n\n</span><span class="st">"</span><span class="op">,</span> <span class="op">-</span><span class="dv">10</span><span class="op">,</span> volta_negativo<span class="op">(-</span><span class="dv">10</span><span class="op">));</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> n <span class="op">=</span> <span class="op">-</span><span class="dv">5</span><span class="op">;</span> n <span class="op">&lt;=</span> <span class="dv">5</span><span class="op">;</span> n<span class="op">++)</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"</span><span class="sc">%d</span><span class="st"> = </span><span class="sc">%d</span><span class="st"> = -1 * </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> n<span class="op">,</span> volta_igual<span class="op">(</span>n<span class="op">),</span> volta_negativo<span class="op">(</span>n<span class="op">));</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">\n</span><span class="st">As funções volta_igual e volta_negativo foram chamadas </span><span class="sc">%d</span><span class="st"> "</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>           <span class="st">"vezes no total.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> numero_chamadas<span class="op">);</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="co">// Retorna igual</span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> volta_igual<span class="op">(</span><span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>    numero_chamadas<span class="op">++;</span>  <span class="co">// conta a chamada à função</span></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> n<span class="op">;</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a><span class="co">// Retorna negativo</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> volta_negativo<span class="op">(</span><span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>    numero_chamadas<span class="op">++;</span>  <span class="co">// conta a chamada à função</span></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>n<span class="op">;</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>10 = 10.</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>-10 = -1 * 10.</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>-5 = -5 = -1 * 5.</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>-4 = -4 = -1 * 4.</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>-3 = -3 = -1 * 3.</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>-2 = -2 = -1 * 2.</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>-1 = -1 = -1 * 1.</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>0 = 0 = -1 * 0.</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>1 = 1 = -1 * -1.</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>2 = 2 = -1 * -2.</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>3 = 3 = -1 * -3.</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>4 = 4 = -1 * -4.</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>5 = 5 = -1 * -5.</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>As funções volta_igual e volta_negativo foram chamadas 24 vezes no total.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A variável <code>numero_chamadas</code> é global e seu escopo de validade se inicia na linha de declaração, de forma que ela pode ser usada em todas as funções seguintes, incluindo <code>main</code>. Como ela é global e não há iniciação explícita, seu valor inicial é zero. Cada vez que as funções <code>volta_igual</code> e <code>volta_negativo</code> são chamadas, essa variável é incrementada.</p>
+</section>
+<section id="quando-usar-variáveis-globais" class="level3" data-number="19.3.2">
+<h3 data-number="19.3.2" class="anchored" data-anchor-id="quando-usar-variáveis-globais"><span class="header-section-number">19.3.2</span> Quando usar variáveis globais?</h3>
+<p>A resposta rápida e curta para a pergunta do título da seção é simples: nunca. Claro que “nunca” é um exagero, pois há exceções. O ponto é sempre que qualquer variável global deve ser evitada, pois pode induzir a erros no código extremamente difíceis de serem localizados.</p>
+<p>O exemplo do contador de chamadas pode, talvez, ser caracterizado como uma exceção. O programa é pequeno e o uso da variável global para o contador oculta a contagem separando-a do uso da função. Se outro programador fizer modificações no programa, ele poderia até ignorar a contagem e usar as duas funções definidas sem problemas.</p>
+<p>O problema do uso de variáveis locais, entretanto, é exatamente alguém fazer uma modificação no programa e, por um descuido simples, interferir inadvertidamente no valor de uma variável que ele nem sabia que existia.</p>
+<p>Para exemplificar, suponha que seja solicitado a outro programador uma pequena modificação na função <code>main</code>: a inclusão de uma série de exemplos de chamadas à função <code>volta_negativo</code> antes dos exemplos já existentes. O programa seguinte mostra a solução feita rapidamente pelo novo programador.</p>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Programa exemplo com variável global</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * O código cria duas funções, volta_igual e volta_negativo, mantendo</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"> *      controle sobre o número de vezes que elas são chamadas</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"> * Assegura: apresentações diversas do uso da função e do número de vezes</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"> *      em que foram chamadas</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">//! Contador para uso global</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> numero_chamadas<span class="op">;</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna igual ao que foi passado</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">n</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> n</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> volta_igual<span class="op">(</span><span class="dt">int</span> n<span class="op">);</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna o oposto do que foi passado</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">n</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> -n</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> volta_negativo<span class="op">(</span><span class="dt">int</span> n<span class="op">);</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="co"> * Main</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Exemplos novos para volta_negativo</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> numero_chamadas<span class="op">;</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>numero_chamadas <span class="op">=</span> <span class="dv">10</span><span class="op">;</span> numero_chamadas <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">;</span> numero_chamadas<span class="op">--)</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"&gt; volta_negativo(</span><span class="sc">%d</span><span class="st">) = </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> numero_chamadas<span class="op">,</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>               volta_negativo<span class="op">(</span>numero_chamadas<span class="op">));</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Código com os exemplos orginais</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">%d</span><span class="st"> = </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> <span class="dv">10</span><span class="op">,</span> volta_igual<span class="op">(</span><span class="dv">10</span><span class="op">));</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">%d</span><span class="st"> = -1 * </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n\n</span><span class="st">"</span><span class="op">,</span> <span class="op">-</span><span class="dv">10</span><span class="op">,</span> volta_negativo<span class="op">(-</span><span class="dv">10</span><span class="op">));</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> n <span class="op">=</span> <span class="op">-</span><span class="dv">5</span><span class="op">;</span> n <span class="op">&lt;=</span> <span class="dv">5</span><span class="op">;</span> n<span class="op">++)</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"</span><span class="sc">%d</span><span class="st"> = </span><span class="sc">%d</span><span class="st"> = -1 * </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> n<span class="op">,</span> volta_igual<span class="op">(</span>n<span class="op">),</span> volta_negativo<span class="op">(</span>n<span class="op">));</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">\n</span><span class="st">As funções volta_igual e volta_negativo foram chamadas </span><span class="sc">%d</span><span class="st"> "</span></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>           <span class="st">"vezes no total.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> numero_chamadas<span class="op">);</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="co">// Retorna igual</span></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> volta_igual<span class="op">(</span><span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>    numero_chamadas<span class="op">++;</span>  <span class="co">// conta a chamada à função</span></span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> n<span class="op">;</span></span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a><span class="co">// Retorna negativo</span></span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> volta_negativo<span class="op">(</span><span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>    numero_chamadas<span class="op">++;</span>  <span class="co">// conta a chamada à função</span></span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>n<span class="op">;</span></span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>&gt; volta_negativo(10) = -10.</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>&gt; volta_negativo(9) = -9.</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>&gt; volta_negativo(8) = -8.</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>&gt; volta_negativo(7) = -7.</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>&gt; volta_negativo(6) = -6.</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>&gt; volta_negativo(5) = -5.</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>&gt; volta_negativo(4) = -4.</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>&gt; volta_negativo(3) = -3.</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>&gt; volta_negativo(2) = -2.</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>&gt; volta_negativo(1) = -1.</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>&gt; volta_negativo(0) = 0.</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>10 = 10.</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>-10 = -1 * 10.</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>-5 = -5 = -1 * 5.</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>-4 = -4 = -1 * 4.</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>-3 = -3 = -1 * 3.</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>-2 = -2 = -1 * 2.</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>-1 = -1 = -1 * 1.</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>0 = 0 = -1 * 0.</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>1 = 1 = -1 * -1.</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>2 = 2 = -1 * -2.</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>3 = 3 = -1 * -3.</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>4 = 4 = -1 * -4.</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>5 = 5 = -1 * -5.</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>As funções volta_igual e volta_negativo foram chamadas -1 vezes no total.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O programa foi compilado com sucesso, sem erros e sem avisos. Porém o resultado agora está incorreto. Uma vez criada a variável local <code>numero_chamadas</code>, ela se sobrepõe à global. No último <code>printf</code>, o valor mostrado para a contagem é o da nova variável local e não mais o do contador global, produzindo um resultado inconsistente, provavelmente de fácil detecção, já que o novo resultado é incongruente.</p>
+<p>Um erro mais sutil poderia ser introduzido, gerando uma situação em que o programa afirma que 11&nbsp;=&nbsp;-10.</p>
+<div class="sourceCode cell-code" id="cb10" data-clip="14,5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Programa exemplo com variável global</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * O código cria duas funções, volta_igual e volta_negativo, mantendo</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"> *      controle sobre o número de vezes que elas são chamadas</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"> * Assegura: apresentações diversas do uso da função e do número de vezes</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"> *      em que foram chamadas</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">//! Contador para uso global</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> numero_chamadas<span class="op">;</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna igual ao que foi passado</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">n</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> n</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> volta_igual<span class="op">(</span><span class="dt">int</span> n<span class="op">);</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna o oposto do que foi passado</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">n</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> -n</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> volta_negativo<span class="op">(</span><span class="dt">int</span> n<span class="op">);</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a><span class="co"> * Main</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Exemplo adicional </span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>    numero_chamadas <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"&gt; volta_negativo(</span><span class="sc">%d</span><span class="st">) = </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> numero_chamadas<span class="op">,</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>           volta_negativo<span class="op">(</span>numero_chamadas<span class="op">));</span></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Código com os exemplos originais</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">%d</span><span class="st"> = </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> <span class="dv">10</span><span class="op">,</span> volta_igual<span class="op">(</span><span class="dv">10</span><span class="op">));</span></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">%d</span><span class="st"> = -1 * </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n\n</span><span class="st">"</span><span class="op">,</span> <span class="op">-</span><span class="dv">10</span><span class="op">,</span> volta_negativo<span class="op">(-</span><span class="dv">10</span><span class="op">));</span></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> n <span class="op">=</span> <span class="op">-</span><span class="dv">5</span><span class="op">;</span> n <span class="op">&lt;=</span> <span class="dv">5</span><span class="op">;</span> n<span class="op">++)</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"</span><span class="sc">%d</span><span class="st"> = </span><span class="sc">%d</span><span class="st"> = -1 * </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> n<span class="op">,</span> volta_igual<span class="op">(</span>n<span class="op">),</span> volta_negativo<span class="op">(</span>n<span class="op">));</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">\n</span><span class="st">As funções volta_igual e volta_negativo foram chamadas </span><span class="sc">%d</span><span class="st"> "</span></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>           <span class="st">"vezes no total.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> numero_chamadas<span class="op">);</span></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a><span class="co">// Retorna igual</span></span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> volta_igual<span class="op">(</span><span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>    numero_chamadas<span class="op">++;</span>  <span class="co">// conta a chamada à função</span></span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> n<span class="op">;</span></span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a><span class="co">// Retorna negativo</span></span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> volta_negativo<span class="op">(</span><span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>    numero_chamadas<span class="op">++;</span>  <span class="co">// conta a chamada à função</span></span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">-</span>n<span class="op">;</span></span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>&gt; volta_negativo(11) = -10.</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>10 = 10.</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>-10 = -1 * 10.</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>-5 = -5 = -1 * 5.</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>-4 = -4 = -1 * 4.</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>-3 = -3 = -1 * 3.</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>-2 = -2 = -1 * 2.</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>-1 = -1 = -1 * 1.</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>0 = 0 = -1 * 0.</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>1 = 1 = -1 * -1.</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>2 = 2 = -1 * -2.</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>3 = 3 = -1 * -3.</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>4 = 4 = -1 * -4.</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>5 = 5 = -1 * -5.</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>As funções volta_igual e volta_negativo foram chamadas 35 vezes no total.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Em programas mais longos, mais complexos e com muitas funções, diagnosticar problemas com variáveis globais pode ser uma tarefa árdua e desmotivante.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiada");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiada");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./c-funcoes.html" class="pagination-link" aria-label="Funções em C">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Funções em C</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./c-enderecamento-de-memoria-e-ponteiros.html" class="pagination-link" aria-label="Endereçamento de memória e ponteiros nos programas">
+        <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Endereçamento de memória e ponteiros nos programas</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

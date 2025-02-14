@@ -1,0 +1,85 @@
+.cell-output {
+    background-color: #f8f8f8;
+    border-radius: 0px;
+    border-top: 1px;
+    border-top-style: solid;
+    border-top-color: #dad9d9;
+    border-bottom: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #dad9d9;
+    /* margin-top: -0.6rem;
+    margin-left: -0.6rem; */
+}
+
+/* .cell-output-stdout {
+    background-color: #f8f8f8;
+    margin-top: -0.6rem;
+    margin-left: -0.6rem;
+    margin-bottom: 2rem;
+    border-left: 3px;
+    border-left-style: solid;
+    border-left-color: #dad9d9;
+} */
+
+/* .quarto-layout-cell img {
+    max-width: none;
+} */
+
+
+.quarto-layout-cell .html-widget {
+    max-width: none;
+}
+
+/* .figure-caption {
+    max-width: 67%;
+    margin-top: 0pt;
+    margin-bottom: 0pt;
+} */
+
+.quarto-layout-cell {
+    max-width: 95%;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+/* img {
+    margin-top: 0pt;
+    transform-origin: left;
+    transform: scale(.475) translate(20px, 0);
+} */
+
+.semescala {
+    transform-origin: center;
+    transform: scale(1);
+}
+
+.escala30 {
+    transform-origin: left;
+    transform: scale(.3) translate(20px, 0);
+}
+
+.escala35 {
+    transform-origin: left;
+    transform: scale(.35) translate(20px, 0);
+}
+
+.escala40 {
+    transform-origin: left;
+    transform: scale(.4) translate(20px, 0);
+}
+
+.escala45 {
+    transform-origin: left;
+    transform: scale(.45) translate(20px, 0);
+}
+
+.escala60 {
+    transform-origin: left;
+    transform: scale(.6) translate(20px, 0);
+}
+
+.escalapadrao {
+    transform-origin: left;
+    transform: scale(.475) translate(20px, 0);
+}
+

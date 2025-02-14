@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>23&nbsp; C: Dados com struct – Construção de Algoritmos e Programação</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./c-dados-em-vetores.html" rel="next">
+<link href="./c-parametros-de-funcoes.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-9e1f2a4632985dffc2c80318c992baf5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-7cf8a0149bf791b42ada95f7f6344cc2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="book.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./c-dados-com-struct.html">Estruturação de dados</a></li><li class="breadcrumb-item"><a href="./c-dados-com-struct.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">C: Dados com <code>struct</code></span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Construção de Algoritmos e Programação</a> 
+        <div class="sidebar-tools-main">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-save"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./moreira_j-construcao_algoritmos_programacao-programacao.pdf">
+            Versão PDF
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Procurar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Apresentação</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preambulo_prefacio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Programação em C</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./algoritmos-nocoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Noções de algoritmos</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Programação básica</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-introducao-a-linguagem-c.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introdução à linguagem C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-tipos-de-dados.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tipos de dados da linguagem C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-variaveis-identificadores-e-leitura.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Variáveis e leituras em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-expressoes-aritmeticas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Expressões aritméticas de C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-expressoes-relacionais-e-logicas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">C: expressões relacionais e lógicas</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Controle de fluxo simples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-execucao-condicional-com-if.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Execução condicional com <code>if</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-execucao-condicional-com-switch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Execução condicional com <code>switch</code></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Organização geral do código</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-escopo-basico-de-declaracoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Escopo básico de declarações</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-organizacao-do-codigo-fonte.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Organização do código fonte</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Controle de repetição do fluxo</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-while.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Repetições com <code>while</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-for.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Repetições com <code>for</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-do-while.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Repetições com <code>do while</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-arquivos-texto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Arquivos texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-desvirtuacao-das-repeticoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Desvirtuação das repetições</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Cadeias de caracteres</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-textuais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Dados textuais em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-manipulacao-de-dados-textuais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Manipulação de dados textuais em C</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Modularização e memória</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-funcoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Funções em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-regras-de-escopo-com-modularizacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Regras de escopo com a modularização</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-enderecamento-de-memoria-e-ponteiros.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Endereçamento de memória e ponteiros nos programas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-procedimentos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Procedimentos em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-parametros-de-funcoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Parâmetros das funções na linguagem C</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Estruturação de dados</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-com-struct.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">C: Dados com <code>struct</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-em-vetores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">C: Dados em vetores</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página:</h2>
+   
+  <ul>
+  <li><a href="#variáveis-compostas" id="toc-variáveis-compostas" class="nav-link active" data-scroll-target="#variáveis-compostas"><span class="header-section-number">23.1</span> Variáveis compostas</a></li>
+  <li><a href="#declaração-e-uso-do-struct" id="toc-declaração-e-uso-do-struct" class="nav-link" data-scroll-target="#declaração-e-uso-do-struct"><span class="header-section-number">23.2</span> Declaração e uso do <code>struct</code></a>
+  <ul class="collapse">
+  <li><a href="#uso-e-acesso-a-campos" id="toc-uso-e-acesso-a-campos" class="nav-link" data-scroll-target="#uso-e-acesso-a-campos"><span class="header-section-number">23.2.1</span> Uso e acesso a campos</a></li>
+  <li><a href="#declaração-com-iniciação" id="toc-declaração-com-iniciação" class="nav-link" data-scroll-target="#declaração-com-iniciação"><span class="header-section-number">23.2.2</span> Declaração com iniciação</a></li>
+  </ul></li>
+  <li><a href="#modularização-com-struct" id="toc-modularização-com-struct" class="nav-link" data-scroll-target="#modularização-com-struct"><span class="header-section-number">23.3</span> Modularização com <code>struct</code></a>
+  <ul class="collapse">
+  <li><a href="#passagem-de-registro-por-referência" id="toc-passagem-de-registro-por-referência" class="nav-link" data-scroll-target="#passagem-de-registro-por-referência"><span class="header-section-number">23.3.1</span> Passagem de registro por referência</a></li>
+  <li><a href="#ponteiros-para-struct-e-acesso-a-campos" id="toc-ponteiros-para-struct-e-acesso-a-campos" class="nav-link" data-scroll-target="#ponteiros-para-struct-e-acesso-a-campos"><span class="header-section-number">23.3.2</span> Ponteiros para <code>struct</code> e acesso a campos</a></li>
+  <li><a href="#uso-dos-ponteiros-na-passagem-por-referência" id="toc-uso-dos-ponteiros-na-passagem-por-referência" class="nav-link" data-scroll-target="#uso-dos-ponteiros-na-passagem-por-referência"><span class="header-section-number">23.3.3</span> Uso dos ponteiros na passagem por referência</a></li>
+  </ul></li>
+  <li><a href="#mais-sobre-as-declarações-de-struct" id="toc-mais-sobre-as-declarações-de-struct" class="nav-link" data-scroll-target="#mais-sobre-as-declarações-de-struct"><span class="header-section-number">23.4</span> Mais sobre as declarações de <code>struct</code></a>
+  <ul class="collapse">
+  <li><a href="#sec-declaracao-struct-sem-nome" id="toc-sec-declaracao-struct-sem-nome" class="nav-link" data-scroll-target="#sec-declaracao-struct-sem-nome"><span class="header-section-number">23.4.1</span> Declaração sem nome de registro</a></li>
+  <li><a href="#sec-declaracoes-struct-iguais" id="toc-sec-declaracoes-struct-iguais" class="nav-link" data-scroll-target="#sec-declaracoes-struct-iguais"><span class="header-section-number">23.4.2</span> Declarações “iguais”</a></li>
+  </ul></li>
+  <li><a href="#exemplos" id="toc-exemplos" class="nav-link" data-scroll-target="#exemplos"><span class="header-section-number">23.5</span> Exemplos</a>
+  <ul class="collapse">
+  <li><a href="#apresentação-de-um-registro-em-uma-função" id="toc-apresentação-de-um-registro-em-uma-função" class="nav-link" data-scroll-target="#apresentação-de-um-registro-em-uma-função"><span class="header-section-number">23.5.1</span> Apresentação de um registro em uma função</a></li>
+  <li><a href="#normalização-de-vetores" id="toc-normalização-de-vetores" class="nav-link" data-scroll-target="#normalização-de-vetores"><span class="header-section-number">23.5.2</span> Normalização de vetores</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./c-dados-com-struct.html">Estruturação de dados</a></li><li class="breadcrumb-item"><a href="./c-dados-com-struct.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">C: Dados com <code>struct</code></span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">C: Dados com <code>struct</code></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<span class="math inline">\(\newcommand\Id[1]{\mbox{\textit{#1}}}\)</span>
+<p>Este capítulo discute como variáveis compostas heterogêneas, comumente chamadas de registros, são declaradas e usadas em&nbsp;C. São cobertos os aspectos de declaração, atribuição e seu uso com funções.</p>
+<section id="variáveis-compostas" class="level2" data-number="23.1">
+<h2 data-number="23.1" class="anchored" data-anchor-id="variáveis-compostas"><span class="header-section-number">23.1</span> Variáveis compostas</h2>
+<p>A exploração de variáveis compostas se inicia com a apresentação de um problema envolvendo pontos em <span class="math inline">\(\mathbb{R}^3\)</span>. Se três pontos no espaço são especificados, então um triângulo é formado e sua área pode ser calculada. O <a href="c-dados-com-struct.html#alg-area-triangulo-espaco">Algoritmo 23.1</a> apresenta a estratégia para esse cálculo.</p>
+<div id="alg-area-triangulo-espaco">
+<figcaption class="figure-caption">
+<p>Algoritmo 23.1: Cálculo da área de um triângulo no espaço <span class="math inline">\(\mathbb{R}^3\)</span>.</p>
+</figcaption>
+<p><img src="algxpar/pseudocode.3162023885d056e92d35c8340e2e60ea18d578ef.svg" class="img-fluid" alt="Algoritmo 23.1: Cálculo da área de um triângulo no espaço \mathbb{R}^3." width="648"></p>
+</div>
+<p>A função <span class="smallcaps">ÁreaTriângulo</span> está apresentada no <a href="c-dados-com-struct.html#alg-funcao-area-triangulo-espaco">Algoritmo 23.2</a>, assim como uma função <span class="smallcaps">DistânciaPontos</span> necessária à sua execução.</p>
+<div id="alg-funcao-area-triangulo-espaco">
+<figcaption class="figure-caption">
+<p>Algoritmo 23.2: Função para cálculo da área de um triângulo dados seus vértices.</p>
+</figcaption>
+<p><img src="algxpar/pseudocode.c1a40739cbb60ef42a1e2bedc68eb8cf1951e7f6.svg" class="img-fluid" alt="Algoritmo 23.2: Função para cálculo da área de um triângulo dados seus vértices." width="648"></p>
+</div>
+<p>Com base nessas especificações, é possível escrever um programa em C para implementar essa solução.</p>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Determinação da área de um triângulo dados seus vértices em R^3</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * Requer: três pontos, cada um composto por suas coordenadas x, y e z</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"> * Assegura: a apresentação da área do triângulo definido pelos vértices</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;math.h&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna a área de um triângulo dados seus vértices</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">x1:</span><span class="co"> x de P1</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">y1:</span><span class="co"> y de P1</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">z1:</span><span class="co"> z de P1</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">x2:</span><span class="co"> x de P2</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">y2:</span><span class="co"> y de P2</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">z2:</span><span class="co"> z de P2</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">x3:</span><span class="co"> x de P3</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">y3:</span><span class="co"> y de P3</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">z3:</span><span class="co"> z de P3</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> área do triângulo</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> area_triangulo<span class="op">(</span><span class="dt">double</span> x1<span class="op">,</span> <span class="dt">double</span> y1<span class="op">,</span> <span class="dt">double</span> z1<span class="op">,</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>                      <span class="dt">double</span> x2<span class="op">,</span> <span class="dt">double</span> y2<span class="op">,</span> <span class="dt">double</span> z2<span class="op">,</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>                      <span class="dt">double</span> x3<span class="op">,</span> <span class="dt">double</span> y3<span class="op">,</span> <span class="dt">double</span> z3<span class="op">);</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna a distância entre P1 e P2</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">x1:</span><span class="co"> x de P1</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">y1:</span><span class="co"> y de P1</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">z1:</span><span class="co"> z de P1</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">x2:</span><span class="co"> x de P2</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">y2:</span><span class="co"> y de P2</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">z2:</span><span class="co"> z de P2</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> a distância</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> distancia_pontos<span class="op">(</span><span class="dt">double</span> x1<span class="op">,</span> <span class="dt">double</span> y1<span class="op">,</span> <span class="dt">double</span> z1<span class="op">,</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>                        <span class="dt">double</span> x2<span class="op">,</span> <span class="dt">double</span> y2<span class="op">,</span> <span class="dt">double</span> z2<span class="op">);</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="co"> * Leitura de um ponto em R^3</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">mensagem:</span><span class="co"> mensagem solicitando a digitação dos dados</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">x:</span><span class="co"> referência a x</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">y:</span><span class="co"> referência a y</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">z:</span><span class="co"> referência a z</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> leia_ponto<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>mensagem<span class="op">,</span> <span class="dt">double</span> <span class="op">*</span>x<span class="op">,</span> <span class="dt">double</span> <span class="op">*</span>y<span class="op">,</span> <span class="dt">double</span> <span class="op">*</span>z<span class="op">);</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="co"> * Main</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> x1<span class="op">,</span> y1<span class="op">,</span> z1<span class="op">;</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    leia_ponto<span class="op">(</span><span class="st">"Digite as coordenadas de P1: "</span><span class="op">,</span> <span class="op">&amp;</span>x1<span class="op">,</span> <span class="op">&amp;</span>y1<span class="op">,</span> <span class="op">&amp;</span>z1<span class="op">);</span>  <span class="co">// P1</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> x2<span class="op">,</span> y2<span class="op">,</span> z2<span class="op">;</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    leia_ponto<span class="op">(</span><span class="st">"Digite as coordenadas de P2: "</span><span class="op">,</span> <span class="op">&amp;</span>x2<span class="op">,</span> <span class="op">&amp;</span>y2<span class="op">,</span> <span class="op">&amp;</span>z2<span class="op">);</span>  <span class="co">// P2</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> x3<span class="op">,</span> y3<span class="op">,</span> z3<span class="op">;</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>    leia_ponto<span class="op">(</span><span class="st">"Digite as coordenadas de P3: "</span><span class="op">,</span> <span class="op">&amp;</span>x3<span class="op">,</span> <span class="op">&amp;</span>y3<span class="op">,</span> <span class="op">&amp;</span>z3<span class="op">);</span>  <span class="co">// P3</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> area <span class="op">=</span> area_triangulo<span class="op">(</span>x1<span class="op">,</span> y1<span class="op">,</span> z1<span class="op">,</span> x2<span class="op">,</span> y2<span class="op">,</span> z2<span class="op">,</span> x3<span class="op">,</span> y3<span class="op">,</span> z3<span class="op">);</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Área do triângulo: </span><span class="sc">%.2f</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> area<span class="op">);</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="co">// Retorna a área do triângulo dados os vértices</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> area_triangulo<span class="op">(</span><span class="dt">double</span> x1<span class="op">,</span> <span class="dt">double</span> y1<span class="op">,</span> <span class="dt">double</span> z1<span class="op">,</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>                      <span class="dt">double</span> x2<span class="op">,</span> <span class="dt">double</span> y2<span class="op">,</span> <span class="dt">double</span> z2<span class="op">,</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>                      <span class="dt">double</span> x3<span class="op">,</span> <span class="dt">double</span> y3<span class="op">,</span> <span class="dt">double</span> z3<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> lado1 <span class="op">=</span> distancia_pontos<span class="op">(</span>x1<span class="op">,</span> y1<span class="op">,</span> z1<span class="op">,</span> x2<span class="op">,</span> y2<span class="op">,</span> z2<span class="op">);</span> <span class="co">// P1 e P2</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> lado2 <span class="op">=</span> distancia_pontos<span class="op">(</span>x1<span class="op">,</span> y1<span class="op">,</span> z1<span class="op">,</span> x3<span class="op">,</span> y3<span class="op">,</span> z3<span class="op">);</span> <span class="co">// P1 e P3</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> lado3 <span class="op">=</span> distancia_pontos<span class="op">(</span>x2<span class="op">,</span> y2<span class="op">,</span> z2<span class="op">,</span> x3<span class="op">,</span> y3<span class="op">,</span> z3<span class="op">);</span> <span class="co">// P2 e P3</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> semiperimetro <span class="op">=</span> <span class="op">(</span>lado1 <span class="op">+</span> lado2 <span class="op">+</span> lado3<span class="op">)</span> <span class="op">/</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sqrt<span class="op">(</span>semiperimetro <span class="op">*</span> <span class="op">(</span>semiperimetro <span class="op">-</span> lado1<span class="op">)</span> <span class="op">*</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>                <span class="op">(</span>semiperimetro <span class="op">-</span> lado2<span class="op">)</span> <span class="op">*</span> <span class="op">(</span>semiperimetro <span class="op">-</span> lado3<span class="op">));</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="co">// Retorna a distância entre dois pontos</span></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> distancia_pontos<span class="op">(</span><span class="dt">double</span> x1<span class="op">,</span> <span class="dt">double</span> y1<span class="op">,</span> <span class="dt">double</span> z1<span class="op">,</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>                        <span class="dt">double</span> x2<span class="op">,</span> <span class="dt">double</span> y2<span class="op">,</span> <span class="dt">double</span> z2<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sqrt<span class="op">(</span>pow<span class="op">(</span>x1 <span class="op">-</span> x2<span class="op">,</span> <span class="dv">2</span><span class="op">)</span> <span class="op">+</span> pow<span class="op">(</span>y1 <span class="op">-</span> y2<span class="op">,</span> <span class="dv">2</span><span class="op">)</span> <span class="op">+</span> pow<span class="op">(</span>z1 <span class="op">-</span> z2<span class="op">,</span> <span class="dv">2</span><span class="op">));</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="co">// Leitura de um ponto</span></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> leia_ponto<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>mensagem<span class="op">,</span> <span class="dt">double</span> <span class="op">*</span>x<span class="op">,</span> <span class="dt">double</span> <span class="op">*</span>y<span class="op">,</span> <span class="dt">double</span> <span class="op">*</span>z<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">%s</span><span class="st">"</span><span class="op">,</span> mensagem<span class="op">);</span></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf%lf%lf</span><span class="st">"</span><span class="op">,</span> x<span class="op">,</span> y<span class="op">,</span> z<span class="op">);</span></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Digite as coordenadas de P1: <span class="kw">-1 7 3</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>Digite as coordenadas de P2: <span class="kw">-1 0 0</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Digite as coordenadas de P3: <span class="kw">2 3 5</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>Área do triângulo: 17.31.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A grande distância entre o algoritmo e a implementação é a complexidade introduzida pelo número de parâmetros que as funções possuem. Enquanto no algoritmo a instrução <span class="smallcaps">ÁreaTriângulo</span>(<span class="math inline">\(P_1\)</span>, <span class="math inline">\(P_2\)</span>, <span class="math inline">\(P_3\)</span>) é clara, a codificação <code>area_triangulo(x1, y1, z1, x2, y2, z2, x3, y3, z3)</code> é mais longa e propensa a erros<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>A questão envolvida nesse momento é como representar <span class="smallcaps">ÁreaTriângulo</span>(<span class="math inline">\(P_1\)</span>, <span class="math inline">\(P_2\)</span>, <span class="math inline">\(P_3\)</span>) no código <code>area_triangulo(p1, p2, p3)</code>.</p>
+<p>Para esse fim, cada ponto pode ser estruturado como um registro e, em C, esse agrupamento é feito na forma de um <code>struct</code>.</p>
+</section>
+<section id="declaração-e-uso-do-struct" class="level2" data-number="23.2">
+<h2 data-number="23.2" class="anchored" data-anchor-id="declaração-e-uso-do-struct"><span class="header-section-number">23.2</span> Declaração e uso do <code>struct</code></h2>
+<p>As variáveis compostas, chamadas registros, são criadas com <code>struct</code> em C. A declaração de registros na linguagem pode assumir diversos formatos. Neste texto será adotado, com poucas exceções, um formato padronizado para manter a clareza.</p>
+<p>Um grupo de informações pode ser agrupado em uma única variável criando-se um registro. Como exemplo, um ponto no espaço, composto de coordenadas <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span> e <span class="math inline">\(z\)</span> pode ser estruturado como segue.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*! </span><span class="an">@struct</span><span class="co"> </span><span class="cv">Ponto</span><span class="co"> em R^3 */</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> ponto <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> x<span class="op">,</span> y<span class="op">,</span> z<span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Essa instrução define um novo tipo na linguagem, chamado <code>struct ponto</code>. Ela é apenas uma declaração e nenhuma variável criada ou espaço de armazenamento é reservado.</p>
+<p>Variáveis podem ser criadas usando-se o formato geral de declarações: o tipo da variável é precedido pelo identificadores.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> ponto ponto1<span class="op">,</span> ponto2<span class="op">;</span>  <span class="co">// duas variáveis (ponto1 e ponto2), ambas</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                              <span class="co">// do tipo struct ponto</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="uso-e-acesso-a-campos" class="level3" data-number="23.2.1">
+<h3 data-number="23.2.1" class="anchored" data-anchor-id="uso-e-acesso-a-campos"><span class="header-section-number">23.2.1</span> Uso e acesso a campos</h3>
+<p>O acesso aos campos é feito com o operador <code>.</code> (ponto). Assim, <code>ponto1.x</code> é o campo <code>x</code> da variável <code>ponto1</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Definição de ponto1 como o ponto (1.5, 0, 3.9)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ponto1<span class="op">.</span>x <span class="op">=</span> <span class="fl">1.5</span><span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>ponto1<span class="op">.</span>y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>ponto1<span class="op">.</span>z <span class="op">=</span> <span class="fl">3.9</span><span class="op">;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Uma vantagem interessante de variáveis <code>struct</code> é a capacidade de atribuição direta. Por exemplo, a instrução <code>ponto2 = ponto1</code> pode ser usada sem problemas. Na prática, o compilador não está ciente dos campos ou de seus valores, mas copia todos os bytes que formam um registro para o outro, resultando em uma cópia idêntica.</p>
+</section>
+<section id="declaração-com-iniciação" class="level3" data-number="23.2.2">
+<h3 data-number="23.2.2" class="anchored" data-anchor-id="declaração-com-iniciação"><span class="header-section-number">23.2.2</span> Declaração com iniciação</h3>
+<p>É possível, ao declarar uma varável do tipo registro, já incluir a iniciação de seus valores. O programa seguinte ilustra essa manipulação.</p>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Exemplo de iniciação de valores de um registro</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * Assegura: apresentação dos valores iniciados</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> pessoa <span class="op">{</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> nome<span class="op">[</span><span class="dv">100</span><span class="op">];</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> cpf<span class="op">[</span><span class="dv">15</span><span class="op">];</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> ano_nascimento<span class="op">;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> pessoa alguem <span class="op">=</span> <span class="op">{</span><span class="st">"Fulano de tal"</span><span class="op">,</span> <span class="st">"123.456.789-00"</span><span class="op">,</span> <span class="dv">2008</span><span class="op">};</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Nome: </span><span class="sc">%s</span><span class="st">,</span><span class="sc">\n</span><span class="st">CPF: </span><span class="sc">%s</span><span class="st">,</span><span class="sc">\n</span><span class="st">Ano: </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> alguem<span class="op">.</span>nome<span class="op">,</span> alguem<span class="op">.</span>cpf<span class="op">,</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>           alguem<span class="op">.</span>ano_nascimento<span class="op">);</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Nome: Fulano de tal,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>CPF: 123.456.789-00,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>Ano: 2008.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Esse recurso, porém, apenas está disponível na declaração. Tentativas de atribuição posteriores não são aceitas. Nestes casos as atribuições necessariamente têm que ser feitas campo a campo.</p>
+<div class="sourceCode cell-code" id="cb8" data-intentional-problems="true"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Exemplo de falha na atribuição de registros</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> pessoa <span class="op">{</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> nome<span class="op">[</span><span class="dv">100</span><span class="op">];</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> cpf<span class="op">[</span><span class="dv">15</span><span class="op">];</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> ano_nascimento<span class="op">;</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> pessoa alguem<span class="op">;</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    alguem <span class="op">=</span> <span class="op">{</span><span class="st">"Muriel Gomes Faruak"</span><span class="op">,</span> <span class="st">"123.456.789-00"</span><span class="op">,</span> <span class="dv">2008</span><span class="op">};</span>  <span class="co">// não funciona!</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Nome: </span><span class="sc">%s</span><span class="st">,</span><span class="sc">\n</span><span class="st">CPF: </span><span class="sc">%s</span><span class="st">,</span><span class="sc">\n</span><span class="st">Ano: </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> alguem<span class="op">.</span>nome<span class="op">,</span> alguem<span class="op">.</span>cpf<span class="op">,</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>           alguem<span class="op">.</span>ano_nascimento<span class="op">);</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>main.c: In function ‘main’:</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>main.c:14:14: error: expected expression before ‘{’ token</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>   14 |     alguem = {"Muriel Gomes Faruak", "123.456.789-00", 2008};  // </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>não funciona!</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>      |              ^</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="modularização-com-struct" class="level2" data-number="23.3">
+<h2 data-number="23.3" class="anchored" data-anchor-id="modularização-com-struct"><span class="header-section-number">23.3</span> Modularização com <code>struct</code></h2>
+<p>Um ponto positivo do <code>struct</code> na linguagem C é a possibilidade da atribuição de um registro para outro, copiando todos os campos de uma única vez, desde que sejam do mesmo tipo. Essa característica é interessante, em particular, ao passar um registro completo como parâmetro.</p>
+<p>Retomando o <a href="c-dados-com-struct.html#alg-area-triangulo-espaco">Algoritmo 23.1</a>, a função para o cálculo da área da distância entre dois pontos pode se apresentar conforme segue, juntamente com a nova versão de <span class="smallcaps">DistânciaPontos</span>.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*! </span><span class="an">@struct</span><span class="co"> </span><span class="cv">ponto</span><span class="co"> */</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> ponto <span class="op">{</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> x<span class="op">,</span> y<span class="op">,</span> z<span class="op">;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna a área de um triângulo dados seus vértices</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">ponto1:</span><span class="co"> primeiro vértice</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">ponto2:</span><span class="co"> segundo vértice</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">ponto3:</span><span class="co"> terceiro vértice</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> área do triângulo</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> area_triangulo<span class="op">(</span><span class="kw">struct</span> ponto ponto1<span class="op">,</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>                      <span class="kw">struct</span> ponto ponto2<span class="op">,</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>                      <span class="kw">struct</span> ponto ponto3<span class="op">);</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna a distância entre P1 e P2</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">ponto1:</span><span class="co"> P1</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">ponto2:</span><span class="co"> P2</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> a distância</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> distancia_pontos<span class="op">(</span><span class="kw">struct</span> ponto ponto1<span class="op">,</span> <span class="kw">struct</span> ponto ponto2<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>As funções possuem como parâmetros formais registros do tipo <code>struct ponto</code>. A declaração de tipo desse <code>struct</code>tem que ser global, uma vez que precisa ser conhecida nas funções subsequentes e, depois, dentro da função <code>main</code>.</p>
+<p>Na sequência é apresentada a implementação da função <code>area_triangulo</code>.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Retorna a área do triângulo dados os vértices</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> area_triangulo<span class="op">(</span><span class="kw">struct</span> ponto ponto1<span class="op">,</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                      <span class="kw">struct</span> ponto ponto2<span class="op">,</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                      <span class="kw">struct</span> ponto ponto3<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> lado1 <span class="op">=</span> distancia_pontos<span class="op">(</span>ponto1<span class="op">,</span> ponto2<span class="op">);</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> lado2 <span class="op">=</span> distancia_pontos<span class="op">(</span>ponto1<span class="op">,</span> ponto3<span class="op">);</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> lado3 <span class="op">=</span> distancia_pontos<span class="op">(</span>ponto2<span class="op">,</span> ponto3<span class="op">);</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> semiperimetro <span class="op">=</span> <span class="op">(</span>lado1 <span class="op">+</span> lado2 <span class="op">+</span> lado3<span class="op">)</span> <span class="op">/</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sqrt<span class="op">(</span>semiperimetro <span class="op">*</span> <span class="op">(</span>semiperimetro <span class="op">-</span> lado1<span class="op">)</span> <span class="op">*</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>                <span class="op">(</span>semiperimetro <span class="op">-</span> lado2<span class="op">)</span> <span class="op">*</span> <span class="op">(</span>semiperimetro <span class="op">-</span> lado3<span class="op">));</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Todas as chamadas são por valor, uma vez que uma cópia do registro inteiro é feita na passagem dos parâmetros.</p>
+<p>O código completo pode ser, então. apresentado.</p>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Determinação da área de um triângulo dados seus vértices em R^3</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * Requer: três pontos, cada um composto por suas coordenadas x, y e z</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"> * Assegura: a apresentação da área do triângulo definido pelos vértices</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;math.h&gt;</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">/*! </span><span class="an">@struct</span><span class="co"> </span><span class="cv">ponto</span><span class="co"> */</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> ponto <span class="op">{</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> x<span class="op">,</span> y<span class="op">,</span> z<span class="op">;</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna a área de um triângulo dados seus vértices</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">ponto1:</span><span class="co"> primeiro vértice</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">ponto2:</span><span class="co"> segundo vértice</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">ponto3:</span><span class="co"> terceiro vértice</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> área do triângulo</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> area_triangulo<span class="op">(</span><span class="kw">struct</span> ponto ponto1<span class="op">,</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>                      <span class="kw">struct</span> ponto ponto2<span class="op">,</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>                      <span class="kw">struct</span> ponto ponto3<span class="op">);</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna a distância entre P1 e P2</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">ponto1:</span><span class="co"> P1</span></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">ponto2:</span><span class="co"> P2</span></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> a distância</span></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> distancia_pontos<span class="op">(</span><span class="kw">struct</span> ponto ponto1<span class="op">,</span> <span class="kw">struct</span> ponto ponto2<span class="op">);</span></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a><span class="co"> * Leitura de um ponto em R^3</span></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">mensagem:</span><span class="co"> mensagem solicitando a digitação dos dados</span></span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">x:</span><span class="co"> referência a x</span></span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">y:</span><span class="co"> referência a y</span></span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">z:</span><span class="co"> referência a z</span></span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> leia_ponto<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>mensagem<span class="op">,</span> <span class="dt">double</span> <span class="op">*</span>x<span class="op">,</span> <span class="dt">double</span> <span class="op">*</span>y<span class="op">,</span> <span class="dt">double</span> <span class="op">*</span>z<span class="op">);</span></span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a><span class="co"> * Main</span></span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> ponto vertice1<span class="op">;</span></span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>    leia_ponto<span class="op">(</span><span class="st">"Digite as coordenadas 1: "</span><span class="op">,</span> <span class="op">&amp;</span>vertice1<span class="op">.</span>x<span class="op">,</span> <span class="op">&amp;</span>vertice1<span class="op">.</span>y<span class="op">,</span></span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>               <span class="op">&amp;</span>vertice1<span class="op">.</span>z<span class="op">);</span></span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> ponto vertice2<span class="op">;</span></span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>    leia_ponto<span class="op">(</span><span class="st">"Digite as coordenadas 2: "</span><span class="op">,</span> <span class="op">&amp;</span>vertice2<span class="op">.</span>x<span class="op">,</span> <span class="op">&amp;</span>vertice2<span class="op">.</span>y<span class="op">,</span></span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a>               <span class="op">&amp;</span>vertice2<span class="op">.</span>z<span class="op">);</span></span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> ponto vertice3<span class="op">;</span></span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a>    leia_ponto<span class="op">(</span><span class="st">"Digite as coordenadas 1: "</span><span class="op">,</span> <span class="op">&amp;</span>vertice3<span class="op">.</span>x<span class="op">,</span> <span class="op">&amp;</span>vertice3<span class="op">.</span>y<span class="op">,</span></span>
+<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>               <span class="op">&amp;</span>vertice3<span class="op">.</span>z<span class="op">);</span></span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> area <span class="op">=</span> area_triangulo<span class="op">(</span>vertice1<span class="op">,</span> vertice2<span class="op">,</span> vertice3<span class="op">);</span></span>
+<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Área do triângulo: </span><span class="sc">%.2f</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> area<span class="op">);</span></span>
+<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a><span class="co">// Retorna a área do triângulo dados os vértices</span></span>
+<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> area_triangulo<span class="op">(</span><span class="kw">struct</span> ponto ponto1<span class="op">,</span></span>
+<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>                      <span class="kw">struct</span> ponto ponto2<span class="op">,</span></span>
+<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a>                      <span class="kw">struct</span> ponto ponto3<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> lado1 <span class="op">=</span> distancia_pontos<span class="op">(</span>ponto1<span class="op">,</span> ponto2<span class="op">);</span></span>
+<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> lado2 <span class="op">=</span> distancia_pontos<span class="op">(</span>ponto1<span class="op">,</span> ponto3<span class="op">);</span></span>
+<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> lado3 <span class="op">=</span> distancia_pontos<span class="op">(</span>ponto2<span class="op">,</span> ponto3<span class="op">);</span></span>
+<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> semiperimetro <span class="op">=</span> <span class="op">(</span>lado1 <span class="op">+</span> lado2 <span class="op">+</span> lado3<span class="op">)</span> <span class="op">/</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sqrt<span class="op">(</span>semiperimetro <span class="op">*</span> <span class="op">(</span>semiperimetro <span class="op">-</span> lado1<span class="op">)</span> <span class="op">*</span></span>
+<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a>                <span class="op">(</span>semiperimetro <span class="op">-</span> lado2<span class="op">)</span> <span class="op">*</span> <span class="op">(</span>semiperimetro <span class="op">-</span> lado3<span class="op">));</span></span>
+<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a><span class="co">// Retorna a distância entre dois pontos</span></span>
+<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> distancia_pontos<span class="op">(</span><span class="kw">struct</span> ponto ponto1<span class="op">,</span> <span class="kw">struct</span> ponto ponto2<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sqrt<span class="op">(</span>pow<span class="op">(</span>ponto1<span class="op">.</span>x <span class="op">-</span> ponto2<span class="op">.</span>x<span class="op">,</span> <span class="dv">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a>                pow<span class="op">(</span>ponto1<span class="op">.</span>y <span class="op">-</span> ponto2<span class="op">.</span>y<span class="op">,</span> <span class="dv">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>                pow<span class="op">(</span>ponto1<span class="op">.</span>z <span class="op">-</span> ponto2<span class="op">.</span>z<span class="op">,</span> <span class="dv">2</span><span class="op">));</span></span>
+<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a><span class="co">// Leitura de um ponto</span></span>
+<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> leia_ponto<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>mensagem<span class="op">,</span> <span class="dt">double</span> <span class="op">*</span>x<span class="op">,</span> <span class="dt">double</span> <span class="op">*</span>y<span class="op">,</span> <span class="dt">double</span> <span class="op">*</span>z<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">%s</span><span class="st">"</span><span class="op">,</span> mensagem<span class="op">);</span></span>
+<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf%lf%lf</span><span class="st">"</span><span class="op">,</span> x<span class="op">,</span> y<span class="op">,</span> z<span class="op">);</span></span>
+<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>Digite as coordenadas 1: <span class="kw">-1 7 3</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>Digite as coordenadas 2: <span class="kw">-1 0 0</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>Digite as coordenadas 1: <span class="kw">2 3 5</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>Área do triângulo: 17.31.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="passagem-de-registro-por-referência" class="level3" data-number="23.3.1">
+<h3 data-number="23.3.1" class="anchored" data-anchor-id="passagem-de-registro-por-referência"><span class="header-section-number">23.3.1</span> Passagem de registro por referência</h3>
+<p>Da mesma forma que outras variáveis, é possível passar a referência de um registro para uma função. O endereço de um registro é o endereço de seu primeiro byte, independentemente de seus campos.</p>
+<p>No caso do exemplo da área do triângulo, a leitura de cada ponto está passando cada campo de forma independente. Essa situação pode ser modificada passando um único parâmetro (o registro) para a função, todo ele por referência.</p>
+<p>Segue a nova versão do procedimento <code>leia_ponto</code>.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Leitura de um ponto em R^3</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">mensagem:</span><span class="co"> mensagem solicitando a digitação dos dados</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">ponto:</span><span class="co"> referência a um ponto</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> leia_ponto<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>mensagem<span class="op">,</span> <span class="kw">struct</span> ponto <span class="op">*</span>ponto<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O primeiro parâmetro, <code>mensagem</code>, está inalterado e as três coordenadas foram substituídas pelo registro todo. Agora, o parâmetro formal aguarda o endereço de uma variável <code>struct ponto</code>, estruturando uma passagem por referência. A chamada para essa função pode ser, por exemplo, como apresentada logo na sequência.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> ponto ponto<span class="op">;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>leia_ponto<span class="op">(</span><span class="st">"Digite as coordenadas: "</span><span class="op">,</span> <span class="op">&amp;</span>ponto<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="ponteiros-para-struct-e-acesso-a-campos" class="level3" data-number="23.3.2">
+<h3 data-number="23.3.2" class="anchored" data-anchor-id="ponteiros-para-struct-e-acesso-a-campos"><span class="header-section-number">23.3.2</span> Ponteiros para <code>struct</code> e acesso a campos</h3>
+<p>O entendimento da passagem por referência quando os parâmetros são <code>struct</code> requer entender a natureza da notação específica usada em C para esses casos. Dessa forma, uma sequência de exemplos proporcionam o entendimento dos operadores utilizados.</p>
+<p>O programa seguinte mostra o uso de um ponteiro para fazer acesso ao conteúdo de um registro.</p>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Registros e ponteiros para registros</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">/*! </span><span class="an">@struct</span><span class="co"> </span><span class="cv">registro</span><span class="co"> com campos diversos */</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> registro <span class="op">{</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> d<span class="op">;</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> c<span class="op">;</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Variável comum para registro</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> registro r1 <span class="op">=</span> <span class="op">{</span><span class="dv">9</span><span class="op">,</span> <span class="fl">3.7</span><span class="op">,</span> <span class="ch">'x'</span><span class="op">};</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"r1 = </span><span class="sc">%d</span><span class="st"> / </span><span class="sc">%g</span><span class="st"> / '</span><span class="sc">%c</span><span class="st">'.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> r1<span class="op">.</span>i<span class="op">,</span> r1<span class="op">.</span>d<span class="op">,</span> r1<span class="op">.</span>c<span class="op">);</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Ponteiro para registro</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> registro <span class="op">*</span>pr <span class="op">=</span> <span class="op">&amp;</span>r1<span class="op">;</span>  <span class="co">// pr aponta para r1</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Uso do ponteiro com outra variável comum</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> registro r2 <span class="op">=</span> <span class="op">*</span>pr<span class="op">;</span>  <span class="co">// copia r1 para r2</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"r2 = </span><span class="sc">%d</span><span class="st"> / </span><span class="sc">%g</span><span class="st"> / '</span><span class="sc">%c</span><span class="st">'.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> r2<span class="op">.</span>i<span class="op">,</span> r2<span class="op">.</span>d<span class="op">,</span> r2<span class="op">.</span>c<span class="op">);</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>r1 = 9 / 3.7 / 'x'.</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>r2 = 9 / 3.7 / 'x'.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Nesse programa, <code>r1</code> é um registro com três campos, iniciados com alguns valores ilustrativos. Há, também, uma variável do tipo ponteiro, cujo tipo base é <code>struct registro</code>.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> registro <span class="op">*</span>pr<span class="op">;</span>  <span class="co">// para guardar o endereço de um registro</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Da mesma forma que outras variáveis e respectivos ponteiros, <code>pr</code> é usado para guardar um endereço (no caso, de <code>r1</code>) e a notação <code>*pr</code> permite o acesso aos dados apontado. Dessa forma, escrever <code>r2 = *pr</code> equivale, no código, a <code>r2 = r1</code>, já que <code>pr</code> aponta para <code>r1</code>. Em outras palavras, o tipo de <code>pr</code> é <code>struct registro*</code> (um ponteiro) e de <code>*pr</code> é <code>struct registro</code> (o registro real que está sendo apontado).</p>
+<p>A questão que se apresenta é o acesso aos campos de um registro apontado. C disponibiliza uma notação particular para essa situação, usando o operador <code>-&gt;</code>, como se ilustra a seguir.</p>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Registros e ponteiros para registros</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">/*! </span><span class="an">@struct</span><span class="co"> </span><span class="cv">registro</span><span class="co"> com campos diversos */</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> registro <span class="op">{</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> d<span class="op">;</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> c<span class="op">;</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> registro r1 <span class="op">=</span> <span class="op">{</span><span class="dv">9</span><span class="op">,</span> <span class="fl">3.7</span><span class="op">,</span> <span class="ch">'x'</span><span class="op">};</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"r1 = </span><span class="sc">%d</span><span class="st"> / </span><span class="sc">%g</span><span class="st"> / '</span><span class="sc">%c</span><span class="st">'.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> r1<span class="op">.</span>i<span class="op">,</span> r1<span class="op">.</span>d<span class="op">,</span> r1<span class="op">.</span>c<span class="op">);</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> registro <span class="op">*</span>pr <span class="op">=</span> <span class="op">&amp;</span>r1<span class="op">;</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"r2 = </span><span class="sc">%d</span><span class="st"> / </span><span class="sc">%g</span><span class="st"> / '</span><span class="sc">%c</span><span class="st">'.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> pr<span class="op">-&gt;</span>i<span class="op">,</span> pr<span class="op">-&gt;</span>d<span class="op">,</span> pr<span class="op">-&gt;</span>c<span class="op">);</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>r1 = 9 / 3.7 / 'x'.</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>r2 = 9 / 3.7 / 'x'.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Quando uma variável <code>p</code> é um ponteiro para um <code>struct</code>, <code>*p</code> é o registro apontado inteiro e <code>p-&gt;c</code> indica o acesso ao campo <code>c</code> de <code>*p</code>.</p>
+</section>
+<section id="uso-dos-ponteiros-na-passagem-por-referência" class="level3" data-number="23.3.3">
+<h3 data-number="23.3.3" class="anchored" data-anchor-id="uso-dos-ponteiros-na-passagem-por-referência"><span class="header-section-number">23.3.3</span> Uso dos ponteiros na passagem por referência</h3>
+<p>Com o uso de ponteiros, a passagem por referência de um registro pode ser feita. O programa seguinte modifica a função de leitura de um ponto, trocando as três coordenadas separadas pelo registro como um todo. As demais funções ficaram inalteradas e foram suprimidas para simplificar a listagem.</p>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Determinação da área de um triângulo dados seus vértices em R^3</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * Requer: três pontos, cada um composto por suas coordenadas x, y e z</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"> * Assegura: a apresentação da área do triângulo definido pelos vértices</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;math.h&gt;</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co">/*! </span><span class="an">@struct</span><span class="co"> </span><span class="cv">ponto</span><span class="co"> */</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> ponto <span class="op">{</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> x<span class="op">,</span> y<span class="op">,</span> z<span class="op">;</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="co">// --- Alguns protótipos foram suprimidos</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="co"> * Leitura de um ponto em R^3</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">mensagem:</span><span class="co"> mensagem solicitando a digitação dos dados</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">ponto:</span><span class="co"> referência para o ponto</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> leia_ponto<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>mensagem<span class="op">,</span> <span class="kw">struct</span> ponto <span class="op">*</span>ponto<span class="op">);</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a><span class="co"> * Main</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> ponto vertice1<span class="op">;</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>    leia_ponto<span class="op">(</span><span class="st">"Digite as coordenadas 1: "</span><span class="op">,</span> <span class="op">&amp;</span>vertice1<span class="op">);</span></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> ponto vertice2<span class="op">;</span></span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>    leia_ponto<span class="op">(</span><span class="st">"Digite as coordenadas 2: "</span><span class="op">,</span> <span class="op">&amp;</span>vertice2<span class="op">);</span></span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> ponto vertice3<span class="op">;</span></span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>    leia_ponto<span class="op">(</span><span class="st">"Digite as coordenadas 1: "</span><span class="op">,</span> <span class="op">&amp;</span>vertice3<span class="op">);</span></span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> area <span class="op">=</span> area_triangulo<span class="op">(</span>vertice1<span class="op">,</span> vertice2<span class="op">,</span> vertice3<span class="op">);</span></span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Área do triângulo: </span><span class="sc">%.2f</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> area<span class="op">);</span></span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a><span class="co">// --- Algumas implementações foram suprimidas</span></span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a><span class="co">// Leitura de um ponto</span></span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> leia_ponto<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>mensagem<span class="op">,</span> <span class="kw">struct</span> ponto <span class="op">*</span>ponto<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">%s</span><span class="st">"</span><span class="op">,</span> mensagem<span class="op">);</span></span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf%lf%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>ponto<span class="op">-&gt;</span>x<span class="op">,</span> <span class="op">&amp;</span>ponto<span class="op">-&gt;</span>y<span class="op">,</span> <span class="op">&amp;</span>ponto<span class="op">-&gt;</span>z<span class="op">);</span></span>
+<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>Digite as coordenadas 1: <span class="kw">-1 7 3</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>Digite as coordenadas 2: <span class="kw">-1 0 0</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>Digite as coordenadas 1: <span class="kw">2 3 5</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>Área do triângulo: 17.31.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O procedimento <code>leia_ponto</code> mantém o primeiro parâmetro original, que é a mensagem apresentada e define mais um único parâmetro que é o <code>struct</code> passado como referência (com tipo <code>struct ponto*</code>). Dado que dentro desse procedimento o parâmetro <code>ponto</code> é um ponteiro, o acesso aos campos é escrito <code>ponto-&gt;x</code>, <code>ponto-&gt;y</code> e <code>ponto-&gt;z</code>. Para o <code>sscanf</code>, que também espera passagens por referência, são indicados os endereços de cada campo individualmente: <code>&amp;ponto-&gt;x</code>, <code>&amp;ponto-&gt;y</code> e <code>&amp;ponto-&gt;z</code>.</p>
+<p>Na função <code>main</code>, a chamada para <code>leia_ponto</code> requer que seja passado o endereço do registro que será modificado.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>leia_ponto<span class="op">(</span><span class="st">"Digite as coordenadas 1: "</span><span class="op">,</span> <span class="op">&amp;</span>vertice1<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="mais-sobre-as-declarações-de-struct" class="level2" data-number="23.4">
+<h2 data-number="23.4" class="anchored" data-anchor-id="mais-sobre-as-declarações-de-struct"><span class="header-section-number">23.4</span> Mais sobre as declarações de <code>struct</code></h2>
+<p>Declarações de registros na linguagem C apresentam uma certa variedade de formatos. Nesta seção há comentários sobre algumas variações, embora nem todas sejam consideradas.</p>
+<section id="sec-declaracao-struct-sem-nome" class="level3" data-number="23.4.1">
+<h3 data-number="23.4.1" class="anchored" data-anchor-id="sec-declaracao-struct-sem-nome"><span class="header-section-number">23.4.1</span> Declaração sem nome de registro</h3>
+<p>Em algumas situações, é possível agrupar os campos em um registro sem que o <code>struct</code> tenha um nome próprio.</p>
+<p>Segue um exemplo</p>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Exemplo de struct sem nome</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * Assegura: apresentação dos valores iniciados</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> nome<span class="op">[</span><span class="dv">100</span><span class="op">];</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> cpf<span class="op">[</span><span class="dv">15</span><span class="op">];</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> ano_nascimento<span class="op">;</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> alguem<span class="op">;</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    strncpy<span class="op">(</span>alguem<span class="op">.</span>nome<span class="op">,</span> <span class="st">"Muriel Gomes Faruak"</span><span class="op">,</span> <span class="kw">sizeof</span> alguem<span class="op">.</span>nome <span class="op">-</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    strncpy<span class="op">(</span>alguem<span class="op">.</span>cpf<span class="op">,</span> <span class="st">"123.456.789-00"</span><span class="op">,</span> <span class="kw">sizeof</span> alguem<span class="op">.</span>cpf <span class="op">-</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    alguem<span class="op">.</span>ano_nascimento <span class="op">=</span> <span class="dv">2008</span><span class="op">;</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Nome: </span><span class="sc">%s</span><span class="st">,</span><span class="sc">\n</span><span class="st">CPF: </span><span class="sc">%s</span><span class="st">,</span><span class="sc">\n</span><span class="st">Ano: </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> alguem<span class="op">.</span>nome<span class="op">,</span> alguem<span class="op">.</span>cpf<span class="op">,</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>           alguem<span class="op">.</span>ano_nascimento<span class="op">);</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>Nome: Muriel Gomes Faruak,</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>CPF: 123.456.789-00���,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>Ano: 2008.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Nesse exemplo, o registro é criado e a variável é declarada de uma única vez. Um nome para o registro, dado que a variável já está criada, é irrelevante e pode ser omitido.</p>
+</section>
+<section id="sec-declaracoes-struct-iguais" class="level3" data-number="23.4.2">
+<h3 data-number="23.4.2" class="anchored" data-anchor-id="sec-declaracoes-struct-iguais"><span class="header-section-number">23.4.2</span> Declarações “iguais”</h3>
+<p>Em C, ao se encontrar a definição do registro como um tipo, o compilador adiciona esse novo <code>struct</code> a uma tabela interna de novos tipos. Se duas definições são idênticas, porém criadas em momentos diferentes, elas não são compatíveis.</p>
+<p>Segue um exemplo no qual duas variáveis são criadas sem especificação do nome do <code>struct</code> (<a href="#sec-declaracao-struct-sem-nome" class="quarto-xref"><span>Seção 23.4.1</span></a>) para, em seguida, ser declarada uma terceira variável com <code>struct</code> idêntico no formato.</p>
+<div class="sourceCode cell-code" id="cb26" data-intentional-problems="true"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * Exemplo de struct sem nome</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"> * Assegura: apresentação dos valores iniciados</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// registro1 e registro2 são compatíveis</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> d<span class="op">;</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> registro1<span class="op">,</span> registro2<span class="op">;</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    registro1<span class="op">.</span>i <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    registro1<span class="op">.</span>d <span class="op">=</span> <span class="fl">1.1</span><span class="op">;</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    registro2 <span class="op">=</span> registro1<span class="op">;</span>  <span class="co">// cópia completa</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">// registro3 possui a mesma organização, porém é incompatível</span></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> d<span class="op">;</span></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> registro3<span class="op">;</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>    registro3 <span class="op">=</span> registro1<span class="op">;</span></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>main.c: In function ‘main’:</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>main.c:24:17: error: incompatible types when assigning to type ‘struct </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>&lt;anonymous&gt;’ from type ‘struct &lt;anonymous&gt;’</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>   24 |     registro3 = registro1;</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>      |                 ^~~~~~~~~</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>main.c:23:7: warning: variable ‘registro3’ set but not used </span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>[-Wunused-but-set-variable]</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>   23 |     } registro3;</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>      |       ^~~~~~~~~</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>main.c:14:18: warning: variable ‘registro2’ set but not used </span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>[-Wunused-but-set-variable]</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>   14 |     } registro1, registro2;</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>      |                  ^~~~~~~~~</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O uso de <code>struct</code> com nome permite a declaração de novas variáveis referenciando um único tipo e, assim, mantendo a compatibilidade entre as variáveis.</p>
+</section>
+</section>
+<section id="exemplos" class="level2" data-number="23.5">
+<h2 data-number="23.5" class="anchored" data-anchor-id="exemplos"><span class="header-section-number">23.5</span> Exemplos</h2>
+<p>Mais alguns exemplos com registros são apresentados.</p>
+<section id="apresentação-de-um-registro-em-uma-função" class="level3" data-number="23.5.1">
+<h3 data-number="23.5.1" class="anchored" data-anchor-id="apresentação-de-um-registro-em-uma-função"><span class="header-section-number">23.5.1</span> Apresentação de um registro em uma função</h3>
+<p>O programa seguinte mostra mais um exemplo de passagem de um registro como parâmetro por valor.</p>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Apresentação de dados de um vetor 2D com rótulo</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * Assegura: apresentação dos campos do registro</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co">/*! </span><span class="an">@struct</span><span class="co"> </span><span class="cv">vetor</span><span class="co"> 2D */</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> vetor <span class="op">{</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> rotulo<span class="op">;</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> x<span class="op">,</span> y<span class="op">;</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="co"> * Escreve o conteúdo de um vetor</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">vetor:</span><span class="co"> vetor a ser escrito</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> escreva_vetor<span class="op">(</span><span class="kw">struct</span> vetor vetor<span class="op">);</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a><span class="co"> * Main</span></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> vetor vetor1 <span class="op">=</span> <span class="op">{</span><span class="ch">'A'</span><span class="op">,</span> <span class="fl">0.0</span><span class="op">,</span> <span class="fl">0.0</span><span class="op">};</span></span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> vetor vetor2 <span class="op">=</span> <span class="op">{</span><span class="ch">'B'</span><span class="op">,</span> <span class="op">-</span><span class="fl">2.2</span><span class="op">,</span> <span class="fl">1.7</span><span class="op">};</span></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a>    escreva_vetor<span class="op">(</span>vetor1<span class="op">);</span></span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a>    escreva_vetor<span class="op">(</span>vetor2<span class="op">);</span></span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a><span class="co">// Apresenta um vetor na tela</span></span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> escreva_vetor<span class="op">(</span><span class="kw">struct</span> vetor vetor<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"vetor </span><span class="sc">%c</span><span class="st">: (</span><span class="sc">%.1f</span><span class="st">, </span><span class="sc">%.1f</span><span class="st">).</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> vetor<span class="op">.</span>rotulo<span class="op">,</span> vetor<span class="op">.</span>x<span class="op">,</span> vetor<span class="op">.</span>y<span class="op">);</span></span>
+<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>vetor A: (0.0, 0.0).</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>vetor B: (-2.2, 1.7).</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>É reforçado, aqui, que a declaração de <code>struct vetor</code> deve ser global, pois isso é necessário para que o registro definido possa ser usado tanto na função <code>escreva_vetor</code> quanto na função <code>main</code>.</p>
+<p>Dessa forma, a função <code>escreva_vetor</code> tem como único parâmetro um <code>struct vetor</code>. Em <code>main</code>, duas variáveis (<code>vetor1</code> e <code>vetor2</code>) são declaradas e compartilham o mesmo tipo do parâmetro. Nas chamadas à função, cada um dos registros é passado por valor, com cópia do registro de <code>main</code> para o parâmetro <code>vetor</code> de <code>escreva_vetor</code>.</p>
+</section>
+<section id="normalização-de-vetores" class="level3" data-number="23.5.2">
+<h3 data-number="23.5.2" class="anchored" data-anchor-id="normalização-de-vetores"><span class="header-section-number">23.5.2</span> Normalização de vetores</h3>
+<p>Um vetor <span class="math inline">\(\vec{v}\)</span> é usualmente representando por um segmento orientado, indicando sua direção e intensidade. A norma de um vetor, também chamada módulo, é representada por <span class="math inline">\(\lvert\vec{v}\rvert\)</span> e corresponde, graficamente, ao comprimento do segmento.</p>
+<p>Quando um vetor é normalizado, é mantida sua direção e sentido, alterando-se sua norma para uma unidade, ou seja <span class="math inline">\({\lvert\vec{v'}\rvert = 1}\)</span>. O programa seguinte ilustra como vetores são normalizados. Cada vetor é organizado em um <code>struct</code> e são usadas funções para as diversas manipulações.</p>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Apresentação de dados de um vetor 2D com rótulo</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * Assegura: apresentação dos campos do registro</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;math.h&gt;</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co">/*! </span><span class="an">@struct</span><span class="co"> </span><span class="cv">vetor</span><span class="co"> 2D */</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> vetor <span class="op">{</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> rotulo<span class="op">;</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> x<span class="op">,</span> y<span class="op">;</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="co"> * Escreve o conteúdo de um vetor</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">vetor:</span><span class="co"> vetor a ser escrito</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> escreva_vetor<span class="op">(</span><span class="kw">struct</span> vetor vetor<span class="op">);</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a><span class="co"> * Faz a normalização de um vetor para que tenha norma igual a 1</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">vetor:</span><span class="co"> referência para o vetor</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> normalize_vetor<span class="op">(</span><span class="kw">struct</span> vetor <span class="op">*</span>vetor<span class="op">);</span></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna a norma (módulo) de um vetor</span></span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">vetor</span></span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> norma do vetor</span></span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> norma_vetor<span class="op">(</span><span class="kw">struct</span> vetor vetor<span class="op">);</span></span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a><span class="co"> * Main</span></span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> vetor vetor1 <span class="op">=</span> <span class="op">{</span><span class="ch">'A'</span><span class="op">,</span> <span class="fl">3.0</span><span class="op">,</span> <span class="fl">4.0</span><span class="op">};</span></span>
+<span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a>    escreva_vetor<span class="op">(</span>vetor1<span class="op">);</span></span>
+<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a>    normalize_vetor<span class="op">(&amp;</span>vetor1<span class="op">);</span></span>
+<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a>    escreva_vetor<span class="op">(</span>vetor1<span class="op">);</span></span>
+<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> vetor vetor2 <span class="op">=</span> <span class="op">{</span><span class="ch">'B'</span><span class="op">,</span> <span class="fl">300.0</span><span class="op">,</span> <span class="fl">400.0</span><span class="op">};</span></span>
+<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a>    escreva_vetor<span class="op">(</span>vetor2<span class="op">);</span></span>
+<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a>    normalize_vetor<span class="op">(&amp;</span>vetor2<span class="op">);</span></span>
+<span id="cb30-45"><a href="#cb30-45" aria-hidden="true" tabindex="-1"></a>    escreva_vetor<span class="op">(</span>vetor2<span class="op">);</span></span>
+<span id="cb30-46"><a href="#cb30-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-47"><a href="#cb30-47" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> vetor vetor3 <span class="op">=</span> <span class="op">{</span><span class="ch">'C'</span><span class="op">,</span> <span class="op">-</span><span class="fl">18.7</span><span class="op">,</span> <span class="fl">41.1</span><span class="op">};</span></span>
+<span id="cb30-48"><a href="#cb30-48" aria-hidden="true" tabindex="-1"></a>    escreva_vetor<span class="op">(</span>vetor3<span class="op">);</span></span>
+<span id="cb30-49"><a href="#cb30-49" aria-hidden="true" tabindex="-1"></a>    normalize_vetor<span class="op">(&amp;</span>vetor3<span class="op">);</span></span>
+<span id="cb30-50"><a href="#cb30-50" aria-hidden="true" tabindex="-1"></a>    escreva_vetor<span class="op">(</span>vetor3<span class="op">);</span></span>
+<span id="cb30-51"><a href="#cb30-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-52"><a href="#cb30-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb30-53"><a href="#cb30-53" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb30-54"><a href="#cb30-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-55"><a href="#cb30-55" aria-hidden="true" tabindex="-1"></a><span class="co">// Apresenta um vetor na tela</span></span>
+<span id="cb30-56"><a href="#cb30-56" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> escreva_vetor<span class="op">(</span><span class="kw">struct</span> vetor vetor<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-57"><a href="#cb30-57" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"vetor </span><span class="sc">%c</span><span class="st">: (</span><span class="sc">%.1f</span><span class="st">, </span><span class="sc">%.1f</span><span class="st">); norma </span><span class="sc">%.2f</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> vetor<span class="op">.</span>rotulo<span class="op">,</span> vetor<span class="op">.</span>x<span class="op">,</span></span>
+<span id="cb30-58"><a href="#cb30-58" aria-hidden="true" tabindex="-1"></a>            vetor<span class="op">.</span>y<span class="op">,</span> norma_vetor<span class="op">(</span>vetor<span class="op">));</span></span>
+<span id="cb30-59"><a href="#cb30-59" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb30-60"><a href="#cb30-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-61"><a href="#cb30-61" aria-hidden="true" tabindex="-1"></a><span class="co">// Normalização de um vetor</span></span>
+<span id="cb30-62"><a href="#cb30-62" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> normalize_vetor<span class="op">(</span><span class="kw">struct</span> vetor <span class="op">*</span>vetor<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-63"><a href="#cb30-63" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> norma <span class="op">=</span> norma_vetor<span class="op">(*</span>vetor<span class="op">);</span></span>
+<span id="cb30-64"><a href="#cb30-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-65"><a href="#cb30-65" aria-hidden="true" tabindex="-1"></a>    vetor<span class="op">-&gt;</span>x <span class="op">/=</span> norma<span class="op">;</span></span>
+<span id="cb30-66"><a href="#cb30-66" aria-hidden="true" tabindex="-1"></a>    vetor<span class="op">-&gt;</span>y <span class="op">/=</span> norma<span class="op">;</span></span>
+<span id="cb30-67"><a href="#cb30-67" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb30-68"><a href="#cb30-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-69"><a href="#cb30-69" aria-hidden="true" tabindex="-1"></a><span class="co">// Calcula a norma de um vetor</span></span>
+<span id="cb30-70"><a href="#cb30-70" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> norma_vetor<span class="op">(</span><span class="kw">struct</span> vetor vetor<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-71"><a href="#cb30-71" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> sqrt<span class="op">(</span>vetor<span class="op">.</span>x <span class="op">*</span> vetor<span class="op">.</span>x <span class="op">+</span> vetor<span class="op">.</span>y <span class="op">*</span> vetor<span class="op">.</span>y<span class="op">);</span></span>
+<span id="cb30-72"><a href="#cb30-72" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>vetor A: (3.0, 4.0); norma 5.00.</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>vetor A: (0.6, 0.8); norma 1.00.</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>vetor B: (300.0, 400.0); norma 500.00.</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>vetor B: (0.6, 0.8); norma 1.00.</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>vetor C: (-18.7, 41.1); norma 45.15.</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>vetor C: (-0.4, 0.9); norma 1.00.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>As funções <code>escreva_vetor</code> e <code>norma_vetor</code> recebem um <code>struct vetor</code> por valor, com cópia do conteúdo do argumento. A normalização, por sua vez, recebe seu parâmetro por referência e altera o conteúdo do registro apontado.</p>
+
+
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Este autor reconhece que um certo número de recompilações foi necessário por erros na digitação dos parâmetros ao criar o exemplo.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiada");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiada");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./c-parametros-de-funcoes.html" class="pagination-link" aria-label="Parâmetros das funções na linguagem C">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Parâmetros das funções na linguagem C</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./c-dados-em-vetores.html" class="pagination-link" aria-label="C: Dados em vetores">
+        <span class="nav-page-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">C: Dados em vetores</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

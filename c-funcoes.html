@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>18&nbsp; Funções em C – Construção de Algoritmos e Programação</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./c-regras-de-escopo-com-modularizacao.html" rel="next">
+<link href="./c-manipulacao-de-dados-textuais.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-9e1f2a4632985dffc2c80318c992baf5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-7cf8a0149bf791b42ada95f7f6344cc2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="book.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./c-funcoes.html">Modularização e memória</a></li><li class="breadcrumb-item"><a href="./c-funcoes.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Funções em C</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Construção de Algoritmos e Programação</a> 
+        <div class="sidebar-tools-main">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-save"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./moreira_j-construcao_algoritmos_programacao-programacao.pdf">
+            Versão PDF
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Procurar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Apresentação</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preambulo_prefacio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Programação em C</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./algoritmos-nocoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Noções de algoritmos</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Programação básica</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-introducao-a-linguagem-c.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introdução à linguagem C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-tipos-de-dados.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tipos de dados da linguagem C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-variaveis-identificadores-e-leitura.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Variáveis e leituras em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-expressoes-aritmeticas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Expressões aritméticas de C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-expressoes-relacionais-e-logicas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">C: expressões relacionais e lógicas</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Controle de fluxo simples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-execucao-condicional-com-if.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Execução condicional com <code>if</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-execucao-condicional-com-switch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Execução condicional com <code>switch</code></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Organização geral do código</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-escopo-basico-de-declaracoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Escopo básico de declarações</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-organizacao-do-codigo-fonte.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Organização do código fonte</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Controle de repetição do fluxo</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-while.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Repetições com <code>while</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-for.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Repetições com <code>for</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-do-while.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Repetições com <code>do while</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-arquivos-texto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Arquivos texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-desvirtuacao-das-repeticoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Desvirtuação das repetições</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Cadeias de caracteres</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-textuais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Dados textuais em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-manipulacao-de-dados-textuais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Manipulação de dados textuais em C</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Modularização e memória</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-funcoes.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Funções em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-regras-de-escopo-com-modularizacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Regras de escopo com a modularização</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-enderecamento-de-memoria-e-ponteiros.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Endereçamento de memória e ponteiros nos programas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-procedimentos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Procedimentos em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-parametros-de-funcoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Parâmetros das funções na linguagem C</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Estruturação de dados</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-com-struct.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">C: Dados com <code>struct</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-em-vetores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">C: Dados em vetores</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página:</h2>
+   
+  <ul>
+  <li><a href="#o-que-é-uma-função" id="toc-o-que-é-uma-função" class="nav-link active" data-scroll-target="#o-que-é-uma-função"><span class="header-section-number">18.1</span> O que é uma função</a></li>
+  <li><a href="#declaração-e-implementação-das-funções" id="toc-declaração-e-implementação-das-funções" class="nav-link" data-scroll-target="#declaração-e-implementação-das-funções"><span class="header-section-number">18.2</span> Declaração e implementação das funções</a>
+  <ul class="collapse">
+  <li><a href="#declaração-e-implementação-de-funções-próprias" id="toc-declaração-e-implementação-de-funções-próprias" class="nav-link" data-scroll-target="#declaração-e-implementação-de-funções-próprias"><span class="header-section-number">18.2.1</span> Declaração e implementação de funções próprias</a></li>
+  <li><a href="#onde-declarar-a-função" id="toc-onde-declarar-a-função" class="nav-link" data-scroll-target="#onde-declarar-a-função"><span class="header-section-number">18.2.2</span> Onde declarar a função?</a></li>
+  <li><a href="#sec-escopo-da-declaracao-de-funcoes" id="toc-sec-escopo-da-declaracao-de-funcoes" class="nav-link" data-scroll-target="#sec-escopo-da-declaracao-de-funcoes"><span class="header-section-number">18.2.3</span> Escopo da declaração das funções</a></li>
+  <li><a href="#funções-com-vários-parâmetros" id="toc-funções-com-vários-parâmetros" class="nav-link" data-scroll-target="#funções-com-vários-parâmetros"><span class="header-section-number">18.2.4</span> Funções com vários parâmetros</a></li>
+  <li><a href="#sec-documentacao-funcoes" id="toc-sec-documentacao-funcoes" class="nav-link" data-scroll-target="#sec-documentacao-funcoes"><span class="header-section-number">18.2.5</span> Documentação</a></li>
+  </ul></li>
+  <li><a href="#criação-de-funções" id="toc-criação-de-funções" class="nav-link" data-scroll-target="#criação-de-funções"><span class="header-section-number">18.3</span> Criação de funções</a></li>
+  <li><a href="#escolha-dos-tipos-de-retorno-e-dos-parâmetros" id="toc-escolha-dos-tipos-de-retorno-e-dos-parâmetros" class="nav-link" data-scroll-target="#escolha-dos-tipos-de-retorno-e-dos-parâmetros"><span class="header-section-number">18.4</span> Escolha dos tipos de retorno e dos parâmetros</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./c-funcoes.html">Modularização e memória</a></li><li class="breadcrumb-item"><a href="./c-funcoes.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Funções em C</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-funcoes" class="quarto-section-identifier"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Funções em C</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<span class="math inline">\(\newcommand\Id[1]{\mbox{\textit{#1}}}\)</span>
+<p>As funções são parte essencial do desenvolvimento de qualquer código. Não somente evitam que trabalho extra tenha que ser feito mas também melhoram a qualidade geral do código como um todo. As estruturas e estratégias das funções serão abordadas ao longo deste capítulo.</p>
+<section id="o-que-é-uma-função" class="level2" data-number="18.1">
+<h2 data-number="18.1" class="anchored" data-anchor-id="o-que-é-uma-função"><span class="header-section-number">18.1</span> O que é uma função</h2>
+<p>O conceito de função nas linguagens de programação é bastante similar ao das funções matemáticas, estas últimas mapeando um conjunto domínio em um conjunto chamado contradomínio. A função <span class="math inline">\({y = \cos x}\)</span>, por exemplo, é usualmente definida para mapear valores <span class="math inline">\({x \in \mathbb{R}}\)</span> para <span class="math inline">\({y \in \mathbb{R}}\)</span>, sendo domínio e contradomínio iguais; a função <span class="math inline">\({y = \lfloor x \rfloor}\)</span> (função piso), por sua vez, tem domínio real e contradomínio inteiro.</p>
+<p>Basicamente, uma função é aplicada em um argumento<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> do domínio e tem como resultado um valor do contradomínio.</p>
+<p>Um exemplo de programa que inclui uma função matemática é apresentado a seguir.</p>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">Apresentação de valores de raiz quadrada</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: apresentação do valor e sua raiz, de 0 a 1, de 0,1 em 0,1</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;math.h&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">double</span> valor <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> valor <span class="op">&lt;=</span> <span class="fl">1.0</span><span class="op">;</span> valor <span class="op">+=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"A raiz quadrada de </span><span class="sc">%g</span><span class="st"> é </span><span class="sc">%g</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> valor<span class="op">,</span> sqrt<span class="op">(</span>valor<span class="op">));</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>A raiz quadrada de 0 é 0.</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>A raiz quadrada de 0.1 é 0.316228.</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>A raiz quadrada de 0.2 é 0.447214.</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>A raiz quadrada de 0.3 é 0.547723.</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>A raiz quadrada de 0.4 é 0.632456.</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>A raiz quadrada de 0.5 é 0.707107.</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>A raiz quadrada de 0.6 é 0.774597.</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>A raiz quadrada de 0.7 é 0.83666.</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>A raiz quadrada de 0.8 é 0.894427.</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>A raiz quadrada de 0.9 é 0.948683.</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>A raiz quadrada de 1 é 1.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Em C, a função <code>sqrt</code> retorna a raiz quadrada de um valor, sendo seu domínio e contradomínio <code>double</code>.</p>
+<p>Como domínio e contradomínios não precisam ser iguais, segue exemplo em C que ilustra uma função nessa condição.</p>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">Apresentação de uma cadeia de caracteres e seu tamanho em bytes</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: apresentação de um texto e o número de bytes que ele ocupa</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>texto <span class="op">=</span> <span class="st">"Modularização"</span><span class="op">;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">\"%s\"</span><span class="st"> usa </span><span class="sc">%zu</span><span class="st"> bytes.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> texto<span class="op">,</span> strlen<span class="op">(</span>texto<span class="op">));</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>"Modularização" usa 15 bytes.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A função <code>strlen</code> faz o mapeamento de cadeias de caracteres (seu domínio) para valores inteiros (contradomínio).</p>
+<p>As funções em C podem mapear os mais diferentes tipos de dados para outros tantos tipos, como de <code>double</code> para <code>int</code>, <code>int</code> para <code>double</code> ou cadeias de caracteres para <code>double</code>, por exemplo.</p>
+</section>
+<section id="declaração-e-implementação-das-funções" class="level2" data-number="18.2">
+<h2 data-number="18.2" class="anchored" data-anchor-id="declaração-e-implementação-das-funções"><span class="header-section-number">18.2</span> Declaração e implementação das funções</h2>
+<p>Todo programa em C contém pelo menos uma função. Desde o primeiro código apresentado nesse livro (o programa que não faz nada, na <a href="c-introducao-a-linguagem-c.html#sec-programa-minimo" class="quarto-xref"><span>Seção 2.2.1</span></a>), fica patente que todo executável gerado a partir de um código em C precisa de <code>main</code>, e <code>main</code> é uma função. Como usado em todos os programas até o momento, a função principal tem domínio vazio (indicado por <code>void</code>) e seu contradomínio é o tipo <code>int</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Toda função tem um nome. Neste caso, o nome é <code>main</code>, assim como seriam logaritmo (<span class="math inline">\(\log\)</span>) ou cosseno (<span class="math inline">\(\cos\)</span>) para citar algumas funções matemáticas. Entre os parênteses estão especificados seus parâmetros e, para <code>main</code>, não há efetivamente nenhum parâmetro. O contradomínio é indicado antes do nome da função: <code>int</code>.</p>
+<p>Para citar um exemplo já conhecido, a função <code>sqrt</code> tem a seguinte declaração em <code>math.h</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> sqrt<span class="op">(</span><span class="dt">double</span> x<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Colocando-se isso mais explicitamente, <code>sqrt</code> aceita um <code>double</code> como parâmetro e, como resultado, devolve um valor também <code>double</code>.</p>
+<section id="declaração-e-implementação-de-funções-próprias" class="level3" data-number="18.2.1">
+<h3 data-number="18.2.1" class="anchored" data-anchor-id="declaração-e-implementação-de-funções-próprias"><span class="header-section-number">18.2.1</span> Declaração e implementação de funções próprias</h3>
+<p>O programador tem como uma grande vantagem poder escrever suas próprias funções e, para isso, precisa fazer sua declaração.</p>
+<div class="callout callout-style-simple callout-none no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Declaração de função
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>tipo_de_retorno</em> <em>nome_da_função</em> <code>(</code> <em>lista_de_parâmetros</em><code>)</code> <code>;</code></p>
+</div>
+</div>
+<p>As funções precisam ter um <em>nome_da_função</em> (identificador válido), especificar seu <em>tipo_de_retorno</em> e seus parâmetros (<em>lista_de_parâmetros</em>). Declarações de função nesse formato são conhecidos como protótipos da função.</p>
+<p>Os conceitos envolvidos na escrita de funções podem ser ilustrados por uma sequência de tentativas de escrever um programa que usa uma função. Esse programa tem o objetivo de ler um texto qualquer e apresentar o número de vogais presentes (ignorando acentuações).</p>
+<p>Segue a versão do programa sem nenhuma função.</p>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">Determinação da quantidade de vogais em um texto digitado pelo usuário</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: um texto qualquer</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: apresentação do número de vogais contidas no texto</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite um texto: "</span><span class="op">);</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> texto<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>texto<span class="op">,</span> <span class="kw">sizeof</span> texto<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    texto<span class="op">[</span>strlen<span class="op">(</span>texto<span class="op">)</span> <span class="op">-</span> <span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">;</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> numero_vogais <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span>strlen<span class="op">(</span>texto<span class="op">);</span> i<span class="op">++)</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>texto<span class="op">[</span>i<span class="op">]</span> <span class="op">==</span> <span class="ch">'a'</span> <span class="op">||</span> texto<span class="op">[</span>i<span class="op">]</span> <span class="op">==</span> <span class="ch">'e'</span> <span class="op">||</span> texto<span class="op">[</span>i<span class="op">]</span> <span class="op">==</span> <span class="ch">'i'</span> <span class="op">||</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>             texto<span class="op">[</span>i<span class="op">]</span> <span class="op">==</span> <span class="ch">'o'</span> <span class="op">||</span> texto<span class="op">[</span>i<span class="op">]</span> <span class="op">==</span> <span class="ch">'u'</span> <span class="op">||</span> texto<span class="op">[</span>i<span class="op">]</span> <span class="op">==</span> <span class="ch">'A'</span> <span class="op">||</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>             texto<span class="op">[</span>i<span class="op">]</span> <span class="op">==</span> <span class="ch">'E'</span> <span class="op">||</span> texto<span class="op">[</span>i<span class="op">]</span> <span class="op">==</span> <span class="ch">'I'</span> <span class="op">||</span> texto<span class="op">[</span>i<span class="op">]</span> <span class="op">==</span> <span class="ch">'O'</span> <span class="op">||</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>             texto<span class="op">[</span>i<span class="op">]</span> <span class="op">==</span> <span class="ch">'U'</span><span class="op">)</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>            numero_vogais<span class="op">++;</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">\"%s\"</span><span class="st"> possui </span><span class="sc">%d</span><span class="st"> </span><span class="sc">%s</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> texto<span class="op">,</span> numero_vogais<span class="op">,</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>           numero_vogais <span class="op">&gt;</span> <span class="dv">1</span> <span class="op">?</span> <span class="st">"vogais"</span> <span class="op">:</span> <span class="st">"vogal"</span><span class="op">);</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Digite um texto: <span class="kw">Comece pelo começo, disse a Rainha a Alice</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>"Comece pelo começo, disse a Rainha a Alice" possui 18 vogais.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A linguagem provê funções de verificação do tipo dos caracteres, como <code>isdigit</code> ou <code>isspace</code> (<a href="c-manipulacao-de-dados-textuais.html#tbl-funcoes-para-caractere" class="quarto-xref">Tabela&nbsp;<span>17.2</span></a>), entre outras. Porém, entre elas não se inclui uma que verifica as vogais.</p>
+<p>Assim, o objetivo do programa é ter uma função para verificar se um dado caractere é ou não uma vogal. Essa função será nomeada <code>eh_vogal</code>. O código seguinte tenta usar essa função, que até o momento não existe.</p>
+<div class="sourceCode cell-code" id="cb9" data-intentional-problems="true"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">Determinação da quantidade de vogais em um texto digitado pelo usuário</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: um texto qualquer</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: apresentação do número de vogais contidas no texto</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite um texto: "</span><span class="op">);</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> texto<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>texto<span class="op">,</span> <span class="kw">sizeof</span> texto<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    texto<span class="op">[</span>strlen<span class="op">(</span>texto<span class="op">)</span> <span class="op">-</span> <span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">;</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> numero_vogais <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span>strlen<span class="op">(</span>texto<span class="op">);</span> i<span class="op">++)</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>eh_vogal<span class="op">(</span>texto<span class="op">[</span>i<span class="op">]))</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>            numero_vogais<span class="op">++;</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">\"%s\"</span><span class="st"> possui </span><span class="sc">%d</span><span class="st"> </span><span class="sc">%s</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> texto<span class="op">,</span> numero_vogais<span class="op">,</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>           numero_vogais <span class="op">&gt;</span> <span class="dv">1</span> <span class="op">?</span> <span class="st">"vogais"</span> <span class="op">:</span> <span class="st">"vogal"</span><span class="op">);</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>main.c: In function ‘main’:</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>main.c:17:13: warning: implicit declaration of function ‘eh_vogal’ </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>[-Wimplicit-function-declaration]</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>   17 |         if (eh_vogal(texto[i]))</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>      |             ^~~~~~~~</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>/usr/bin/ld: /tmp/cc12hv8X.o: na função "main":</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>main.c:(.text+0x99): undefined reference to `eh_vogal'</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>collect2: error: ld returned 1 exit status</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Há dois problemas dignos de destaque no resultado da compilação. O primeiro se refere ao uso de <code>eh_vogal</code>, dando um alerta (<em>warning</em>) de declaração implícita, o que significa que a função não possui declaração e o compilador assumiu um formato padrão. O segundo ponto é o que diz “referência não definida para <code>eh_vogal</code>”, que significa que a função não foi implementada e não existe nenhum código para ela.</p>
+<p>O primeiro ponto a se resolver, portanto, é declarar a função antes de ela ser usada, o que é feito antes da função <code>main</code>. Essa nova versão do programa é a que segue.</p>
+<div class="sourceCode cell-code" id="cb11" data-intentional-problems="true"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">Determinação da quantidade de vogais em um texto digitado pelo usuário</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: um texto qualquer</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: apresentação do número de vogais contidas no texto</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdbool.h&gt;</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> eh_vogal<span class="op">(</span><span class="dt">char</span> caractere<span class="op">);</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite um texto: "</span><span class="op">);</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> texto<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>texto<span class="op">,</span> <span class="kw">sizeof</span> texto<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    texto<span class="op">[</span>strlen<span class="op">(</span>texto<span class="op">)</span> <span class="op">-</span> <span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">;</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> numero_vogais <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span>strlen<span class="op">(</span>texto<span class="op">);</span> i<span class="op">++)</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>eh_vogal<span class="op">(</span>texto<span class="op">[</span>i<span class="op">]))</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>            numero_vogais<span class="op">++;</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">\"%s\"</span><span class="st"> possui </span><span class="sc">%d</span><span class="st"> </span><span class="sc">%s</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> texto<span class="op">,</span> numero_vogais<span class="op">,</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>           numero_vogais <span class="op">&gt;</span> <span class="dv">1</span> <span class="op">?</span> <span class="st">"vogais"</span> <span class="op">:</span> <span class="st">"vogal"</span><span class="op">);</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>/usr/bin/ld: /tmp/ccTcvThP.o: na função "main":</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>main.c:(.text+0x94): undefined reference to `eh_vogal'</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>collect2: error: ld returned 1 exit status</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A declaração é feita por meio de seu protótipo, que indica o tipo, o nome e os parâmetros que a função possui. A prototipagem da função requereu também incluir <code>stdbool.h</code> para poder especificar o tipo de retorno <code>bool</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> eh_vogal<span class="op">(</span><span class="dt">char</span> caractere<span class="op">);</span>  <span class="co">// protótipo da função</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Vale observar que a compilação do programa foi bem sucedida e todo o código objeto para ele foi criado com êxito. O problema que persiste é que, ao criar o executável, notou-se a ausência da implementação.</p>
+<p>Esse é o problema que a versão final do programa resolve.</p>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">Determinação da quantidade de vogais em um texto digitado pelo usuário</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: um texto qualquer</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: apresentação do número de vogais contidas no texto</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdbool.h&gt;</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> eh_vogal<span class="op">(</span><span class="dt">char</span> caractere<span class="op">);</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite um texto: "</span><span class="op">);</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> texto<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>texto<span class="op">,</span> <span class="kw">sizeof</span> texto<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    texto<span class="op">[</span>strlen<span class="op">(</span>texto<span class="op">)</span> <span class="op">-</span> <span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">;</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> numero_vogais <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span>strlen<span class="op">(</span>texto<span class="op">);</span> i<span class="op">++)</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>eh_vogal<span class="op">(</span>texto<span class="op">[</span>i<span class="op">]))</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>            numero_vogais<span class="op">++;</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">\"%s\"</span><span class="st"> possui </span><span class="sc">%d</span><span class="st"> </span><span class="sc">%s</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> texto<span class="op">,</span> numero_vogais<span class="op">,</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>           numero_vogais <span class="op">&gt;</span> <span class="dv">1</span> <span class="op">?</span> <span class="st">"vogais"</span> <span class="op">:</span> <span class="st">"vogal"</span><span class="op">);</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="co"> * Verificação se um caractere é uma vogal (maiúscula ou minúscula).</span></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">caractere:</span><span class="co"> caractere simples a ser verificado</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> true se for vogal, false caso contrário</span></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> eh_vogal<span class="op">(</span><span class="dt">char</span> caractere<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> se_eh_vogal <span class="op">=</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>            <span class="op">(</span>caractere <span class="op">==</span> <span class="ch">'a'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'e'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'i'</span> <span class="op">||</span></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>             caractere <span class="op">==</span> <span class="ch">'o'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'u'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'A'</span> <span class="op">||</span></span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>             caractere <span class="op">==</span> <span class="ch">'E'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'I'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'O'</span> <span class="op">||</span></span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>             caractere <span class="op">==</span> <span class="ch">'U'</span><span class="op">);</span></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> se_eh_vogal<span class="op">;</span></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>Digite um texto: <span class="kw">Comece pelo começo, disse a Rainha a Alice</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>"Comece pelo começo, disse a Rainha a Alice" possui 18 vogais.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A função declarada é lógica, retornando um valor <code>bool</code>, o nome escolhido para ela é <code>eh_vogal</code> e ela tem um único parâmetro que é um <code>char</code> denominado <code>caractere</code>.</p>
+<p>Para sua implementação, a função define uma variável booliana local <code>se_eh_vogal</code> que recebe <code>true</code> ou <code>false</code> conforme o resultado da comparação. O valor resultante da função é determinado pela instrução <code>return</code> que, nesse caso, volta o valor booliano. Sempre que <code>return</code> é executado, a função é encerrada e comandos escritos depois dele nunca serão executados.</p>
+<p>O uso da variável local <code>se_eh_vogal</code> é meramente didático pois estabelece dois passos: o cálculo do resultado da função e o retorno desse resultado. Na prática, é mais interessante escrever essa função conforme se segue, sem o uso da variável local e já retornando o valor da expressão.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Verificação se um caractere é uma vogal (maiúscula ou minúscula).</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">caractere:</span><span class="co"> (char) caractere a ser verificado</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> true se for vogal, false caso contrário</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> eh_vogal<span class="op">(</span><span class="dt">char</span> caractere<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>caractere <span class="op">==</span> <span class="ch">'a'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'e'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'i'</span> <span class="op">||</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>            caractere <span class="op">==</span> <span class="ch">'o'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'u'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'A'</span> <span class="op">||</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>            caractere <span class="op">==</span> <span class="ch">'E'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'I'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'O'</span> <span class="op">||</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>            caractere <span class="op">==</span> <span class="ch">'U'</span><span class="op">);</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Para concluir esta seção é preciso rever dois pontos importantes:</p>
+<ul>
+<li>Toda função tem que ser declarada antes de ser usada;</li>
+<li>A implementação da função (seu código) tem que ter sido escrito para que executável possa ser criado.</li>
+</ul>
+<p>Assim, para o exemplo do contador de vogais, a declaração foi feita na forma de um protótipo, o qual indica para o compilador o tipo de retorno e os parâmetros e respectivos tipos. Com essas informações, as devidas verificações de consistência podem ser realizadas durante a compilação, como verificar se o tipo do parâmetro passado é compatível com o tipo indicado na declaração. A implementação, por sua vez, foi inserida no código fonte logo abaixo de <code>main</code>, fornecendo condições para que <code>eh_vogal</code> possuísse sua implementação e viabilizasse o que se deseja: o executável completo.</p>
+</section>
+<section id="onde-declarar-a-função" class="level3" data-number="18.2.2">
+<h3 data-number="18.2.2" class="anchored" data-anchor-id="onde-declarar-a-função"><span class="header-section-number">18.2.2</span> Onde declarar a função?</h3>
+<p>Há duas estratégias usuais para declarar funções em C. A primeira é usando protótipos para a declaração e ter a implementação feita posterioriormente. Outra forma é pela inserção direta da implementação, a qual tanto implementa quanto declara a função ao mesmo tempo.</p>
+<p>A segunda forma é apresentada na sequência, como uma versão alternativa do mesmo programa de contagem de vogais.</p>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">Determinação da quantidade de vogais em um texto digitado pelo usuário</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: um texto qualquer</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: apresentação do número de vogais contidas no texto</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdbool.h&gt;</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co"> * Verificação se um caractere é uma vogal (maiúscula ou minúscula).</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">caractere:</span><span class="co"> (char) caractere a ser verificado</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> true se for vogal, false caso contrário</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> eh_vogal<span class="op">(</span><span class="dt">char</span> caractere<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">(</span>caractere <span class="op">==</span> <span class="ch">'a'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'e'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'i'</span> <span class="op">||</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>            caractere <span class="op">==</span> <span class="ch">'o'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'u'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'A'</span> <span class="op">||</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>            caractere <span class="op">==</span> <span class="ch">'E'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'I'</span> <span class="op">||</span> caractere <span class="op">==</span> <span class="ch">'O'</span> <span class="op">||</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>            caractere <span class="op">==</span> <span class="ch">'U'</span><span class="op">);</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite um texto: "</span><span class="op">);</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> texto<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>texto<span class="op">,</span> <span class="kw">sizeof</span> texto<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>    texto<span class="op">[</span>strlen<span class="op">(</span>texto<span class="op">)</span> <span class="op">-</span> <span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">;</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> numero_vogais <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="op">(</span><span class="dt">int</span><span class="op">)</span>strlen<span class="op">(</span>texto<span class="op">);</span> i<span class="op">++)</span></span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>eh_vogal<span class="op">(</span>texto<span class="op">[</span>i<span class="op">]))</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>            numero_vogais<span class="op">++;</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">\"%s\"</span><span class="st"> possui </span><span class="sc">%d</span><span class="st"> </span><span class="sc">%s</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> texto<span class="op">,</span> numero_vogais<span class="op">,</span></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>           numero_vogais <span class="op">&gt;</span> <span class="dv">1</span> <span class="op">?</span> <span class="st">"vogais"</span> <span class="op">:</span> <span class="st">"vogal"</span><span class="op">);</span></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>Digite um texto: <span class="kw">Comece pelo começo, disse a Rainha a Alice</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>"Comece pelo começo, disse a Rainha a Alice" possui 18 vogais.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Não há uma regra para usar uma forma ou outra, sendo assim uma opção pessoal (exceto quando a empresa ou o cliente possuírem regras específicas).</p>
+<!-- Para a declaração com protótipo e implementação depois do `main` podem ser elencadas as seguintes vantagens:
+
+* a
+* b
+
+Em contraposição, essa estratégia também tem desvantagens: 
+
+* a
+* b
+
+No caso da declaração juntamente com a implementação antes do `main`, há vantagens quem podem ser citadas:
+
+* a
+* b
+
+Entre as desvantagens para essa modalidade, pode-se listar:
+
+* a
+* b -->
+<p>Como regra geral, este livro adota o uso das declarações de função com protótipos e cuja implementação fica posterior à função <code>main</code> quando estiverem no mesmo arquivo.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Curiosidade">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Curiosidade
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>É interessante notar que, embora a implementação da função <code>eh_vogal</code> tenha sido feita no mesmo arquivo em que estava a função <code>main</code>, ela poderia estar em outro arquivo.</p>
+<p>Quando programas se tornam maiores, é uma prática comum e muito positiva separar as implementações de funções em arquivos separados. Assim, se um programa deve lidar com o processamento de um texto, pode haver um arquivo para as funções que manipulam arquivos, outro para as que manipulam as cadeias de caracteres e assim por diante. Tudo se reflete em organização.</p>
+<p>Esse assunto é abordado no <span class="quarto-unresolved-ref">?sec-organizacao-do-codigo-separado</span>.</p>
+</div>
+</div>
+</section>
+<section id="sec-escopo-da-declaracao-de-funcoes" class="level3" data-number="18.2.3">
+<h3 data-number="18.2.3" class="anchored" data-anchor-id="sec-escopo-da-declaracao-de-funcoes"><span class="header-section-number">18.2.3</span> Escopo da declaração das funções</h3>
+<p>Uma discussão prévia sobre declarações e escopo está apresentada na <a href="c-escopo-basico-de-declaracoes.html#sec-declaracoes-e-validade" class="quarto-xref"><span>Seção 9.1</span></a>, tratando da validade de cada variável em um programa. Com a introdução do assunto da modularização, o conceito de escopo se amplia. Qualquer variável usada nos diversos programas possuem sua validade definida internamente a <code>main</code>, ou seja, são locais à função principal e não existem fora dela.</p>
+<p>Ao se criar uma nova função, ela é declarada fora da função <code>main</code> e não é, portanto, local. As declarações das funções são sempre globais. A consequência para esse tipo de declaração é que ela é válida da linha do protótipo (ou do cabeçalho de uma função implementada) até o fim do arquivo do código fonte.</p>
+<p>O programa seguinte é apenas um exemplo para o qual comentários pertinentes sobre escopo serão apresentados. Nenhuma função é comentada, visto que são apenas exemplos simples (documentação de funções está na <a href="#sec-documentacao-funcoes" class="quarto-xref"><span>Seção 18.2.5</span></a>).</p>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb19-1"><a href="#cb19-1"></a><span class="co">/*</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="co">Programa exemplo com funções simples</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="co">*/</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a></span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="dt">double</span> dobro<span class="op">(</span><span class="dt">double</span> valor<span class="op">);</span></span>
+<span id="cb19-7"><a href="#cb19-7"></a></span>
+<span id="cb19-8"><a href="#cb19-8"></a><span class="dt">double</span> maximo<span class="op">(</span><span class="dt">double</span> valor1<span class="op">,</span> <span class="dt">double</span> valor2<span class="op">);</span></span>
+<span id="cb19-9"><a href="#cb19-9"></a></span>
+<span id="cb19-10"><a href="#cb19-10"></a><span class="dt">int</span> somatorio<span class="op">(</span><span class="dt">int</span> n<span class="op">);</span></span>
+<span id="cb19-11"><a href="#cb19-11"></a></span>
+<span id="cb19-12"><a href="#cb19-12"></a><span class="dt">double</span> um_double<span class="op">(</span><span class="dt">void</span><span class="op">);</span></span>
+<span id="cb19-13"><a href="#cb19-13"></a></span>
+<span id="cb19-14"><a href="#cb19-14"></a><span class="dt">int</span> um_int<span class="op">(</span><span class="dt">void</span><span class="op">);</span></span>
+<span id="cb19-15"><a href="#cb19-15"></a></span>
+<span id="cb19-16"><a href="#cb19-16"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-17"><a href="#cb19-17"></a>    printf<span class="op">(</span><span class="st">"Quádruplo de 1.77 = </span><span class="sc">%.2lf</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> dobro<span class="op">(</span>dobro<span class="op">(</span><span class="fl">1.77</span><span class="op">)));</span></span>
+<span id="cb19-18"><a href="#cb19-18"></a>    printf<span class="op">(</span><span class="st">"max(1.2, 7.8) = </span><span class="sc">%.1lf</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> maximo<span class="op">(</span><span class="fl">1.2</span><span class="op">,</span> <span class="fl">7.8</span><span class="op">));</span></span>
+<span id="cb19-19"><a href="#cb19-19"></a>    printf<span class="op">(</span><span class="st">"Somatório de 1 até 100 = </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> somatorio<span class="op">(</span><span class="dv">100</span><span class="op">));</span></span>
+<span id="cb19-20"><a href="#cb19-20"></a>    printf<span class="op">(</span><span class="st">"Um: </span><span class="sc">%d</span><span class="st"> e </span><span class="sc">%.1f</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> um_int<span class="op">(),</span> um_double<span class="op">());</span></span>
+<span id="cb19-21"><a href="#cb19-21"></a></span>
+<span id="cb19-22"><a href="#cb19-22"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb19-23"><a href="#cb19-23"></a><span class="op">}</span></span>
+<span id="cb19-24"><a href="#cb19-24"></a></span>
+<span id="cb19-25"><a href="#cb19-25"></a><span class="dt">double</span> dobro<span class="op">(</span><span class="dt">double</span> valor<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-26"><a href="#cb19-26"></a>    <span class="dt">double</span> valor_dobrado <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> valor<span class="op">;</span></span>
+<span id="cb19-27"><a href="#cb19-27"></a></span>
+<span id="cb19-28"><a href="#cb19-28"></a>    <span class="cf">return</span> valor_dobrado<span class="op">;</span></span>
+<span id="cb19-29"><a href="#cb19-29"></a><span class="op">}</span></span>
+<span id="cb19-30"><a href="#cb19-30"></a></span>
+<span id="cb19-31"><a href="#cb19-31"></a><span class="dt">double</span> maximo<span class="op">(</span><span class="dt">double</span> valor1<span class="op">,</span> <span class="dt">double</span> valor2<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-32"><a href="#cb19-32"></a>    <span class="cf">return</span> <span class="op">(</span>valor1 <span class="op">&gt;</span> valor2<span class="op">)</span> <span class="op">?</span> valor1 <span class="op">:</span> valor2<span class="op">;</span></span>
+<span id="cb19-33"><a href="#cb19-33"></a><span class="op">}</span></span>
+<span id="cb19-34"><a href="#cb19-34"></a></span>
+<span id="cb19-35"><a href="#cb19-35"></a><span class="dt">int</span> somatorio<span class="op">(</span><span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-36"><a href="#cb19-36"></a>    <span class="dt">int</span> soma <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb19-37"><a href="#cb19-37"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> i <span class="op">&lt;=</span> n<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb19-38"><a href="#cb19-38"></a>        soma <span class="op">+=</span> i<span class="op">;</span></span>
+<span id="cb19-39"><a href="#cb19-39"></a></span>
+<span id="cb19-40"><a href="#cb19-40"></a>    <span class="cf">return</span> soma<span class="op">;</span></span>
+<span id="cb19-41"><a href="#cb19-41"></a><span class="op">}</span></span>
+<span id="cb19-42"><a href="#cb19-42"></a></span>
+<span id="cb19-43"><a href="#cb19-43"></a><span class="dt">double</span> um_double<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-44"><a href="#cb19-44"></a>    <span class="cf">return</span> <span class="op">(</span><span class="dt">double</span><span class="op">)</span>um_int<span class="op">();</span></span>
+<span id="cb19-45"><a href="#cb19-45"></a><span class="op">}</span></span>
+<span id="cb19-46"><a href="#cb19-46"></a></span>
+<span id="cb19-47"><a href="#cb19-47"></a><span class="dt">int</span> um_int<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-48"><a href="#cb19-48"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb19-49"><a href="#cb19-49"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>Quádruplo de 1.77 = 7.08.</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>max(1.2, 7.8) = 7.8.</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>Somatório de 1 até 100 = 5050.</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>Um: 1 e 1.0.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>No programa exemplificado há cinco funções definidas pelo programador: <code>dobro</code>, <code>maximo</code>, <code>somatorio</code>, <code>um_int</code> e <code>um_double</code>. Cada uma delas é declarada por seu respectivo protótipo e, em consequência, possuem validade da linha em que houve a declaração até o final do arquivo do código fonte. Como exemplos, a função <code>dobro</code> é conhecida e pode ser usada da linha&nbsp;6 até a&nbsp;49, enquanto <code>somatorio</code> tem validade a partir da linha&nbsp;10 e também encerrando na linha&nbsp;49.</p>
+<p>Assim, toda função pode ser usada a partir da linha de sua declaração. Quando se chega à função <code>main</code>, todas as funções já são conhecidas e seu uso é perfeitamente possível.</p>
+<p>Um destaque relevante vai para as funções <code>um_double</code> e <code>um_int</code>, que apenas retornam o valor unitário, um do tipo <code>double</code>, outro do tipo <code>int</code>. No exemplo, a função <code>um_double</code> retorna uma chamada para <code>um_int</code>, a qual já foi declarada por seu protótipo.</p>
+<p>Segue um exemplo para o caso em que as funções têm suas declarações sem prototipagem, ou seja, são declaradas e implementadas antes da função <code>main</code>. A regra de escopo aqui é a mesma e, a título de exemplo, <code>maximo</code> é declarado na linha&nbsp;12 e pode ser usado desta linha até a&nbsp;39.</p>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb21-1"><a href="#cb21-1"></a><span class="co">/*</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="co">Programa exemplo com funções simples</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="co">*/</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a></span>
+<span id="cb21-6"><a href="#cb21-6"></a><span class="dt">double</span> dobro<span class="op">(</span><span class="dt">double</span> valor<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-7"><a href="#cb21-7"></a>    <span class="dt">double</span> valor_dobrado <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> valor<span class="op">;</span></span>
+<span id="cb21-8"><a href="#cb21-8"></a></span>
+<span id="cb21-9"><a href="#cb21-9"></a>    <span class="cf">return</span> valor_dobrado<span class="op">;</span></span>
+<span id="cb21-10"><a href="#cb21-10"></a><span class="op">}</span></span>
+<span id="cb21-11"><a href="#cb21-11"></a></span>
+<span id="cb21-12"><a href="#cb21-12"></a><span class="dt">double</span> maximo<span class="op">(</span><span class="dt">double</span> valor1<span class="op">,</span> <span class="dt">double</span> valor2<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-13"><a href="#cb21-13"></a>    <span class="cf">return</span> <span class="op">(</span>valor1 <span class="op">&gt;</span> valor2<span class="op">)</span> <span class="op">?</span> valor1 <span class="op">:</span> valor2<span class="op">;</span></span>
+<span id="cb21-14"><a href="#cb21-14"></a><span class="op">}</span></span>
+<span id="cb21-15"><a href="#cb21-15"></a></span>
+<span id="cb21-16"><a href="#cb21-16"></a><span class="dt">int</span> somatorio<span class="op">(</span><span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-17"><a href="#cb21-17"></a>    <span class="dt">int</span> soma <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb21-18"><a href="#cb21-18"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> i <span class="op">&lt;=</span> n<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb21-19"><a href="#cb21-19"></a>        soma <span class="op">+=</span> i<span class="op">;</span></span>
+<span id="cb21-20"><a href="#cb21-20"></a></span>
+<span id="cb21-21"><a href="#cb21-21"></a>    <span class="cf">return</span> soma<span class="op">;</span></span>
+<span id="cb21-22"><a href="#cb21-22"></a><span class="op">}</span></span>
+<span id="cb21-23"><a href="#cb21-23"></a></span>
+<span id="cb21-24"><a href="#cb21-24"></a><span class="dt">int</span> um_int<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-25"><a href="#cb21-25"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb21-26"><a href="#cb21-26"></a><span class="op">}</span></span>
+<span id="cb21-27"><a href="#cb21-27"></a></span>
+<span id="cb21-28"><a href="#cb21-28"></a><span class="dt">double</span> um_double<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-29"><a href="#cb21-29"></a>    <span class="cf">return</span> <span class="op">(</span><span class="dt">double</span><span class="op">)</span>um_int<span class="op">();</span></span>
+<span id="cb21-30"><a href="#cb21-30"></a><span class="op">}</span></span>
+<span id="cb21-31"><a href="#cb21-31"></a></span>
+<span id="cb21-32"><a href="#cb21-32"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb21-33"><a href="#cb21-33"></a>    printf<span class="op">(</span><span class="st">"Quádruplo de 1.77 = </span><span class="sc">%.2lf</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> dobro<span class="op">(</span>dobro<span class="op">(</span><span class="fl">1.77</span><span class="op">)));</span></span>
+<span id="cb21-34"><a href="#cb21-34"></a>    printf<span class="op">(</span><span class="st">"max(1.2, 7.8) = </span><span class="sc">%.1lf</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> maximo<span class="op">(</span><span class="fl">1.2</span><span class="op">,</span> <span class="fl">7.8</span><span class="op">));</span></span>
+<span id="cb21-35"><a href="#cb21-35"></a>    printf<span class="op">(</span><span class="st">"Somatório de 1 até 100 = </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> somatorio<span class="op">(</span><span class="dv">100</span><span class="op">));</span></span>
+<span id="cb21-36"><a href="#cb21-36"></a>    printf<span class="op">(</span><span class="st">"Um: </span><span class="sc">%d</span><span class="st"> e </span><span class="sc">%.1f</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> um_int<span class="op">(),</span> um_double<span class="op">());</span></span>
+<span id="cb21-37"><a href="#cb21-37"></a></span>
+<span id="cb21-38"><a href="#cb21-38"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb21-39"><a href="#cb21-39"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>Quádruplo de 1.77 = 7.08.</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>max(1.2, 7.8) = 7.8.</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>Somatório de 1 até 100 = 5050.</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>Um: 1 e 1.0.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Uma ressalva importante é feita à função <code>um_double</code>, a qual necessariamente tem que ser declarada depois de <code>um_int</code>, pois essa inversão implicaria no problema de uma função ser desconhecida antes de ser usada. Nesses casos ou a correta ordenação ou a inclusão de um protótipo são soluções válidas.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Cuidado
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A especificação da linguagem C não admite que funções sejam declaradas dentro de outras funções, o chamado aninhamento de declarações. Uma vantagem dessa estratégia é ter uma função que é reconhecida e usada apenas dentro de outra função.</p>
+<p>Muitos compiladores dão, porém, suporte a esse recurso e, assim, torna-se importante ressaltar que o código fonte pode não ser compatível com outros compiladores, outros sistemas ou mesmo com versões futuras.</p>
+<p>Aderir aos recursos padronizados oficiais da linguagem é sempre uma boa opção de conduta.</p>
+</div>
+</div>
+</section>
+<section id="funções-com-vários-parâmetros" class="level3" data-number="18.2.4">
+<h3 data-number="18.2.4" class="anchored" data-anchor-id="funções-com-vários-parâmetros"><span class="header-section-number">18.2.4</span> Funções com vários parâmetros</h3>
+<p>Não é incomum que uma função precise de mais que um único parâmetro. Por exemplo, pode-se ter uma função que calcule o peso (massa) ideal de uma pessoa conforme seu sexo biológico e sua altura. Essa função poderia ser escrita com a declaração seguinte.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Determina a massa ideal a partir do sexo biológico e da altura de um</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * indivíduo.</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">sexo:</span><span class="co"> o sexo biológio ('F' para feminino, 'M' para masculino) </span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">altura:</span><span class="co"> a altura da pessoa em metros</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> a massa ideal em quilogramas</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> massa_ideal<span class="op">(</span><span class="dt">char</span> sexo<span class="op">,</span> <span class="dt">double</span> altura<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Quando há mais que um parâmetro, eles são separados por vírgulas. Na sequência, são apresentadas declarações genéricas e suas interpretações.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> funcao<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">double</span> b<span class="op">);</span>  <span class="co">// a é int, b é double; retorna double</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> funcao<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">);</span>  <span class="co">// a e b são int; retorna double</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> funcao<span class="op">(</span><span class="dt">bool</span> a<span class="op">,</span> <span class="dt">bool</span> b<span class="op">,</span> <span class="dt">bool</span> c<span class="op">);</span>  <span class="co">// a, b e c são bool; retorna bool</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> funcao<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>a<span class="op">,</span> <span class="dt">char</span> <span class="op">*</span>b<span class="op">,</span> <span class="dt">int</span> c<span class="op">,</span> <span class="dt">int</span> d<span class="op">);</span>  <span class="co">// a e b são strings; c e d são</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>                                             <span class="co">// int; retorna int</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Cuidado
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Cada um dos parâmetros devem ter seu tipo especificado. Um exemplo interessante é uma função declarada como na sequência.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> funcao<span class="op">(</span><span class="dt">double</span> a<span class="op">,</span> b<span class="op">,</span> c<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Nessa função, o parâmetro <code>a</code> é do tipo <code>double</code>. Porém <code>b</code> e <code>c</code> não possuem tipo e, em consequência, haverá um erro de compilação.</p>
+</div>
+</div>
+</section>
+<section id="sec-documentacao-funcoes" class="level3" data-number="18.2.5">
+<h3 data-number="18.2.5" class="anchored" data-anchor-id="sec-documentacao-funcoes"><span class="header-section-number">18.2.5</span> Documentação</h3>
+<p>Neste livro as funções são documentadas usando um padrão de formato aceito pelo Doxygen<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, que é uma ferramenta para gerar documentação para grandes projetos. No caso dos programas e funções apresentados como exemplos ao longo do texto, o termo “grande projeto”, entretanto, não se aplica, nem tampouco é necessária uma ferramenta para gerar a documentação. Apesar disso, o formato escolhido para a documentação é simples e atende às necessidades.</p>
+<p>A documentação de uma função envolve:</p>
+<ul>
+<li>A descrição do que ela faz;</li>
+<li>A apresentação contextualizada dos parâmetros;</li>
+<li>O que a função retorna como resultado.</li>
+</ul>
+<p>Como exemplo, segue a declaração da função para o cálculo do fatorial de um valor inteiro.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna, para um dado n, o valor de n!</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">n:</span><span class="co"> valor para o qual seu fatorial é calculado, n &gt;= 0</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> n!</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">long</span> <span class="dt">int</span> fatorial<span class="op">(</span><span class="dt">unsigned</span> <span class="dt">int</span> n<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Nessa declaração, a descrição cobre o que a função faz: retorna o fatorial de um valor <span class="math inline">\(n\)</span> indicado. na lista de parâmetros há um só, denominado <code>n</code>, além de indicar que a função atende corretamente apenas valores naturais. O retorno da função, por sua vez, é o que a função promete devolver, ou seja, <span class="math inline">\(n!\)</span>. Os tipos envolvidos tanto no parâmetro quanto para o retorno estão indicados no cabeçalho da função.</p>
+<p>Quando se escreve a documentação, é importante que esteja indicado o que função faz e não como ela o faz. Por exemplo, a descrição não deve conter algo como “por meio de multiplicações sucessivas”, pois isso já se refere ao como. A descrição pode ser curta ou longa, dependendo da necessidade, sempre com foco de indicar como outro programador poderá usar essa função corretamente. Para os parâmetros formais, ou seja, os que ficam entre os parênteses, todos devem ser elencados dentro do contexto da função (indicados com <code>@param</code>). Assim, para o fatorial de um <span class="math inline">\({n \in \mathbb{N}}\)</span>, o único parâmetro é o <span class="math inline">\(n\)</span> a ser usado, sendo que <code>n &gt;= 0</code> deixa claro para quais valores a função funciona corretamente[^ressalva-dominio-incorreto]. Para o retorno da função (<code>@return</code>), é indicado tão claramente quanto possível o que é resultado da função.</p>
+<p>A documentação de uma uma função é sempre um elemento importante. Entretanto, documentar absolutamente todas as funções pode ter um efeito inverso ao de proporcionar clareza a um dado código. Funções extremamente simples, que sejam praticamente autoexplicativas, podem ficar sem uma documentação explícita. O mesmo ocorre para funções que são apenas auxiliares para outras funções e não são destinadas para que outros programadores as usem. Nessa última categoria, é interessante ver que <code>sscanf</code> é uma função importante e, portanto, deva ter sua documentação bem estabelecida (o que é verdade, pois possui sua página de manual), mas é possível supor que ela chame outras funções menores para cada conversão de texto para um determinado tipo; essas funções não requerem, necessariamente, uma documentação, já que não foram feitas para serem usadas abertamente.</p>
+<p>Nos exemplos dados ao longo deste texto, é possível que funções simples ou auxiliares deixem de ter documentação explícita.</p>
+<p>Os IDEs em geral reconhecem a documentação das funções e auxiliam o programador durante a codificação. Na <a href="#fig-ide-popup-funcao" class="quarto-xref">Figura&nbsp;<span>18.1</span></a> há um exemplo de como a documentação é mostrada quando se posiciona o mouse sobre o nome da função <code>eh_vogal</code>. Outros auxílios, como verificações dos tipos dos parâmetros também são recursos comuns.</p>
+<div id="fig-ide-popup-funcao" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ide-popup-funcao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figuras/ide-popup.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ide-popup-funcao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;18.1: Auxílio ao programador em IDEs quando as funções são devidamente documentadas. IDE: CLion.
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="criação-de-funções" class="level2" data-number="18.3">
+<h2 data-number="18.3" class="anchored" data-anchor-id="criação-de-funções"><span class="header-section-number">18.3</span> Criação de funções</h2>
+<p>Quando uma função é escrita em um programa, é importante que se tenha clareza do seu objetivo. A função deve, em consequência, ater-se somente a ele e não realizar outra tarefa qualquer. Por exemplo, se uma função é escrita para converter graus Celsius para Fahrenheit, é somente a conversão que deve ser feita; a função não deve ler nada nem escrever nada.</p>
+<p>Segue um exemplo dessa função.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna a temperatura em Fahenheit dado seu valor em graus Celsius</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">celsius:</span><span class="co"> a temperatura Celsius</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> a temperatura em Fahrenheit</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> celsius_para_fahrenheit<span class="op">(</span><span class="dt">double</span> celsius<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">1.8</span> <span class="op">*</span> celsius <span class="op">+</span> <span class="dv">32</span><span class="op">;</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Todos os dados necessários devem ser passados como parâmetros e o resultado retornado pela função.</p>
+<p>Não se está dizendo aqui que função não podem nem ler nem escrever. Se uma função tenha como objetivo ler um valor digitado pelo usuário, é isso que ela tem que fazer. O programa exemplo seguinte inclui uma função de interface para ler um valor inteiro digitado pelo usuário, verificando erros e garantindo que um valor válido seja entrado.</p>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co">Leitura da idade de uma pessoa e escrita desse valor na tela</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: digitação de uma idade</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: apresentação da idade na tela</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> leia_inteiro<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>mensagem<span class="op">);</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> idade <span class="op">=</span> leia_inteiro<span class="op">(</span><span class="st">"Digite sua idade: "</span><span class="op">);</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Você tem </span><span class="sc">%d</span><span class="st"> anos de idade.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> idade<span class="op">);</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna um valor inteiro válido digitado pelo usuário.</span></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a><span class="co"> * A leitura é repetida caso o valor digitado não corresponda a</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a><span class="co"> * um inteiro válido, sendo uma mensagem de aviso apresentada. Qualquer</span></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a><span class="co"> * texto depois do inteiro é descartado.</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">mensagem:</span><span class="co"> mensagem solicitando a leitura</span></span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> um valor inteiro lido</span></span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> leia_inteiro<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>mensagem<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">%s</span><span class="st">"</span><span class="op">,</span> mensagem<span class="op">);</span></span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> valor_lido<span class="op">,</span> quantidade_itens_lidos<span class="op">;</span></span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">do</span> <span class="op">{</span></span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>        fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>        quantidade_itens_lidos <span class="op">=</span> sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%d</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>valor_lido<span class="op">);</span></span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>quantidade_itens_lidos <span class="op">!=</span> <span class="dv">1</span><span class="op">)</span></span>
+<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">"&gt; Valor inválido. Esperado um inteiro.</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"</span><span class="sc">%s</span><span class="st">"</span><span class="op">,</span> mensagem<span class="op">);</span></span>
+<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">while</span> <span class="op">(</span>quantidade_itens_lidos <span class="op">!=</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> valor_lido<span class="op">;</span></span>
+<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>Digite sua idade: <span class="kw">abc</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>&gt; Valor inválido. Esperado um inteiro.</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>Digite sua idade: <span class="kw">*</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>&gt; Valor inválido. Esperado um inteiro.</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>Digite sua idade: <span class="kw">#10</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>&gt; Valor inválido. Esperado um inteiro.</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>Digite sua idade: <span class="kw">25</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>Você tem 25 anos de idade.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Há que se notar que a função deve ler e retornar um valor inteiro e digitações erradas são detectadas e contornadas. Para ser uma função genérica, ela lê inteiros e não idades (tanto que valores negativos seriam aceitos nesse caso). Essa função pode ser usada em qualquer outro programa para a leitura de um inteiro e ela não atende exclusivamente o problema do programa em questão.</p>
+<p>Caso fosse interessante garantir que o valor fosse maior que zero, outra função poderia ser escrita para ler valores apenas em <span class="math inline">\(\mathbb{N}\)</span>. Segue um exemplo de implementação de uma função que atende a esses requisitos, a qual aproveita a já escrita <code>leia_inteiro</code>, apenas repassando a mensagem para o usuário. No programa anterior, bastaria <code>main</code> executar <code>leia_natural</code> no lugar de <code>leia_inteiro</code>.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna um valor inteiro natural digitado pelo usuário.</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * A leitura é repetida para valores inválidos e o restante da linha</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"> * depois do inteiro é ignorado</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">mensagem:</span><span class="co"> mensagem solicitando a leitura</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> valor inteiro lido, maior ou igual a zero</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> leia_natural<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>mensagem<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> valor_lido<span class="op">;</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">do</span> <span class="op">{</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>        valor_lido <span class="op">=</span> leia_inteiro<span class="op">(</span>mensagem<span class="op">);</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>valor_lido <span class="op">&lt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">"Valor inválido. Esperado maior ou igual a zero.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">while</span> <span class="op">(</span>valor_lido <span class="op">&lt;</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> valor_lido<span class="op">;</span></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="escolha-dos-tipos-de-retorno-e-dos-parâmetros" class="level2" data-number="18.4">
+<h2 data-number="18.4" class="anchored" data-anchor-id="escolha-dos-tipos-de-retorno-e-dos-parâmetros"><span class="header-section-number">18.4</span> Escolha dos tipos de retorno e dos parâmetros</h2>
+<p>Os tipos dos parâmetros devem satisfazer as necessidades das funções. Por exemplo, na conversão de graus Celsius para Fahrenheit é esperado que a temperatura em Celsius seja <code>double</code>, assim como o valor retornado em Fahrenheit.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> celsius_para_fahrenheit<span class="op">(</span><span class="dt">double</span> celsius<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Para uma função do cálculo do fatorial de um número, entretanto, as escolhas podem não ser tão elementares. Uma primeira tentativa seria, por exemplo, ter a função com o seguinte protótipo.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> fatorial<span class="op">(</span><span class="dt">int</span> n<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Um primeiro ponto é que, nos sistemas atuais, um <code>int</code> ocupa geralmente quatro bytes e permite valores de -2.147.483.648 a 2.147.483.647. Metade dos valores representados são negativos e o resultado do fatorial nunca será negativo. Assim, pode-se optar pela prototipagem seguinte.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">int</span> fatorial<span class="op">(</span><span class="dt">int</span> n<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Nessa nova versão, ainda considerando os tamanhos típicos para inteiros, os valores de retorno podem ser de zero a 4.294.967.295. Esse intervalo comportaria valores até 12<span class="math inline">\(!\)</span> (479.001.600), pois 13<span class="math inline">\(!\)</span> (6.227.020.800) já extrapolaria.</p>
+<p>A versão seguinte expande o tipo de retorno para <code>unsigned long int</code>, o qual usa oito bytes na versão do <code>gcc</code> usada nos programas. Desse modo, a gama de possíveis resultados vai para 18.446.744.073.709.551.615, o que comportaria até 20<span class="math inline">\(!\)</span><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">long</span> <span class="dt">int</span> fatorial<span class="op">(</span><span class="dt">int</span> n<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O mesmo raciocínio se aplicaria ao parâmetro <code>n</code>. Para <span class="math inline">\(n!\)</span>, sempre se tem <span class="math inline">\(n \geq 0\)</span>, e, assim, a função poderia ter como protótipo final o formato que segue.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">long</span> <span class="dt">int</span> fatorial<span class="op">(</span><span class="dt">unsigned</span> <span class="dt">int</span> n<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Sua implementação seria como se segue.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*!</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Retorna, para um dado n, o valor de n!</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@param</span><span class="co"> </span><span class="cv">n:</span><span class="co"> valor para o qual seu fatorial é calculado, n &gt;= 0</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="co"> * </span><span class="an">@return</span><span class="co"> n!</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">long</span> <span class="dt">int</span> fatorial<span class="op">(</span><span class="dt">unsigned</span> <span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">long</span> <span class="dt">int</span> multiplicador <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">unsigned</span> <span class="dt">int</span> i <span class="op">=</span> <span class="dv">2</span><span class="op">;</span> i <span class="op">&lt;=</span> n<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>        multiplicador <span class="op">*=</span> i<span class="op">;</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> multiplicador<span class="op">;</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A vantagem na escolha dos tipos é que, até certo limite, o compilador consegue verificar consistência nos valores passados para a função. Por exemplo, se houver uma variável <code>i</code> do tipo <code>int</code> (que possui valores negativos), o compilador pode avisar (não é erro) que pode haver algum problema. A mensagem de compilação seguinte mostra que pode haver um problema de conversão caso os valores sejam negativos e o resultado, portanto, pode não ser confiável.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode terminal code-with-copy"><code class="sourceCode terminal"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>main.c:18:31: warning: conversion to ‘unsigned int’ from ‘int’ may change</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>the sign of the result [-Wsign-conversion]</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>   18 |     printf("%lu.\n", fatorial(i));</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>      |                               ^</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A boa escolha dos tipos sempre proporciona uma camada adicional de controle na escrita de programas.</p>
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>As funções, tanto matemáticas quanto computacionais, podem ter mais que um argumento (funções de múltiplas variáveis).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Doxygen: <a href="https://www.doxygen.nl" class="uri" target="_blank">https://www.doxygen.nl</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Embora 20<span class="math inline">\(!\)</span> não pareça muito, vale lembrar seu valor é 2.432.902.008.176.640.000, ou seja, aproximadamente 2,4&nbsp;<span class="math inline">\(\times\)</span>&nbsp;10<sup>18</sup>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiada");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiada");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./c-manipulacao-de-dados-textuais.html" class="pagination-link" aria-label="Manipulação de dados textuais em C">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Manipulação de dados textuais em C</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./c-regras-de-escopo-com-modularizacao.html" class="pagination-link" aria-label="Regras de escopo com a modularização">
+        <span class="nav-page-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Regras de escopo com a modularização</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

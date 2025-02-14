@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>11&nbsp; Repetições com while – Construção de Algoritmos e Programação</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./c-repeticoes-com-for.html" rel="next">
+<link href="./c-organizacao-do-codigo-fonte.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-9e1f2a4632985dffc2c80318c992baf5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-7cf8a0149bf791b42ada95f7f6344cc2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="book.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./c-repeticoes-com-while.html">Controle de repetição do fluxo</a></li><li class="breadcrumb-item"><a href="./c-repeticoes-com-while.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Repetições com <code>while</code></span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Construção de Algoritmos e Programação</a> 
+        <div class="sidebar-tools-main">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-save"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./moreira_j-construcao_algoritmos_programacao-programacao.pdf">
+            Versão PDF
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Procurar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Apresentação</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preambulo_prefacio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Programação em C</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./algoritmos-nocoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Noções de algoritmos</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Programação básica</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-introducao-a-linguagem-c.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introdução à linguagem C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-tipos-de-dados.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tipos de dados da linguagem C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-variaveis-identificadores-e-leitura.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Variáveis e leituras em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-expressoes-aritmeticas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Expressões aritméticas de C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-expressoes-relacionais-e-logicas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">C: expressões relacionais e lógicas</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Controle de fluxo simples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-execucao-condicional-com-if.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Execução condicional com <code>if</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-execucao-condicional-com-switch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Execução condicional com <code>switch</code></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Organização geral do código</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-escopo-basico-de-declaracoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Escopo básico de declarações</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-organizacao-do-codigo-fonte.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Organização do código fonte</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Controle de repetição do fluxo</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-while.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Repetições com <code>while</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-for.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Repetições com <code>for</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-do-while.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Repetições com <code>do while</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-arquivos-texto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Arquivos texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-desvirtuacao-das-repeticoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Desvirtuação das repetições</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Cadeias de caracteres</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-textuais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Dados textuais em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-manipulacao-de-dados-textuais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Manipulação de dados textuais em C</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Modularização e memória</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-funcoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Funções em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-regras-de-escopo-com-modularizacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Regras de escopo com a modularização</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-enderecamento-de-memoria-e-ponteiros.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Endereçamento de memória e ponteiros nos programas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-procedimentos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Procedimentos em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-parametros-de-funcoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Parâmetros das funções na linguagem C</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Estruturação de dados</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-com-struct.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">C: Dados com <code>struct</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-em-vetores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">C: Dados em vetores</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página:</h2>
+   
+  <ul>
+  <li><a href="#a-estrutura-de-repetição-while" id="toc-a-estrutura-de-repetição-while" class="nav-link active" data-scroll-target="#a-estrutura-de-repetição-while"><span class="header-section-number">11.1</span> A estrutura de repetição <code>while</code></a></li>
+  <li><a href="#o-double-nas-verificações-do-while" id="toc-o-double-nas-verificações-do-while" class="nav-link" data-scroll-target="#o-double-nas-verificações-do-while"><span class="header-section-number">11.2</span> O <code>double</code> nas verificações do <code>while</code></a></li>
+  <li><a href="#repetições-baseadas-na-entrada" id="toc-repetições-baseadas-na-entrada" class="nav-link" data-scroll-target="#repetições-baseadas-na-entrada"><span class="header-section-number">11.3</span> Repetições baseadas na entrada</a>
+  <ul class="collapse">
+  <li><a href="#entrada-com-sentinela" id="toc-entrada-com-sentinela" class="nav-link" data-scroll-target="#entrada-com-sentinela"><span class="header-section-number">11.3.1</span> Entrada com sentinela</a></li>
+  <li><a href="#detecção-do-encerramento-do-fluxo-de-entrada" id="toc-detecção-do-encerramento-do-fluxo-de-entrada" class="nav-link" data-scroll-target="#detecção-do-encerramento-do-fluxo-de-entrada"><span class="header-section-number">11.3.2</span> Detecção do encerramento do fluxo de entrada</a></li>
+  </ul></li>
+  <li><a href="#exemplos" id="toc-exemplos" class="nav-link" data-scroll-target="#exemplos"><span class="header-section-number">11.4</span> Exemplos</a>
+  <ul class="collapse">
+  <li><a href="#contagem-regressiva" id="toc-contagem-regressiva" class="nav-link" data-scroll-target="#contagem-regressiva"><span class="header-section-number">11.4.1</span> Contagem regressiva</a></li>
+  <li><a href="#atualização-de-saldo" id="toc-atualização-de-saldo" class="nav-link" data-scroll-target="#atualização-de-saldo"><span class="header-section-number">11.4.2</span> Atualização de saldo</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./c-repeticoes-com-while.html">Controle de repetição do fluxo</a></li><li class="breadcrumb-item"><a href="./c-repeticoes-com-while.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Repetições com <code>while</code></span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-repeticoes-com-while" class="quarto-section-identifier"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Repetições com <code>while</code></span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<span class="math inline">\(\newcommand\Id[1]{\mbox{\textit{#1}}}\)</span>
+<p>A linguagem C permite laços de repetição usando <code>while</code>, <code>for</code> e <code>do while</code>. Neste capítulo a estrutura e aspectos lógicos do <code>while</code> são apresentados. O <code>for</code> é abordado no <a href="c-repeticoes-com-for.html" class="quarto-xref"><span>Capítulo 12</span></a> e o <code>do while</code>, no <a href="c-repeticoes-com-do-while.html" class="quarto-xref"><span>Capítulo 13</span></a>.</p>
+<section id="a-estrutura-de-repetição-while" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="a-estrutura-de-repetição-while"><span class="header-section-number">11.1</span> A estrutura de repetição <code>while</code></h2>
+<p>A estrutura de repetição que o <code>while</code> implementa pode ser chamada de indefinida, pois o número de repetições depende de uma condição que se altera ao longo do tempo. Sua estrutura é apresentada na sequência.</p>
+<p></p>
+<div class="callout callout-style-simple callout-none no-icon callout-titled" title="Estrutura do `while`">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Estrutura do <code>while</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>while</code> <code>(</code> <em>expressão_lógica</em> <code>)</code> <em>comando</em></p>
+</div>
+</div>
+<p>O uso dessa estrutura é intuitivo: enquanto a <em>expressão_lógica</em> for avaliada como verdadeira, o <em>comando</em> é executado. Este último pode ser um comando simples terminado em ponto e vírgula ou um comando composto delimitado por chaves.</p>
+<p>O <code>while</code> sempre testa a condição antes de iniciar cada execução, o que leva à possibilidade que nada seja repetido se a condição já for falsa previamente. Caso a condição seja verdadeira, todo os comandos condicionados são executados antes de ser feita nova verificação.</p>
+<p>Para que a estrutura de repetição em si faça sentido, em <em>comando</em> deve haver alguma alteração que leve a condição a se tornar falsa em algum momento.</p>
+<p>Segue um exemplo simples de uso do <code>while</code> na forma de um programa que implementa o <a href="c-repeticoes-com-while.html#alg-conversao-pressao-com-sentinela">Algoritmo 11.1</a>.</p>
+<div id="alg-conversao-pressao-com-sentinela">
+<figcaption class="figure-caption">
+<p>Algoritmo 11.1: Conversão de unidades de pressão para uma sequência de valores.</p>
+</figcaption>
+<p><img src="algxpar/pseudocode.001ab02adfc41f8ae6dcef98fe84298ca3031386.svg" class="img-fluid" alt="Algoritmo 11.1: Conversão de unidades de pressão para uma sequência de valores." width="648"></p>
+</div>
+<p>A implementação desse algoritmo em C pode ser dada como o código seguinte.</p>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">Conversão de uma sequência de valores de pressão dadas em mmHg para atm,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">    usando um valor nulo como sentinela</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: Uma sequência potencialmente vazia de valores de pressão (mmHg)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">    não nulos seguidos por um valor sentinela nulo</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: O valor de cada medida de pressão convertido para atm</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite o valor da pressão (mmHg) ou 0 para terminar: "</span><span class="op">);</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> pressao_mmhg<span class="op">;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>pressao_mmhg<span class="op">);</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>pressao_mmhg <span class="op">!=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> pressao_atm <span class="op">=</span> pressao_mmhg <span class="op">/</span> <span class="dv">760</span><span class="op">;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Pressão em ATM: </span><span class="sc">%.2f</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> pressao_atm<span class="op">);</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Digite o valor da pressão (mmHg) ou 0 para terminar: "</span><span class="op">);</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>pressao_mmhg<span class="op">);</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Digite o valor da pressão (mmHg) ou 0 para terminar: <span class="kw">500</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>Pressão em ATM: 0.66.</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Digite o valor da pressão (mmHg) ou 0 para terminar: <span class="kw">1000</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>Pressão em ATM: 1.32.</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>Digite o valor da pressão (mmHg) ou 0 para terminar: <span class="kw">2565.26</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>Pressão em ATM: 3.38.</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>Digite o valor da pressão (mmHg) ou 0 para terminar: <span class="kw">760.0</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>Pressão em ATM: 1.00.</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>Digite o valor da pressão (mmHg) ou 0 para terminar: <span class="kw">0</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O mapeamento do <a href="c-repeticoes-com-while.html#alg-conversao-pressao-com-sentinela">Algoritmo 11.1</a> para&nbsp;C é bastante direto. Inicialmente é feita a primeira leitura, que pode ser tanto um valor válido quanto o valor sentinela e, em seguida, é feito o teste. Sendo bem sucedida a verificação (i.e, não é o sentinela), é feita apresentado o resultado da conversão de unidade e solicitado o próximo valor da sequência. Este ciclo de verificação e execução é repetido, sendo encerrado quando a verificação se torna falsa e <code>return 0</code> é finalmente executado.</p>
+<p>Se a sequência for vazia e na entrada de dados constar apenas o valor sentinela, a condição do <code>while</code> falha já na primeira tentativa e o programa se encerra sem que nenhuma conversão seja feita.</p>
+<p>Outro ponto curioso sobre a implementação é a verificação de igualdade feita com um valor <code>double</code>. Neste caso, a tolerância não é necessária, pois <code>pressao_mmhg</code> não é o resultado calculado e, portanto, quando for digitado o valor nulo, a conversão será exata.</p>
+<p>Para outro exemplo, segue um algoritmo para contabilização do resultado de uma pesquisa, que considera</p>
+</section>
+<section id="o-double-nas-verificações-do-while" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="o-double-nas-verificações-do-while"><span class="header-section-number">11.2</span> O <code>double</code> nas verificações do <code>while</code></h2>
+<p>Um cuidado essencial ao programador são as verificações que, embora façam sentido no código, falham por conta da precisão dos tipos numéricos reais, como <code>double</code> ou <code>float</code>.</p>
+<p>Para exemplificar essa questão, o trecho de código seguinte pode ser considerado.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> a <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span>a <span class="op">!=</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"a = </span><span class="sc">%g</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> a<span class="op">);</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    a <span class="op">+=</span> <span class="fl">0.1</span><span class="op">;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Essa repetição nunca termina, pois <code>a</code> nunca será igual a 1. Na precisão dupla que o <code>double</code> proporciona, o valor mais próximo de 0,1 é, na realidade, 0.100000000000000005551115123126. Assim, quando se espera que a variável tenha valor 1, ha uma diferença de 1,11022&nbsp;<span class="math inline">\(\times\)</span>&nbsp;10<sup>-6</sup> pelos erros acumulados.</p>
+<p>Assim, salvaguardas devem ser adotadas para evitar essas ocorrências.</p>
+<p>No exemplo dado, uma solução seria interromper a repetição caso o valor de <code>a</code> ultrapassasse 1.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> a <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span>a <span class="op">&lt;=</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span>  <span class="co">// garantia de não ultrapassar o limite</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"a = </span><span class="sc">%g</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> a<span class="op">);</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    a <span class="op">+=</span> <span class="fl">0.1</span><span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Outra alternativa é o estabelecimento de uma tolerância.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> a <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span>fabs<span class="op">(</span>a <span class="op">-</span> <span class="dv">1</span><span class="op">)</span> <span class="op">&lt;</span> <span class="fl">0.00001</span><span class="op">)</span> <span class="op">{</span>  <span class="co">// considera próximo o suficiente</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"a = </span><span class="sc">%g</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> a<span class="op">);</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    a <span class="op">+=</span> <span class="fl">0.1</span><span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled" title="Curiosidade">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Curiosidade
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>No exemplo de incremento desta seção foi destacado que 0,1 não tem representação exata em um <code>double</code>. O valor 0,25, porém, é exato. Nesse caso, o código seguinte funcionaria conforme o esperado.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> a <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span>a <span class="op">!=</span> <span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"a = </span><span class="sc">%g</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> a<span class="op">);</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    a <span class="op">+=</span> <span class="fl">0.25</span><span class="op">;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Mesmo assim, recomenda-se fortemente que a igualdade ou desigualdade não seja empregada. O uso de <code>while (a &lt;= 1)</code> deve ser usado mesmo neste caso.</p>
+</div>
+</div>
+</section>
+<section id="repetições-baseadas-na-entrada" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="repetições-baseadas-na-entrada"><span class="header-section-number">11.3</span> Repetições baseadas na entrada</h2>
+<p>Muitas das repetições nos programas são necessárias para processar uma sequência de dados de entrada. De forma geral, o <code>while</code> é usado quando não se conhece a quantidade de repetições que serão executadas, relacionadas neste caso ao número de dados que servirão como entrada para o programa.</p>
+<p>Nesse contexto, há duas formas importantes para a entrada, uma usando um valor sentinela (que indica o fim dos dados) e outra que reconhece que os dados acabaram por si, em um indicador explícito.</p>
+<section id="entrada-com-sentinela" class="level3" data-number="11.3.1">
+<h3 data-number="11.3.1" class="anchored" data-anchor-id="entrada-com-sentinela"><span class="header-section-number">11.3.1</span> Entrada com sentinela</h3>
+<p>Uma forma comum de entrada de dados é o uso de um valor sentinela que indica o fim dos dados. O programa seguinte apresenta uma sequência de leituras para a soma de valores inteiros maiores que zero, usando o valor nulo como sentinela para indicar o fim dos dados.</p>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">Exemplo de leitura de valores inteiros positivos, usando o zero como sentinela</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite um valor inteiro positivo ou zero para terminar: "</span><span class="op">);</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> valor<span class="op">;</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%d</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>valor<span class="op">);</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>valor <span class="op">!=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Valor digitado: </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> valor<span class="op">);</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Digite um valor inteiro positivo ou zero para terminar: "</span><span class="op">);</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>        sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%d</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>valor<span class="op">);</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Encerrado!</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Digite um valor inteiro positivo ou zero para terminar: <span class="kw">12</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Valor digitado: 12.</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>Digite um valor inteiro positivo ou zero para terminar: <span class="kw">26</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>Valor digitado: 26.</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>Digite um valor inteiro positivo ou zero para terminar: <span class="kw">13</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>Valor digitado: 13.</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>Digite um valor inteiro positivo ou zero para terminar: <span class="kw">3</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>Valor digitado: 3.</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>Digite um valor inteiro positivo ou zero para terminar: <span class="kw">20</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>Valor digitado: 20.</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>Digite um valor inteiro positivo ou zero para terminar: <span class="kw">0</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>Encerrado!</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Não é incomum o programador optar por expandir o conceito do valor sentinela. Sem prejuízo aos propósitos do programa original, o programador poderia usar na condição do <code>while</code> a a expressão <code>valor &gt; 0</code>, o que incluiria qualquer valor negativo como sentinela.</p>
+</section>
+<section id="detecção-do-encerramento-do-fluxo-de-entrada" class="level3" data-number="11.3.2">
+<h3 data-number="11.3.2" class="anchored" data-anchor-id="detecção-do-encerramento-do-fluxo-de-entrada"><span class="header-section-number">11.3.2</span> Detecção do encerramento do fluxo de entrada</h3>
+<p>Outra alternativa para indicar o fim da sequência de dados é o encerramento da entrada em si. Em sistemas Linux, ao se digitar <code>Ctrl-D</code> em uma linha vazia é indicado ao programa que a entrada de dados foi encerrada. No Windows, o equivalente é digitar <code>Ctrl-Z</code> seguido de <code>ENTER</code>.</p>
+<p>Uma leitura com função <code>fgets</code> é capaz de entender o encerramento dos dados. Essa função, como outras funções, retorna um valor resultante, o qual tem sido sistematicamente ignorado. Como exemplo, os comandos seguintes fazem uma leitura e apresentam o resultado lido. Neste caso, o valor de retorno do <code>fgets</code> é ignorado.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">"</span><span class="sc">%s</span><span class="st">"</span><span class="op">,</span> entrada<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Entretanto, essa função retorna um valor que pode ser verificado. O valor <code>NULL</code> é retornado em caso de erro. Assim, com uma verificação extra, a leitura da linha poderia ser escrita conforme apresentado na sequência.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">)</span> <span class="op">!=</span> NULL<span class="op">)</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">%s</span><span class="st">"</span><span class="op">,</span> entrada<span class="op">);</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Houve algum problema com a leitura.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O “problema” mais comum da falha na leitura é o fim do fluxo de entrada. Assim, um programa pode usar essa verificação para repetir a leitura condicionalmente. O programa seguinte exemplifica leituras de linha de texto e contagem do número de linhas<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">Contagem do número de linhas no fluxo de entrada</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: uma sequência de linhas de texto</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: a apresentação do número de linhas desse texto</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite seu texto linha a linha (Ctrl-D) para terminar.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> contador_linhas <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">)</span> <span class="op">!=</span> NULL<span class="op">)</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>        contador_linhas<span class="op">++;</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Número de linhas: </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> contador_linhas<span class="op">);</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>Digite seu texto linha a linha (Ctrl-D) para terminar.</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CAPITULO V </span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">O AGREGADO </span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw"></span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="kw">Nem sempre ia naquele passo vagaroso e rígido. Também se descompunha em </span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="kw">acionados, era muita vez rápido e lépido nos movimentos, tao natural nesta como </span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="kw">naquela maneira. Outrossim, ria largo, se era preciso, de um grande riso sem </span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="kw">vontade, mas comunicativo, a tal ponto as bochechas, os dentes, os olhos, toda a </span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="kw">cara, toda a pessoa, todo o mundo pareciam rir nele. Nos lances graves, </span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="kw">gravíssimo.</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>Número de linhas: 9.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dica
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>As funções de leitura, quando detectam o fim do fluxo de entrada associado a <code>stdin</code>, ignoram entradas subsequentes. Assim, depois de terminada uma sequência com <code>Ctrl-D</code>, outras chamadas a <code>fgets</code> são ignoradas. Isso acontece devido a um controle do fluxo feito pelo sistema operacional. Entretanto, é possível retomar a leitura com <code>clearerr</code>, que limpa o indicador de fim de fluxo.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">Contagem do número de linhas no fluxo de entrada</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: uma sequência de linhas de texto</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: a apresentação do número de linhas desse texto</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite seu texto linha a linha (Ctrl-D) para terminar.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> contador_linhas <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">)</span> <span class="op">!=</span> NULL<span class="op">)</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        contador_linhas<span class="op">++;</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Número de linhas: </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> contador_linhas<span class="op">);</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Reassumindo a leitura de stdin</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    clearerr<span class="op">(</span>stdin<span class="op">);</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite seu nome: "</span><span class="op">);</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> nome<span class="op">[</span><span class="dv">80</span><span class="op">];</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>nome<span class="op">,</span> <span class="kw">sizeof</span> nome<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    nome<span class="op">[</span>strlen<span class="op">(</span>nome<span class="op">)</span> <span class="op">-</span> <span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="ch">'</span><span class="sc">\0</span><span class="ch">'</span><span class="op">;</span>  <span class="co">// eliminação do \n</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Obrigado, </span><span class="sc">%s</span><span class="st">, por sua digitação!</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> nome<span class="op">);</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Sem a chamada a <code>clearerr</code>, a leitura do nome é ignorada.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="exemplos" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="exemplos"><span class="header-section-number">11.4</span> Exemplos</h2>
+<p>Esta seção apresenta alguns exemplos mais realistas do uso do <code>while</code> na codificação de alguns algoritmos.</p>
+<section id="contagem-regressiva" class="level3" data-number="11.4.1">
+<h3 data-number="11.4.1" class="anchored" data-anchor-id="contagem-regressiva"><span class="header-section-number">11.4.1</span> Contagem regressiva</h3>
+<p>Um exemplo simples de repetição com <code>while</code> é apresentado na sequência. O programa implementa um cronômetro regressivo simples e segue o <a href="c-repeticoes-com-while.html#alg-cronometro-regressivo">Algoritmo 11.2</a>.</p>
+<div id="alg-cronometro-regressivo">
+<figcaption class="figure-caption">
+<p>Algoritmo 11.2: Contagem regressiva segundo a segundo</p>
+</figcaption>
+<p><img src="algxpar/pseudocode.769b3649a6f02d46a48a03fb3beb64739cdfea19.svg" class="img-fluid" alt="Algoritmo 11.2: Contagem regressiva segundo a segundo" width="648"></p>
+</div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">Realiza a contagem regressiva para um tempo determinado</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: o tempo para contagem (inteiro)</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: a apresentação de uma contagem regressiva e mensagem de finalização</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;unistd.h&gt;</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite o tempo para contagem.</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Exemplos: '10' ou '10s' para 10s, '3m' para 3 minutos "</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>           <span class="st">"ou '5h' para 5 horas.</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Tempo: "</span><span class="op">);</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> tempo_restante<span class="op">;</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> unidade_tempo <span class="op">=</span> <span class="ch">'s'</span><span class="op">;</span>  <span class="co">// padrão: segundos</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%d%c</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>tempo_restante<span class="op">,</span> <span class="op">&amp;</span>unidade_tempo<span class="op">);</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Conversão de unidades se necessário; senão considera segundos</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> <span class="op">(</span>unidade_tempo<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'h'</span><span class="op">:</span>  <span class="co">// horas</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>            tempo_restante <span class="op">=</span> tempo_restante <span class="op">*</span> <span class="dv">3600</span><span class="op">;</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">case</span> <span class="ch">'m'</span><span class="op">:</span>  <span class="co">// minutos</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>            tempo_restante <span class="op">=</span> tempo_restante <span class="op">*</span> <span class="dv">60</span><span class="op">;</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Contagem</span></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Contagem para </span><span class="sc">%d</span><span class="st"> segundo(s):</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> tempo_restante<span class="op">);</span></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>tempo_restante <span class="op">&gt;=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> tempo_horas <span class="op">=</span> tempo_restante <span class="op">/</span> <span class="dv">3600</span><span class="op">;</span></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> tempo_minutos <span class="op">=</span> <span class="op">(</span>tempo_restante <span class="op">-</span> tempo_horas <span class="op">*</span> <span class="dv">3600</span><span class="op">)</span> <span class="op">/</span> <span class="dv">60</span><span class="op">;</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> tempo_segundos <span class="op">=</span> tempo_restante <span class="op">%</span> <span class="dv">60</span><span class="op">;</span></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"&gt; Tempo restante: </span><span class="sc">%02d</span><span class="st">h </span><span class="sc">%02d</span><span class="st">min </span><span class="sc">%02d</span><span class="st">s</span><span class="sc">\r</span><span class="st">"</span><span class="op">,</span> tempo_horas<span class="op">,</span></span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>               tempo_minutos<span class="op">,</span> tempo_segundos<span class="op">);</span></span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>        fflush<span class="op">(</span>stdout<span class="op">);</span></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>        sleep<span class="op">(</span><span class="dv">1</span><span class="op">);</span>  <span class="co">// aguarda 1 segundo</span></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>        tempo_restante<span class="op">--;</span></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">\n</span><span class="st">Obrigado pela paciência!</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Este código usa o <code>while</code> para a contagem regressiva. A cada execução, é apresentando o valor do cronômetro (dado por <code>tempo_restante</code>) e esse tempo é decrescido de um segundo. A chamada <code>sleep(1)</code> (declarada em <code>unistd.h</code>) suspende a execução do processo por um segundo antes de retomar a contagem.</p>
+<p>Valem ainda dois comentários sobre esse programa. O primeiro é sobre o uso de <code>\r</code> ao apresentar o cronômetro. Esse caractere faz com que o cursor do terminal volte para o início da linha sem passar para a linha de baixo e, assim, o próximo <code>printf</code> sobrescreve o horário anterior, atualizando-o. O outro ponto é o uso da função <code>fflush(stdout)</code> (incluído via <code>stdio.h</code>), a qual faz com que o texto escrito pelo programa seja imediatamente colocado no terminal. Sem ele, há atrasos na escrita e o contador parece irregular.</p>
+<p>O programa de contagem regressiva não é preciso. Ele se baseia em intervalos de um segundo, mas a cada repetição outras operações são feitas. A longo prazo, o cronômetro ficará atrasado em relação ao tempo real. Este programa é para ser um mero exemplo da repetição e não tem maiores pretensões.</p>
+</section>
+<section id="atualização-de-saldo" class="level3" data-number="11.4.2">
+<h3 data-number="11.4.2" class="anchored" data-anchor-id="atualização-de-saldo"><span class="header-section-number">11.4.2</span> Atualização de saldo</h3>
+<p>Um saldo bancário tem um valor inicial e, dependendo de uma série de transações de crédito ou débito, o montante é modificado. Esta é a proposta do <a href="c-repeticoes-com-while.html#alg-atualizacao-de-saldo">Algoritmo 11.3</a>.</p>
+<div id="alg-atualizacao-de-saldo">
+<figcaption class="figure-caption">
+<p>Algoritmo 11.3: Atualização de saldo bancário a partir de créditos e débitos.</p>
+</figcaption>
+<p><img src="algxpar/pseudocode.f79639ff6d22c6d95a8816ae4bd16888014ae04f.svg" class="img-fluid" alt="Algoritmo 11.3: Atualização de saldo bancário a partir de créditos e débitos." width="648"></p>
+</div>
+<p>A implementação em C apresentada na sequência considera que cada transação é entrada expressando o tipo da transação com <code>C</code> para crédito ou <code>D</code> para débito em uma linha e o valor monetário em outra. Não há valor sentinela para finalizar a entrada e o programa assume que o encerramento do fluxo de entrada implica no fim dos dados.</p>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">Atualização de um saldo bancário a partir de uma sequência de movimentações de crédito ou débito ocorridas em um período</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: o saldo inicial e uma sequência de transações, cada um fazendo indicando separadamente o tipo 'C' ou 'D' (crédito ou débito) e o valor</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: a apresentação do saldo atualizado</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">Transações não reconhecidas são rejeitadas</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Obtenção do saldo inicial</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite o saldo inicial: "</span><span class="op">);</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> saldo<span class="op">;</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>saldo<span class="op">);</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Atualização do saldo de acordo com as transações</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite Ctrl-D (Linux) ou Ctrl-Z (Windows) para encerrar.</span><span class="sc">\n\n</span><span class="st">"</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Tipo (C ou D): "</span><span class="op">);</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">)</span> <span class="op">!=</span> NULL<span class="op">)</span> <span class="op">{</span>  <span class="co">// leitura do tipo</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> tipo_transacao <span class="op">=</span> <span class="ch">'*'</span><span class="op">;</span>  <span class="co">// '*' = inválido</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>        sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%c</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>tipo_transacao<span class="op">);</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Valor: R$ "</span><span class="op">);</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> valor_transacao<span class="op">;</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>        fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span>  <span class="co">// leitura do valor</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>        sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>valor_transacao<span class="op">);</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">switch</span> <span class="op">(</span>tipo_transacao<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> <span class="ch">'C'</span><span class="op">:</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>                saldo <span class="op">+=</span> valor_transacao<span class="op">;</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> <span class="ch">'D'</span><span class="op">:</span></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>                saldo <span class="op">-=</span> valor_transacao<span class="op">;</span></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>            <span class="cf">default</span><span class="op">:</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>                printf<span class="op">(</span><span class="st">"Transação não reconhecida (</span><span class="sc">%c</span><span class="st">).</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> tipo_transacao<span class="op">);</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Tipo (C ou D): "</span><span class="op">);</span>  <span class="co">// próxima transação</span></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Apresentação do saldo atualizado</span></span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"</span><span class="sc">\n</span><span class="st">Saldo final: R$ </span><span class="sc">%.2f</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> saldo<span class="op">);</span></span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Digite o saldo inicial: <span class="kw">5800.00</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>Digite Ctrl-D (Linux) ou Ctrl-Z (Windows) para encerrar.</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>Tipo (C ou D): <span class="kw">D</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>Valor: R$ <span class="kw">300.00</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>Tipo (C ou D): <span class="kw">C</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>Valor: R$ <span class="kw">82.50</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>Tipo (C ou D): <span class="kw">C</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>Valor: R$ <span class="kw">181.00</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>Tipo (C ou D): <span class="kw">D</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>Valor: R$ <span class="kw">1.25</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>Tipo (C ou D): <span class="kw">D</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>Valor: R$ <span class="kw">789.42</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>Tipo (C ou D): </span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>Saldo final: R$ 4972.83.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>O texto digitado como exemplo foi extraído de Dom Casmurro, de Machado de Assis, obtido em <a href="http://www.educadores.diaadia.pr.gov.br/arquivos/File/2010/literatura/obras_completas_literatura_brasileira_e_portuguesa/MACHADO_ASSIS/DCASMURRO/CASMURRO5.HTM" class="uri" target="_blank">http://www.educadores.diaadia.pr.gov.br/arquivos/File/2010/literatura/obras_completas_literatura_brasileira_e_portuguesa/MACHADO_ASSIS/DCASMURRO/CASMURRO5.HTM</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiada");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiada");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./c-organizacao-do-codigo-fonte.html" class="pagination-link" aria-label="Organização do código fonte">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Organização do código fonte</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./c-repeticoes-com-for.html" class="pagination-link" aria-label="Repetições com `for`">
+        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Repetições com <code>for</code></span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

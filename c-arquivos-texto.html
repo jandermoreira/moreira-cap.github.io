@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR" xml:lang="pt-BR"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>14&nbsp; Arquivos texto – Construção de Algoritmos e Programação</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./c-desvirtuacao-das-repeticoes.html" rel="next">
+<link href="./c-repeticoes-com-do-while.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-9e1f2a4632985dffc2c80318c992baf5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-7cf8a0149bf791b42ada95f7f6344cc2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="book.css">
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./c-repeticoes-com-while.html">Controle de repetição do fluxo</a></li><li class="breadcrumb-item"><a href="./c-arquivos-texto.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Arquivos texto</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Construção de Algoritmos e Programação</a> 
+        <div class="sidebar-tools-main">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-save"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./moreira_j-construcao_algoritmos_programacao-programacao.pdf">
+            Versão PDF
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Procurar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Apresentação</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./preambulo_prefacio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Programação em C</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./algoritmos-nocoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Noções de algoritmos</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Programação básica</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-introducao-a-linguagem-c.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introdução à linguagem C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-tipos-de-dados.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tipos de dados da linguagem C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-variaveis-identificadores-e-leitura.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Variáveis e leituras em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-expressoes-aritmeticas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Expressões aritméticas de C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-expressoes-relacionais-e-logicas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">C: expressões relacionais e lógicas</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Controle de fluxo simples</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-execucao-condicional-com-if.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Execução condicional com <code>if</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-execucao-condicional-com-switch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Execução condicional com <code>switch</code></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Organização geral do código</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-escopo-basico-de-declaracoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Escopo básico de declarações</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-organizacao-do-codigo-fonte.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Organização do código fonte</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Controle de repetição do fluxo</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-while.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Repetições com <code>while</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-for.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Repetições com <code>for</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-repeticoes-com-do-while.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Repetições com <code>do while</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-arquivos-texto.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Arquivos texto</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-desvirtuacao-das-repeticoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Desvirtuação das repetições</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Cadeias de caracteres</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-textuais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Dados textuais em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-manipulacao-de-dados-textuais.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Manipulação de dados textuais em C</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Modularização e memória</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-funcoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Funções em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-regras-de-escopo-com-modularizacao.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Regras de escopo com a modularização</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-enderecamento-de-memoria-e-ponteiros.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Endereçamento de memória e ponteiros nos programas</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-procedimentos.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Procedimentos em C</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-parametros-de-funcoes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Parâmetros das funções na linguagem C</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Estruturação de dados</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-com-struct.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">C: Dados com <code>struct</code></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c-dados-em-vetores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">C: Dados em vetores</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Nesta página:</h2>
+   
+  <ul>
+  <li><a href="#fluxos-de-entrada-e-saída" id="toc-fluxos-de-entrada-e-saída" class="nav-link active" data-scroll-target="#fluxos-de-entrada-e-saída"><span class="header-section-number">14.1</span> Fluxos de entrada e saída</a>
+  <ul class="collapse">
+  <li><a href="#entrada-e-saída-padrão" id="toc-entrada-e-saída-padrão" class="nav-link" data-scroll-target="#entrada-e-saída-padrão"><span class="header-section-number">14.1.1</span> Entrada e saída padrão</a></li>
+  <li><a href="#texto-plano-e-outros-fluxos-de-entrada-e-saída" id="toc-texto-plano-e-outros-fluxos-de-entrada-e-saída" class="nav-link" data-scroll-target="#texto-plano-e-outros-fluxos-de-entrada-e-saída"><span class="header-section-number">14.1.2</span> Texto plano e outros fluxos de entrada e saída</a></li>
+  </ul></li>
+  <li><a href="#fluxo-de-escrita-para-arquivo" id="toc-fluxo-de-escrita-para-arquivo" class="nav-link" data-scroll-target="#fluxo-de-escrita-para-arquivo"><span class="header-section-number">14.2</span> Fluxo de escrita para arquivo</a></li>
+  <li><a href="#sec-fluxo-de-leitura" id="toc-sec-fluxo-de-leitura" class="nav-link" data-scroll-target="#sec-fluxo-de-leitura"><span class="header-section-number">14.3</span> Fluxo de leitura</a></li>
+  <li><a href="#mais-sobre-a-abertura-e-o-fechamento-de-arquivos-texto" id="toc-mais-sobre-a-abertura-e-o-fechamento-de-arquivos-texto" class="nav-link" data-scroll-target="#mais-sobre-a-abertura-e-o-fechamento-de-arquivos-texto"><span class="header-section-number">14.4</span> Mais sobre a abertura e o fechamento de arquivos texto</a>
+  <ul class="collapse">
+  <li><a href="#a-função-fopen" id="toc-a-função-fopen" class="nav-link" data-scroll-target="#a-função-fopen"><span class="header-section-number">14.4.1</span> A função <code>fopen</code></a></li>
+  <li><a href="#a-função-fclose" id="toc-a-função-fclose" class="nav-link" data-scroll-target="#a-função-fclose"><span class="header-section-number">14.4.2</span> A função <code>fclose</code></a></li>
+  </ul></li>
+  <li><a href="#a-função-fprintf" id="toc-a-função-fprintf" class="nav-link" data-scroll-target="#a-função-fprintf"><span class="header-section-number">14.5</span> A função <code>fprintf</code></a></li>
+  <li><a href="#leitura-até-o-fim-do-arquivo" id="toc-leitura-até-o-fim-do-arquivo" class="nav-link" data-scroll-target="#leitura-até-o-fim-do-arquivo"><span class="header-section-number">14.6</span> Leitura até o fim do arquivo</a></li>
+  <li><a href="#a-função-rewind" id="toc-a-função-rewind" class="nav-link" data-scroll-target="#a-função-rewind"><span class="header-section-number">14.7</span> A função <code>rewind</code></a></li>
+  <li><a href="#a-traiçoeira-função-feof" id="toc-a-traiçoeira-função-feof" class="nav-link" data-scroll-target="#a-traiçoeira-função-feof"><span class="header-section-number">14.8</span> A traiçoeira função <code>feof</code></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./c-repeticoes-com-while.html">Controle de repetição do fluxo</a></li><li class="breadcrumb-item"><a href="./c-arquivos-texto.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Arquivos texto</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Arquivos texto</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<span class="math inline">\(\newcommand\Id[1]{\mbox{\textit{#1}}}\)</span>
+<p>Todos os programas apresentados até o momento escrevem e leem texto, usando o terminal como interface: tela para a apresentação de informações e teclado para receber caracteres digitados.</p>
+<p>Na escrita de um programa em C usando a função <code>printf</code>, a saída é sempre um texto. Este texto pode ser explícito e direto, como o do comando seguinte.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">"Digite um valor: "</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Por outro lado, o texto escrito pode ser o resultante de uma conversão do valor de uma variável, exemplificado na sequência.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> d <span class="op">=</span> <span class="fl">1.32143211</span><span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">"v = </span><span class="sc">%.2f\n</span><span class="st">"</span><span class="op">,</span> d<span class="op">);</span>  <span class="co">// 1.32</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Neste último <code>printf</code>, a variável <code>d</code> contém um dado valor representado internamente com o tipo <code>double</code>, mas a escrita é uma representação textual desse valor. De acordo com o formato <code>%.2f</code>, a transformação do valor para texto gera a sequência de caracteres <code>1</code>, <code>.</code>, <code>3</code> e <code>2</code>. A saída, portanto, é texto.</p>
+<p>A questão uso de texto também ocorre nas leituras. Os programas recebem uma sequência de caracteres (texto) obtidas por <code>fgets</code>, mas um eventual valor numérico digitado deve ser convertido para um tipo <code>int</code> ou <code>double</code>, por exemplo. Assim, toda entrada para os programas também tem sido exclusivamente no formato textual. Segue um exemplo destacando a conversão.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span>  <span class="co">// texto</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span>  <span class="co">// obtém texto</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> d<span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>d<span class="op">);</span>  <span class="co">// converte o texto digitado para double</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="fluxos-de-entrada-e-saída" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="fluxos-de-entrada-e-saída"><span class="header-section-number">14.1</span> Fluxos de entrada e saída</h2>
+<p>Um programa em C recebe os caracteres digitados no terminal e produz suas saídas também na tela do terminal. A sequencia de caracteres digitados é denominada fluxo de entrada e o texto gerado é o fluxo de saída.</p>
+<p>Esta seção abordada os fluxos usuais do programa e introduz novos fluxos, estes associados a arquivos.</p>
+<section id="entrada-e-saída-padrão" class="level3" data-number="14.1.1">
+<h3 data-number="14.1.1" class="anchored" data-anchor-id="entrada-e-saída-padrão"><span class="header-section-number">14.1.1</span> Entrada e saída padrão</h3>
+<p>Durante a execução de um programa, ele é capaz de escrever e ler de um terminal. O sistema operacional automaticamente associa as leituras a um fluxo chamado de entrada padrão, conhecido por <em>stdin</em> (de <em>standard input</em>). A saída, por seu turno, é associada à chamada saída padrão, que é o fluxo <em>stdout</em> (<em>standard output</em>).</p>
+<p>Ao executar um programa, <em>stdout</em> é associada ao terminal e, assim, todos as chamadas a <code>printf</code> produzem textos nesse terminal. De forma similar, <em>stdin</em> é também associada a esse terminal, de forma que as digitações realizadas são transferidas para o programa (daí o último argumento de <code>fgets</code> ser <code>stdin</code>).</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Curiosidade">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Curiosidade
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Existe, ainda, um segundo fluxo de saída chamado <em>stderr</em> (<em>standard error</em>), que também é associado ao terminal e funciona praticamente da mesma forma que <em>stdout</em>.</p>
+</div>
+</div>
+<p>Para concluir, o programa em execução pega dados de um fluxo de entrada e gera dados um fluxo de saída.</p>
+</section>
+<section id="texto-plano-e-outros-fluxos-de-entrada-e-saída" class="level3" data-number="14.1.2">
+<h3 data-number="14.1.2" class="anchored" data-anchor-id="texto-plano-e-outros-fluxos-de-entrada-e-saída"><span class="header-section-number">14.1.2</span> Texto plano e outros fluxos de entrada e saída</h3>
+<p>Nos fluxos de entrada e saída padrão, via de regra, são produzidos o que se convencionou chamar de texto plano (ou texto simples). Esse texto plano se refere apenas ao fluxo de caracteres convencionais, sem atributos associados. Em outras palavras, o nem <code>fgets</code> nem <code>printf</code> lidam com itálicos, negritos, espaçamento de linhas entre parágrafos ou linhas centralizadas, para citar alguns exemplos de formatação.</p>
+<p>Quando um programa em C é escrito em um editor, ele é um texto plano. A maioria dos IDEs coloca cores e negritos para destacar palavras chaves e comentários, mas esse recurso é apenas visual e automático; essas características não são salvas junto como o código fonte. Textos planos são os produzidos em IDEs ou editores simples, como o GEdit ou o Notepad.</p>
+<p>Programas em C são capazes de gerenciar outros fluxos além de <em>stdin</em> e <em>stdout</em>, os quais são manipulados como textos planos. Esses novos fluxos são usualmente associados a arquivos, o que permite que as leituras sejam feitas usando-se os caracteres armazenados em um arquivo e, adicionalmente, que as saídas produzam textos direcionados para outro arquivo.</p>
+<p>O termo geral arquivo é usado para qualquer fluxo de dados de entrada ou saída de um programa. Estranhamente, <em>stdin</em> e <em>stdout</em> são tratados internamente também como arquivos.</p>
+<p> A função de escrita <code>printf</code> escreve na saída padrão. Há uma outra função similar, a <code>fprintf</code>, esta última permitindo especificar o fluxo para o qual texto será enviado.</p>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Duas saídas equivalente</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Hello, world!</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span>  <span class="co">// implicitamente envia para stdout</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    fprintf<span class="op">(</span>stdout<span class="op">,</span> <span class="st">"Hello, world!</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span> <span class="co">// explícito para stdout</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Hello, world!</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>Hello, world!</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A função <code>fprintf</code> possui um novo parâmetro obrigatório, que é o fluxo que será usado. Neste programa em particular, as duas instruções possuem o mesmo efeito, pois ambas as funções estão associadas a <em>stdout</em>.</p>
+</section>
+</section>
+<section id="fluxo-de-escrita-para-arquivo" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="fluxo-de-escrita-para-arquivo"><span class="header-section-number">14.2</span> Fluxo de escrita para arquivo</h2>
+<p>Para a criação de um novo fluxo existe uma função em <code>stdio.h</code> chamada <code>fopen</code>. Esta é uma função de chamada ao sistema operacional, solicitando o acesso a um determinado arquivo.</p>
+<p>Para entender mais facilmente a criação de um novo fluxo dados, o programa seguinte parte do uso do fluxo convencional, ou seja, saída na tela. O programa lê uma sequência de coordenadas em <span class="math inline">\(\mathbb{R}^2\)</span> e apresenta as coordenadas e sua distância à origem. Segue o programa com entradas e saídas convencionais.</p>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">Criação de um novo arquivo contendo dados digitados pelo usuário</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: uma sequência de pares de pontos (x, y), usando o ponto (0, 0) como</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">    valor sentinela</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">Ensure: a apresentação de cada ponto e de sua distância à origem</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;math.h&gt;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Digite x e y do ponto (ou 0 0  para terminar): "</span><span class="op">);</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> x<span class="op">,</span> y<span class="op">;</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>x<span class="op">,</span> <span class="op">&amp;</span>y<span class="op">);</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>x <span class="op">!=</span> <span class="dv">0</span> <span class="op">||</span> y <span class="op">!=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Cálculo da distância à origem</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> distancia_origem <span class="op">=</span> sqrt<span class="op">(</span>x <span class="op">*</span> x <span class="op">+</span> y <span class="op">*</span> y<span class="op">);</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Escrita das informações no arquivo</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>        fprintf<span class="op">(</span>stdout<span class="op">,</span> <span class="st">"(</span><span class="sc">%.1f</span><span class="st">, </span><span class="sc">%.1f</span><span class="st">) --&gt; </span><span class="sc">%.1f\n</span><span class="st">"</span><span class="op">,</span> x<span class="op">,</span> y<span class="op">,</span> distancia_origem<span class="op">);</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Próximo (x, y)</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Digite x e y do ponto (ou 0 0  para terminar): "</span><span class="op">);</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>        fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>        sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>x<span class="op">,</span> <span class="op">&amp;</span>y<span class="op">);</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Digite x e y do ponto (ou 0 0  para terminar): <span class="kw">3 -2</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>(3.0, -2.0) --&gt; 3.6</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>Digite x e y do ponto (ou 0 0  para terminar): <span class="kw">1 -2</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>(1.0, -2.0) --&gt; 2.2</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>Digite x e y do ponto (ou 0 0  para terminar): <span class="kw">10 5</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>(10.0, 5.0) --&gt; 11.2</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>Digite x e y do ponto (ou 0 0  para terminar): <span class="kw">14.2 -14.2</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>(14.2, -14.2) --&gt; 20.1</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>Digite x e y do ponto (ou 0 0  para terminar): <span class="kw">0 0</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Um ponto a se notar nesse programa é o uso da função <code>fprintf</code> para realizar a escrita, mesmo quando o <code>printf</code> poderia ser usado. Esse uso é proposital para identificar as alterações para mudar o fluxo para um arquivo.</p>
+<div class="runenv">
+<p>A nova versão do programa é apresentada na sequência, sendo que a saída produzida pelo programa é gravada em um arquivo chamado <code>distancias.txt</code>.</p>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource c number-lines code-with-copy"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1"></a><span class="co">/*</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co">Criação de um novo arquivo contendo dados digitados pelo usuário</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co">Requer: Uma sequência de pares de pontos (x, y), usando o ponto (0, 0) como</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">    valor sentinela</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">Ensure: um arquivo texto contendo, linha a linha, as coordenadas do ponto e</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">    suas distâncias à origem</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">*/</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="pp">#include </span><span class="im">&lt;math.h&gt;</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a>    <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a></span>
+<span id="cb8-14"><a href="#cb8-14"></a>    <span class="co">// Criação do arquivo de saída</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a>    <span class="dt">FILE</span> <span class="op">*</span>arquivo_destino <span class="op">=</span> fopen<span class="op">(</span><span class="st">"distancias.txt"</span><span class="op">,</span> <span class="st">"w"</span><span class="op">);</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a></span>
+<span id="cb8-17"><a href="#cb8-17"></a>    <span class="cf">if</span> <span class="op">(</span>arquivo_destino <span class="op">==</span> NULL<span class="op">)</span></span>
+<span id="cb8-18"><a href="#cb8-18"></a>        printf<span class="op">(</span><span class="st">"Erro ao criar novo arquivo.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb8-19"><a href="#cb8-19"></a>    <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb8-20"><a href="#cb8-20"></a>        printf<span class="op">(</span><span class="st">"Digite x e y do ponto (ou 0 0  para terminar): "</span><span class="op">);</span></span>
+<span id="cb8-21"><a href="#cb8-21"></a>        fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb8-22"><a href="#cb8-22"></a>        <span class="dt">double</span> x<span class="op">,</span> y<span class="op">;</span></span>
+<span id="cb8-23"><a href="#cb8-23"></a>        sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>x<span class="op">,</span> <span class="op">&amp;</span>y<span class="op">);</span></span>
+<span id="cb8-24"><a href="#cb8-24"></a>        <span class="cf">while</span> <span class="op">(</span>x <span class="op">!=</span> <span class="dv">0</span> <span class="op">||</span> y <span class="op">!=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-25"><a href="#cb8-25"></a>            <span class="co">// Cálculo da distância à origem</span></span>
+<span id="cb8-26"><a href="#cb8-26"></a>            <span class="dt">double</span> distancia_origem <span class="op">=</span> sqrt<span class="op">(</span>x <span class="op">*</span> x <span class="op">+</span> y <span class="op">*</span> y<span class="op">);</span></span>
+<span id="cb8-27"><a href="#cb8-27"></a></span>
+<span id="cb8-28"><a href="#cb8-28"></a>            <span class="co">// Escrita das informações no arquivo</span></span>
+<span id="cb8-29"><a href="#cb8-29"></a>            fprintf<span class="op">(</span>arquivo_destino<span class="op">,</span> <span class="st">"(</span><span class="sc">%.1f</span><span class="st">, </span><span class="sc">%.1f</span><span class="st">) --&gt; </span><span class="sc">%.1f\n</span><span class="st">"</span><span class="op">,</span> x<span class="op">,</span> y<span class="op">,</span> distancia_origem<span class="op">);</span></span>
+<span id="cb8-30"><a href="#cb8-30"></a></span>
+<span id="cb8-31"><a href="#cb8-31"></a>            <span class="co">// Próximo (x, y)</span></span>
+<span id="cb8-32"><a href="#cb8-32"></a>            printf<span class="op">(</span><span class="st">"Digite x e y do ponto (ou 0 0  para terminar): "</span><span class="op">);</span></span>
+<span id="cb8-33"><a href="#cb8-33"></a>            fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb8-34"><a href="#cb8-34"></a>            sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>x<span class="op">,</span> <span class="op">&amp;</span>y<span class="op">);</span></span>
+<span id="cb8-35"><a href="#cb8-35"></a>        <span class="op">}</span></span>
+<span id="cb8-36"><a href="#cb8-36"></a></span>
+<span id="cb8-37"><a href="#cb8-37"></a>        <span class="co">// Encerramento do acesso ao arquivo</span></span>
+<span id="cb8-38"><a href="#cb8-38"></a>        fclose<span class="op">(</span>arquivo_destino<span class="op">);</span></span>
+<span id="cb8-39"><a href="#cb8-39"></a>    <span class="op">}</span></span>
+<span id="cb8-40"><a href="#cb8-40"></a></span>
+<span id="cb8-41"><a href="#cb8-41"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb8-42"><a href="#cb8-42"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>Digite x e y do ponto (ou 0 0  para terminar): <span class="kw">3 -2</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>Digite x e y do ponto (ou 0 0  para terminar): <span class="kw">1 -2</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>Digite x e y do ponto (ou 0 0  para terminar): <span class="kw">10 5</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>Digite x e y do ponto (ou 0 0  para terminar): <span class="kw">14.2 -14.2</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>Digite x e y do ponto (ou 0 0  para terminar): <span class="kw">0 0</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A primeira diferença entre essa versão e a original é especificação de um arquivo, ou seja, um novo fluxo de dados. Essa especificação é feita usando-se uma variável <code>arquivo_destino</code> cujo tipo é <code>FILE *</code>. A essa variável é atribuído o valor retornado pela função <code>fopen</code>.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="dt">FILE</span> <span class="op">*</span>arquivo_destino <span class="op">=</span> fopen<span class="op">(</span><span class="st">"distancias.txt"</span><span class="op">,</span> <span class="st">"w"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Conforme apresentada no programa, essa função solicita ao sistema operacional para criar um novo arquivo, o qual usará o nome <code>distancias.txt</code>. Essa função não é infalível e o sistema operacional pode, assim, negar a criação. Entre as razões para a criação falhar podem ser citadas, a título de exemplo, que o programa tenha autorização de criar um arquivo no diretório corrente ou que já exista um arquivo com esse nome e ele seja protegido para não ser reescrito. No caso de falha, a função retorno o valor <code>NULL</code>. O segundo parâmetro, <code>"w"</code>, indica que o arquivo deve ser criado.</p>
+<p>Assim, essa possibilidade de falha é tratada no programa, que verifica se o valor retornado foi ou não <code>NULL</code>.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>arquivo_destino <span class="op">==</span> NULL<span class="op">)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">"Erro ao criar novo arquivo.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span>  <span class="co">// aqui houve erro</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Aqui o arquivo foi criado com sucesso</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A relação entre o arquivo real (armazenado em um disco rígido, por exemplo) e o programa em C se dá por meio do valor retornado pela função <code>fopen</code> e armazenado na variável <code>arquivo_destino</code>. O programa usa essa variável para indicar o que é feito e o sistema operacional se encarrega de refletir os efeitos dos comandos no arquivo real.</p>
+<p> O arquivo real é chamado usualmente de arquivo físico, enquanto a variável associada a esse arquivo é conhecida como arquivo lógico.</p>
+<p>Se o arquivo de saída foi criado com sucesso, o programa segue para o <code>else</code>, cujos comandos reproduzem as mesmas leituras do programa original, incluindo as mesmas verificações e conversões. Nessa parte, a primeira diferença está no comando <code>fprintf</code>, cujo primeiro argumento é <code>arquivo_destino</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fprintf<span class="op">(</span>arquivo_destino<span class="op">,</span> <span class="st">"(</span><span class="sc">%.1f</span><span class="st">, </span><span class="sc">%.1f</span><span class="st">) --&gt; </span><span class="sc">%.1f\n</span><span class="st">"</span><span class="op">,</span> x<span class="op">,</span> y<span class="op">,</span> distancia_origem<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O texto que seria escrito no terminal é, agora, gravado no arquivo <code>distancias.txt</code>, incluindo as formatações (<code>%.f</code>) e mudanças de linha (<code>\n</code>).</p>
+<p>Dessa forma, o arquivo de saída fica com o conteúdo apresentado na sequência.</p>
+<div class="sourceCode" id="cb13" data-from="distancias.txt"><pre class="sourceCode textfile terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>(3.0, -2.0) --&gt; 3.6</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>(1.0, -2.0) --&gt; 2.2</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>(10.0, 5.0) --&gt; 11.2</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>(14.2, -14.2) --&gt; 20.1</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Há, finalmente, ainda uma diferença importante: depois de encerrada a sequência de entrada, o arquivo é fechado com <code>fclose</code>.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fclose<span class="op">(</span>arquivo_destino<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Fechar um arquivo faz com que o sistema operacional grave todos os bytes enviados para o arquivo, atualize suas informações de armazenamento (tamanho, data de gravação etc.) e libere os recursos que o sistema estava usando para controlar o acesso ao arquivo.</p>
+<p>É importante notar que o arquivo somente é fechado caso tenha sido aberto com sucesso. É por essa razão que o <code>fclose</code> está no bloco de comandos condicionados no <code>else</code>.</p>
+</div>
+<!-- runenv -->
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Dica
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Em geral, quando um programa tem sua execução terminada, os arquivos abertos por ele são automaticamente fechados.</p>
+<p>Entretanto, é uma péssima prática não deixar o fechamento dos arquivos explicitamente indicados no código. O uso do <code>fclose</code>, portanto, é mandatório para um código de boa qualidade.</p>
+</div>
+</div>
+</section>
+<section id="sec-fluxo-de-leitura" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="sec-fluxo-de-leitura"><span class="header-section-number">14.3</span> Fluxo de leitura</h2>
+<p>Da mesma forma que a saída textual de um programa pode ser direcionada a um arquivo, criando um fluxo de escrita, também a entrada pode ser feita de um arquivo, criando-se um fluxo de entrada.</p>
+<p>Para exemplificar um fluxo de entrada, será considerado um arquivo textual contendo dados sobre triângulos e retângulos. O arquivo conterá, em sua primeira linha, um valor com a quantidade de figuras contidas no arquivo. Para os triângulos há uma linha contendo o caractere T e seis valores reais, cada par deles correspondendo às coordenadas <span class="math inline">\((x, y)\)</span> dos vértices do triângulo; para os retângulos, o caractere será R e há apenas dois pontos (quatro valores) para referenciá-lo, correspondendo a dois vértices opostos (os lados do retângulo são sempre considerados paralelos aos eixos).</p>
+<div class="runenv">
+<p>Para um exemplo inicial, pode ser considerado o arquivo seguinte, cujo nome é <code>figuras.txt</code>. Esse arquivo pode ser criado com qualquer editor de texto plano.</p>
+<div class="sourceCode" id="cb15" data-to="figuras.txt"><pre class="sourceCode textfile terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>3</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>R 0.0 0.0 5.5 2.0</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>T -1.0 1.0 3.0 4.5 4 -0.5</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>R -1.2 5.2 2.2 3.1</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Neste exemplo, o <code>3</code> indica que há três formas. A primeira é o retângulo <span class="math inline">\(R_1\)</span> da <a href="#fig-retangulos-e-triangulos" class="quarto-xref">Figura&nbsp;<span>14.1</span></a>; segue-se o triângulo <span class="math inline">\(T\)</span> e a última é o retângulo <span class="math inline">\(R_2\)</span>.</p>
+<div id="fig-retangulos-e-triangulos" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-retangulos-e-triangulos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figuras/retangulos-e-triangulos.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-retangulos-e-triangulos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;14.1: Três formas armazenadas em arquivo segundo seus vértices.
+</figcaption>
+</figure>
+</div>
+<p>Uma solução para processar os dados desse arquivo e apresentar as áreas de cada figura é o <a href="c-arquivos-texto.html#alg-retangulos-e-triangulos-com-prefixacao">Algoritmo 14.1</a>, apresentado com nível alto de abstração.</p>
+<div id="alg-retangulos-e-triangulos-com-prefixacao">
+<figcaption class="figure-caption">
+<p>Algoritmo 14.1: Processamento de formas em arquivo com apresentação das suas áreas, com prefixação do número de formas.</p>
+</figcaption>
+<p><img src="algxpar/pseudocode.a6bebc962bef3912a46f2990a0cc64e1666b0066.svg" class="img-fluid" alt="Algoritmo 14.1: Processamento de formas em arquivo com apresentação das suas áreas, com prefixação do número de formas." width="648"></p>
+</div>
+<p>A implementação desse algoritmo em C pode ser feita conforme o programa seguinte. Nessa codificação, o arquivo lógico é dado pela variável <code>arquivo_formas</code>, associado ao arquivo físico <code>figuras.txt</code>.</p>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">Processamento de um arquivo de formas (triângulos e retângulos) para cálculo</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">    das áreas</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: arquivo texto com nome 'figuras.txt':</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">    na linha 1: número de formas</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">    nas linhas restantes, conforme a quantidade da linha 1:</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">        - OU a letra T mais coordenadas dos vértices do triângulo</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">        - OU a letra R e as coordenadas de dois vértices opostos do</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">            retângulo</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: a apresentação da área de cada forma</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;math.h&gt;</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">FILE</span> <span class="op">*</span>arquivo_formas <span class="op">=</span> fopen<span class="op">(</span><span class="st">"figuras.txt"</span><span class="op">,</span> <span class="st">"r"</span><span class="op">);</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>arquivo_formas <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Falha ao abrir arquivo de formas.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>        fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> arquivo_formas<span class="op">);</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> numero_formas<span class="op">;</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>        sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%d</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>numero_formas<span class="op">);</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Processamento das formas</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> numero_formas<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Obtenção da linha com a forma</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>            fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> arquivo_formas<span class="op">);</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>            <span class="dt">double</span> area<span class="op">;</span></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>entrada<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">==</span> <span class="ch">'T'</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>                <span class="co">// Triângulo: área por semiperímetro</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>                <span class="dt">double</span> x1<span class="op">,</span> y1<span class="op">,</span> x2<span class="op">,</span> y2<span class="op">,</span> x3<span class="op">,</span> y3<span class="op">;</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>                sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%*c%lf%lf%lf%lf%lf%lf</span><span class="st">"</span><span class="op">,</span></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>                       <span class="op">&amp;</span>x1<span class="op">,</span> <span class="op">&amp;</span>y1<span class="op">,</span> <span class="op">&amp;</span>x2<span class="op">,</span> <span class="op">&amp;</span>y2<span class="op">,</span> <span class="op">&amp;</span>x3<span class="op">,</span> <span class="op">&amp;</span>y3<span class="op">);</span></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>                <span class="dt">double</span> lado1 <span class="op">=</span> sqrt<span class="op">(</span>pow<span class="op">(</span>x1 <span class="op">-</span> x2<span class="op">,</span> <span class="dv">2</span><span class="op">)</span> <span class="op">+</span> pow<span class="op">(</span>y1 <span class="op">-</span> y2<span class="op">,</span> <span class="dv">2</span><span class="op">));</span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>                <span class="dt">double</span> lado2 <span class="op">=</span> sqrt<span class="op">(</span>pow<span class="op">(</span>x1 <span class="op">-</span> x3<span class="op">,</span> <span class="dv">2</span><span class="op">)</span> <span class="op">+</span> pow<span class="op">(</span>y1 <span class="op">-</span> y3<span class="op">,</span> <span class="dv">2</span><span class="op">));</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>                <span class="dt">double</span> lado3 <span class="op">=</span> sqrt<span class="op">(</span>pow<span class="op">(</span>x2 <span class="op">-</span> x3<span class="op">,</span> <span class="dv">2</span><span class="op">)</span> <span class="op">+</span> pow<span class="op">(</span>y2 <span class="op">-</span> y3<span class="op">,</span> <span class="dv">2</span><span class="op">));</span></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>                <span class="dt">double</span> semiperimetro <span class="op">=</span> <span class="op">(</span>lado1 <span class="op">+</span> lado2 <span class="op">+</span> lado3<span class="op">)</span> <span class="op">/</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>                area <span class="op">=</span> sqrt<span class="op">(</span>semiperimetro <span class="op">*</span> <span class="op">(</span>semiperimetro <span class="op">-</span> lado1<span class="op">)</span> <span class="op">*</span></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>                            <span class="op">(</span>semiperimetro <span class="op">-</span> lado2<span class="op">)</span> <span class="op">*</span> <span class="op">(</span>semiperimetro <span class="op">-</span> lado3<span class="op">));</span></span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>                <span class="co">// Retângulo: ára por base x altura</span></span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>                <span class="dt">double</span> x1<span class="op">,</span> y1<span class="op">,</span> x2<span class="op">,</span> y2<span class="op">;</span></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>                sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%*c%lf%lf%lf%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>x1<span class="op">,</span> <span class="op">&amp;</span>y1<span class="op">,</span> <span class="op">&amp;</span>x2<span class="op">,</span> <span class="op">&amp;</span>y2<span class="op">);</span></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>                area <span class="op">=</span> fabs<span class="op">(</span>x2 <span class="op">-</span> x1<span class="op">)</span> <span class="op">*</span> fabs<span class="op">(</span>y2 <span class="op">-</span> y1<span class="op">);</span></span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">"</span><span class="sc">%.2f\n</span><span class="st">"</span><span class="op">,</span> area<span class="op">);</span></span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>        fclose<span class="op">(</span>arquivo_formas<span class="op">);</span></span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>11.00</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>11.75</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>7.14</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A função <code>fopen</code> usa como parâmetros o nome do arquivo de formas e o modo <code>"r"</code>, que indica acesso para leitura. Todas as leituras são feitas linha a linha, usando a variável genérica <code>entrada</code> para armazenamento temporário. Para o caso da primeira linha, a qual contém apenas a quantidade de formas do arquivo, esse valor é obtido pelo <code>sscanf</code> usando-se o formato <code>%d</code>.</p>
+<p>No caso das linhas de cada forma, cada uma delas é armazenada em <code>entrada</code>, porém analisadas de forma diferente. Como o primeiro caractere da linha indica sua forma, a decisão entre triângulo e retângulo é feita com base em <code>entrada[0]</code>, que será <code>T</code> ou <code>R</code>.</p>
+<p>Com base no tipo da forma, a linha é analisada de forma separada. No caso do triângulo, são esperados seis valores que formam as três coordenadas dos vértices e, desse modo, o <code>sscanf</code> usa o padrão de formato <code>%*c%lf%lf%lf%lf</code>, que ignora o primeiro caractere e faz a varredura procurando seis valores reais. Para o caso do retângulo, no qual há apenas dois pontos, o padrão usado é <code>%*c%lf%lf%lf%lf</code>, o qual ignora o <code>R</code> e obtém os quatro valores que formam as duas coordenadas dos vértices opostos.</p>
+<p>Naturalmente, terminado o processamento do arquivo, <code>fclose</code> é usado para liberar o sistema operacional de gerenciar o arquivo de dados.</p>
+</div>
+<!-- runenv -->
+</section>
+<section id="mais-sobre-a-abertura-e-o-fechamento-de-arquivos-texto" class="level2" data-number="14.4">
+<h2 data-number="14.4" class="anchored" data-anchor-id="mais-sobre-a-abertura-e-o-fechamento-de-arquivos-texto"><span class="header-section-number">14.4</span> Mais sobre a abertura e o fechamento de arquivos texto</h2>
+<p>Nesta seção são reapresentadas as funções de manipulação de arquivos com mais detalhamento sobre seu funcionamento e uso dos parâmetros.</p>
+<section id="a-função-fopen" class="level3" data-number="14.4.1">
+<h3 data-number="14.4.1" class="anchored" data-anchor-id="a-função-fopen"><span class="header-section-number">14.4.1</span> A função <code>fopen</code></h3>
+<p>A função de associação entre o programa e o arquivo real é a <code>fopen</code>. Ela sempre possui dois parâmetros, sendo o primeiro a indicação do nome do arquivo e o segundo, o modo de abertura.</p>
+<p>O nome do arquivo é uma cadeia de caracteres que pode ser somente o nome do arquivo, como <code>"figuras.txt"</code>, por exemplo. Nesse caso, o arquivo físico é considerado em relação ao diretório corrente. O nome pode indicar também o caminho: <code>"../figuras.txt"</code> indica o arquivo no diretório pai (isto é, um acima do atual) e <code>"/home/user/dados/figuras.txt"</code> dá o caminho absoluto e independe do diretório corrente<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>Em relação aos modos, como <code>"w"</code> ou <code>"r"</code> usados nos exemplos, a <a href="#tbl-modos-arquivo-texto" class="quarto-xref">Tabela&nbsp;<span>14.1</span></a> sumariza como funcionam.</p>
+<div id="tbl-modos-arquivo-texto" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-modos-arquivo-texto-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;14.1: Modos do <code>fopen</code> para manipulação de arquivos texto.
+</figcaption>
+<div aria-describedby="tbl-modos-arquivo-texto-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 91%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span>&nbsp;&nbsp;Modo&nbsp;&nbsp;</span></th>
+<th style="text-align: left;">Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><code>"w"</code></td>
+<td style="text-align: left;">Prepara um arquivo somente para escrita, criando um arquivo novo ou truncando o existente para tamanho zero. A posição corrente é ajustada para o início do arquivo.</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>"r"</code></td>
+<td style="text-align: left;">Prepara um arquivo somente para leitura. A posição corrente é ajustada para o início do arquivo.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>"a"</code></td>
+<td style="text-align: left;">Prepara um arquivo somente para escrita. Se o arquivo já existir, a posição corrente é ajustada para o final do arquivo; senão, um novo arquivo é criado.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Arquivos texto são, via de regra, processados sequencialmente, do início ao fim ou do início até um ponto de interesse qualquer. Raramente são abertos para leitura e escrita, de forma que essa opção foi omitida da lista apresentada.</p>
+<p>A <a href="#tbl-modos-arquivo-texto" class="quarto-xref">Tabela&nbsp;<span>14.1</span></a> também introduz um elemento importante, embora intuitivamente fácil de compreender: a posição corrente. Esse termo é aplicado ao local no arquivo onde as operações de leitura e escrita serão realizadas. Por exemplo, quando um arquivo é aberto em modo <code>"r"</code>, a posição corrente está no início do arquivo, que é o byte zero. A cada leitura, a posição corrente é ajustada para o próximo byte que será lido.</p>
+<p>Embora a posição corrente não seja diretamente usada pelo programador no processamento sequencial do arquivo, um exemplo simples de programa ilustra esse conceito.</p>
+<div class="runenv">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">Escrita de algumas linhas de texto em um arquivo com acompanhamento da</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">    posição corrente de Escrita</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: criação de arquivo 'texto.txt' com algum texto e apresentação</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">    dos bytes usados em cada linha durante a escrita</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">FILE</span> <span class="op">*</span>arquivo_numeros <span class="op">=</span> fopen<span class="op">(</span><span class="st">"texto.txt"</span><span class="op">,</span> <span class="st">"w"</span><span class="op">);</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>arquivo_numeros <span class="op">==</span> NULL<span class="op">)</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Falha ao criar arquivo de saída.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Primeira linha: bytes de </span><span class="sc">%ld</span><span class="st">"</span><span class="op">,</span> ftell<span class="op">(</span>arquivo_numeros<span class="op">));</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>        fprintf<span class="op">(</span>arquivo_numeros<span class="op">,</span> <span class="st">"Primeira linha deste arquivo.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">" a </span><span class="sc">%ld</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> ftell<span class="op">(</span>arquivo_numeros<span class="op">)</span> <span class="op">-</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Segunda linha: bytes de </span><span class="sc">%ld</span><span class="st">"</span><span class="op">,</span> ftell<span class="op">(</span>arquivo_numeros<span class="op">));</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>        fprintf<span class="op">(</span>arquivo_numeros<span class="op">,</span> <span class="st">"Linha 2"</span><span class="op">);</span>  <span class="co">// escrita em duas etapas</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>        fprintf<span class="op">(</span>arquivo_numeros<span class="op">,</span> <span class="st">" segue aqui...</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">" a </span><span class="sc">%ld</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> ftell<span class="op">(</span>arquivo_numeros<span class="op">)</span> <span class="op">-</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Terceira linha: bytes de </span><span class="sc">%ld</span><span class="st">"</span><span class="op">,</span> ftell<span class="op">(</span>arquivo_numeros<span class="op">));</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>        fprintf<span class="op">(</span>arquivo_numeros<span class="op">,</span> <span class="st">"Finalmente o fim do texto! (linha 3)"</span><span class="op">);</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">" a </span><span class="sc">%ld</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> ftell<span class="op">(</span>arquivo_numeros<span class="op">)</span> <span class="op">-</span> <span class="dv">1</span><span class="op">);</span></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>        fclose<span class="op">(</span>arquivo_numeros<span class="op">);</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>Primeira linha: bytes de 0 a 29.</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>Segunda linha: bytes de 30 a 51.</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>Terceira linha: bytes de 52 a 87.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O conteúdo de <code>texto.txt</code> ficou como se segue.</p>
+<div class="sourceCode" id="cb20" data-from="texto.txt"><pre class="sourceCode textfile terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>Primeira linha deste arquivo.</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>Linha 2 segue aqui...</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>Finalmente o fim do texto! (linha 3)</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Para visualização, a seguir é apresentado o conteúdo do arquivo com 16&nbsp;bytes por linha. A primeira coluna é a contagem de caracteres (primeira linha do <code>od</code> são os bytes de zero a 15), o que ajuda a identificar a posição de cada caractere relativo a sua posição do arquivo. Os valores <code>\n</code> são as mudanças de linha usuais<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. Vale a pena confrontar os valores escritos pelo programa anterior com as posições reais do arquivo.</p>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode terminal code-with-copy"><code class="sourceCode terminal"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>$ <span class="kw">od -Ad -tc texto.txt</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>0000000   P   r   i   m   e   i   r   a       l   i   n   h   a       d</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>0000016   e   s   t   e       a   r   q   u   i   v   o   .  \n   L   i</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>0000032   n   h   a       2       s   e   g   u   e       a   q   u   i</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>0000048   .   .   .  \n   F   i   n   a   l   m   e   n   t   e       o</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>0000064       f   i   m       d   o       t   e   x   t   o   !       (</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>0000080   l   i   n   h   a       3   )</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>0000088</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!-- runenv -->
+<p>O conceito da posição corrente também é válido para as leituras, que se iniciam na posição zero (início do arquivo) e, após cada leitura, é atualizada para o próximo byte que será lido em um próximo <code>fgets</code>.</p>
+<p>A ideia da posição em que ocorre a próxima operação de entrada ou saída é a usada quando o modo <code>"a"</code> é usado no <code>fopen</code>. Nesse caso, o arquivo é aberto para escrita, seu conteúdo (se existir) é preservado e a posição corrente é colocada depois do último byte do arquivo. Com isso, uma nova escrita no arquivo acrescentará texto ao seu final.</p>
+<p>Um <em>log</em> é um arquivo usado para registrar eventos. Por exemplo, sempre que um usuário entra no sistema ou quando um trabalho de impressão é iniciado, cada evento é registrado no <em>log</em>. O programa seguinte, cada vez que executado, solicita uma linha de informação e a grava em um arquivo de <em>log</em>.</p>
+<div class="runenv">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co">Inserção de uma linha no arquivo de log 'registro.log'</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: a digitação da linha de informação</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: o acréscimo dessa linha no final do arquivo</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">FILE</span> <span class="op">*</span>arquivo_log <span class="op">=</span> fopen<span class="op">(</span><span class="st">"registro.log"</span><span class="op">,</span> <span class="st">"a"</span><span class="op">);</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>arquivo_log <span class="op">==</span> NULL<span class="op">)</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Falha ao criar ou abrir arquivo de log.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Digite a informação a ser registrada:</span><span class="sc">\n</span><span class="st">&gt; "</span><span class="op">);</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> linha_de_log<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>        fgets<span class="op">(</span>linha_de_log<span class="op">,</span> <span class="kw">sizeof</span> linha_de_log<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>        fprintf<span class="op">(</span>arquivo_log<span class="op">,</span> <span class="st">"</span><span class="sc">%s</span><span class="st">"</span><span class="op">,</span> linha_de_log<span class="op">);</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>        fclose<span class="op">(</span>arquivo_log<span class="op">);</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>Digite a informação a ser registrada:</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>&gt; <span class="kw">Primeiro registro do log.</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Na primeira execução, o arquivo <code>registro.log</code> ainda não existe, o que faz com que ele seja criado vazio. Então o programa solicita o primeiro registro e o grava no arquivo.</p>
+<p>A cada nova execução, uma linha é solicitada e adicionada ao final do arquivo.</p>
+</div>
+<!-- runenv -->
+<div class="callout callout-style-default callout-warning callout-titled" title="Curiosidade">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Curiosidade
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Quando um arquivo é aberto apenas para escrita (<code>"w"</code> e <code>"a"</code>), tentativas de leitura desse arquivo são apenas ignoradas sem gerar qualquer erro. De forma similar, ao se tentar escrever em um arquivo aberto com <code>"r"</code>, a escrita não é feita e nenhum erro é indicado.</p>
+</div>
+</div>
+</section>
+<section id="a-função-fclose" class="level3" data-number="14.4.2">
+<h3 data-number="14.4.2" class="anchored" data-anchor-id="a-função-fclose"><span class="header-section-number">14.4.2</span> A função <code>fclose</code></h3>
+<p>O encerramento do acesso ao arquivo é feito pela função <code>fclose</code>, para a qual é preciso passar como parâmetro a variável correspondente a um arquivo aberto com sucesso. Uma vez fechado, nenhuma operação de entrada ou saída para o arquivo é possível.</p>
+</section>
+</section>
+<section id="a-função-fprintf" class="level2" data-number="14.5">
+<h2 data-number="14.5" class="anchored" data-anchor-id="a-função-fprintf"><span class="header-section-number">14.5</span> A função <code>fprintf</code></h2>
+<p> A escrita em um arquivo texto com o <code>fprint</code> funciona de forma similar ao <code>print</code> na tela. A função, inicialmente, processa a cadeia de caracteres de formato e faz as conversões de formato, gerando o texto final. Então, esse texto é gravado no arquivo. Enquanto <code>print</code> é sempre direcionado para <em>stdout</em>, <code>fprintf</code> permite escolher a qual fluxo de saída o texto será enviado.</p>
+<div class="runenv">
+<p>Como exemplo, pode ser considerado o programa seguinte, que cria um arquivo com algumas operações com raiz quadrada.</p>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co">Criação de arquivo com valores de raízes quadradas</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: criação de arquivo texto contendo valores de raízes</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;math.h&gt;</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">FILE</span> <span class="op">*</span>arquivo_raizes <span class="op">=</span> fopen<span class="op">(</span><span class="st">"raizes.txt"</span><span class="op">,</span> <span class="st">"w"</span><span class="op">);</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>arquivo_raizes <span class="op">==</span> NULL<span class="op">)</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Falha ao criar arquivo.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">double</span> x <span class="op">=</span> <span class="fl">0.0</span><span class="op">;</span> x <span class="op">&lt;=</span> <span class="dv">100</span><span class="op">;</span> x <span class="op">+=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>            fprintf<span class="op">(</span>arquivo_raizes<span class="op">,</span> <span class="st">"raiz(</span><span class="sc">%.1f</span><span class="st">) = </span><span class="sc">%.3f\n</span><span class="st">"</span><span class="op">,</span> x<span class="op">,</span> sqrt<span class="op">(</span>x<span class="op">));</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>        fclose<span class="op">(</span>arquivo_raizes<span class="op">);</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O arquivo resultante da execução, <code>raizes.txt</code>, segue.</p>
+<div class="sourceCode" id="cb25" data-from="raizes.txt" data-clip="20,5"><pre class="sourceCode textfile terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>raiz(0.0) = 0.000</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>raiz(0.5) = 0.707</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>raiz(1.0) = 1.000</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>raiz(1.5) = 1.225</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>raiz(2.0) = 1.414</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>... [191 linhas omitidas]</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>raiz(98.0) = 9.899</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>raiz(98.5) = 9.925</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>raiz(99.0) = 9.950</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>raiz(99.5) = 9.975</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>raiz(100.0) = 10.000</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Executada uma chamada de <code>fprint</code>, a escrita é feita a partir da posição corrente, a qual é atualizada para o próximo byte depois do último byte escrito.</p>
+</section>
+<section id="leitura-até-o-fim-do-arquivo" class="level2" data-number="14.6">
+<h2 data-number="14.6" class="anchored" data-anchor-id="leitura-até-o-fim-do-arquivo"><span class="header-section-number">14.6</span> Leitura até o fim do arquivo</h2>
+<p>Quando um arquivo contém dados, além da estratégia de prefixar os dados com a quantidade (estratégia usada no <a href="c-arquivos-texto.html#alg-retangulos-e-triangulos-com-prefixacao">Algoritmo 14.1</a>), é também possível varrer o arquivo até encontrar seu final. O <a href="c-arquivos-texto.html#alg-retangulos-e-triangulos-sem-prefixacao">Algoritmo 14.2</a> aborda esse novo problema, ainda no contexto de um arquivo com formas triangulares e retangulares.</p>
+<div id="alg-retangulos-e-triangulos-sem-prefixacao">
+<figcaption class="figure-caption">
+<p>Algoritmo 14.2: Processamento de formas em arquivo com apresentação das suas áreas, com uma forma por linha.</p>
+</figcaption>
+<p><img src="algxpar/pseudocode.5beab7202b2914f7776514c71f10374d9d9d9ad9.svg" class="img-fluid" alt="Algoritmo 14.2: Processamento de formas em arquivo com apresentação das suas áreas, com uma forma por linha." width="648"></p>
+</div>
+<p>A função <code>fgets</code> opera da mesma forma para um arquivo aberto quanto para <code>stdin</code>, ou seja, os dados do arquivo são lidos para uma variável do programa até que seja encontrado um final de linha (<code>\n</code>). O efeito prático é a leitura de uma linha por vez.</p>
+<p>Quando não há mais dados no arquivo para serem lidos, situação em que o fim do arquivo foi atingido, o valor de retorno de <code>fgets</code> é <code>NULL</code>. Assim, pela verificação do valor de retorno, é possível verificar se se chegou ao fim dos dados.</p>
+<div class="runenv">
+<p>O programa em C seguinte implementa do <a href="c-arquivos-texto.html#alg-retangulos-e-triangulos-sem-prefixacao">Algoritmo 14.2</a>, verificando se ainda há formas do arquivo analisando o valor de retorno de <code>fgets</code>.</p>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co">Processamento de um arquivo de formas (triângulos e retângulos) para cálculo</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">    das áreas</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: arquivo texto com nome 'figuras.txt' com cada linha contendo:</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">        - OU a letra T mais coordenadas dos vértices do triângulo</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co">        - OU a letra R e as coordenadas de dois vértices opostos do</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co">            retângulo</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: a apresentação da área de cada forma</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;math.h&gt;</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">FILE</span> <span class="op">*</span>arquivo_formas <span class="op">=</span> fopen<span class="op">(</span><span class="st">"figuras.txt"</span><span class="op">,</span> <span class="st">"r"</span><span class="op">);</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>arquivo_formas <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Falha ao abrir arquivo de formas.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> forma<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Obtenção do número de formas</span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="op">(</span>fgets<span class="op">(</span>forma<span class="op">,</span> <span class="kw">sizeof</span> forma<span class="op">,</span> arquivo_formas<span class="op">)</span> <span class="op">!=</span> NULL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>            <span class="dt">double</span> area<span class="op">;</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>forma<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">==</span> <span class="ch">'T'</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>                <span class="co">// Triângulo: área por semiperímetro</span></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>                <span class="dt">double</span> x1<span class="op">,</span> y1<span class="op">,</span> x2<span class="op">,</span> y2<span class="op">,</span> x3<span class="op">,</span> y3<span class="op">;</span></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>                sscanf<span class="op">(</span>forma<span class="op">,</span> <span class="st">"</span><span class="sc">%*c%lf%lf%lf%lf%lf%lf</span><span class="st">"</span><span class="op">,</span></span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>                       <span class="op">&amp;</span>x1<span class="op">,</span> <span class="op">&amp;</span>y1<span class="op">,</span> <span class="op">&amp;</span>x2<span class="op">,</span> <span class="op">&amp;</span>y2<span class="op">,</span> <span class="op">&amp;</span>x3<span class="op">,</span> <span class="op">&amp;</span>y3<span class="op">);</span></span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>                <span class="dt">double</span> lado1 <span class="op">=</span> sqrt<span class="op">(</span>pow<span class="op">(</span>x1 <span class="op">-</span> x2<span class="op">,</span> <span class="dv">2</span><span class="op">)</span> <span class="op">+</span> pow<span class="op">(</span>y1 <span class="op">-</span> y2<span class="op">,</span> <span class="dv">2</span><span class="op">));</span></span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>                <span class="dt">double</span> lado2 <span class="op">=</span> sqrt<span class="op">(</span>pow<span class="op">(</span>x1 <span class="op">-</span> x3<span class="op">,</span> <span class="dv">2</span><span class="op">)</span> <span class="op">+</span> pow<span class="op">(</span>y1 <span class="op">-</span> y3<span class="op">,</span> <span class="dv">2</span><span class="op">));</span></span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>                <span class="dt">double</span> lado3 <span class="op">=</span> sqrt<span class="op">(</span>pow<span class="op">(</span>x2 <span class="op">-</span> x3<span class="op">,</span> <span class="dv">2</span><span class="op">)</span> <span class="op">+</span> pow<span class="op">(</span>y2 <span class="op">-</span> y3<span class="op">,</span> <span class="dv">2</span><span class="op">));</span></span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>                <span class="dt">double</span> semiperimetro <span class="op">=</span> <span class="op">(</span>lado1 <span class="op">+</span> lado2 <span class="op">+</span> lado3<span class="op">)</span> <span class="op">/</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>                area <span class="op">=</span> sqrt<span class="op">(</span>semiperimetro <span class="op">*</span> <span class="op">(</span>semiperimetro <span class="op">-</span> lado1<span class="op">)</span> <span class="op">*</span></span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>                            <span class="op">(</span>semiperimetro <span class="op">-</span> lado2<span class="op">)</span> <span class="op">*</span> <span class="op">(</span>semiperimetro <span class="op">-</span> lado3<span class="op">));</span></span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a>                <span class="co">// Retângulo: ára por base x altura</span></span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a>                <span class="dt">double</span> x1<span class="op">,</span> y1<span class="op">,</span> x2<span class="op">,</span> y2<span class="op">;</span></span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a>                sscanf<span class="op">(</span>forma<span class="op">,</span> <span class="st">"</span><span class="sc">%*c%lf%lf%lf%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>x1<span class="op">,</span> <span class="op">&amp;</span>y1<span class="op">,</span> <span class="op">&amp;</span>x2<span class="op">,</span> <span class="op">&amp;</span>y2<span class="op">);</span></span>
+<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-42"><a href="#cb26-42" aria-hidden="true" tabindex="-1"></a>                area <span class="op">=</span> fabs<span class="op">(</span>x2 <span class="op">-</span> x1<span class="op">)</span> <span class="op">*</span> fabs<span class="op">(</span>y2 <span class="op">-</span> y1<span class="op">);</span></span>
+<span id="cb26-43"><a href="#cb26-43" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb26-44"><a href="#cb26-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-45"><a href="#cb26-45" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">"</span><span class="sc">%.2f\n</span><span class="st">"</span><span class="op">,</span> area<span class="op">);</span></span>
+<span id="cb26-46"><a href="#cb26-46" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb26-47"><a href="#cb26-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-48"><a href="#cb26-48" aria-hidden="true" tabindex="-1"></a>        fclose<span class="op">(</span>arquivo_formas<span class="op">);</span></span>
+<span id="cb26-49"><a href="#cb26-49" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb26-50"><a href="#cb26-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-51"><a href="#cb26-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb26-52"><a href="#cb26-52" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>11.00</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>11.75</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>7.14</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>1.00</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>4.00</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>0.50</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O arquivo <code>figuras.txt</code> processado por esse programa contém o conteúdo seguinte. Comparativamente ao usado na <a href="#sec-fluxo-de-leitura" class="quarto-xref"><span>Seção 14.3</span></a>, o formado de descrição de cada forma é o mesmo, sendo que apenas a primeira linha contendo o número de formas não existe.</p>
+<div class="sourceCode" id="cb28" data-from="figuras.txt"><pre class="sourceCode textfile terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>R 0.0 0.0 5.5 2.0</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>T -1.0 1.0 3.0 4.5 4 -0.5</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>R -1.2 5.2 2.2 3.1</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>R 0 0 1 1</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>R -1 -1 1 1</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>T 0 0 0 1 1 0</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Durante a execução, o resultado de <code>fgets</code> é checado a cada início do <code>while</code>, até que retorne <code>NULL</code> e encerre a repetição. A cada retorno válido, a área correspondente é calculada.</p>
+</div>
+<!-- runenv -->
+</section>
+<section id="a-função-rewind" class="level2" data-number="14.7">
+<h2 data-number="14.7" class="anchored" data-anchor-id="a-função-rewind"><span class="header-section-number">14.7</span> A função <code>rewind</code></h2>
+<p>A palavra <em>rewind</em> tem aqui o sentido de rebobinar e vem do tempo em que os arquivos eram mantidos em fitas magnéticas e, para voltar para o início do arquivo, era necessário retroceder fisicamente o carretel. Para o contexto atual, rebobinar significa apenas retornar a posição corrente para o byte zero, ou seja, o primeiro byte do arquivo.</p>
+<!-- ![Gravador de fitas magnéticas. Imagem gerada artificialmente por Dall-E\ 3.](figuras/gravador_de_fita.jpeg){#fig-gravador-de-fita width="50%"} -->
+<p>A função <code>rewind</code> tem o significado de retornar o arquivo para a primeira posição. Isso significa, por exemplo, que se um arquivo tem que ser processado mais que uma vez, é possível fazer uma varredura até o final e, então, retornar ao início e fazer nova leitura.</p>
+<p>Um uso interessante de <code>rewind</code> é apresentado no <a href="c-arquivos-texto.html#alg-notas-maiores-que-a-media">Algoritmo 14.3</a>.</p>
+<div id="alg-notas-maiores-que-a-media">
+<figcaption class="figure-caption">
+<p>Algoritmo 14.3: Processamento de arquivo de notas.</p>
+</figcaption>
+<p><img src="algxpar/pseudocode.2a8db47b0c1e9df7274557e48726e501a17ff338.svg" class="img-fluid" alt="Algoritmo 14.3: Processamento de arquivo de notas." width="648"></p>
+</div>
+<p>Esse problema requer duas passadas pelos valores das notas, uma vez que a contagem dos valores maiores que a média precisa que a média já tenha sido calculada e, para calcular a média, é preciso ter passado por todos as notas. Assim, o arquivo é varrido sequencialmente somando-se as notas e contando quantas são para, em seguida, calcular a média. Em um segundo passo, o arquivo é varrido novamente desde o início, para, então, contar a quantidade de notas maiores que a média.</p>
+<div class="runenv">
+<p>Como arquivo de notas, segue uma possível versão de <code>notas.txt</code>.</p>
+<div class="sourceCode" id="cb29" data-to="notas.txt"><pre class="sourceCode textfile terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>5.4</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>3.4</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>5.6</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>9.8</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>5.0</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>3.8</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>4.4</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>4.9</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>2.5</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>4.8</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>4.9</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A implementação em C para o processamento do arquivo é apresentada na sequência.</p>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co">Determinação da quantidade de notas maiores que a média geral das notas</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co">    em um arquivo de dados</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: arquivo texto com uma nota por linha</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: a apresentação da quantidade notas maiores que a média geral</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">FILE</span> <span class="op">*</span>arquivo_notas <span class="op">=</span> fopen<span class="op">(</span><span class="st">"notas.txt"</span><span class="op">,</span> <span class="st">"r"</span><span class="op">);</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>arquivo_notas <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Falha ao abrir arquivo de notas.</span><span class="sc">\n</span><span class="st">"</span><span class="op">);</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Cálculo da média geral das notas</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> soma_notas <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> contador_notas <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="op">(</span>fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> arquivo_notas<span class="op">)</span> <span class="op">!=</span> NULL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>            <span class="dt">double</span> nota<span class="op">;</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>            sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>nota<span class="op">);</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>            soma_notas <span class="op">+=</span> nota<span class="op">;</span></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>            contador_notas<span class="op">++;</span></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>        <span class="dt">double</span> media <span class="op">=</span> soma_notas <span class="op">/</span> contador_notas<span class="op">;</span></span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Contagem da quantidade de notas acima da média calculada</span></span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a>        rewind<span class="op">(</span>arquivo_notas<span class="op">);</span>  <span class="co">// retorna ao início do arquivo</span></span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> contador_maiores <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="op">(</span>fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> arquivo_notas<span class="op">)</span> <span class="op">!=</span> NULL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>            <span class="dt">double</span> nota<span class="op">;</span></span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>            sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%lf</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>nota<span class="op">);</span></span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="op">(</span>nota <span class="op">&gt;</span> media<span class="op">)</span></span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>                contador_maiores<span class="op">++;</span></span>
+<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a>        fclose<span class="op">(</span>arquivo_notas<span class="op">);</span></span>
+<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Resultado</span></span>
+<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"</span><span class="sc">%d</span><span class="st"> notas maiores que </span><span class="sc">%.1f</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> contador_maiores<span class="op">,</span> media<span class="op">);</span></span>
+<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb30-45"><a href="#cb30-45" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>4 notas maiores que 5.0.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Sem o uso de <code>rewind</code>, o segundo <code>while</code> terminaria de imediato, visto que a posição corrente já está no fim do arquivo e qualquer nova leitura retornará <code>NULL</code> como resultado.</p>
+</div>
+</section>
+<section id="a-traiçoeira-função-feof" class="level2" data-number="14.8">
+<h2 data-number="14.8" class="anchored" data-anchor-id="a-traiçoeira-função-feof"><span class="header-section-number">14.8</span> A traiçoeira função <code>feof</code></h2>
+<p> O nome “<em>feof</em>” é composto pelo <em>f</em> inicial, como (quase) todas as funções que trabalham com arquivos (<em>files</em>), seguido de <em>eof</em>, que significa <em>end of file</em>, ou fim de arquivo.</p>
+<p>Porém, o uso correto dessa função requer entender tanto o que ela faz e o que ela não faz. Apesar do nome, <code>feof</code> não verifica se o arquivo chegou ao fim. Isso é o que ela não faz.</p>
+<p>A função <code>feof</code> deve ser usada depois que uma operação de leitura (<code>fgets</code>, por exemplo) tenta ser executada mas falha. Somente depois dessa falha é que <code>feof</code> pode ser usada para verificar porquê a função não foi bem sucedida. Assim, <code>feof</code> volta verdadeiro quando a razão da falha foi tentar ler além do último dado do arquivo.</p>
+<div class="runenv">
+<p>A diferença parece sutil, mas não é. Para entender esse mecanismo, um programa simples é usado para mostrar o que acontece na leitura de um arquivo texto e como <code>feof</code> se comporta.</p>
+<p>O arquivo usado para exemplo possui apenas duas linhas e é apresentado a seguir.</p>
+<div class="sourceCode" id="cb32" data-to="texto.txt"><pre class="sourceCode textfile terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>Texto da primeira linha</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>E material para a segunda linha!</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Esse arquivo possui duas linhas, ambas terminadas com <code>\n</code>, como pode ser observado ao se analisar mais detalhadamente o conteúdo do arquivo.</p>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode terminal code-with-copy"><code class="sourceCode terminal"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>$ <span class="kw">od -tc -Ad texto.txt</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>0000000   T   e   x   t   o       d   a       p   r   i   m   e   i   r</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>0000016   a       l   i   n   h   a  \n   E       m   a   t   e   r   i</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>0000032   a   l       p   a   r   a       a       s   e   g   u   n   d</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>0000048   a       l   i   n   h   a   !  \n</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>0000057</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O programa usado para processar esse arquivo está apresentado na sequência.</p>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co">Programa exemplo do comportamento da função feof</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: a apresentação de informações relevantes ao longo da execução</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">FILE</span> <span class="op">*</span>arquivo <span class="op">=</span> fopen<span class="op">(</span><span class="st">"texto.txt"</span><span class="op">,</span> <span class="st">"r"</span><span class="op">);</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>arquivo <span class="op">==</span> NULL<span class="op">)</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Falha ao abrir arquivo com texto."</span><span class="op">);</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> linha<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Situação inicial</span></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Ao abrir o arquivo: feof = </span><span class="sc">%c</span><span class="st">.</span><span class="sc">\n\n</span><span class="st">"</span><span class="op">,</span> feof<span class="op">(</span>arquivo<span class="op">)</span> <span class="op">?</span> <span class="ch">'V'</span> <span class="op">:</span> <span class="ch">'F'</span><span class="op">);</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Primeira leitura</span></span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>        fgets<span class="op">(</span>linha<span class="op">,</span> <span class="kw">sizeof</span> linha<span class="op">,</span> arquivo<span class="op">);</span></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Primeira leitura: </span><span class="sc">%s</span><span class="st">"</span><span class="op">,</span> linha<span class="op">);</span></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Depois da 1ª leitura: feof = </span><span class="sc">%c</span><span class="st">.</span><span class="sc">\n\n</span><span class="st">"</span><span class="op">,</span></span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>               feof<span class="op">(</span>arquivo<span class="op">)</span> <span class="op">?</span> <span class="ch">'V'</span> <span class="op">:</span> <span class="ch">'F'</span><span class="op">);</span></span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Segunda leitura</span></span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a>        fgets<span class="op">(</span>linha<span class="op">,</span> <span class="kw">sizeof</span> linha<span class="op">,</span> arquivo<span class="op">);</span></span>
+<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Segunda leitura: </span><span class="sc">%s</span><span class="st">"</span><span class="op">,</span> linha<span class="op">);</span></span>
+<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Depois da 2ª leitura: feof = </span><span class="sc">%c</span><span class="st">.</span><span class="sc">\n\n</span><span class="st">"</span><span class="op">,</span></span>
+<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a>               feof<span class="op">(</span>arquivo<span class="op">)</span> <span class="op">?</span> <span class="ch">'V'</span> <span class="op">:</span> <span class="ch">'F'</span><span class="op">);</span></span>
+<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Terceira leitura, que deve falhar</span></span>
+<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a>        fgets<span class="op">(</span>linha<span class="op">,</span> <span class="kw">sizeof</span> linha<span class="op">,</span> arquivo<span class="op">);</span></span>
+<span id="cb34-32"><a href="#cb34-32" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Terceira leitura: </span><span class="sc">%s</span><span class="st">"</span><span class="op">,</span> linha<span class="op">);</span></span>
+<span id="cb34-33"><a href="#cb34-33" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Depois da 3ª leitura: feof = </span><span class="sc">%c</span><span class="st">.</span><span class="sc">\n\n</span><span class="st">"</span><span class="op">,</span></span>
+<span id="cb34-34"><a href="#cb34-34" aria-hidden="true" tabindex="-1"></a>               feof<span class="op">(</span>arquivo<span class="op">)</span> <span class="op">?</span> <span class="ch">'V'</span> <span class="op">:</span> <span class="ch">'F'</span><span class="op">);</span></span>
+<span id="cb34-35"><a href="#cb34-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-36"><a href="#cb34-36" aria-hidden="true" tabindex="-1"></a>        fclose<span class="op">(</span>arquivo<span class="op">);</span></span>
+<span id="cb34-37"><a href="#cb34-37" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb34-38"><a href="#cb34-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb34-39"><a href="#cb34-39" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>Ao abrir o arquivo: feof = F.</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>Primeira leitura: Texto da primeira linha</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>Depois da 1ª leitura: feof = F.</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>Segunda leitura: E material para a segunda linha!</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>Depois da 2ª leitura: feof = F.</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>Terceira leitura: E material para a segunda linha!</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>Depois da 3ª leitura: feof = V.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Como esperado, as duas primeiras execuções de <code>fgets</code> fazem as leituras das duas primeiras linhas do arquivo e apresentam seu conteúdo na tela. Como o arquivo <code>texto.txt</code> possui apenas essas duas linhas, a terceira chamada a <code>fgets</code> falha, sendo o <code>NULL</code> retornado ignorado no programa. Como a leitura falha, a variável <code>linha</code> não é modificada e é por essa razão que a mensagem de conteúdo da terceira leitura aparece igual ao da segunda.</p>
+<p>Quanto à função <code>feof</code>, ela retorna falso (zero) logo ao abrir o arquivo e também depois da primeira leitura. Na segunda execução de <code>fgets</code>, a segunda linha é copiada para a variável <code>linha</code> e efetivamente a posição corrente está no fim do arquivo. Entretanto, como a leitura não foi além do fim do arquivo, <code>feof</code> ainda retorna falso. Na terceira leitura, que é mal sucedida por não haver mais o que ler do arquivo, o <code>fgets</code> não faz a leitura e, a partir desse momento, <code>feof</code> começa a retornar verdadeiro (valor não nulo), indicando que o problema foi tentar ler de um arquivo que já havia terminado.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Cuidado
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Por uma tendência em interpretar erroneamente o que <code>feof</code> realmente verifica, não é incomum programas como o seguinte, que produz um resultado insatisfatório.</p>
+<p>Supondo a existência de um arquvio <code>inteiros.txt</code> com o conteúdo seguinte, um programa se propõe a fazer a soma dos valores inteiros contidos nele. Para este arquivo específico, o resultado esperado é 120.</p>
+<div class="sourceCode" id="cb36" data-to="inteiros.txt"><pre class="sourceCode textfile terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>20</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>50</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>30</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>20</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Este arquivo possui um <code>\n</code> no final de cada linha. Como ilustra o comando seguinte.</p>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode terminal code-with-copy"><code class="sourceCode terminal"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>$ <span class="kw">od -tc -Ad inteiros.txt</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>0000000   2   0  \n   5   0  \n   3   0  \n   2   0  \n</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>0000012</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Segue, agora, o programa que tenta processar esse arquivo.</p>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co">Tentativa incorreta de somar os valores de um arquivo de inteiros</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: um arquivo com valores inteiros, um por linha</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: a soma incorreta dos valores</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">FILE</span> <span class="op">*</span>arquivo_inteiros <span class="op">=</span> fopen<span class="op">(</span><span class="st">"inteiros.txt"</span><span class="op">,</span> <span class="st">"r"</span><span class="op">);</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>arquivo_inteiros <span class="op">==</span> NULL<span class="op">)</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Falha ao abrir arquivo_inteiros com os valores inteiros."</span><span class="op">);</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> soma <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="op">(!</span>feof<span class="op">(</span>arquivo_inteiros<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Obtenção do inteiro</span></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>            <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>            fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> arquivo_inteiros<span class="op">);</span></span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>            <span class="dt">int</span> valor<span class="op">;</span></span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>            sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%d</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>valor<span class="op">);</span></span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Acumulação do valor</span></span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>            soma <span class="op">+=</span> valor<span class="op">;</span></span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a>        fclose<span class="op">(</span>arquivo_inteiros<span class="op">);</span></span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Soma dos valores no arquivo: </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> soma<span class="op">);</span></span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb38-30"><a href="#cb38-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb38-31"><a href="#cb38-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb38-32"><a href="#cb38-32" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>Soma dos valores no arquivo: 140.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O laço de repetição é baseado na verificação de <code>feof</code>. Porém, essa função ainda retorna verdadeiro depois da leitura da última linha, pois o <code>fgets</code> não tentou ler depois do fim do arquivo. A consequência disso é que o <code>while</code> faz uma repetição a mais e o último valor lido é somado mais uma vez.</p>
+<p>Uma alternativa interessante é evitar o uso do <code>feof</code>, baseando as decisões no resultado da função de leitura. Segue, assim, uma versão robusta do programa para a soma dos valores do arquivo.</p>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">/*</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co">Tentativa incorreta de somar os valores de um arquivo de inteiros</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="co">Requer: um arquivo com valores inteiros, um por linha</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="co">Assegura: a soma incorreta dos valores</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="co">*/</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">FILE</span> <span class="op">*</span>arquivo_inteiros <span class="op">=</span> fopen<span class="op">(</span><span class="st">"inteiros.txt"</span><span class="op">,</span> <span class="st">"r"</span><span class="op">);</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>arquivo_inteiros <span class="op">==</span> NULL<span class="op">)</span></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Falha ao abrir arquivo_inteiros com os valores inteiros."</span><span class="op">);</span></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">char</span> entrada<span class="op">[</span><span class="dv">160</span><span class="op">];</span></span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> soma <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="op">(</span>fgets<span class="op">(</span>entrada<span class="op">,</span> <span class="kw">sizeof</span> entrada<span class="op">,</span> arquivo_inteiros<span class="op">)</span> <span class="op">!=</span> NULL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>            <span class="dt">int</span> valor<span class="op">;</span></span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>            sscanf<span class="op">(</span>entrada<span class="op">,</span> <span class="st">"</span><span class="sc">%d</span><span class="st">"</span><span class="op">,</span> <span class="op">&amp;</span>valor<span class="op">);</span></span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>            soma <span class="op">+=</span> valor<span class="op">;</span></span>
+<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a>        fclose<span class="op">(</span>arquivo_inteiros<span class="op">);</span></span>
+<span id="cb40-25"><a href="#cb40-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-26"><a href="#cb40-26" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">"Soma dos valores no arquivo: </span><span class="sc">%d</span><span class="st">.</span><span class="sc">\n</span><span class="st">"</span><span class="op">,</span> soma<span class="op">);</span></span>
+<span id="cb40-27"><a href="#cb40-27" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb40-28"><a href="#cb40-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-29"><a href="#cb40-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb40-30"><a href="#cb40-30" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode terminal cell-output code-with-copy"><code class="sourceCode terminal"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>Soma dos valores no arquivo: 120.</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<!-- runenv -->
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>No Linux, usado como plataforma para este livro, o separador de diretórios é a barra <code>/</code>. O mesmo ocorre para o MacOS. Em sistemas Windows, os caminhos usam a barra reversa <code>\</code> e, como essa barra tem significado especial em C, é preciso indicar o caminho com o escape <code>\\</code>: <code>"..\\figuras.txt"</code> ou <code>C:\\User\\Documentos\\Dados\\figuras.txt</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>No Windows, a mudança de linha costuma ser indicada pela sequência <code>\r\n</code>, de modo que o conteúdo do arquivo pode diferir um pouco caso seja essa a plataforma usada para execução do programa.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copiada");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copiada");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./c-repeticoes-com-do-while.html" class="pagination-link" aria-label="Repetições com `do while`">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Repetições com <code>do while</code></span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./c-desvirtuacao-das-repeticoes.html" class="pagination-link" aria-label="Desvirtuação das repetições">
+        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Desvirtuação das repetições</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
